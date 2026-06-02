@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /.image-slots.state.json
+Disallow: /serve.pl
+
+Sitemap: https://www.pantheraestate.com/sitemap.xml

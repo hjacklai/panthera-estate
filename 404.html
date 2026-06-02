@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page not found · Panthera Bertam</title>
+<meta name="description" content="The page you were looking for has moved or never existed. Head back to Panthera Bertam, pantheraestate.com.">
+<meta name="robots" content="noindex,nofollow">
+
+<link rel="icon" type="image/svg+xml" href="assets/panthera-mark-square.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream: #F2E9DF;
+    --ink:   #4A413E;
+    --text:  #1C1714;
+    --terra: #8A4638;
+    --clay:  #C88A76;
+  }
+  *{ box-sizing: border-box; margin: 0; padding: 0; }
+  body{
+    background: var(--cream);
+    color: var(--text);
+    font-family: "Inter Tight", -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background-image: url("assets/topo.svg");
+    background-size: 1400px auto;
+    background-position: center;
+  }
+  .wrap{
+    max-width: 540px;
+    text-align: center;
+    background: rgba(242,233,223,0.92);
+    backdrop-filter: blur(6px);
+    border-radius: 18px;
+    padding: 48px 36px;
+    border: 1px solid rgba(28,23,20,0.10);
+    box-shadow: 0 30px 80px -40px rgba(28,23,20,0.4);
+  }
+  .mark{ display: block; height: 28px; width: auto; margin: 0 auto 24px; }
+  .code{
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terra);
+    margin-bottom: 14px;
+  }
+  h1{
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 400;
+    font-size: clamp(36px, 6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+  }
+  p{
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(28,23,20,0.7);
+    margin-bottom: 30px;
+  }
+  .btn-row{ display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn{
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 22px;
+    border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary{
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgba(28,23,20,0.4); }
+  .btn-wa{
+    background: #25D366;
+    color: #fff;
+  }
+  .btn-wa:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px -10px rgba(37,211,102,0.5); }
+  .foot{
+    margin-top: 36px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(28,23,20,0.45);
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <img class="mark" src="assets/panthera-logo-full.png" alt="Panthera">
+    <div class="code">404 · Page not found</div>
+    <h1>This page took a wrong turn.</h1>
+    <p>The link you followed may be broken, or the page may have been moved. Head back to the home page, or message our sales team, we'll point you to whatever you were looking for.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/">Back to home →</a>
+      <a class="btn btn-wa" href="https://wa.me/60175981858" target="_blank" rel="noopener">WhatsApp sales ↗</a>
+    </div>
+    <div class="foot">Panthera Bertam · pantheraestate.com</div>
+  </main>
+</body>
+</html>

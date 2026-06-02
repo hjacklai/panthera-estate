@@ -1,0 +1,56 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Claude
+.claude/
+plan-*.md
+
+# Image-slot drag-drop state (auto-generated when users drop photos in the browser)
+.image-slots.state.json
+
+# Source engineering files, kept locally but NOT deployed to the live site.
+# Comment these out if you want them tracked in git as project archive.
+*.pdf
+*.dwg
+*.pptx
+
+# Original logo source files at project root (the website uses copies in assets/)
+/PANTHERA LOGO.png
+/e-mark.png
+/bungalo.jpeg
+/semi d.jpeg
+
+# Source artwork folder + local scratch / tooling (not deployed)
+/PICTURES/
+/tmp/
+/tools/
+
+# Dead script: drag-drop image slots, removed from the page
+/image-slot.js
+
+# Google Drive sync duplicates
+* - Copy.*
+*Copy.jpg
+*Copy.png
+
+# Unused / superseded assets (kept locally, not shipped)
+assets/Gemini_Generated_Image_*.png
+assets/e-mark.png
+assets/e-mark-transparent.png
+assets/elevation-*.png
+assets/panthera-mark-color.png
+assets/panthera-mark-square.svg
+assets/site-render-illustration.svg
+assets/site-render-vector.svg
+assets/streetscape.svg
+
+# Local backups
+*.bak

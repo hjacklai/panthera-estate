@@ -54,3 +54,6 @@ assets/streetscape.svg
 
 # Local backups
 *.bak
+
+# Dev-only local preview server (kept on Drive, not deployed)
+/serve.pl

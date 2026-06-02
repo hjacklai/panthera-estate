@@ -3,4 +3,4 @@ Allow: /
 Disallow: /.image-slots.state.json
 Disallow: /serve.pl
 
-Sitemap: https://www.pantheraestate.com/sitemap.xml
+Sitemap: https://pantheraestate.com/sitemap.xml

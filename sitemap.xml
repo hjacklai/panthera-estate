@@ -2,31 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://pantheraestate.com/</loc>
+    <loc>https://www.pantheraestate.com/</loc>
     <lastmod>2026-05-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://pantheraestate.com/assets/render-bungalow.jpg</image:loc>
+      <image:loc>https://www.pantheraestate.com/assets/render-bungalow.jpg</image:loc>
       <image:title>Panthera Bertam, bungalow exterior render</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://pantheraestate.com/assets/render-semid.jpg</image:loc>
+      <image:loc>https://www.pantheraestate.com/assets/render-semid.jpg</image:loc>
       <image:title>Panthera Bertam, semi-D exterior render</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://pantheraestate.com/assets/site-plan-color.png</image:loc>
+      <image:loc>https://www.pantheraestate.com/assets/site-plan-color.png</image:loc>
       <image:title>Panthera Bertam, site plan</image:title>
     </image:image>
   </url>
   <!-- Single-page site: anchor hashes index the major sections -->
-  <url><loc>https://pantheraestate.com/#estate</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://pantheraestate.com/#homes</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://pantheraestate.com/#site</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://pantheraestate.com/#plans</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://pantheraestate.com/#pricing</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://pantheraestate.com/#location</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://pantheraestate.com/#calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://pantheraestate.com/#faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://pantheraestate.com/#register</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.pantheraestate.com/#estate</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.pantheraestate.com/#homes</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.pantheraestate.com/#site</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.pantheraestate.com/#plans</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.pantheraestate.com/#pricing</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.pantheraestate.com/#location</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.pantheraestate.com/#calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.pantheraestate.com/#faq</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.pantheraestate.com/#register</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
 </urlset>

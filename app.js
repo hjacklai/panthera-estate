@@ -783,7 +783,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initPrelaunchBar();
   initLoadCascade();
   initScrollProgress();
-  initDayCarousel();
   initTopoParallax();
 });
 
@@ -804,111 +803,6 @@ function initTopoParallax(){
   }
   window.addEventListener('scroll', apply, { passive: true });
   apply();
-}
-
-/* ── Day-at-Panthera swipe carousel ─────────────
-   Below the 1100px breakpoint, the day strip
-   becomes a snap-scroll carousel. This wires up:
-     · per-card dot indicators (built from the
-       articles already in the DOM)
-     · prev / next chevrons that scroll one card
-     · live sync of the active dot as the user
-       swipes, scrolls, or uses keyboard arrows
-   On wide viewports the strip stays a 6-up grid
-   and these controls hide via CSS. */
-function initDayCarousel(){
-  const strip = document.querySelector('.day-strip');
-  const root  = document.querySelector('.day-carousel');
-  if (!strip || !root) return;
-  const cards = [...strip.querySelectorAll('.day')];
-  const dotsBox = root.querySelector('.day-dots');
-  const prev = root.querySelector('.day-nav--prev');
-  const next = root.querySelector('.day-nav--next');
-  if (!cards.length || !dotsBox) return;
-
-  // Build a dot per card
-  dotsBox.innerHTML = '';
-  cards.forEach((card, i) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.setAttribute('role', 'tab');
-    b.setAttribute('aria-label', `Moment ${i + 1}`);
-    b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-    b.addEventListener('click', () => scrollToIndex(i));
-    dotsBox.appendChild(b);
-  });
-  const dots = [...dotsBox.children];
-
-  function indexFromScroll(){
-    // Pick the card whose left edge is closest to the strip's scroll position.
-    const sl = strip.scrollLeft;
-    let best = 0, bestDist = Infinity;
-    cards.forEach((c, i) => {
-      const d = Math.abs(c.offsetLeft - sl);
-      if (d < bestDist){ bestDist = d; best = i; }
-    });
-    return best;
-  }
-  function syncActive(){
-    const i = indexFromScroll();
-    dots.forEach((d, j) => d.setAttribute('aria-selected', j === i ? 'true' : 'false'));
-    if (prev) prev.disabled = (i === 0);
-    if (next) next.disabled = (i === cards.length - 1);
-  }
-  let tweenTimer = null;
-  function scrollToIndex(i){
-    const target = cards[Math.max(0, Math.min(cards.length - 1, i))];
-    if (!target) return;
-    if (tweenTimer){ clearInterval(tweenTimer); tweenTimer = null; }
-    // CSS `scroll-snap-type: mandatory` + `scroll-behavior: smooth` can
-    // fight a programmatic scroll, so manually tween scrollLeft while
-    // snap and smooth-behaviour are temporarily relaxed; restore on end
-    // so finger-swipe still snaps cleanly.
-    const snapWas = strip.style.scrollSnapType;
-    const behWas  = strip.style.scrollBehavior;
-    strip.style.scrollSnapType = 'none';
-    strip.style.scrollBehavior = 'auto';
-    const startX = strip.scrollLeft;
-    const endX   = target.offsetLeft;
-    if (Math.abs(endX - startX) < 2){
-      strip.style.scrollSnapType = snapWas;
-      strip.style.scrollBehavior = behWas;
-      syncActive();
-      return;
-    }
-    const startT = Date.now();
-    const dur    = 340;
-    tweenTimer = setInterval(() => {
-      const t = Math.min(1, (Date.now() - startT) / dur);
-      const eased = 1 - Math.pow(1 - t, 3); // ease-out-cubic
-      strip.scrollLeft = startX + (endX - startX) * eased;
-      if (t >= 1){
-        clearInterval(tweenTimer); tweenTimer = null;
-        strip.scrollLeft = endX;
-        strip.style.scrollSnapType = snapWas;
-        strip.style.scrollBehavior = behWas;
-        syncActive();
-      }
-    }, 16);
-  }
-
-  prev?.addEventListener('click', () => scrollToIndex(indexFromScroll() - 1));
-  next?.addEventListener('click', () => scrollToIndex(indexFromScroll() + 1));
-
-  // Debounced scroll listener so we don't fight the smooth-scroll animation
-  let t;
-  strip.addEventListener('scroll', () => {
-    clearTimeout(t);
-    t = setTimeout(syncActive, 60);
-  }, { passive: true });
-
-  // Re-sync when the layout flips between grid / strip
-  window.addEventListener('resize', () => {
-    clearTimeout(t);
-    t = setTimeout(syncActive, 100);
-  });
-
-  syncActive();
 }
 
 /* ── First-load cascade ────────────────────────
@@ -1446,7 +1340,7 @@ function initDockSpy(){
   if (!items.length) return;
   const map = {
     estate:   ["estate", "glance", "philosophy"],
-    homes:    ["homes", "day", "architecture", "sketches", "specs", "plans"],
+    homes:    ["homes", "architecture", "sketches", "specs", "plans"],
     site:     ["bertam", "pricing", "calculator"],
     location: ["location"],
     register: ["journey", "faq", "register"]

@@ -66,28 +66,47 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://www.pantheraestate.com/#website",
+      "name": "Panthera Bertam",
+      "alternateName": "pantheraestate.com",
+      "url": "https://www.pantheraestate.com/",
+      "inLanguage": ["en", "ms", "zh"],
+      "publisher": { "@id": "https://www.pantheraestate.com/#developer" }
+    },
+    {
       "@type": "Organization",
       "@id": "https://www.pantheraestate.com/#developer",
       "name": "Panthera Development Sdn Bhd",
       "url": "https://www.pantheraestate.com/",
-      "logo": "https://www.pantheraestate.com/assets/panthera-mark.svg",
+      "logo": "https://www.pantheraestate.com/assets/panthera-logo-full.png",
+      "image": "https://www.pantheraestate.com/assets/og-card.jpg",
       "telephone": "+60175981858",
+      "areaServed": "Penang, Malaysia",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bertam",
+        "addressRegion": "Pulau Pinang",
+        "addressCountry": "MY"
+      },
       "sameAs": ["https://wa.me/60175981858"]
     },
     {
       "@type": "RealEstateListing",
       "@id": "https://www.pantheraestate.com/#listing",
       "name": "Panthera Bertam",
-      "description": "A 1.96-acre development of 3 bungalows and 16 semi-detached homes around a central park of over 700 m² in Bertam, Seberang Perai, Penang. Freehold. Five minutes to Penang Technology Park @ Bertam.",
+      "description": "A 1.96-acre freehold development of 3 bungalows and 16 semi-detached homes arranged around a shared central park of over 700 m² in Bertam, Seberang Perai Utara, Penang. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-detached from RM 610,000, bungalows from RM 860,000.",
       "url": "https://www.pantheraestate.com/",
       "image": [
-        "https://www.pantheraestate.com/assets/render-bungalow.jpg",
-        "https://www.pantheraestate.com/assets/render-semid.jpg",
-        "https://www.pantheraestate.com/assets/site-plan-color.png"
+        "https://www.pantheraestate.com/assets/og-card.jpg",
+        "https://www.pantheraestate.com/assets/site-render-aerial.png",
+        "https://www.pantheraestate.com/assets/perspective-bungalow-front.jpg",
+        "https://www.pantheraestate.com/assets/perspective-semid-front.jpg"
       ],
       "datePosted": "2026-05-20",
       "availabilityStarts": "2028-01-01",
       "broker": { "@id": "https://www.pantheraestate.com/#developer" },
+      "numberOfItems": 19,
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Bertam",
@@ -107,7 +126,7 @@
           "priceCurrency": "MYR",
           "availability": "https://schema.org/PreOrder",
           "category": "Semi-Detached House",
-          "description": "1,917 sq ft built-up · 210–318 m² land · 4 bed · 4 bath · 2 storey · Freehold"
+          "description": "1,917 sq ft built-up · 210 to 318 m² land · 4 bed · 4 bath · 2 storey · Freehold"
         },
         {
           "@type": "Offer",
@@ -116,7 +135,63 @@
           "priceCurrency": "MYR",
           "availability": "https://schema.org/PreOrder",
           "category": "Bungalow / Detached House",
-          "description": "2,598 sq ft built-up · 356–493 m² land · 5 bed · 6 bath · 2 storey · Freehold"
+          "description": "2,598 sq ft built-up · 356 to 493 m² land · 5 bed · 6 bath · 2 storey · Freehold"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.pantheraestate.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is the title freehold or leasehold?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Freehold. The land is Lot 24480; individual titles will be issued at handover. No 99-year clock." }
+        },
+        {
+          "@type": "Question",
+          "name": "Are foreigners allowed to buy at Panthera Bertam?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, with conditions. The minimum foreign-purchase threshold for landed property on the Penang mainland is RM 1.8 million per unit. Bungalow lots may qualify above that level subject to state consent; semi-detached units are not eligible for foreign ownership. Contact the sales team for the latest threshold." }
+        },
+        {
+          "@type": "Question",
+          "name": "What does Bumi lot mean here?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Six lots are reserved under Penang's Bumiputera quota and receive a 5% discount on the standard price. These lots can only be transferred to Bumiputera owners. The remaining thirteen are unrestricted." }
+        },
+        {
+          "@type": "Question",
+          "name": "When is handover?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Estimated Q4 2028, a 24-month build from SPA signing. The exact date is fixed in your Sale and Purchase Agreement with a Liquidated Ascertained Damages (LAD) clause, so you are protected if completion is late." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in the price?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The full structure, all finishes in the specifications schedule, sanitaryware in every bathroom, water heaters, electrical points, fibre and CAT-6 wiring, smart-home pre-wiring, and a 7kW EV charger point at the car porch. Kitchen cabinetry, air-conditioning units and lighting fixtures are owner fit-out." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I choose my lot?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Lots are released first-come from the published price list. Corner lots (04 and 19) carry a corner premium. Bungalow lots (01 to 03) are priced individually by land size." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the maintenance arrangement?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A Residents' Association is set up at handover to maintain the central green, the inner ring road, the drains and the retention pond (kolam tadahan). Indicative contribution is RM 180 per home per month. The estate is not gated; the layout itself keeps through-traffic out." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I extend or modify the house later?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Within the approved building envelope, yes. Common modifications such as porch enclosure and rear-kitchen extension are pre-approved. External alterations affecting the streetscape require Residents' Association and MPSP approval. A renovation guideline is provided at handover." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you assist with bank loans?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Panel lenders include Maybank, CIMB, RHB and Hong Leong. Pre-qualification typically takes 3 to 5 working days. Final terms depend on your individual credit profile." }
+        },
+        {
+          "@type": "Question",
+          "name": "What if I am not ready to buy yet?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Register your interest anyway. You will be informed when launch pricing is finalised and get first refusal on the lots you flagged. No obligation and no deposit at this stage." }
         }
       ]
     }

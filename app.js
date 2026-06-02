@@ -1030,8 +1030,8 @@ function initLocationMap(){
         '<img src="assets/e-mark-square.png?v=5" alt="" aria-hidden="true" class="pin-site-img">' +
       '</div>' +
       '<div class="pin-site-label">PANTHERA <span>· BERTAM</span></div>',
-    iconSize: [54, 54],
-    iconAnchor: [27, 27]
+    iconSize: [44, 44],
+    iconAnchor: [22, 22]
   });
   L.marker(SITE_COORD, { icon: siteIcon, zIndexOffset: 2000, riseOnHover: true })
     .addTo(leafletMap)

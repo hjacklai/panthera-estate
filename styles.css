@@ -3269,14 +3269,14 @@ a:focus-visible,
   position: relative;
 }
 .pin-site{
-  width: 54px; height: 54px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   background: var(--terra-2);
   border: 3px solid var(--cream);
   box-shadow: 0 0 0 0 rgba(138,70,56,0.55), 0 10px 24px -6px rgba(28,23,20,0.55);
   animation: site-pulse 2.6s ease-out infinite;
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 6px;
+  padding: 5px;
   box-sizing: border-box;
 }
 .pin-site svg{

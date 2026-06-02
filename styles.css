@@ -3037,7 +3037,7 @@ a:focus-visible,
   margin-bottom: 40px;
 }
 .loc-livemap-bar{
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: flex-end;
   flex-wrap: wrap; gap: 12px;
   padding: 14px 18px;
   background: var(--ink);

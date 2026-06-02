@@ -43,14 +43,14 @@ const I18N = {
     "glance.eyebrow": "At a glance",
     "glance.title": "What you're buying into.",
     "glance.lede": "Not just a house. A freehold address in a township the country is pouring billions into, bought while it is still quiet enough to call home.",
-    "g1.k": "Total Land",     "g1.v": "1.96",  "g1.u": "acres (0.794 ha)",
+    "g1.k": "Total Land",     "g1.v": "2",  "g1.u": "acres freehold",
     "g2.k": "Homes",          "g2.v": "19",     "g2.u": "3 bungalow · 16 semi-D",
     "g3.k": "From",           "g3.v": "RM 610k","g3.u": "Pre-launch 2026 · register early",
     "g5.k": "Central Green",  "g5.v": "700+",    "g5.u": "m²", "g5.s": "Shared open space, never built over",
 
     "site.eyebrow": "Site Plan",
     "site.title": "The site.",
-    "site.lede": "1.96 acres of freehold land off Bertam, arranged as a quiet inner ring of houses around a central open space, a layout you'll rarely see on the mainland at this size.",
+    "site.lede": "2 acres of freehold land off Bertam, arranged as a quiet inner ring of houses around a central open space, a layout you'll rarely see on the mainland at this size.",
     "site.cap.l": "Drawing · proposed development plan",
     "site.cap.r": "Lot 24480 · 7,939.59 m² · 1.962 ac",
     "site.aerial.l": "Artist's impression · aerial view from north",
@@ -247,14 +247,14 @@ const I18N = {
     "glance.eyebrow": "Ringkasan",
     "glance.title": "Apa yang anda miliki.",
     "glance.lede": "Bukan sekadar rumah. Alamat pegangan bebas dalam sebuah bandar yang sedang dilaburkan berbilion oleh negara, dimiliki ketika ia masih cukup tenang untuk dipanggil rumah.",
-    "g1.k": "Jumlah Tanah",  "g1.v": "1.96",  "g1.u": "ekar (0.794 hektar)",
+    "g1.k": "Jumlah Tanah",  "g1.v": "2",  "g1.u": "ekar pegangan bebas",
     "g2.k": "Rumah",         "g2.v": "19",     "g2.u": "3 banglo · 16 berkembar",
     "g3.k": "Bermula",       "g3.v": "RM 610k","g3.u": "Pra-pelancaran 2026 · daftar awal",
     "g5.k": "Kawasan Lapang", "g5.v": "700+",   "g5.u": "m²", "g5.s": "Ruang lapang dikongsi, tidak akan dibina",
 
     "site.eyebrow": "Pelan Tapak",
     "site.title": "Tapak.",
-    "site.lede": "1.96 ekar tanah pegangan bebas di Bertam, disusun sebagai cincin dalaman rumah yang tenang mengelilingi ruang terbuka pusat, susun atur yang jarang ditemui di tanah besar pada saiz ini.",
+    "site.lede": "2 ekar tanah pegangan bebas di Bertam, disusun sebagai cincin dalaman rumah yang tenang mengelilingi ruang terbuka pusat, susun atur yang jarang ditemui di tanah besar pada saiz ini.",
     "site.cap.l": "Lukisan · pelan pembangunan cadangan",
     "site.cap.r": "Lot 24480 · 7,939.59 m² · 1.962 ek",
     "site.aerial.l": "Tafsiran artis · pandangan udara dari utara",
@@ -447,14 +447,14 @@ const I18N = {
     "glance.eyebrow": "一目了然",
     "glance.title": "您所购买的一切。",
     "glance.lede": "不只是一栋房子。这是一个永久地契的门牌, 落在国家正投入数十亿的新兴市镇, 而您在它仍然宁静、仍能称之为家的时候入手。",
-    "g1.k": "总土地面积", "g1.v": "1.96",  "g1.u": "英亩(0.794 公顷)",
+    "g1.k": "总土地面积", "g1.v": "2",  "g1.u": "英亩永久地契",
     "g2.k": "房屋",        "g2.v": "19",     "g2.u": "3 独立 · 16 半独立",
     "g3.k": "起价",        "g3.v": "RM 610k","g3.u": "2026 预发布 · 提早登记",
     "g5.k": "中央绿地",     "g5.v": "700+",    "g5.u": "m²", "g5.s": "永久共享开放空间, 永不建房",
 
     "site.eyebrow": "总平面",
     "site.title": "地段。",
-    "site.lede": "1.96 英亩永久地契土地,坐落北赖,房屋以静谧的内环方式围绕中央开放空间布置, 这种尺度的布局,在威省鲜有所见。",
+    "site.lede": "2 英亩永久地契土地,坐落北赖,房屋以静谧的内环方式围绕中央开放空间布置, 这种尺度的布局,在威省鲜有所见。",
     "site.cap.l": "图纸, 拟议发展计划",
     "site.cap.r": "Lot 24480 · 7,939.59 m² · 1.962 英亩",
     "site.aerial.l": "艺术家示意图 · 由北面俯瞰",
@@ -1039,7 +1039,7 @@ function initLocationMap(){
       '<div class="pop-card">' +
         '<div class="cat-row"><span class="cat-num" style="background:var(--terra-2)">●</span><span>Panthera Site</span></div>' +
         '<div class="pop-h">Panthera Bertam</div>' +
-        '<div class="pop-meta"><span>19 homes</span><span><span class="v">1.96 ac</span> freehold</span></div>' +
+        '<div class="pop-meta"><span>19 homes</span><span><span class="v">2 ac</span> freehold</span></div>' +
         '<a class="pop-go" href="https://www.google.com/maps?q=' + SITE_COORD[0] + ',' + SITE_COORD[1] + '" target="_blank" rel="noopener">Open in Google Maps ↗</a>' +
       '</div>',
       { className: "loc-pop", maxWidth: 280 }

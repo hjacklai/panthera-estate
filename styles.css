@@ -45,22 +45,67 @@ body{
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-/* Animated topo backdrop, slow drift + gentle breathing + scroll parallax.
-   The base drift keyframes give the contours their "alive" feel; the JS-fed
-   --scroll-parallax variable shifts the background slowly as the user scrolls,
-   creating depth without distracting from the content. */
-body::before{
-  content: ""; position: fixed; inset: -8% -8%;
-  background-image: url("assets/topo.svg");
-  background-size: 2800px auto;
-  background-position: center 0px;
-  background-position-y: calc(0px + var(--scroll-parallax, 0px));
-  background-repeat: no-repeat;
+/* Live topo canvas replaces the old static image background.
+   Fixed, full-viewport, behind everything, non-interactive. */
+#topo-canvas{
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
   z-index: -1; pointer-events: none;
-  opacity: 0.55;
-  will-change: transform, background-position;
-  animation: topoDrift 64s ease-in-out infinite alternate;
-  transition: background-position-y .05s linear;
+  opacity: 0.9;
+}
+/* Draughtsman's sheet frame: a hairline border + corner crop marks +
+   a sheet reference, sitting as a faint top overlay like a real drawing. */
+.sheet-frame{
+  position: fixed; inset: 0; z-index: 38; pointer-events: none;
+}
+.sheet-frame::before{
+  content: ""; position: absolute; inset: 16px;
+  border: 1px solid rgba(40,33,28,0.12);
+}
+.sheet-frame .cm{
+  position: absolute; width: 13px; height: 13px;
+}
+.sheet-frame .cm::before,
+.sheet-frame .cm::after{
+  content: ""; position: absolute; background: rgba(40,33,28,0.32);
+}
+.sheet-frame .cm::before{ left: 0; top: 6px; width: 13px; height: 1px; }
+.sheet-frame .cm::after{ top: 0; left: 6px; width: 1px; height: 13px; }
+.sheet-frame .cm-tl{ left: 9.5px;  top: 9.5px; }
+.sheet-frame .cm-tr{ right: 9.5px; top: 9.5px; }
+.sheet-frame .cm-bl{ left: 9.5px;  bottom: 9.5px; }
+.sheet-frame .cm-br{ right: 9.5px; bottom: 9.5px; }
+.sheet-frame .sheet-ref,
+.sheet-frame .sheet-coord{
+  position: absolute; bottom: 22px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(40,33,28,0.42); white-space: nowrap;
+}
+.sheet-frame .sheet-ref{ left: 30px; }
+.sheet-frame .sheet-coord{ right: 30px; }
+@media (max-width: 820px){
+  .sheet-frame::before{ inset: 10px; }
+  .sheet-frame .sheet-ref, .sheet-frame .sheet-coord{ display: none; }
+  .sheet-frame .cm-tl{ left: 4px; top: 4px; }
+  .sheet-frame .cm-tr{ right: 4px; top: 4px; }
+  .sheet-frame .cm-bl{ left: 4px; bottom: 4px; }
+  .sheet-frame .cm-br{ right: 4px; bottom: 4px; }
+}
+/* Draughtsman's drafting paper ground.
+   Warm sheet + a faint graph grid (fine 28px, heavier 140px index
+   lines) sits behind everything. The animated topo canvas (z-index
+   -1) inks survey contours over it; the .ambient grain adds tooth. */
+body::before{
+  content: ""; position: fixed; inset: 0;
+  z-index: -3; pointer-events: none;
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(rgba(74,65,62,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,65,62,0.028) 1px, transparent 1px),
+    linear-gradient(rgba(74,65,62,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,65,62,0.04) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px, 140px 140px, 140px 140px;
+  background-position: -1px -1px;
 }
 @keyframes topoDrift {
   0%   { transform: translate3d(-2.0%, -1.2%, 0) scale(1.00); }
@@ -69,6 +114,73 @@ body::before{
 }
 @media (prefers-reduced-motion: reduce){
   body::before{ animation: none; transition: none; }
+}
+
+/* ─────────────────────────────────────────────
+   AMBIENT BACKGROUND MOTION
+   A fixed decorative layer behind all content (z-index:-2):
+   (1) a slow-drifting warm "light wash" that breathes across the
+       cream like sun moving over a garden, and
+   (2) faint motes (pollen / dust) rising gently. Purely atmospheric,
+       non-interactive, and fully disabled under reduced-motion.
+   ───────────────────────────────────────────── */
+.ambient{
+  position: fixed; inset: 0; z-index: -2;
+  pointer-events: none; overflow: hidden;
+}
+/* Paper tooth, fine graphite grain so the sheet never reads as flat screen-white */
+.ambient::after{
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 180px 180px;
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+}
+.ambient::before{
+  content: ""; position: absolute; inset: -25%;
+  background:
+    radial-gradient(42% 42% at 28% 30%, rgba(233,201,163,0.42), transparent 70%),
+    radial-gradient(38% 40% at 78% 66%, rgba(177,118,100,0.22), transparent 72%),
+    radial-gradient(32% 34% at 58% 102%, rgba(111,127,88,0.16), transparent 70%);
+  filter: blur(10px);
+  will-change: transform;
+  animation: ambientWash 80s ease-in-out infinite alternate;
+}
+@keyframes ambientWash{
+  0%   { transform: translate3d(-3%, -2%, 0) scale(1.02); }
+  50%  { transform: translate3d( 2%,  1.5%, 0) scale(1.06); }
+  100% { transform: translate3d( 3%, -1%, 0) scale(1.03); }
+}
+.ambient .mote{
+  position: absolute; bottom: -7%;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255,247,232,0.95), rgba(190,128,108,0.5) 64%, transparent 72%);
+  opacity: 0; filter: blur(0.5px);
+  will-change: transform, opacity;
+  animation: moteRise linear infinite;
+}
+@keyframes moteRise{
+  0%   { opacity: 0;    transform: translateY(0)      translateX(0)    scale(0.8); }
+  12%  { opacity: 0.7;  }
+  50%  { transform: translateY(-48vh) translateX(16px) scale(1); }
+  88%  { opacity: 0.6;  }
+  100% { opacity: 0;    transform: translateY(-94vh) translateX(-12px) scale(0.9); }
+}
+/* scatter the motes, varied column, size, speed and phase so it never reads as a grid */
+.ambient .mote:nth-child(1) { left: 6%;  animation-duration: 26s; animation-delay: -2s;  }
+.ambient .mote:nth-child(2) { left: 16%; animation-duration: 34s; animation-delay: -12s; width: 5px; height: 5px; }
+.ambient .mote:nth-child(3) { left: 25%; animation-duration: 30s; animation-delay: -7s;  }
+.ambient .mote:nth-child(4) { left: 34%; animation-duration: 39s; animation-delay: -21s; width: 9px; height: 9px; }
+.ambient .mote:nth-child(5) { left: 43%; animation-duration: 28s; animation-delay: -15s; width: 5px; height: 5px; }
+.ambient .mote:nth-child(6) { left: 52%; animation-duration: 36s; animation-delay: -4s;  }
+.ambient .mote:nth-child(7) { left: 60%; animation-duration: 31s; animation-delay: -25s; width: 6px; height: 6px; }
+.ambient .mote:nth-child(8) { left: 69%; animation-duration: 41s; animation-delay: -9s;  width: 4px; height: 4px; }
+.ambient .mote:nth-child(9) { left: 78%; animation-duration: 29s; animation-delay: -18s; }
+.ambient .mote:nth-child(10){ left: 86%; animation-duration: 35s; animation-delay: -28s; width: 8px; height: 8px; }
+.ambient .mote:nth-child(11){ left: 92%; animation-duration: 32s; animation-delay: -6s;  width: 5px; height: 5px; }
+.ambient .mote:nth-child(12){ left: 97%; animation-duration: 37s; animation-delay: -16s; }
+@media (prefers-reduced-motion: reduce){
+  .ambient{ display: none; }
 }
 
 img, svg { max-width: 100%; display: block; }
@@ -147,11 +259,11 @@ section{ position: relative; }
    fully visible, a missed observer or disabled JS can never blank content,
    it simply skips the animation. */
 @keyframes revealUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(34px) scale(.986); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 [data-reveal].in{
-  animation: revealUp 1.0s cubic-bezier(.22,.7,.2,1) both;
+  animation: revealUp 1.15s cubic-bezier(.2,.72,.15,1) both;
 }
 @media (prefers-reduced-motion: reduce){
   [data-reveal].in{ animation: none; }
@@ -240,7 +352,7 @@ section{ position: relative; }
   color: var(--ink);
 }
 .topbar .brand-mark .wordmark-img{
-  height: 26px;
+  height: 15px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -268,7 +380,7 @@ section{ position: relative; }
   .topbar-side.left{ display: none; }
   .topbar-inner{ grid-template-columns: 1fr auto; }
   .topbar .brand-mark{ justify-self: start; gap: 8px; }
-  .topbar .brand-mark .wordmark-img{ height: 20px; }
+  .topbar .brand-mark .wordmark-img{ height: 15px; }
   .topbar .brand-mark .sub{ display: none; }
 }
 
@@ -429,16 +541,47 @@ footer{ padding-bottom: 60px; }
 .btn-cream:hover{ background: white; }
 
 /* ── Hero ────────────────────────────────────── */
+/* Drafting-sheet hero: the live paper + moving contours show through; the
+   headline and a spec strip sit on it. */
 .hero{
-  padding: clamp(48px, 7vw, 120px) 0 clamp(64px, 8vw, 140px);
   position: relative; overflow: hidden;
+  min-height: min(86vh, 820px);
+  display: flex; align-items: center;
+  padding: clamp(96px, 14vh, 160px) 0 clamp(56px, 8vw, 110px);
 }
-.hero-grid{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(32px, 5vw, 80px);
-  align-items: center;
-  max-width: 880px;
+.hero-inner{ position: relative; z-index: 2; width: 100%; }
+.hero-copy{ max-width: 760px; }
+/* a faint pencil registration bracket at the sheet's top-left, drawn in CSS */
+.hero::before{
+  content: ""; position: absolute; z-index: 1; pointer-events: none;
+  left: calc(var(--gutter) - 18px); top: clamp(72px, 11vh, 128px);
+  width: 26px; height: 26px;
+  border-left: 1px solid rgba(40,33,28,0.32);
+  border-top: 1px solid rgba(40,33,28,0.32);
+}
+.hero-specs{
+  list-style: none; margin: clamp(36px, 5vw, 56px) 0 0; padding: 16px 0 0;
+  display: flex; flex-wrap: wrap; gap: 0;
+  border-top: 1px solid var(--rule);
+  max-width: 680px;
+}
+.hero-specs li{
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 4px 28px 4px 0; margin-right: 28px;
+  border-right: 1px solid var(--rule-soft);
+}
+.hero-specs li:last-child{ border-right: 0; margin-right: 0; }
+.hero-specs .v{
+  font-family: var(--serif); font-size: clamp(24px, 3vw, 32px);
+  line-height: 1; letter-spacing: -0.01em; color: var(--text);
+}
+.hero-specs .k{
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-mute);
+}
+@media (max-width: 720px){
+  .hero{ min-height: 78vh; }
+  .hero-specs li{ padding-right: 18px; margin-right: 18px; }
 }
 
 .hero h1{ margin: 18px 0 24px; }
@@ -658,6 +801,18 @@ footer{ padding-bottom: 60px; }
   width: 100%; height: auto; display: block;
   aspect-ratio: 1116 / 944;
   object-fit: cover;
+  transform-origin: 52% 46%;
+  animation: aerialFlythrough 42s ease-in-out infinite alternate;
+  will-change: transform;
+}
+/* Cinematic slow push-in over the estate, the brochure "cover" coming alive.
+   Eases toward the central green; disabled under reduced-motion. */
+@keyframes aerialFlythrough{
+  0%   { transform: scale(1.00); }
+  100% { transform: scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce){
+  .site-aerial img{ animation: none; }
 }
 .site-aerial figcaption{
   display: flex; justify-content: space-between; align-items: center;
@@ -743,6 +898,61 @@ footer{ padding-bottom: 60px; }
   display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
 }
 @media (max-width: 900px){ .homes-grid{ grid-template-columns: 1fr; } }
+
+/* ── Two image-led product sections (Semi-D / Bungalow) ──────── */
+.homes-stack{ margin-top: clamp(8px, 2vw, 24px); }
+.product{
+  display: grid; grid-template-columns: 1.02fr 0.98fr;
+  gap: clamp(28px, 5vw, 76px); align-items: center;
+  padding: clamp(40px, 6vw, 80px) 0;
+}
+.product + .product{ border-top: 1px solid var(--rule-soft); }
+.product--flip .product-art{ order: 2; }
+.product-body{ min-width: 0; }
+.product-body .count{
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--terra-2); margin-bottom: 12px;
+}
+.product-body h3{
+  font-family: var(--serif); font-weight: 400; margin: 0;
+  font-size: clamp(40px, 5vw, 60px); line-height: 0.98; letter-spacing: -0.02em;
+}
+.product-pitch{
+  margin: 16px 0 26px; max-width: 46ch;
+  font-size: 17px; line-height: 1.55; color: var(--text-mute); text-wrap: pretty;
+}
+.product-foot{
+  display: flex; align-items: center; gap: clamp(20px, 3vw, 36px);
+  margin-top: 26px; flex-wrap: wrap;
+}
+.product .price{ font-family: var(--serif); }
+.product .price .lbl{
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-mute); display: block; margin-bottom: 3px;
+}
+.product .price strong{ font-weight: 500; font-size: 26px; letter-spacing: -0.01em; }
+
+/* The watercolour, framed like a drawing pinned to the sheet */
+.product-art{
+  position: relative; margin: 0;
+  background: #FBF6EE; padding: 16px 16px 12px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 28px 54px -32px rgba(28,23,20,0.5);
+  transform: rotate(-0.7deg);
+}
+.product--flip .product-art{ transform: rotate(0.7deg); }
+.product-img{ overflow: hidden; background: var(--cream-3); }
+.product-img img{ width: 100%; height: auto; display: block; }
+.product-art figcaption{
+  display: flex; justify-content: space-between; gap: 14px; margin-top: 11px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--text-mute);
+}
+@media (max-width: 860px){
+  .product{ grid-template-columns: 1fr; gap: 26px; padding: 40px 0; }
+  .product--flip .product-art{ order: 0; }
+  .product-art, .product--flip .product-art{ transform: none; }
+}
 
 .home-card{
   background: var(--cream-2);

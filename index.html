@@ -58,7 +58,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 
-<link rel="stylesheet" href="styles.css?v=68">
+<link rel="stylesheet" href="styles.css?v=69">
 
 <!-- Structured data for Google rich results -->
 <script type="application/ld+json">
@@ -207,6 +207,19 @@
 <!-- Premium touch: scroll progress indicator -->
 <div class="scroll-progress" aria-hidden="true"></div>
 
+<!-- Ambient background motion: warm light wash -->
+<div class="ambient" aria-hidden="true"></div>
+
+<!-- Live topographic contour field, marching-squares contours panned on scroll -->
+<canvas id="topo-canvas" aria-hidden="true"></canvas>
+
+<!-- Draughtsman's sheet frame: hairline border, corner crop marks, sheet ref -->
+<div class="sheet-frame" aria-hidden="true">
+  <span class="cm cm-tl"></span><span class="cm cm-tr"></span>
+  <span class="cm cm-bl"></span><span class="cm cm-br"></span>
+  <span class="sheet-coord">5.5306° N · 100.4655° E</span>
+</div>
+
 <!-- ─── TOP RIBBON ─────────────────────────────── -->
 <header class="topbar" data-screen-label="00 Top">
   <div class="wrap topbar-inner">
@@ -216,7 +229,7 @@
     </a>
     <a href="#" class="brand-mark" aria-label="Panthera Bertam">
       <img src="assets/panthera-logo-full.png" alt="Panthera" class="wordmark-img">
-      <span class="sub">BERTAM</span>
+      <span class="sub">BERTAM PENANG</span>
     </a>
     <div class="topbar-side right">
       <div class="lang" role="tablist" aria-label="Language">
@@ -282,9 +295,9 @@
 </header>
 
 <!-- ─── HERO ──────────────────────────────────── -->
-<section class="hero" data-screen-label="01 Hero">
-  <div class="wrap hero-grid">
-    <div data-reveal>
+<section class="hero hero--paper" data-screen-label="01 Hero">
+  <div class="wrap hero-inner">
+    <div class="hero-copy" data-reveal>
       <div class="eyebrow" data-i18n="hero.eyebrow">Pre-launch · Bertam, Seberang Perai Utara</div>
       <h1 class="display">
         <span data-i18n="hero.h1.a">Every home</span><br>
@@ -302,8 +315,14 @@
           <span class="arrow" aria-hidden="true">↗</span>
         </a>
       </div>
-    </div>
 
+      <ul class="hero-specs" aria-label="At a glance">
+        <li><span class="v" data-i18n="hero.f1.v">RM 610k</span><span class="k" data-i18n="hero.f1.k">from</span></li>
+        <li><span class="v" data-i18n="hero.f2.v">Freehold</span><span class="k" data-i18n="hero.f2.k">tenure</span></li>
+        <li><span class="v" data-i18n="hero.f3.v">19</span><span class="k" data-i18n="hero.f3.k">homes</span></li>
+        <li><span class="v" data-i18n="hero.f4.v">5 min</span><span class="k" data-i18n="hero.f4.k">to Tech Park</span></li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -457,78 +476,89 @@
       </div>
     </div>
 
-    <div class="homes-grid">
+    <div class="homes-stack">
       <!-- SEMI-D -->
-      <article class="home-card" data-reveal>
-        <div>
+      <article class="product" data-reveal>
+        <figure class="product-art pinned">
+          <div class="product-img"><img src="assets/perspective-semid-front.jpg?v=2" alt="Semi-Detached watercolour, front pair, artist's impression" loading="lazy"></div>
+          <figcaption><span>Semi-Detached · front pair</span><span>Artist's impression</span></figcaption>
+        </figure>
+        <div class="product-body">
           <div class="count" data-i18n="h.semid.tag">16 units · Semi-Detached</div>
-          <h3 data-i18n="h.semid.name">Semi-D</h3>
-          <div class="price">
-            <strong data-i18n="h.semid.price.v">RM 610,000 onwards</strong>
+          <h3 data-i18n="h.semid.name">The Semi-D</h3>
+          <p class="product-pitch" data-i18n="h.semid.pitch">Right-sized for a growing family: 1,917 sq ft over two storeys, four bedrooms and a true garden setback. Every one faces the central green.</p>
+          <div class="specs specs-6">
+            <div>
+              <div class="k" data-i18n="h.semid.s1.k">Built-up</div>
+              <div class="v"><span data-i18n="h.semid.s1.v">1,917</span> <small data-i18n="h.semid.s1.u">sq ft</small></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.semid.s2.k">Land Size</div>
+              <div class="v"><span data-i18n="h.semid.s2.v">210–318</span> <small data-i18n="h.semid.s2.u">m²</small></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.semid.s3.k">Bedrooms</div>
+              <div class="v"><span data-i18n="h.semid.s3.v">4</span></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.semid.s4.k">Bathrooms</div>
+              <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.semid.s5.k">Storeys</div>
+              <div class="v"><span data-i18n="h.semid.s5.v">2</span></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.semid.s6.k">Tenure</div>
+              <div class="v"><span data-i18n="h.semid.s6.v">Freehold</span></div>
+            </div>
           </div>
-        </div>
-        <div class="specs specs-6">
-          <div>
-            <div class="k" data-i18n="h.semid.s1.k">Built-up</div>
-            <div class="v"><span data-i18n="h.semid.s1.v">1,917</span> <small data-i18n="h.semid.s1.u">sq ft</small></div>
-          </div>
-          <div>
-            <div class="k" data-i18n="h.semid.s2.k">Land Size</div>
-            <div class="v"><span data-i18n="h.semid.s2.v">210–318</span> <small data-i18n="h.semid.s2.u">m²</small></div>
-          </div>
-          <div>
-            <div class="k" data-i18n="h.semid.s3.k">Bedrooms</div>
-            <div class="v"><span data-i18n="h.semid.s3.v">4</span></div>
-          </div>
-          <div>
-            <div class="k" data-i18n="h.semid.s4.k">Bathrooms</div>
-            <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
-          </div>
-          <div>
-            <div class="k" data-i18n="h.semid.s5.k">Storeys</div>
-            <div class="v"><span data-i18n="h.semid.s5.v">2</span></div>
-          </div>
-          <div>
-            <div class="k" data-i18n="h.semid.s6.k">Tenure</div>
-            <div class="v"><span data-i18n="h.semid.s6.v">Freehold</span></div>
+          <div class="product-foot">
+            <div class="price"><span class="lbl" data-i18n="h.semid.price.l">From</span><strong data-i18n="h.semid.price.v">RM 610,000 onwards</strong></div>
+            <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </div>
       </article>
 
       <!-- BUNGALOW -->
-      <article class="home-card dark" data-reveal style="background:var(--ink); color:var(--cream); border-color:transparent;">
-        <div>
-          <div class="count" data-i18n="h.bungalow.tag" style="color:var(--clay);">3 units · Bungalow</div>
-          <h3 data-i18n="h.bungalow.name">Bungalow</h3>
-          <div class="price" style="color:var(--cream);">
-            <span class="lbl" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.price.l">From</span>
-            <strong data-i18n="h.bungalow.price.v">RM 860,000 onwards</strong>
+      <article class="product product--flip" data-reveal>
+        <figure class="product-art pinned">
+          <div class="product-img"><img src="assets/perspective-bungalow-front.jpg?v=2" alt="Bungalow watercolour, front facade, artist's impression" loading="lazy"></div>
+          <figcaption><span>Bungalow · front facade</span><span>Artist's impression</span></figcaption>
+        </figure>
+        <div class="product-body">
+          <div class="count" data-i18n="h.bungalow.tag">3 units · Bungalow</div>
+          <h3 data-i18n="h.bungalow.name">The Bungalow</h3>
+          <p class="product-pitch" data-i18n="h.bungalow.pitch">The flagship: 2,598 sq ft, five bedrooms and six baths on the estate's largest lots. Only three will ever be built.</p>
+          <div class="specs specs-6">
+            <div>
+              <div class="k" data-i18n="h.bungalow.s1.k">Built-up</div>
+              <div class="v"><span data-i18n="h.bungalow.s1.v">2,598</span> <small data-i18n="h.bungalow.s1.u">sq ft</small></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.bungalow.s2.k">Land Size</div>
+              <div class="v"><span data-i18n="h.bungalow.s2.v">356–493</span> <small data-i18n="h.bungalow.s2.u">m²</small></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.bungalow.s3.k">Bedrooms</div>
+              <div class="v"><span data-i18n="h.bungalow.s3.v">5</span></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.bungalow.s4.k">Bathrooms</div>
+              <div class="v"><span data-i18n="h.bungalow.s4.v">6</span></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.bungalow.s5.k">Storeys</div>
+              <div class="v"><span data-i18n="h.bungalow.s5.v">2</span></div>
+            </div>
+            <div>
+              <div class="k" data-i18n="h.bungalow.s6.k">Tenure</div>
+              <div class="v"><span data-i18n="h.bungalow.s6.v">Freehold</span></div>
+            </div>
           </div>
-        </div>
-        <div class="specs specs-6" style="border-top-color:rgba(242,233,223,0.20);">
-          <div style="border-color:rgba(242,233,223,0.20);">
-            <div class="k" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s1.k">Built-up</div>
-            <div class="v"><span data-i18n="h.bungalow.s1.v">2,598</span> <small style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s1.u">sq ft</small></div>
-          </div>
-          <div style="border-color:rgba(242,233,223,0.20);">
-            <div class="k" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s2.k">Land Size</div>
-            <div class="v"><span data-i18n="h.bungalow.s2.v">356–493</span> <small style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s2.u">m²</small></div>
-          </div>
-          <div style="border-color:rgba(242,233,223,0.20);">
-            <div class="k" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s3.k">Bedrooms</div>
-            <div class="v"><span data-i18n="h.bungalow.s3.v">5</span></div>
-          </div>
-          <div style="border-color:rgba(242,233,223,0.20);">
-            <div class="k" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s4.k">Bathrooms</div>
-            <div class="v"><span data-i18n="h.bungalow.s4.v">6</span></div>
-          </div>
-          <div style="border-color:rgba(242,233,223,0.20);">
-            <div class="k" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s5.k">Storeys</div>
-            <div class="v"><span data-i18n="h.bungalow.s5.v">2</span></div>
-          </div>
-          <div style="border-color:rgba(242,233,223,0.20);">
-            <div class="k" style="color:rgba(242,233,223,0.65);" data-i18n="h.bungalow.s6.k">Tenure</div>
-            <div class="v"><span data-i18n="h.bungalow.s6.v">Freehold</span></div>
+          <div class="product-foot">
+            <div class="price"><span class="lbl" data-i18n="h.bungalow.price.l">From</span><strong data-i18n="h.bungalow.price.v">RM 860,000 onwards</strong></div>
+            <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
           </div>
         </div>
       </article>
@@ -1428,6 +1458,7 @@
   <span class="fab-wa-pulse" aria-hidden="true"></span>
 </a>
 
-<script src="app.js?v=61"></script>
+<script src="app.js?v=62"></script>
+<script src="topo-flow.js?v=1"></script>
 </body>
 </html>

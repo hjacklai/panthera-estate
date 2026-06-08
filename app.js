@@ -47,8 +47,8 @@ const I18N = {
     "glance.eyebrow": "At a glance",
     "glance.title": "What you're buying into.",
     "glance.lede": "Not just a house. A freehold address in a township the country is pouring billions into, bought while it is still quiet enough to call home.",
-    "g1.k": "Total Land",     "g1.v": "2",  "g1.u": "acres freehold",
-    "g2.k": "Homes",          "g2.v": "19",     "g2.u": "3 bungalow · 16 semi-D",
+    "g1.k": "Green-facing",     "g1.v": "100%",  "g1.u": "Every home opens to the shared park",
+    "g2.k": "The enclave",          "g2.v": "Just 19",     "g2.u": "3 bungalow · 16 semi-D",
     "g3.k": "From",           "g3.v": "RM 610k","g3.u": "Pre-launch 2026 · register early",
     "g5.k": "Central Green",  "g5.v": "700+",    "g5.u": "m²", "g5.s": "Shared open space, never built over",
 
@@ -336,8 +336,8 @@ const I18N = {
     "glance.eyebrow": "Ringkasan",
     "glance.title": "Apa yang anda miliki.",
     "glance.lede": "Bukan sekadar rumah. Alamat pegangan bebas dalam sebuah bandar yang sedang dilaburkan berbilion oleh negara, dimiliki ketika ia masih cukup tenang untuk dipanggil rumah.",
-    "g1.k": "Jumlah Tanah",  "g1.v": "2",  "g1.u": "ekar pegangan bebas",
-    "g2.k": "Rumah",         "g2.v": "19",     "g2.u": "3 banglo · 16 berkembar",
+    "g1.k": "Menghadap taman",  "g1.v": "100%",  "g1.u": "Setiap rumah terbuka ke taman dikongsi",
+    "g2.k": "Enklaf",         "g2.v": "Hanya 19",     "g2.u": "3 banglo · 16 berkembar",
     "g3.k": "Bermula",       "g3.v": "RM 610k","g3.u": "Pra-pelancaran 2026 · daftar awal",
     "g5.k": "Kawasan Lapang", "g5.v": "700+",   "g5.u": "m²", "g5.s": "Ruang lapang dikongsi, tidak akan dibina",
 
@@ -621,8 +621,8 @@ const I18N = {
     "glance.eyebrow": "一目了然",
     "glance.title": "您所购买的一切。",
     "glance.lede": "不只是一栋房子。这是一个永久地契的门牌, 落在国家正投入数十亿的新兴市镇, 而您在它仍然宁静、仍能称之为家的时候入手。",
-    "g1.k": "总土地面积", "g1.v": "2",  "g1.u": "英亩永久地契",
-    "g2.k": "房屋",        "g2.v": "19",     "g2.u": "3 独立 · 16 半独立",
+    "g1.k": "面向绿地", "g1.v": "100%",  "g1.u": "每户都向共享公园敞开",
+    "g2.k": "私密社区",        "g2.v": "仅 19 户",     "g2.u": "3 独立 · 16 半独立",
     "g3.k": "起价",        "g3.v": "RM 610k","g3.u": "2026 预发布 · 提早登记",
     "g5.k": "中央绿地",     "g5.v": "700+",    "g5.u": "m²", "g5.s": "永久共享开放空间, 永不建房",
 

@@ -521,6 +521,43 @@ footer{ padding-bottom: 60px; }
   padding: 4px 10px; border-radius: 999px; color: var(--ink-soft);
 }
 .lang button[aria-pressed="true"]{ background: var(--ink); color: var(--cream); }
+/* Thumb-friendly language toggle on touch */
+.lang button{ min-height: 38px; display: inline-flex; align-items: center; }
+
+/* ── Mobile conversion bar (sticky bottom, phones only) ──────────
+   On phones the section-nav dock and the WhatsApp FAB are replaced by a
+   single always-visible action bar so the next step is never more than a
+   thumb-tap away (the highest-leverage mobile conversion pattern). */
+.mobile-cta{ display: none; }
+@media (max-width: 700px){
+  .mobile-cta{
+    display: flex; gap: 10px; align-items: stretch;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(242,233,223,0.93);
+    backdrop-filter: saturate(150%) blur(12px);
+    -webkit-backdrop-filter: saturate(150%) blur(12px);
+    border-top: 1px solid var(--rule-soft);
+    box-shadow: 0 -10px 26px -14px rgba(28,23,20,0.32);
+  }
+  .mcta-primary{
+    flex: 1 1 auto; min-height: 52px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    background: var(--ink); color: var(--cream); border-radius: 999px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .mcta-primary:active{ background: var(--terra-2); }
+  .mcta-wa{
+    flex: 0 0 auto; min-height: 52px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 0 18px;
+    background: var(--green); color: var(--cream); border-radius: 999px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .dock{ display: none; }
+  .fab-wa{ display: none; }
+  body{ padding-bottom: 78px; }
+}
 
 .btn{
   display: inline-flex; align-items: center; gap: 10px;
@@ -1534,6 +1571,20 @@ footer{ padding-bottom: 60px; }
 .amen-grp li .dist{ font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--text-mute); }
 
 /* ── Section: Register ───────────────────────── */
+/* Scannable proof chips on the terra register band */
+.reg-trust{
+  list-style: none; margin: 0 0 clamp(28px, 4vw, 44px); padding: 0;
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.reg-trust li{
+  display: inline-flex; align-items: center;
+  padding: 8px 15px; border-radius: 999px;
+  border: 1px solid rgba(242,233,223,0.45);
+  background: rgba(242,233,223,0.08);
+  color: var(--cream);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+}
+
 .reg-grid{
   display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 5vw, 80px);
   align-items: start;
@@ -2601,6 +2652,10 @@ footer .baseline{
 @media (max-width: 420px){
   .fab-wa{ right: 10px; bottom: 74px; width: 44px; height: 44px; }
   .fab-wa svg{ width: 20px; height: 20px; }
+}
+/* On phones the sticky conversion bar carries WhatsApp, so hide the floating bubble */
+@media (max-width: 700px){
+  .fab-wa{ display: none !important; }
 }
 
 /* Footer wordmark stamp, sized & toned for dark bg */

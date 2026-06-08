@@ -145,6 +145,11 @@ const I18N = {
     "reg.eyebrow": "Register your interest",
     "reg.title": "Be first in line.",
     "reg.lede": "Limited release. Drop your details and we'll send the brochure, floor plans, and book your private site preview before public launch.",
+    "trust.1": "Only 19 homes",
+    "trust.2": "Freehold title",
+    "trust.3": "6 Bumi lots · 5% off",
+    "trust.4": "Pre-launch pricing",
+    "trust.5": "LAD-protected handover",
     "reg.f.name": "Your name",
     "reg.f.phone": "Phone / WhatsApp",
     "reg.f.email": "Email",
@@ -355,6 +360,11 @@ const I18N = {
     "reg.eyebrow": "Daftar minat anda",
     "reg.title": "Jadilah yang pertama.",
     "reg.lede": "Pelepasan terhad. Tinggalkan butiran anda dan kami akan menghantar brosur, pelan lantai, dan menempah lawatan tapak peribadi sebelum pelancaran umum.",
+    "trust.1": "Hanya 19 rumah",
+    "trust.2": "Pegangan bebas",
+    "trust.3": "6 lot Bumi · diskaun 5%",
+    "trust.4": "Harga pra-pelancaran",
+    "trust.5": "Penyerahan dilindungi LAD",
     "reg.f.name": "Nama anda",
     "reg.f.phone": "Telefon / WhatsApp",
     "reg.f.email": "Emel",
@@ -561,6 +571,11 @@ const I18N = {
     "reg.eyebrow": "登记您的意向",
     "reg.title": "抢占先机。",
     "reg.lede": "名额有限。留下您的联系方式,我们将发送宣传册、平面图,并在公开发布前安排您私下参观项目。",
+    "trust.1": "仅 19 户",
+    "trust.2": "永久地契",
+    "trust.3": "6 个土著保留单位 · 减 5%",
+    "trust.4": "预发布价格",
+    "trust.5": "LAD 保障交屋",
     "reg.f.name": "您的姓名",
     "reg.f.phone": "电话 / WhatsApp",
     "reg.f.email": "电邮",
@@ -675,12 +690,10 @@ function buildWhatsAppLink(data){
     ``,
     `*Name:* ${data.name || "-"}`,
     `*Phone:* ${data.phone || "-"}`,
-    `*Email:* ${data.email || "-"}`,
     `*Interested in:* ${data.interest || "-"}`,
-    data.message ? `*Notes:* ${data.message}` : null,
     ``,
     `Sent from pantheraestate.com`
-  ].filter(Boolean);
+  ];
   const text = encodeURIComponent(lines.join("\n"));
   return `https://wa.me/${WA_NUMBER}?text=${text}`;
 }

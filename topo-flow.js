@@ -203,14 +203,13 @@
     for (var i = 0; i < LEVELS.length; i++) {
       var lv = LEVELS[i];
       var emphasis = (i % 3 === 0);                 // every 3rd = index line
-      g.lineWidth = emphasis ? 1.25 : 0.85;
+      g.lineWidth = emphasis ? 1.5 : 1.0;
       var near = 1 - Math.min(Math.abs(lv) / 1.9, 1);
       var col = emphasis ? TERRA : INK;
-      var alpha = (emphasis ? 0.22 : 0.12) * (0.5 + 0.5 * near);
+      var alpha = (emphasis ? 0.38 : 0.20) * (0.55 + 0.45 * near);
       g.strokeStyle = 'rgba(' + col + ',' + alpha.toFixed(3) + ')';
       marchLevel(lv);
     }
-    drawMarks();
   }
 
   // Blit the buffer to the visible canvas with a scroll-driven offset.

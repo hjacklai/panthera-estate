@@ -241,7 +241,7 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 section{ position: relative; }
 .section{
-  padding: clamp(80px, 10vw, 160px) 0;
+  padding: clamp(52px, 6vw, 96px) 0;
   border-top: 1px solid var(--rule-soft);
 }
 
@@ -304,7 +304,7 @@ section{ position: relative; }
 
 .hd{
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: 24px; margin-bottom: clamp(40px, 5vw, 72px);
+  gap: 24px; margin-bottom: clamp(22px, 2.6vw, 40px);
   border-bottom: 1px solid var(--rule-soft);
   padding-bottom: 18px;
   flex-wrap: wrap;
@@ -540,34 +540,36 @@ footer{ padding-bottom: 60px; }
 .btn-cream{ background: var(--cream); color: var(--ink); }
 .btn-cream:hover{ background: white; }
 
-/* ── Hero ────────────────────────────────────── */
-/* Drafting-sheet hero: the live paper + moving contours show through; the
-   headline and a spec strip sit on it. */
+/* ── Hero (the estate aerial leads) ──────────── */
 .hero{
   position: relative; overflow: hidden;
-  min-height: min(86vh, 820px);
-  display: flex; align-items: center;
-  padding: clamp(96px, 14vh, 160px) 0 clamp(56px, 8vw, 110px);
+  padding: clamp(60px, 8vh, 104px) 0 clamp(40px, 5vw, 72px);
 }
 .hero-inner{ position: relative; z-index: 2; width: 100%; }
-.hero-copy{ max-width: 760px; }
-/* a faint pencil registration bracket at the sheet's top-left, drawn in CSS */
-.hero::before{
-  content: ""; position: absolute; z-index: 1; pointer-events: none;
-  left: calc(var(--gutter) - 18px); top: clamp(72px, 11vh, 128px);
-  width: 26px; height: 26px;
-  border-left: 1px solid rgba(40,33,28,0.32);
-  border-top: 1px solid rgba(40,33,28,0.32);
+.hero-split{
+  display: grid; grid-template-columns: 1.02fr 0.98fr;
+  gap: clamp(32px, 4.5vw, 76px); align-items: center;
+}
+.hero-copy{ max-width: 620px; }
+.hero-art{ margin: 0; position: relative; }
+.hero-art img{
+  width: 100%; height: auto; display: block;
+  border-radius: 6px; border: 1px solid var(--rule-soft);
+  box-shadow: 0 34px 74px -34px rgba(28,23,20,0.5);
+}
+.hero-art figcaption{
+  margin-top: 12px;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-mute);
 }
 .hero-specs{
-  list-style: none; margin: clamp(36px, 5vw, 56px) 0 0; padding: 16px 0 0;
+  list-style: none; margin: clamp(34px, 4.5vw, 54px) 0 0; padding: 18px 0 0;
   display: flex; flex-wrap: wrap; gap: 0;
   border-top: 1px solid var(--rule);
-  max-width: 680px;
 }
 .hero-specs li{
   display: flex; flex-direction: column; gap: 3px;
-  padding: 4px 28px 4px 0; margin-right: 28px;
+  padding: 4px 36px 4px 0; margin-right: 36px;
   border-right: 1px solid var(--rule-soft);
 }
 .hero-specs li:last-child{ border-right: 0; margin-right: 0; }
@@ -579,8 +581,11 @@ footer{ padding-bottom: 60px; }
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--text-mute);
 }
+@media (max-width: 900px){
+  .hero-split{ grid-template-columns: 1fr; gap: clamp(28px, 5vw, 40px); }
+  .hero-copy{ max-width: none; }
+}
 @media (max-width: 720px){
-  .hero{ min-height: 78vh; }
   .hero-specs li{ padding-right: 18px; margin-right: 18px; }
 }
 
@@ -3851,8 +3856,8 @@ body:not(.lang-zh) .zh-only-inline{ display: none; }
 .phil-row{
   display: grid;
   grid-template-columns: 1.1fr 1fr;
-  gap: 60px;
-  padding: 48px 0;
+  gap: 48px;
+  padding: 32px 0;
   border-bottom: 1px solid var(--rule-soft);
   align-items: start;
 }

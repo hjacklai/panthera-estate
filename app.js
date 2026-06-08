@@ -1358,7 +1358,7 @@ function initDockSpy(){
   if (!items.length) return;
   const map = {
     estate:   ["estate", "glance", "philosophy"],
-    homes:    ["homes", "bungalow", "architecture", "sketches", "specs", "plans"],
+    homes:    ["homes", "bungalow", "architecture", "sketches", "specs"],
     site:     ["bertam", "pricing", "calculator"],
     location: ["location"],
     register: ["journey", "faq", "register"]

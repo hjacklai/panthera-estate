@@ -3728,6 +3728,8 @@ a:focus-visible,
   gap: clamp(20px, 2.4vw, 36px);
   padding: 14px 6px 22px;
 }
+/* Two-up variant for the in-section "more views" rows (left + right) */
+.sketch-row-grid--two{ grid-template-columns: repeat(2, 1fr); }
 .sketch-card{
   --rot: 0deg;
   margin: 0;

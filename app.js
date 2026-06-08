@@ -123,7 +123,7 @@ const I18N = {
 
     "loc.eyebrow": "Location",
     "loc.title": "Where you are.",
-    "loc.lede": "Set just off Jalan Bertam, ten minutes from the North-South Expressway interchange, with everything a family needs, schools, mall, hospital, mosque, inside a quarter-hour drive.",
+    "loc.lede": "Just off Jalan Bertam, ten minutes from the expressway. Schools, mall, hospital and mosque all inside a quarter-hour drive.",
     "loc.open": "Open in Google Maps ↗",
     "loc.g1.h": "Daily life",
     "loc.g2.h": "Schools & education",
@@ -178,7 +178,7 @@ const I18N = {
 
     "arch.eyebrow": "Design Notes",
     "arch.title": "Designed for the climate.",
-    "arch.lede": "Modern tropical, not import. The roofs shed monsoon rain. The balconies catch the evening breeze. The car porch keeps your bonnet out of the noon sun. Every move comes from how a family actually lives in Penang.",
+    "arch.lede": "Modern tropical, not import. Roofs that shed the monsoon, balconies that catch the evening breeze, a porch that keeps the noon sun off your car. Built for how Penang actually lives.",
     "arch.feature.cap": "Built for the monsoon",
     "arch.n1.t": "Pitched gable roof, terracotta tile.",
     "arch.n1.b": "Sheds the monsoon fast. A tall, cross-ventilated upper floor, cooler than any flat slab.",
@@ -338,7 +338,7 @@ const I18N = {
 
     "loc.eyebrow": "Lokasi",
     "loc.title": "Di mana anda berada.",
-    "loc.lede": "Terletak betul-betul di luar Jalan Bertam, sepuluh minit dari pertukaran Lebuhraya Utara-Selatan, dengan segala keperluan keluarga, sekolah, mal, hospital, masjid, dalam pemanduan suku jam.",
+    "loc.lede": "Di tepi Jalan Bertam, sepuluh minit dari lebuhraya. Sekolah, mal, hospital dan masjid dalam pemanduan suku jam.",
     "loc.open": "Buka di Google Maps ↗",
     "loc.g1.h": "Kehidupan harian",
     "loc.g2.h": "Sekolah & pendidikan",
@@ -393,7 +393,7 @@ const I18N = {
 
     "arch.eyebrow": "Nota Reka Bentuk",
     "arch.title": "Direka untuk iklim.",
-    "arch.lede": "Tropika moden, bukan import. Bumbungnya menolak hujan monsun. Balkoninya menangkap angin petang. Porch kereta melindungi bonet anda daripada matahari tengahari. Setiap langkah berdasarkan cara sesebuah keluarga sebenar tinggal di Pulau Pinang.",
+    "arch.lede": "Tropika moden, bukan import. Bumbung menolak hujan monsun, balkoni menangkap angin petang, porch melindungi kereta daripada matahari tengah hari. Direka untuk cara hidup sebenar di Pulau Pinang.",
     "arch.feature.cap": "Dibina untuk musim monsun",
     "arch.n1.t": "Bumbung gable bercerun, jubin tanah liat.",
     "arch.n1.b": "Cepat menolak hujan monsun. Tingkat atas yang tinggi dan berventilasi silang, lebih sejuk daripada lantai rata.",
@@ -549,7 +549,7 @@ const I18N = {
 
     "loc.eyebrow": "位置",
     "loc.title": "您身处何方。",
-    "loc.lede": "位于北赖路旁,距南北大道交汇口十分钟车程,家庭所需的一切, 学校、商场、医院、清真寺, 皆在十五分钟车程内。",
+    "loc.lede": "就在北赖路旁,距大道交汇口十分钟。学校、商场、医院、清真寺,皆在一刻钟车程内。",
     "loc.open": "在 Google Maps 中打开 ↗",
     "loc.g1.h": "日常生活",
     "loc.g2.h": "学校与教育",
@@ -604,7 +604,7 @@ const I18N = {
 
     "arch.eyebrow": "设计手记",
     "arch.title": "为气候而设计。",
-    "arch.lede": "现代热带，而非进口。屋顶可送走雨季的雨水，阳台迮迎晚风，车廊为您的车隔绝正午阳光。每一个细节都源于一个家庭在槟城真正的生活方式。",
+    "arch.lede": "现代热带,而非进口。屋顶送走雨水,阳台迎来晚风,车廊为爱车隔绝正午烈日。一切只为槟城真实的生活方式。",
     "arch.feature.cap": "为雨季而建",
     "arch.n1.t": "陶土瓦人字屋顶。",
     "arch.n1.b": "雨水迅速排走。高挑通风的二楼,比平顶凉爽得多。",

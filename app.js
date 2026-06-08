@@ -1358,7 +1358,7 @@ function initDockSpy(){
   if (!items.length) return;
   const map = {
     estate:   ["estate", "glance", "philosophy"],
-    homes:    ["homes", "architecture", "sketches", "specs", "plans"],
+    homes:    ["homes", "bungalow", "architecture", "sketches", "specs", "plans"],
     site:     ["bertam", "pricing", "calculator"],
     location: ["location"],
     register: ["journey", "faq", "register"]
@@ -1373,9 +1373,13 @@ function initDockSpy(){
 
   const onScroll = () => {
     const y = window.scrollY + window.innerHeight * 0.35;
-    let activeKey = null;
+    // Pick the section whose top is closest above the threshold line. Using the
+    // max offsetTop (not array order) keeps this correct no matter what order the
+    // map lists its sections in (the groups are not in strict DOM order).
+    let activeKey = null, best = -Infinity;
     sections.forEach(({key, el}) => {
-      if (el.offsetTop <= y) activeKey = key;
+      const top = el.offsetTop;
+      if (top <= y && top > best) { best = top; activeKey = key; }
     });
     items.forEach(a => a.classList.toggle("active", a.dataset.dock === activeKey));
   };

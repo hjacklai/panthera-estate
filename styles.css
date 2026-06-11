@@ -317,9 +317,15 @@ section{ position: relative; }
 /* ── Top ribbon (logo center, language right, optional WA left) ── */
 .topbar{
   position: sticky; top: 0; z-index: 1100;
-  background: var(--cream);
+  background: rgba(242, 233, 223, 0.5);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  backdrop-filter: saturate(140%) blur(10px);
   border-bottom: 1px solid var(--rule-soft);
   box-shadow: 0 4px 14px -10px rgba(28,23,20,0.18);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* Fallback for browsers without backdrop-filter — keep it readable */
+  .topbar { background: rgba(242, 233, 223, 0.94); }
 }
 .topbar-inner{
   display: grid;
@@ -359,7 +365,7 @@ section{ position: relative; }
 }
 .topbar .brand-mark .sub{
   font-family: var(--mono);
-  font-size: 20px; letter-spacing: 0.18em; color: var(--text-mute);
+  font-size: 15px; letter-spacing: 0.18em; color: var(--text-mute);
   padding-left: 14px; border-left: 1px solid var(--rule-soft);
   text-transform: uppercase;
   line-height: 1;
@@ -768,18 +774,25 @@ footer{ padding-bottom: 60px; }
 
 /* ── Section: Idea ───────────────────────────── */
 .idea-grid{
-  display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(40px, 6vw, 100px);
+  display: grid; grid-template-columns: 1fr;
+  gap: clamp(32px, 4vw, 56px);
   align-items: start;
 }
-@media (max-width: 900px){ .idea-grid{ grid-template-columns: 1fr; } }
 .idea-grid .quote{
   font-family: var(--serif); font-style: italic; font-weight: 300;
   font-size: clamp(28px, 3.4vw, 48px); line-height: 1.18; letter-spacing: -0.01em;
   color: var(--ink);
+  max-width: 24ch;     /* keep the pull-quote short and dense, don't sprawl */
 }
 .idea-grid .quote .accent{ color: var(--terra-2); }
 
-.idea-points{ margin-top: 36px; display: grid; gap: 28px; }
+.idea-points{
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+}
+@media (max-width: 900px){ .idea-points{ grid-template-columns: 1fr; gap: 24px; } }
 .idea-points .p{
   border-top: 1px solid var(--rule-soft); padding-top: 16px;
 }
@@ -879,7 +892,15 @@ footer{ padding-bottom: 60px; }
 @media (max-width: 1000px){ .site-grid{ grid-template-columns: 1fr; } }
 /* When the architectural drawing is hidden, notes get the full width laid
    out as a 2x2 callout grid that pairs with the aerial render above. */
-.site-grid--notes-only{ grid-template-columns: 1fr; }
+.site-grid--notes-only{
+  grid-template-columns: 1fr;
+  /* Push the site-features block away from the ideas block above and add
+     a thin rule so the two sub-sections read as separate ideas instead of
+     one undifferentiated stack of cards. */
+  margin-top: clamp(48px, 6vw, 80px);
+  padding-top: clamp(40px, 5vw, 64px);
+  border-top: 1px solid var(--rule-soft);
+}
 .site-grid--notes-only .site-notes{
   grid-template-columns: repeat(2, 1fr);
   gap: clamp(20px, 2.5vw, 40px);
@@ -2412,7 +2433,6 @@ footer .baseline{
 
 /* ─────────────────────────────────────────────
    WHY BERTAM NOW, investment thesis
-   ───────────────────────────────────────────── */
    ───────────────────────────────────────────── */
 .bertam-grid{
   display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(40px, 5vw, 80px);

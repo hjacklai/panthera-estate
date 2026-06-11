@@ -1946,6 +1946,12 @@ footer .baseline{
   color: var(--ink);
 }
 .spec-row .v small{ display: block; font-family: var(--sans); font-size: 13px; color: var(--text-mute); margin-top: 2px; }
+/* Design-intent cards (pre-launch: direction without committed specs) */
+.spec-intent .t{
+  font-family: var(--serif); font-size: 22px; line-height: 1.25; letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.spec-intent .b{ font-size: 14px; line-height: 1.55; color: var(--ink-soft); margin-top: 8px; }
 
 /* ─────────────────────────────────────────────
    MORTGAGE CALCULATOR

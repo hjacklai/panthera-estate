@@ -292,7 +292,23 @@ const I18N = {
     "plans.p1": "Bungalow · Ground Floor",
     "plans.p2": "Bungalow · First Floor",
     "plans.p3": "Semi-D · Ground Floor",
-    "plans.p4": "Semi-D · First Floor"
+    "plans.p4": "Semi-D · First Floor",
+
+    "specs.eyebrow": "Specifications",
+    "specs.title": "The design intent.",
+    "specs.lede": "The finishes schedule is being finalised with our consultants. This is the direction — registered buyers will receive the full specification first.",
+    "specs.c1.h": "Design language",
+    "specs.c1.t": "Modern tropical, built calm.",
+    "specs.c1.b": "Pitched terracotta rooflines, light walls and timber accents — the language you see in the renders is the language we build.",
+    "specs.c2.h": "Light & openness",
+    "specs.c2.t": "Glass to the green.",
+    "specs.c2.b": "Floor-to-ceiling glazing and full-width sliding doors face the park, pulling daylight and the garden into the living spaces.",
+    "specs.c3.h": "Built for the climate",
+    "specs.c3.t": "Monsoon-first.",
+    "specs.c3.b": "Steep rooflines that shed heavy rain, shaded openings with cross-ventilation, and engineered drainage around every lot.",
+    "specs.c4.h": "The full schedule",
+    "specs.c4.t": "Published with the SPA.",
+    "specs.c4.b": "Materials, brands and finishes are being confirmed. Registered buyers receive the complete schedule first — and the signed Sale & Purchase Agreement is the binding version."
   },
 
   bm: {
@@ -583,7 +599,23 @@ const I18N = {
     "plans.p1": "Banglo · Tingkat Bawah",
     "plans.p2": "Banglo · Tingkat Atas",
     "plans.p3": "Berkembar · Tingkat Bawah",
-    "plans.p4": "Berkembar · Tingkat Atas"
+    "plans.p4": "Berkembar · Tingkat Atas",
+
+    "specs.eyebrow": "Spesifikasi",
+    "specs.title": "Arah rekaan.",
+    "specs.lede": "Jadual kemasan sedang dimuktamadkan bersama perunding kami. Inilah hala tujunya — pembeli berdaftar akan menerima spesifikasi penuh terlebih dahulu.",
+    "specs.c1.h": "Bahasa rekaan",
+    "specs.c1.t": "Tropika moden, tenang dibina.",
+    "specs.c1.b": "Bumbung genting bercerun, dinding cerah dan sentuhan kayu — bahasa yang anda lihat dalam ilustrasi ialah bahasa yang kami bina.",
+    "specs.c2.h": "Cahaya & keterbukaan",
+    "specs.c2.t": "Kaca menghadap taman.",
+    "specs.c2.b": "Tingkap setinggi siling dan pintu gelangsar selebar penuh menghadap taman, membawa cahaya siang dan kehijauan ke dalam ruang kediaman.",
+    "specs.c3.h": "Dibina untuk iklim",
+    "specs.c3.t": "Mengutamakan monsun.",
+    "specs.c3.b": "Bumbung curam yang mengalirkan hujan lebat, bukaan terlindung dengan pengudaraan silang, dan saliran kejuruteraan di sekeliling setiap lot.",
+    "specs.c4.h": "Jadual penuh",
+    "specs.c4.t": "Diterbitkan bersama SPA.",
+    "specs.c4.b": "Bahan, jenama dan kemasan sedang dimuktamadkan. Pembeli berdaftar menerima jadual lengkap terlebih dahulu — dan Perjanjian Jual Beli yang dimeterai ialah versi yang mengikat."
   },
 
   zh: {
@@ -874,7 +906,23 @@ const I18N = {
     "plans.p1": "独立式 · 一楼",
     "plans.p2": "独立式 · 二楼",
     "plans.p3": "半独立式 · 一楼",
-    "plans.p4": "半独立式 · 二楼"
+    "plans.p4": "半独立式 · 二楼",
+
+    "specs.eyebrow": "规格",
+    "specs.title": "设计方向。",
+    "specs.lede": "装修规格表正与顾问团队敲定中。以下是我们的设计方向——已登记的买家将率先收到完整规格表。",
+    "specs.c1.h": "设计语言",
+    "specs.c1.t": "现代热带,沉静而筑。",
+    "specs.c1.b": "斜面陶瓦屋顶、明亮的墙面与木质点缀——效果图中所见的语言,就是我们施工的语言。",
+    "specs.c2.h": "采光与通透",
+    "specs.c2.t": "玻璃面向绿地。",
+    "specs.c2.b": "落地玻璃与全幅推拉门面向中央公园,把日光与绿意引入起居空间。",
+    "specs.c3.h": "为气候而建",
+    "specs.c3.t": "以雨季为先。",
+    "specs.c3.b": "陡峭的屋顶迅速排走豪雨,遮阳开口配合对流通风,每个地段四周均设工程排水。",
+    "specs.c4.h": "完整规格表",
+    "specs.c4.t": "随买卖合约公布。",
+    "specs.c4.b": "材料、品牌与装修正与顾问团队敲定中。已登记买家将率先收到完整规格表——最终以签署的买卖合约为准。"
   }
 };
 

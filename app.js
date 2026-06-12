@@ -1089,7 +1089,7 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   initCalculator();
-  initLocationMap();
+  initLocationMapWhenVisible();
   initDockSpy();
   initPrelaunchBar();
   initLoadCascade();
@@ -1185,6 +1185,9 @@ function initPrelaunchBar(){
     const past = window.scrollY > heroBottom;
     bar.classList.toggle('is-visible', past);
     document.body.classList.toggle('has-prelaunch-bar', past);
+    // The topbar offset must match the bar's real height (it varies with
+    // viewport width); a hard-coded offset leaves the two bars overlapping.
+    document.documentElement.style.setProperty('--prelaunch-h', past ? bar.offsetHeight + 'px' : '0px');
   }
   update();
   window.addEventListener('scroll', update, { passive: true });
@@ -1310,11 +1313,66 @@ let leafletMarkers = {};  // id -> L.Marker
 let leafletTileLayer = null;
 let leafletPopupOpen = null;
 
+// Leaflet (~150KB JS+CSS) and its map tiles are only pulled in when the map
+// scrolls near the viewport, so the initial page load stays light. The map is
+// well below the fold, so most visitors trigger this only after engaging.
+let leafletLoading = false;
+function loadLeaflet(cb){
+  if (typeof L !== "undefined"){ cb(); return; }
+  if (leafletLoading){ document.addEventListener("leaflet:ready", cb, { once: true }); return; }
+  leafletLoading = true;
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+  css.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+  css.crossOrigin = "";
+  document.head.appendChild(css);
+  const js = document.createElement("script");
+  js.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+  js.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+  js.crossOrigin = "";
+  js.onload = () => { document.dispatchEvent(new Event("leaflet:ready")); cb(); };
+  document.head.appendChild(js);
+}
+
+function initLocationMapWhenVisible(){
+  const el = document.getElementById("loc-leaflet");
+  if (!el) return;
+
+  let done = false, io = null;
+  const cleanup = () => {
+    window.removeEventListener("scroll", onScroll);
+    if (io) io.disconnect();
+  };
+  const start = () => { if (done) return; done = true; cleanup(); loadLeaflet(initLocationMap); };
+
+  // Within ~600px of the viewport counts as "near". Fall back to a sane viewport
+  // height if the browser reports 0 (some embedded/headless renderers do).
+  const near = () => {
+    const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+    return el.getBoundingClientRect().top < vh + 600;
+  };
+  const onScroll = () => { if (near()) start(); };
+
+  // Primary: IntersectionObserver loads the map as it approaches the viewport.
+  if ("IntersectionObserver" in window){
+    io = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) start();
+    }, { rootMargin: "600px 0px" });
+    io.observe(el);
+  }
+  // Safety net for environments where IO doesn't fire: a passive scroll check,
+  // removed the moment the map loads.
+  window.addEventListener("scroll", onScroll, { passive: true });
+  // Already near the viewport on load (short pages, deep links)? Load now.
+  if (near()) start();
+}
+
 function initLocationMap(){
   const el = document.getElementById("loc-leaflet");
   if (!el) return;
   if (typeof L === "undefined"){
-    // Leaflet script may still be loading (defer + DOMContentLoaded race). Retry.
+    // Leaflet script still downloading — wait for our loader to finish.
     setTimeout(initLocationMap, 120);
     return;
   }

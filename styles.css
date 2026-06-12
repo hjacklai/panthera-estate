@@ -369,6 +369,7 @@ section{ position: relative; }
   padding-left: 14px; border-left: 1px solid var(--rule-soft);
   text-transform: uppercase;
   line-height: 1;
+  white-space: nowrap;   /* never wrap into BERTA / PENAN */
 }
 
 .topbar .lang{
@@ -382,8 +383,12 @@ section{ position: relative; }
 }
 .topbar .lang button[aria-pressed="true"]{ background: var(--ink); color: var(--cream); }
 
-@media (max-width: 600px){
+/* Mid widths: drop the sales line first so the centered brand and the
+   language pill never collide (the three columns need ~1000px to coexist). */
+@media (max-width: 1020px){
   .topbar-side.left{ display: none; }
+}
+@media (max-width: 780px){
   .topbar-inner{ grid-template-columns: 1fr auto; }
   .topbar .brand-mark{ justify-self: start; gap: 8px; }
   .topbar .brand-mark .wordmark-img{ height: 15px; }
@@ -2886,6 +2891,9 @@ footer .baseline{
   color: rgba(242,233,223,0.85);
   font-size: 13px; line-height: 1.4;
   letter-spacing: 0.01em;
+  /* Ellipsize instead of sliding under the CTA when space runs out */
+  min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .prelaunch-copy strong{
   color: var(--cream);
@@ -2916,19 +2924,32 @@ footer .baseline{
   background: rgba(242,233,223,0.10);
   color: var(--cream);
 }
-/* When pre-launch bar is visible, shift the topbar down so it sits below it */
-.prelaunch-bar.is-visible ~ .topbar{ top: 42px; }
-body.has-prelaunch-bar .topbar{ top: 42px; }
+/* When pre-launch bar is visible, shift the topbar down so it sits below it.
+   --prelaunch-h is set by JS to the bar's measured height. */
+.prelaunch-bar.is-visible ~ .topbar{ top: var(--prelaunch-h, 42px); }
+body.has-prelaunch-bar .topbar{ top: var(--prelaunch-h, 42px); }
+/* The bar's message is long, so reveal it progressively: the closer the
+   viewport gets to a phone, the fewer trailing clauses show — the copy stays
+   one clean line and never ellipsises mid-word.
+     · > 960px  full reminder
+     · ≤ 960px  drop the long "register before…" tail (+ CTA shrinks to "Register →")
+     · ≤ 700px  drop "· 19 homes"  → "Pre-launch · Bumi lots available"
+     · ≤ 480px  compact (no pulse, tighter) so the hook fits even at 360px       */
+@media (max-width: 960px){ .pl-tail{ display: none; } }
 @media (max-width: 700px){
   .prelaunch-copy{ font-size: 12px; }
-  .prelaunch-copy strong{ display: block; font-size: 10px; margin-bottom: 2px; }
+  .prelaunch-copy strong{ display: inline; font-size: 10px; }
   .prelaunch-cta{ font-size: 10px; padding: 6px 10px; }
+  .pl-mid{ display: none; }
 }
 @media (max-width: 480px){
   /* On very small screens just show the gist + CTA */
-  .prelaunch-inner{ gap: 10px; padding: 8px var(--gutter); }
+  .prelaunch-inner{ gap: 8px; padding: 8px 16px; }
+  /* Reclaim width for real words on a phone: drop the decorative pulse and
+     nudge the copy down a touch so "Bumi lots available" fits without clipping. */
+  .prelaunch-pulse{ display: none; }
+  .prelaunch-copy{ font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .prelaunch-copy strong{ display: inline; }
-  .prelaunch-copy{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 
 /* ─────────────────────────────────────────────

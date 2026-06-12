@@ -46,7 +46,7 @@
 <meta name="twitter:image:alt" content="Panthera Bertam, bungalow artist's impression">
 
 <!-- Performance: preload critical above-the-fold assets -->
-<link rel="preload" as="image" href="assets/site-render-aerial.png?v=5" fetchpriority="high">
+<link rel="preload" as="image" href="assets/site-render-aerial.webp?v=6" fetchpriority="high">
 <link rel="preload" as="image" href="assets/panthera-logo-full.png">
 
 <!-- Fonts -->
@@ -54,11 +54,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
 
-<!-- Leaflet (open-source map renderer, no API key, OSM + Carto tiles) -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+<!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
+     map scrolls near the viewport — keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=72">
+<link rel="stylesheet" href="styles.css?v=77">
 
 <!-- Structured data for Google rich results -->
 <script type="application/ld+json">
@@ -99,9 +98,9 @@
       "url": "https://www.pantheraestate.com/",
       "image": [
         "https://www.pantheraestate.com/assets/og-card.jpg",
-        "https://www.pantheraestate.com/assets/site-render-aerial.png",
-        "https://www.pantheraestate.com/assets/perspective-bungalow-front.jpg",
-        "https://www.pantheraestate.com/assets/perspective-semid-front.jpg"
+        "https://www.pantheraestate.com/assets/site-render-aerial.webp",
+        "https://www.pantheraestate.com/assets/perspective-bungalow-front.webp",
+        "https://www.pantheraestate.com/assets/perspective-semid-front.webp"
       ],
       "datePosted": "2026-05-20",
       "availabilityStarts": "2028-01-01",
@@ -246,9 +245,9 @@
   <div class="wrap prelaunch-inner">
     <span class="prelaunch-pulse" aria-hidden="true"></span>
     <span class="prelaunch-copy">
-      <strong>Pre-launch</strong> · 19 homes · Bumi lots available · register before the public launch for early-bird pricing
+      <strong>Pre-launch</strong><span class="pl-mid"> · 19 homes</span> · Bumi lots available<span class="pl-tail"> · register before the public launch for early-bird pricing</span>
     </span>
-    <a href="#register" class="prelaunch-cta">Register interest →</a>
+    <a href="#register" class="prelaunch-cta">Register<span class="pl-tail"> interest</span> →</a>
     <button type="button" class="prelaunch-close" aria-label="Dismiss">×</button>
   </div>
 </aside>
@@ -331,7 +330,7 @@
       </div>
 
       <figure class="hero-art" data-reveal>
-        <img src="assets/site-render-aerial.png?v=5" alt="Aerial view of Panthera Bertam, nineteen homes around the shared central green and pond" fetchpriority="high">
+        <img src="assets/site-render-aerial.webp?v=6" width="920" height="784" alt="Aerial view of Panthera Bertam, nineteen homes around the shared central green and pond" fetchpriority="high">
         <figcaption class="mono" data-i18n="site.aerial.l">Artist's impression · aerial view from north</figcaption>
       </figure>
     </div>
@@ -455,7 +454,7 @@
 
     <article class="product" data-reveal>
       <figure class="product-art pinned">
-        <div class="product-img"><img src="assets/perspective-semid-front.jpg?v=2" alt="Semi-Detached watercolour, front pair, artist's impression" loading="lazy"></div>
+        <div class="product-img"><img src="assets/perspective-semid-front.webp?v=7" alt="Semi-Detached watercolour, front pair, artist's impression" loading="lazy"></div>
         <figcaption><span>Semi-Detached · front pair</span><span>Artist's impression</span></figcaption>
       </figure>
       <div class="product-body">
@@ -496,14 +495,14 @@
     <div class="sketch-row" data-reveal>
       <div class="sketch-row-grid sketch-row-grid--two">
         <figure class="sketch-card" style="--rot:-0.8deg;">
-          <div class="sketch-img"><img src="assets/perspective-semid-left.jpg?v=2" alt="Semi-Detached watercolour, left perspective" loading="lazy"></div>
+          <div class="sketch-img"><img src="assets/perspective-semid-left.webp?v=7" alt="Semi-Detached watercolour, left perspective" loading="lazy"></div>
           <figcaption>
             <span class="num mono">L</span>
             <span class="lbl" data-i18n="sketches.s.left">Semi-D · Left side</span>
           </figcaption>
         </figure>
         <figure class="sketch-card" style="--rot:0.6deg;">
-          <div class="sketch-img"><img src="assets/perspective-semid-right.jpg?v=2" alt="Semi-Detached watercolour, right perspective" loading="lazy"></div>
+          <div class="sketch-img"><img src="assets/perspective-semid-right.webp?v=7" alt="Semi-Detached watercolour, right perspective" loading="lazy"></div>
           <figcaption>
             <span class="num mono">R</span>
             <span class="lbl" data-i18n="sketches.s.right">Semi-D · Right side</span>
@@ -515,7 +514,7 @@
     <div class="plans-gallery home-plans" data-reveal>
       <figure class="plan-card" data-plan="3">
         <div class="plan-img">
-          <img src="assets/floor-plan-p3.jpg?v=4" alt="Semi-Detached Ground Floor plan" loading="lazy">
+          <img src="assets/floor-plan-p3.webp?v=7" alt="Semi-Detached Ground Floor plan" loading="lazy">
         </div>
         <figcaption>
           <span class="num mono">GF</span>
@@ -524,7 +523,7 @@
       </figure>
       <figure class="plan-card" data-plan="4">
         <div class="plan-img">
-          <img src="assets/floor-plan-p4.jpg?v=4" alt="Semi-Detached First Floor plan" loading="lazy">
+          <img src="assets/floor-plan-p4.webp?v=7" alt="Semi-Detached First Floor plan" loading="lazy">
         </div>
         <figcaption>
           <span class="num mono">1F</span>
@@ -548,7 +547,7 @@
 
     <article class="product product--flip" data-reveal>
       <figure class="product-art pinned">
-        <div class="product-img"><img src="assets/perspective-bungalow-front.jpg?v=2" alt="Bungalow watercolour, front facade, artist's impression" loading="lazy"></div>
+        <div class="product-img"><img src="assets/perspective-bungalow-front.webp?v=7" alt="Bungalow watercolour, front facade, artist's impression" loading="lazy"></div>
         <figcaption><span>Bungalow · front facade</span><span>Artist's impression</span></figcaption>
       </figure>
       <div class="product-body">
@@ -589,14 +588,14 @@
     <div class="sketch-row" data-reveal>
       <div class="sketch-row-grid sketch-row-grid--two">
         <figure class="sketch-card" style="--rot:-0.8deg;">
-          <div class="sketch-img"><img src="assets/perspective-bungalow-left.jpg?v=2" alt="Bungalow watercolour, left perspective" loading="lazy"></div>
+          <div class="sketch-img"><img src="assets/perspective-bungalow-left.webp?v=7" alt="Bungalow watercolour, left perspective" loading="lazy"></div>
           <figcaption>
             <span class="num mono">L</span>
             <span class="lbl" data-i18n="sketches.b.left">Bungalow · Left side</span>
           </figcaption>
         </figure>
         <figure class="sketch-card" style="--rot:0.6deg;">
-          <div class="sketch-img"><img src="assets/perspective-bungalow-right.jpg?v=1" alt="Bungalow watercolour, right perspective" loading="lazy"></div>
+          <div class="sketch-img"><img src="assets/perspective-bungalow-right.webp?v=7" alt="Bungalow watercolour, right perspective" loading="lazy"></div>
           <figcaption>
             <span class="num mono">R</span>
             <span class="lbl" data-i18n="sketches.b.right">Bungalow · Right side</span>
@@ -608,7 +607,7 @@
     <div class="plans-gallery home-plans" data-reveal>
       <figure class="plan-card" data-plan="1">
         <div class="plan-img">
-          <img src="assets/floor-plan-p1.jpg?v=6" alt="Bungalow Ground Floor plan" loading="lazy">
+          <img src="assets/floor-plan-p1.webp?v=7" alt="Bungalow Ground Floor plan" loading="lazy">
         </div>
         <figcaption>
           <span class="num mono">GF</span>
@@ -617,7 +616,7 @@
       </figure>
       <figure class="plan-card" data-plan="2">
         <div class="plan-img">
-          <img src="assets/floor-plan-p2.jpg?v=4" alt="Bungalow First Floor plan" loading="lazy">
+          <img src="assets/floor-plan-p2.webp?v=7" alt="Bungalow First Floor plan" loading="lazy">
         </div>
         <figcaption>
           <span class="num mono">1F</span>
@@ -643,7 +642,7 @@
     <div class="arch-grid">
       <figure class="arch-feature" data-reveal>
         <div class="arch-feature-img">
-          <img src="assets/day-4-rain.jpg?v=1" alt="Terracotta-tiled roof and full-length balcony in the Penang monsoon rain" loading="lazy">
+          <img src="assets/day-4-rain.webp?v=7" alt="Terracotta-tiled roof and full-length balcony in the Penang monsoon rain" loading="lazy">
         </div>
         <figcaption class="mono">
           <span data-i18n="arch.feature.cap">Built for the monsoon</span>
@@ -1388,7 +1387,7 @@
   </div>
 </div>
 
-<script src="app.js?v=79"></script>
-<script src="topo-flow.js?v=2"></script>
+<script src="app.js?v=81" defer></script>
+<script src="topo-flow.js?v=2" defer></script>
 </body>
 </html>

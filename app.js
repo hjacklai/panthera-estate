@@ -68,8 +68,8 @@ const I18N = {
     "site.note3.h": "Freehold title",
     "site.note3.t": "Individual titles, issued at handover.",
     "site.note3.b": "No 99-year clock. Land yours outright, one title per home.",
-    "site.note4.h": "Dry through the monsoon",
-    "site.note4.t": "Ready for the heaviest downpours.",
+    "site.note4.h": "Flood-free zone",
+    "site.note4.t": "Engineered to stay dry.",
     "site.note4.b": "Retention pond and perimeter drains keep the roads usable in heavy rain.",
 
     "homes.eyebrow": "The Homes",
@@ -375,8 +375,8 @@ const I18N = {
     "site.note3.h": "Pegangan bebas",
     "site.note3.t": "Hak milik individu, diserah semasa penyerahan.",
     "site.note3.b": "Tiada pajakan 99 tahun. Tanah milik penuh, satu hak milik bagi setiap rumah.",
-    "site.note4.h": "Kering sepanjang tengkujuh",
-    "site.note4.t": "Sedia untuk hujan paling lebat.",
+    "site.note4.h": "Zon bebas banjir",
+    "site.note4.t": "Direka untuk kekal kering.",
     "site.note4.b": "Kolam tadahan dan longkang sekeliling memastikan jalan kekal boleh digunakan ketika hujan lebat.",
 
     "homes.eyebrow": "Rumah",
@@ -682,8 +682,8 @@ const I18N = {
     "site.note3.h": "永久地契",
     "site.note3.t": "个别地契, 交屋时发出。",
     "site.note3.b": "没有 99 年租约。土地完全属于您,每户一份地契。",
-    "site.note4.h": "雨季也安心",
-    "site.note4.t": "为最大的暴雨而建。",
+    "site.note4.h": "无水患区",
+    "site.note4.t": "工程排水,保持干爽。",
     "site.note4.b": "蓄水池与四周排水沟,大雨时道路照样可用。",
 
     "homes.eyebrow": "房屋",

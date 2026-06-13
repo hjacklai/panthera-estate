@@ -254,7 +254,7 @@ const I18N = {
 
     "arch.eyebrow": "Design Notes",
     "arch.title": "Designed for the climate.",
-    "arch.lede": "Modern tropical, not import. Roofs that shed the monsoon, balconies that catch the evening breeze, a porch that keeps the noon sun off your car. Built for how Penang actually lives.",
+    "arch.lede": "Modern tropical, not import. Built for how Penang actually lives.",
     "arch.feature.cap": "Built for the monsoon",
     "arch.n1.t": "Pitched gable roof, terracotta tile.",
     "arch.n1.b": "Sheds the monsoon fast. A tall, cross-ventilated upper floor, cooler than any flat slab.",
@@ -561,7 +561,7 @@ const I18N = {
 
     "arch.eyebrow": "Nota Reka Bentuk",
     "arch.title": "Direka untuk iklim.",
-    "arch.lede": "Tropika moden, bukan import. Bumbung menolak hujan monsun, balkoni menangkap angin petang, porch melindungi kereta daripada matahari tengah hari. Direka untuk cara hidup sebenar di Pulau Pinang.",
+    "arch.lede": "Tropika moden, bukan import. Direka untuk cara hidup sebenar di Pulau Pinang.",
     "arch.feature.cap": "Dibina untuk musim monsun",
     "arch.n1.t": "Bumbung gable bercerun, jubin tanah liat.",
     "arch.n1.b": "Cepat menolak hujan monsun. Tingkat atas yang tinggi dan berventilasi silang, lebih sejuk daripada lantai rata.",
@@ -868,7 +868,7 @@ const I18N = {
 
     "arch.eyebrow": "设计手记",
     "arch.title": "为气候而设计。",
-    "arch.lede": "现代热带,而非进口。屋顶送走雨水,阳台迎来晚风,车廊为爱车隔绝正午烈日。一切只为槟城真实的生活方式。",
+    "arch.lede": "现代热带,而非进口。一切只为槟城真实的生活方式。",
     "arch.feature.cap": "为雨季而建",
     "arch.n1.t": "陶土瓦人字屋顶。",
     "arch.n1.b": "雨水迅速排走。高挑通风的二楼,比平顶凉爽得多。",

@@ -1712,7 +1712,7 @@ function initDockSpy(){
     homes:    ["homes", "bungalow"],
     site:     ["bertam", "pricing", "calculator"],
     location: ["location"],
-    register: ["journey", "faq", "register"]
+    register: ["faq", "register"]
   };
   const sections = [];
   Object.entries(map).forEach(([key, ids]) => {

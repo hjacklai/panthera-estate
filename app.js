@@ -70,7 +70,7 @@ const I18N = {
     "site.note3.b": "No 99-year leasehold clock. The land is yours outright on Lot 24480, with a clean individual title for every home.",
     "site.note4.h": "Dry through the monsoon",
     "site.note4.t": "Ready for the heaviest downpours.",
-    "site.note4.b": "An on-site retention pond and perimeter drains carry stormwater away fast, so the ring road and your porch stay usable when the rain comes down hard.",
+    "site.note4.b": "An on-site retention pond and perimeter drains clear stormwater fast, so the roads and your porch stay usable in heavy rain.",
 
     "homes.eyebrow": "The Homes",
     "homes.title": "Two homes, one green.",
@@ -80,7 +80,7 @@ const I18N = {
 
     "h.semid.tag": "16 units · Semi-Detached",
     "h.semid.name": "The Semi-D",
-    "h.semid.pitch": "Right-sized for a growing family: 1,917 sq ft over two storeys, four bedrooms and a true garden setback. Every one faces the central green.",
+    "h.semid.pitch": "Built to live big: an open-plan kitchen, dining and living run the full ground floor, out to the garden, with four generously sized bedrooms above. 1,917 sq ft, and every home faces the green.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 610,000 onwards",
     "h.semid.price.s": "Bumi lot · standard from RM 632,917",
@@ -94,7 +94,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 units · Bungalow",
     "h.bungalow.name": "The Bungalow",
-    "h.bungalow.pitch": "The flagship: 2,598 sq ft, five bedrooms and six baths on the estate's largest lots. Only three will ever be built.",
+    "h.bungalow.pitch": "Built for three generations under one roof: 2,598 sq ft on the estate's largest lots, with a flexible ground-floor suite for grandparents, guests or a home office. Five bedrooms, six baths, and only three will ever be built.",
     "h.bungalow.price.l": "From",
     "h.bungalow.price.v": "RM 860,000 onwards",
     "h.bungalow.price.s": "Non-Bumi · Bumi from RM 920,263",
@@ -108,7 +108,7 @@ const I18N = {
 
     "pricing.eyebrow": "Pricing",
     "pricing.title": "Range pricing. Plainly told.",
-    "pricing.lede": "Two house types, three tiers each. Bumi reserved lots receive a 5% discount. Want the full lot-by-lot list with current availability? WhatsApp our sales team, we'll send it over same-day.",
+    "pricing.lede": "Two house types, three tiers each. Bumi-reserved lots get 5% off.",
     "pricing.cta.title": "Want the full lot-by-lot list?",
     "pricing.cta.body": "Reach our sales team on WhatsApp, we'll send the live list with availability and Bumi-lot status the same day.",
     "pricing.cta.btn": "WhatsApp sales →",
@@ -377,7 +377,7 @@ const I18N = {
     "site.note3.b": "Tiada kiraan pajakan 99 tahun. Tanah milik anda sepenuhnya di Lot 24480, dengan hak milik individu yang bersih bagi setiap rumah.",
     "site.note4.h": "Kering sepanjang tengkujuh",
     "site.note4.t": "Sedia untuk hujan paling lebat.",
-    "site.note4.b": "Kolam tadahan di tapak dan longkang sekeliling mengalirkan air hujan dengan pantas, supaya jalan dan porch anda kekal boleh digunakan ketika hujan turun lebat.",
+    "site.note4.b": "Kolam tadahan di tapak dan longkang sekeliling mengalirkan air hujan dengan pantas, supaya jalan dan porch anda kekal boleh digunakan ketika hujan lebat.",
 
     "homes.eyebrow": "Rumah",
     "homes.title": "Dua rumah, satu taman.",
@@ -387,7 +387,7 @@ const I18N = {
 
     "h.semid.tag": "16 unit · Berkembar",
     "h.semid.name": "Rumah Berkembar",
-    "h.semid.pitch": "Saiz yang sesuai untuk keluarga yang membesar: 1,917 kaki persegi, dua tingkat, empat bilik tidur dan halaman sebenar. Setiap satu menghadap taman pusat.",
+    "h.semid.pitch": "Direka untuk ruang lapang: dapur, ruang makan dan ruang tamu konsep terbuka memenuhi seluruh tingkat bawah, terus ke taman, dengan empat bilik tidur luas di tingkat atas. 1,917 kaki persegi, dan setiap rumah menghadap kehijauan.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "Lot Bumi · standard dari RM 632,917",
@@ -401,7 +401,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 unit · Banglo",
     "h.bungalow.name": "Banglo",
-    "h.bungalow.pitch": "Unit unggulan: 2,598 kaki persegi, lima bilik tidur dan enam bilik air di atas lot terbesar di kawasan ini. Hanya tiga unit sahaja akan dibina.",
+    "h.bungalow.pitch": "Direka untuk tiga generasi di bawah satu bumbung: 2,598 kaki persegi di atas lot terbesar dalam pembangunan, dengan suite tingkat bawah yang fleksibel untuk ibu bapa, tetamu atau pejabat rumah. Lima bilik tidur, enam bilik air, dan hanya tiga unit sahaja akan dibina.",
     "h.bungalow.price.l": "Bermula",
     "h.bungalow.price.v": "RM 860,000",
     "h.bungalow.price.s": "Bukan-Bumi · Bumi dari RM 920,263",
@@ -415,7 +415,7 @@ const I18N = {
 
     "pricing.eyebrow": "Harga",
     "pricing.title": "Julat harga. Diceritakan dengan jelas.",
-    "pricing.lede": "Dua jenis rumah, tiga peringkat setiap satu. Lot Bumi menerima diskaun 5%. Mahukan senarai lot-demi-lot terkini? WhatsApp pasukan jualan kami, kami akan hantar pada hari yang sama.",
+    "pricing.lede": "Dua jenis rumah, tiga peringkat harga setiap satu. Lot rizab Bumi menikmati diskaun 5%.",
     "pricing.cta.title": "Mahukan senarai harga lot-demi-lot?",
     "pricing.cta.body": "Hubungi pasukan jualan kami di WhatsApp, kami hantar senarai terkini dengan status ketersediaan & lot Bumi pada hari yang sama.",
     "pricing.cta.btn": "WhatsApp jualan →",
@@ -684,7 +684,7 @@ const I18N = {
     "site.note3.b": "没有 99 年租赁年限。土地完全属于您 (Lot 24480), 每户均持清晰的个别地契。",
     "site.note4.h": "雨季也安心",
     "site.note4.t": "为最大的暴雨而建。",
-    "site.note4.b": "场内蓄水池与四周排水沟迅速排走雨水, 即使大雨倾盆, 道路与前廊照样可用。",
+    "site.note4.b": "场内蓄水池与四周排水沟迅速排走雨水,大雨时道路与前廊照样可用。",
 
     "homes.eyebrow": "房屋",
     "homes.title": "两种家,一片绿。",
@@ -694,7 +694,7 @@ const I18N = {
 
     "h.semid.tag": "16 单位 · 半独立式",
     "h.semid.name": "半独立式",
-    "h.semid.pitch": "为成长中的家庭量身打造:1,917 平方英尺,双层,四间卧房,真正的花园退距。每一户都面向中央绿地。",
+    "h.semid.pitch": "为大空间而建:开放式厨房、餐厅与客厅贯通整个底层,直通花园,楼上四间宽敞睡房。1,917 平方英尺,户户面向绿意。",
     "h.semid.price.l": "起价",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "土著保留地 · 一般起价 RM 632,917",
@@ -708,7 +708,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 单位 · 独立式洋房",
     "h.bungalow.name": "独立式",
-    "h.bungalow.pitch": "旗舰户型:2,598 平方英尺,五房六浴,坐落于全区最大地段。仅建三栋。",
+    "h.bungalow.pitch": "为三代同堂而建:2,598 平方英尺,坐落全区最大地段,底层设有灵活套房,可作长辈房、客房或居家办公室。五房六浴,全区仅建三栋。",
     "h.bungalow.price.l": "起价",
     "h.bungalow.price.v": "RM 860,000",
     "h.bungalow.price.s": "非土著 · 土著保留 RM 920,263 起",
@@ -722,7 +722,7 @@ const I18N = {
 
     "pricing.eyebrow": "价格",
     "pricing.title": "区间定价,坦诚相告。",
-    "pricing.lede": "两种户型,每种三个价位。土著保留地享 5% 折扣。想要完整价目表与最新库存?WhatsApp 联系销售,当天送达。",
+    "pricing.lede": "两种户型,每种三个价位。土著保留地享 5% 折扣。",
     "pricing.cta.title": "需要完整逐栋价目表?",
     "pricing.cta.body": "WhatsApp 联系销售,我们当天发送实时价目表、库存与土著保留地信息。",
     "pricing.cta.btn": "WhatsApp 销售 →",

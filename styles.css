@@ -813,11 +813,18 @@ footer{ padding-bottom: 60px; }
   border-top: 1px solid rgba(242,233,223,0.20);
   border-bottom: 1px solid rgba(242,233,223,0.20);
 }
-@media (max-width: 800px){ .stats{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 800px){
+  .stats{ grid-template-columns: repeat(2, 1fr); }
+  /* 2-col: left column flush to the band edge, right column kept off the
+     centre divider, and no stray divider on the band's right edge. */
+  .stats > div:nth-child(odd){ padding-left: 0; }
+  .stats > div:nth-child(even){ border-right: 0; }
+}
 .stats > div{
-  padding: 40px 28px 40px 0;
+  padding: 40px 28px;
   border-right: 1px solid rgba(242,233,223,0.20);
 }
+.stats > div:first-child{ padding-left: 0; }
 .stats > div:last-child{ border-right: 0; }
 .stats .k{
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
@@ -2347,7 +2354,7 @@ footer .baseline{
   .hero-meta{ margin-top: 32px; }
   .hero-meta .v{ font-size: 24px; }
 
-  .stats > div{ padding: 26px 18px 26px 0; }
+  .stats > div{ padding: 26px 18px; }
 
   .home-perspectives{ grid-template-columns: 1fr; }
 

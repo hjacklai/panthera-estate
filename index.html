@@ -55,9 +55,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
 
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
-     map scrolls near the viewport — keeps ~150KB off the initial page load. -->
+     map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=77">
+<link rel="stylesheet" href="styles.css?v=79">
 
 <!-- Structured data for Google rich results -->
 <script type="application/ld+json">
@@ -254,24 +254,19 @@
 
 <!-- ─── BOTTOM DOCK (app-style menu) ───────────── -->
 <nav class="dock" aria-label="Primary">
-  <a href="#estate"   data-dock="estate">Estate</a>
-  <a href="#homes"    data-dock="homes">Homes</a>
-  <a href="#site"     data-dock="site">Site</a>
-  <a href="#location" data-dock="location">Location</a>
-  <a href="#register" data-dock="register" class="cta">Register ↗</a>
+  <div class="dock-scroll">
+    <a href="#estate"   data-dock="estate">Estate</a>
+    <a href="#homes"    data-dock="homes">Homes</a>
+    <a href="#site"     data-dock="site">Site</a>
+    <a href="#location" data-dock="location">Location</a>
+  </div>
+  <div class="dock-actions">
+    <a href="#register" data-dock="register" class="cta">Register ↗</a>
+    <a class="dock-wa" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" aria-label="WhatsApp sales">
+      <svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.003 2.667c-7.364 0-13.336 5.972-13.336 13.336 0 2.347.612 4.643 1.776 6.667l-1.888 6.896 7.06-1.852a13.31 13.31 0 0 0 6.384 1.624h.005c7.36 0 13.333-5.972 13.333-13.336 0-3.562-1.387-6.911-3.905-9.43-2.519-2.52-5.868-3.905-9.43-3.905zm7.842 19.06c-.333.935-1.94 1.788-2.694 1.85-.717.06-1.39.318-4.694-1.06-3.948-1.64-6.46-5.673-6.658-5.937-.194-.264-1.594-2.12-1.594-4.045 0-1.925 1.01-2.872 1.368-3.264.333-.366.722-.458.964-.458.242 0 .485.002.697.013.223.011.523-.085.818.624.305.722 1.037 2.515 1.127 2.697.09.182.15.397.028.64-.122.243-.183.394-.36.607-.18.213-.378.475-.54.638-.18.182-.368.38-.158.745.21.364.935 1.543 2.008 2.5 1.38 1.23 2.543 1.611 2.907 1.794.364.182.576.152.788-.092.21-.243.91-1.06 1.152-1.425.243-.364.485-.303.818-.182.333.121 2.122 1.001 2.486 1.183.364.182.606.273.697.425.09.152.09.879-.243 1.814z"/></svg>
+    </a>
+  </div>
 </nav>
-
-<!-- ─── MOBILE CONVERSION BAR (sticky, phones only) ── -->
-<div class="mobile-cta" aria-label="Quick actions">
-  <a href="#register" class="mcta-primary">
-    <span data-i18n="hero.cta.primary">Register your interest</span>
-    <span class="arrow" aria-hidden="true">→</span>
-  </a>
-  <a href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" class="mcta-wa" aria-label="WhatsApp sales">
-    <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M16.003 2.667c-7.364 0-13.336 5.972-13.336 13.336 0 2.347.612 4.643 1.776 6.667l-1.888 6.896 7.06-1.852a13.31 13.31 0 0 0 6.384 1.624h.005c7.36 0 13.333-5.972 13.333-13.336 0-3.562-1.387-6.911-3.905-9.43-2.519-2.52-5.868-3.905-9.43-3.905zm7.842 19.06c-.333.935-1.94 1.788-2.694 1.85-.717.06-1.39.318-4.694-1.06-3.948-1.64-6.46-5.673-6.658-5.937-.194-.264-1.594-2.12-1.594-4.045 0-1.925 1.01-2.872 1.368-3.264.333-.366.722-.458.964-.458.242 0 .485.002.697.013.223.011.523-.085.818.624.305.722 1.037 2.515 1.127 2.697.09.182.15.397.028.64-.122.243-.183.394-.36.607-.18.213-.378.475-.54.638-.18.182-.368.38-.158.745.21.364.935 1.543 2.008 2.5 1.38 1.23 2.543 1.611 2.907 1.794.364.182.576.152.788-.092.21-.243.91-1.06 1.152-1.425.243-.364.485-.303.818-.182.333.121 2.122 1.001 2.486 1.183.364.182.606.273.697.425.09.152.09.879-.243 1.814z"/></svg>
-    <span>WhatsApp</span>
-  </a>
-</div>
 
 <!-- ─── OLD NAV (hidden, kept for ARIA fallback) ── -->
 <header class="nav" data-screen-label="00 Nav" hidden>
@@ -692,7 +687,7 @@
       <div>
         <div class="eyebrow" data-i18n="specs.eyebrow">Specifications</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="specs.title">The design intent.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="specs.lede">The finishes schedule is being finalised with our consultants. This is the direction — registered buyers will receive the full specification first.</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="specs.lede">The finishes schedule is being finalised with our consultants. This is the direction. Registered buyers will receive the full specification first.</p>
       </div>
     </div>
 
@@ -701,7 +696,7 @@
         <div class="h"><span data-i18n="specs.c1.h">Design language</span><span class="ix">A</span></div>
         <div class="spec-intent">
           <div class="t" data-i18n="specs.c1.t">Modern tropical, built calm.</div>
-          <div class="b" data-i18n="specs.c1.b">Pitched terracotta rooflines, light walls and timber accents — the language you see in the renders is the language we build.</div>
+          <div class="b" data-i18n="specs.c1.b">Pitched terracotta rooflines, light walls and timber accents. The language you see in the renders is the language we build.</div>
         </div>
       </div>
 
@@ -725,7 +720,7 @@
         <div class="h"><span data-i18n="specs.c4.h">The full schedule</span><span class="ix">D</span></div>
         <div class="spec-intent">
           <div class="t" data-i18n="specs.c4.t">Published with the SPA.</div>
-          <div class="b" data-i18n="specs.c4.b">Materials, brands and finishes are being confirmed. Registered buyers receive the complete schedule first — and the signed Sale &amp; Purchase Agreement is the binding version.</div>
+          <div class="b" data-i18n="specs.c4.b">Materials, brands and finishes are being confirmed. Registered buyers receive the complete schedule first, and the signed Sale &amp; Purchase Agreement is the binding version.</div>
         </div>
       </div>
     </div>
@@ -1387,7 +1382,7 @@
   </div>
 </div>
 
-<script src="app.js?v=81" defer></script>
+<script src="app.js?v=82" defer></script>
 <script src="topo-flow.js?v=2" defer></script>
 </body>
 </html>

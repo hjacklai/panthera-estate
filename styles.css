@@ -324,7 +324,7 @@ section{ position: relative; }
   box-shadow: 0 4px 14px -10px rgba(28,23,20,0.18);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  /* Fallback for browsers without backdrop-filter — keep it readable */
+  /* Fallback for browsers without backdrop-filter, keep it readable */
   .topbar { background: rgba(242, 233, 223, 0.94); }
 }
 .topbar-inner{
@@ -441,35 +441,60 @@ section{ position: relative; }
 .dock a.cta:hover{ background: white; color: var(--ink); }
 .dock a.cta.active::before{ background: var(--terra-2); }
 
-/* Mobile: full-width dock */
+/* The dock is a flat row on desktop; these wrappers only take effect on
+   mobile (the combined bar below). WhatsApp sits in the dock on phones
+   only, since the floating FAB already covers desktop. */
+.dock-scroll, .dock-actions{ display: contents; }
+.dock .dock-wa{ display: none; }
+
+/* Mobile: the dock becomes one combined bar. Scrollable section links
+   on the left, pinned Register + WhatsApp on the right, so navigation
+   and the next action share a single full-width bar. */
 @media (max-width: 720px){
   .dock{
-    left: 10px; right: 10px; transform: none; bottom: 10px;
-    padding: 4px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    border-radius: 14px;
-    justify-content: center;
+    left: 0; right: 0; bottom: 0; transform: none;
+    width: 100%; max-width: none;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    border-radius: 0;
+    overflow: visible;
+    background: rgba(28,23,20,0.96);
+    box-shadow: 0 -10px 26px -14px rgba(28,23,20,0.5);
   }
-  .dock::-webkit-scrollbar{ display: none; }
-  .dock a{ padding: 10px 14px; font-size: 10px; letter-spacing: 0.14em; flex-shrink: 0; }
-  .dock a.cta{ margin-left: 2px; padding: 10px 16px; }
-}
-/* Tighter dock for small phones to avoid horizontal scroll */
-@media (max-width: 480px){
-  .dock{ gap: 0; padding: 3px; }
-  .dock a{ padding: 9px 9px; font-size: 9.5px; letter-spacing: 0.08em; }
-  .dock a.cta{ margin-left: 1px; padding: 9px 11px; }
-}
-@media (max-width: 360px){
-  .dock a{ padding: 8px 7px; font-size: 9px; letter-spacing: 0.04em; }
-  .dock a.cta{ padding: 8px 9px; }
+  .dock-scroll{
+    display: flex; align-items: center; gap: 2px;
+    flex: 1 1 auto; min-width: 0;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 calc(100% - 16px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 12px, #000 calc(100% - 16px), transparent 100%);
+  }
+  .dock-scroll::-webkit-scrollbar{ display: none; }
+  .dock-scroll a{
+    flex-shrink: 0;
+    min-height: 42px; padding: 0 12px;
+    font-size: 10px; letter-spacing: 0.10em;
+  }
+  .dock-actions{
+    display: flex; align-items: center; gap: 6px;
+    flex: 0 0 auto;
+  }
+  .dock-actions a.cta{
+    margin-left: 0;
+    min-height: 44px; padding: 0 16px;
+    font-size: 10.5px; letter-spacing: 0.10em;
+  }
+  .dock .dock-wa{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; padding: 0; flex-shrink: 0;
+    background: var(--green); color: var(--cream); border-radius: 999px;
+  }
+  .fab-wa{ display: none !important; }
 }
 
 /* push site content above the dock */
 body{ padding-bottom: 90px; }
-@media (max-width: 720px){ body{ padding-bottom: 78px; } }
+@media (max-width: 720px){ body{ padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); } }
 footer{ padding-bottom: 60px; }
 
 /* hide dock when print */
@@ -535,40 +560,9 @@ footer{ padding-bottom: 60px; }
 /* Thumb-friendly language toggle on touch */
 .lang button{ min-height: 38px; display: inline-flex; align-items: center; }
 
-/* ── Mobile conversion bar (sticky bottom, phones only) ──────────
-   On phones the section-nav dock and the WhatsApp FAB are replaced by a
-   single always-visible action bar so the next step is never more than a
-   thumb-tap away (the highest-leverage mobile conversion pattern). */
-.mobile-cta{ display: none; }
-@media (max-width: 700px){
-  .mobile-cta{
-    display: flex; gap: 10px; align-items: stretch;
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
-    background: rgba(242,233,223,0.93);
-    backdrop-filter: saturate(150%) blur(12px);
-    -webkit-backdrop-filter: saturate(150%) blur(12px);
-    border-top: 1px solid var(--rule-soft);
-    box-shadow: 0 -10px 26px -14px rgba(28,23,20,0.32);
-  }
-  .mcta-primary{
-    flex: 1 1 auto; min-height: 52px;
-    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-    background: var(--ink); color: var(--cream); border-radius: 999px;
-    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
-  }
-  .mcta-primary:active{ background: var(--terra-2); }
-  .mcta-wa{
-    flex: 0 0 auto; min-height: 52px;
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 0 18px;
-    background: var(--green); color: var(--cream); border-radius: 999px;
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-  }
-  .dock{ display: none; }
-  .fab-wa{ display: none; }
-  body{ padding-bottom: 78px; }
-}
+/* The standalone mobile conversion bar was merged into the dock, which
+   now serves as the single combined nav + action bar on phones (see the
+   combined bar in the dock rules above). */
 
 .btn{
   display: inline-flex; align-items: center; gap: 10px;
@@ -830,7 +824,7 @@ footer{ padding-bottom: 60px; }
   color: rgba(242,233,223,0.70); margin-bottom: 10px;
 }
 .stats .v{
-  font-family: var(--serif); font-size: clamp(48px, 5vw, 80px); line-height: 0.96; letter-spacing: -0.02em;
+  font-family: var(--serif); font-size: clamp(40px, 4.4vw, 70px); line-height: 0.96; letter-spacing: -0.02em; white-space: nowrap;
 }
 .stats .u{ font-size: 14px; color: rgba(242,233,223,0.65); margin-top: 6px; font-family: var(--sans); }
 
@@ -2929,7 +2923,7 @@ footer .baseline{
 .prelaunch-bar.is-visible ~ .topbar{ top: var(--prelaunch-h, 42px); }
 body.has-prelaunch-bar .topbar{ top: var(--prelaunch-h, 42px); }
 /* The bar's message is long, so reveal it progressively: the closer the
-   viewport gets to a phone, the fewer trailing clauses show — the copy stays
+   viewport gets to a phone, the fewer trailing clauses show, the copy stays
    one clean line and never ellipsises mid-word.
      · > 960px  full reminder
      · ≤ 960px  drop the long "register before…" tail (+ CTA shrinks to "Register →")

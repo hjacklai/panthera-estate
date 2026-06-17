@@ -15,7 +15,7 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var W = 0, H = 0, DPR = 1;
-  var CELL = 26;             // grid spacing (CSS px)
+  var CELL = 15;             // grid spacing (CSS px); finer = smoother contours
   var PAN = 900;             // px of extra height the buffer carries for the pan
   var FACTOR = 0.10;         // (legacy) parallax factor, pan now maps to full scroll progress
   var DRIFT_AMP = 26;        // px of gentle continuous vertical drift
@@ -76,7 +76,7 @@
     var wf = 2.4 / minDim;          // warp frequency (~2-3 cycles across)
     var warpAmp = 0.22 * minDim;    // how far the rings get pushed around
     var nf = 5.2 / minDim;          // fine organic-detail frequency
-    var NAMP = 0.85;                // detail amplitude (field units)
+    var NAMP = 0.40;                // detail amplitude (field units); lower = smoother
 
     var hx = [], hy = [], ha = [], hk = [];
     curCx = []; curCy = []; curSign = [];

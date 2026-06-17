@@ -2433,10 +2433,11 @@ footer .baseline{
 
 /* Bertam-stats: mobile 1-col */
 @media (max-width: 540px){
-  .bertam-stats{ grid-template-columns: 1fr; }
+  .bertam-stats{ grid-template-columns: 1fr !important; border-top: 0; }
   .bertam-stats > div{
-    padding: 18px 0 !important;
+    padding: 16px 0 !important;
     border-right: 0 !important;
+    border-bottom: 0 !important;
     border-top: 1px solid var(--rule-soft) !important;
   }
   .bertam-stats > div:first-child{ border-top: 0 !important; }
@@ -2460,26 +2461,27 @@ footer .baseline{
 
 .bertam-stats{
   display: grid; grid-template-columns: 1fr 1fr; gap: 0;
-  margin-top: 32px;
+  margin-top: 28px;
   border-top: 1px solid var(--rule-soft);
-  border-bottom: 1px solid var(--rule-soft);
 }
 .bertam-stats > div{
-  padding: 22px 22px 22px 0;
-  border-right: 1px solid var(--rule-soft);
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--rule-soft);
 }
-.bertam-stats > div:nth-child(2){ border-right: 0; padding-right: 0; padding-left: 22px; }
-.bertam-stats > div:nth-child(3){ padding-right: 22px; }
-.bertam-stats > div:nth-child(4){ border-right: 0; padding-right: 0; padding-left: 22px; border-top: 1px solid var(--rule-soft); }
-.bertam-stats > div:nth-child(3){ border-top: 1px solid var(--rule-soft); }
+.bertam-stats > div:nth-child(odd){ padding-left: 0; border-right: 1px solid var(--rule-soft); }
+.bertam-stats > div:nth-child(even){ padding-right: 0; }
+.bertam-stats .ic{ flex: 0 0 26px; color: var(--terra-2); margin-top: 4px; }
+.bertam-stats .ic svg{ width: 26px; height: 26px; display: block; }
+.bertam-stats .txt{ min-width: 0; }
 .bertam-stats .k{
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--text-mute); margin-bottom: 8px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-mute); margin-bottom: 6px;
 }
 .bertam-stats .v{
-  font-family: var(--serif); font-size: clamp(36px, 4vw, 56px); line-height: 0.98; letter-spacing: -0.02em;
+  font-family: var(--serif); font-size: clamp(30px, 3.2vw, 44px); line-height: 0.98; letter-spacing: -0.02em;
 }
-.bertam-stats .u{ font-size: 13px; color: var(--text-mute); margin-top: 6px; max-width: 26ch; line-height: 1.4; }
+.bertam-stats .u{ font-size: 12.5px; color: var(--text-mute); margin-top: 6px; max-width: 30ch; line-height: 1.4; }
 
 /* Catalysts timeline */
 .catalysts{

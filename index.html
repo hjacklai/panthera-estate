@@ -57,7 +57,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=83">
+<link rel="stylesheet" href="styles.css?v=84">
 
 <!-- Structured data for Google rich results -->
 <script type="application/ld+json">
@@ -743,24 +743,52 @@
 
         <div class="bertam-stats">
           <div>
-            <div class="k">INV New Energy</div>
-            <div class="v">RM 6.4B</div>
-            <div class="u" data-i18n="bertam.s1u">Lithium battery plant · 5 min from site · operational 2027</div>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8" width="15" height="9" rx="2"/><line x1="20.5" y1="11" x2="20.5" y2="14"/><path d="M10.5 9.5 8.5 13H11l-2 3.5"/></svg></span>
+            <div class="txt">
+              <div class="k">INV New Energy</div>
+              <div class="v">RM 6.4B</div>
+              <div class="u" data-i18n="bertam.s1u">Lithium-battery plant, Phase 1 live 2025, 5 min away</div>
+            </div>
           </div>
           <div>
-            <div class="k">Penang Tech Park</div>
-            <div class="v">700 ac</div>
-            <div class="u" data-i18n="bertam.s2u">Semiconductor &amp; precision manufacturing · jobs already on the ground</div>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20V10l5 3V10l5 3V7l5 3v10"/><line x1="2.5" y1="20.5" x2="21.5" y2="20.5"/></svg></span>
+            <div class="txt">
+              <div class="k">Penang Tech Park</div>
+              <div class="v">880 ac</div>
+              <div class="u" data-i18n="bertam.s2u">Semiconductor &amp; precision manufacturing, next door</div>
+            </div>
           </div>
           <div>
-            <div class="k">Kulim Hi-Tech Park</div>
-            <div class="v">RM 30B+</div>
-            <div class="u" data-i18n="bertam.s3u">Adjacent township by SP Setia · driving regional demand</div>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1"/><rect x="10" y="10" width="4" height="4"/><path d="M9.5 7V4.5M14.5 7V4.5M9.5 19.5V17M14.5 19.5V17M7 9.5H4.5M7 14.5H4.5M19.5 9.5H17M19.5 14.5H17"/></svg></span>
+            <div class="txt">
+              <div class="k">Infineon · Kulim</div>
+              <div class="v">RM 30B</div>
+              <div class="u" data-i18n="bertam.s3u">World's largest 200mm SiC fab, Phase 1 live</div>
+            </div>
           </div>
           <div>
-            <div class="k" data-i18n="bertam.s4k">Capital growth, 5-yr</div>
-            <div class="v">+38%</div>
-            <div class="u" data-i18n="bertam.s4u">Bertam landed-home median · NAPIC public data</div>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 6-7"/><path d="M16 6h4v4"/></svg></span>
+            <div class="txt">
+              <div class="k">Penang, 2025</div>
+              <div class="v">RM 22.4B</div>
+              <div class="u" data-i18n="bertam.s5u">State manufacturing investment, up 29% on 2024</div>
+            </div>
+          </div>
+          <div>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M9 8V6.5A1.5 1.5 0 0 1 10.5 5h3A1.5 1.5 0 0 1 15 6.5V8"/><line x1="3" y1="13" x2="21" y2="13"/></svg></span>
+            <div class="txt">
+              <div class="k">New jobs</div>
+              <div class="v">16,254</div>
+              <div class="u" data-i18n="bertam.s6u">From Penang's 2024 approved projects</div>
+            </div>
+          </div>
+          <div>
+            <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 3 3 8-8"/><path d="M14 6h6v6"/></svg></span>
+            <div class="txt">
+              <div class="k" data-i18n="bertam.s4k">Capital growth, 5-yr</div>
+              <div class="v">+38%</div>
+              <div class="u" data-i18n="bertam.s4u">Bertam landed-home median · NAPIC public data</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1218,7 +1246,7 @@
   </div>
 </div>
 
-<script src="app.js?v=90" defer></script>
+<script src="app.js?v=91" defer></script>
 <script src="topo-flow.js?v=3" defer></script>
 </body>
 </html>

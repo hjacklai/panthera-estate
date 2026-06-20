@@ -80,7 +80,7 @@ const I18N = {
 
     "h.semid.tag": "16 units · Semi-Detached",
     "h.semid.name": "The Semi-D",
-    "h.semid.pitch": "Built to live big: an open-plan kitchen, dining and living run the full ground floor, out to the garden, with four generously sized bedrooms above. 1,917 sq ft, and every home faces the green.",
+    "h.semid.pitch": "Built to live big: an open-plan kitchen, dining and living run the full ground floor under 3.7m ceilings, out to the garden, with four generously sized bedrooms above. 1,917 sq ft, and every home faces the green.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 610,000 onwards",
     "h.semid.price.s": "Bumi lot · standard from RM 632,917",
@@ -88,7 +88,7 @@ const I18N = {
     "h.semid.s2.k": "Land Size", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 ft²",
     "h.semid.s3.k": "Bedrooms", "h.semid.s3.v": "4",
     "h.semid.s4.k": "Bathrooms", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "Storeys", "h.semid.s5.v": "2",
+    "h.semid.s5.k": "Ceilings", "h.semid.s5.v": "3.7 / 3.5 m",
     "h.semid.s6.k": "Tenure", "h.semid.s6.v": "Freehold",
     "h.semid.ph": "Render · Semi-D Streetscape",
 
@@ -102,7 +102,7 @@ const I18N = {
     "h.bungalow.s2.k": "Land Size", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 ft²",
     "h.bungalow.s3.k": "Bedrooms", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "Bathrooms", "h.bungalow.s4.v": "6",
-    "h.bungalow.s5.k": "Storeys", "h.bungalow.s5.v": "2",
+    "h.bungalow.s5.k": "Ceilings", "h.bungalow.s5.v": "3.7 / 3.5 m",
     "h.bungalow.s6.k": "Tenure", "h.bungalow.s6.v": "Freehold",
     "h.bungalow.ph": "Render · Bungalow Exterior",
 
@@ -392,7 +392,7 @@ const I18N = {
 
     "h.semid.tag": "16 unit · Berkembar",
     "h.semid.name": "Rumah Berkembar",
-    "h.semid.pitch": "Direka untuk ruang lapang: dapur, ruang makan dan ruang tamu konsep terbuka memenuhi seluruh tingkat bawah, terus ke taman, dengan empat bilik tidur luas di tingkat atas. 1,917 kaki persegi, dan setiap rumah menghadap kehijauan.",
+    "h.semid.pitch": "Direka untuk ruang lapang: dapur, ruang makan dan ruang tamu konsep terbuka memenuhi seluruh tingkat bawah dengan siling 3.7m, terus ke taman, dengan empat bilik tidur luas di tingkat atas. 1,917 kaki persegi, dan setiap rumah menghadap kehijauan.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "Lot Bumi · standard dari RM 632,917",
@@ -400,7 +400,7 @@ const I18N = {
     "h.semid.s2.k": "Saiz tanah", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 kp",
     "h.semid.s3.k": "Bilik tidur", "h.semid.s3.v": "4",
     "h.semid.s4.k": "Bilik air", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "Tingkat", "h.semid.s5.v": "2",
+    "h.semid.s5.k": "Tinggi siling", "h.semid.s5.v": "3.7 / 3.5 m",
     "h.semid.s6.k": "Pegangan", "h.semid.s6.v": "Bebas",
     "h.semid.ph": "Render · Rumah Berkembar",
 
@@ -414,7 +414,7 @@ const I18N = {
     "h.bungalow.s2.k": "Saiz tanah", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 kp",
     "h.bungalow.s3.k": "Bilik tidur", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "Bilik air", "h.bungalow.s4.v": "6",
-    "h.bungalow.s5.k": "Tingkat", "h.bungalow.s5.v": "2",
+    "h.bungalow.s5.k": "Tinggi siling", "h.bungalow.s5.v": "3.7 / 3.5 m",
     "h.bungalow.s6.k": "Pegangan", "h.bungalow.s6.v": "Bebas",
     "h.bungalow.ph": "Render · Banglo Luaran",
 
@@ -704,7 +704,7 @@ const I18N = {
 
     "h.semid.tag": "16 单位 · 半独立式",
     "h.semid.name": "半独立式",
-    "h.semid.pitch": "为大空间而建:开放式厨房、餐厅与客厅贯通整个底层,直通花园,楼上四间宽敞睡房。1,917 平方英尺,户户面向绿意。",
+    "h.semid.pitch": "为大空间而建:开放式厨房、餐厅与客厅贯通整个底层,3.7 米挑高,直通花园,楼上四间宽敞睡房。1,917 平方英尺,户户面向绿意。",
     "h.semid.price.l": "起价",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "土著保留地 · 一般起价 RM 632,917",
@@ -712,7 +712,7 @@ const I18N = {
     "h.semid.s2.k": "土地面积", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 平方英尺",
     "h.semid.s3.k": "卧室", "h.semid.s3.v": "4",
     "h.semid.s4.k": "浴室", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "楼层", "h.semid.s5.v": "2",
+    "h.semid.s5.k": "层高", "h.semid.s5.v": "3.7 / 3.5 m",
     "h.semid.s6.k": "地契", "h.semid.s6.v": "永久",
     "h.semid.ph": "效果图, 半独立式街景",
 
@@ -726,7 +726,7 @@ const I18N = {
     "h.bungalow.s2.k": "土地面积", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 平方英尺",
     "h.bungalow.s3.k": "卧室", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "浴室", "h.bungalow.s4.v": "6",
-    "h.bungalow.s5.k": "楼层", "h.bungalow.s5.v": "2",
+    "h.bungalow.s5.k": "层高", "h.bungalow.s5.v": "3.7 / 3.5 m",
     "h.bungalow.s6.k": "地契", "h.bungalow.s6.v": "永久",
     "h.bungalow.ph": "效果图, 独立式外观",
 

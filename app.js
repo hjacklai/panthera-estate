@@ -12,7 +12,7 @@ const I18N = {
     "nav.register": "Register",
     "nav.cta": "Register Interest",
 
-    "hero.eyebrow": "Pre-launch · Bertam · a private, well-connected enclave",
+    "hero.eyebrow": "Pre-launch · Bertam · wake up to your own green",
     "hero.h1.a": "Every home",
     "hero.h1.b": "opens to the green.",
     "hero.lede": "An intimate enclave of nineteen freehold homes, all facing a shared green of more than 700 m². Floor-to-ceiling glass and full-width sliding doors fold the park into the living room. A calm, private address on the mainland's quiet edge, just as it begins to rise.",
@@ -80,7 +80,7 @@ const I18N = {
 
     "h.semid.tag": "16 units · Semi-Detached",
     "h.semid.name": "The Semi-D",
-    "h.semid.pitch": "Built to live big: an open-plan kitchen, dining and living run the full ground floor under 3.7m ceilings, out to the garden, with four generously sized bedrooms above. 1,917 sq ft, and every home faces the green.",
+    "h.semid.pitch": "Built to live big. The kitchen, dining and living open as one tall, bright room, straight through the glass and out to the garden. Four proper bedrooms above, and every home faces the green.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 610,000 onwards",
     "h.semid.price.s": "Bumi lot · standard from RM 632,917",
@@ -94,7 +94,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 units · Bungalow",
     "h.bungalow.name": "The Bungalow",
-    "h.bungalow.pitch": "Built for three generations under one roof: 2,598 sq ft on the estate's largest lots, with a flexible ground-floor suite for grandparents, guests or a home office. Five bedrooms, five baths.",
+    "h.bungalow.pitch": "Room for three generations under one roof. A private ground-floor suite keeps your parents close, with their own front door and no stairs to climb, while the children grow up just down the hall. On the estate's largest lots.",
     "h.bungalow.price.l": "From",
     "h.bungalow.price.v": "RM 860,000 onwards",
     "h.bungalow.price.s": "Non-Bumi · Bumi from RM 920,263",
@@ -324,7 +324,7 @@ const I18N = {
     "nav.register": "Daftar Minat",
     "nav.cta": "Daftar Minat",
 
-    "hero.eyebrow": "Pra-Pelancaran · Bertam · enklaf persendirian, akses mudah",
+    "hero.eyebrow": "Pra-Pelancaran · Bertam · bangun menghadap taman hijau sendiri",
     "hero.h1.a": "Setiap rumah",
     "hero.h1.b": "menghadap kehijauan.",
     "hero.lede": "Enklaf intim sembilan belas rumah pegangan bebas, semuanya menghadap taman hijau dikongsi seluas lebih 700 m². Tingkap lantai ke siling dan pintu gelongsor sepenuh dinding membawa taman masuk ke ruang tamu. Sebuah alamat yang tenang dan persendirian di tepi tanah besar yang kini mula meningkat.",
@@ -392,7 +392,7 @@ const I18N = {
 
     "h.semid.tag": "16 unit · Berkembar",
     "h.semid.name": "Rumah Berkembar",
-    "h.semid.pitch": "Direka untuk ruang lapang: dapur, ruang makan dan ruang tamu konsep terbuka memenuhi seluruh tingkat bawah dengan siling 3.7m, terus ke taman, dengan empat bilik tidur luas di tingkat atas. 1,917 kaki persegi, dan setiap rumah menghadap kehijauan.",
+    "h.semid.pitch": "Direka untuk ruang lapang. Dapur, ruang makan dan ruang tamu terbuka menjadi satu ruang yang tinggi dan terang, terus melalui kaca ke taman. Empat bilik tidur selesa di tingkat atas, dan setiap rumah menghadap kehijauan.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "Lot Bumi · standard dari RM 632,917",
@@ -406,7 +406,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 unit · Banglo",
     "h.bungalow.name": "Banglo",
-    "h.bungalow.pitch": "Direka untuk tiga generasi di bawah satu bumbung: 2,598 kaki persegi di atas lot terbesar dalam pembangunan, dengan suite tingkat bawah yang fleksibel untuk ibu bapa, tetamu atau pejabat rumah. Lima bilik tidur, lima bilik air.",
+    "h.bungalow.pitch": "Ruang untuk tiga generasi di bawah satu bumbung. Suite tingkat bawah persendirian membolehkan ibu bapa tinggal dekat, dengan pintu masuk mereka sendiri dan tanpa tangga, sementara anak-anak membesar di hujung laluan yang sama. Di atas lot terbesar dalam pembangunan.",
     "h.bungalow.price.l": "Bermula",
     "h.bungalow.price.v": "RM 860,000",
     "h.bungalow.price.s": "Bukan-Bumi · Bumi dari RM 920,263",
@@ -636,7 +636,7 @@ const I18N = {
     "nav.register": "登记意向",
     "nav.cta": "登记意向",
 
-    "hero.eyebrow": "预发布 · 北赖 Bertam · 私密社区,交通便捷",
+    "hero.eyebrow": "预发布 · 北赖 Bertam · 推窗即见自家绿地",
     "hero.h1.a": "每一户",
     "hero.h1.b": "都向绿意敞开。",
     "hero.lede": "一个仅十九户永久地契住宅的私密社区, 户户面向逾 700 平方米的共享绿地。落地玻璃与整面推拉门, 将绿意引入客厅。宁静私密的居所, 落脚于对岸正悄然崛起的一隅。",
@@ -704,7 +704,7 @@ const I18N = {
 
     "h.semid.tag": "16 单位 · 半独立式",
     "h.semid.name": "半独立式",
-    "h.semid.pitch": "为大空间而建:开放式厨房、餐厅与客厅贯通整个底层,3.7 米挑高,直通花园,楼上四间宽敞睡房。1,917 平方英尺,户户面向绿意。",
+    "h.semid.pitch": "为大空间而建。厨房、餐厅与客厅连成一个高敞明亮的空间,穿过玻璃直通花园。楼上四间宽敞睡房,户户面向绿意。",
     "h.semid.price.l": "起价",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "土著保留地 · 一般起价 RM 632,917",
@@ -718,7 +718,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 单位 · 独立式洋房",
     "h.bungalow.name": "独立式",
-    "h.bungalow.pitch": "为三代同堂而建:2,598 平方英尺,坐落全区最大地段,底层设有灵活套房,可作长辈房、客房或居家办公室。五房五浴。",
+    "h.bungalow.pitch": "三代同堂,同在一个屋檐下。底层私人套房让长辈住得安心,有自己的大门,无需上下楼梯,孩子就在同一层长大。坐落全区最大地段。",
     "h.bungalow.price.l": "起价",
     "h.bungalow.price.v": "RM 860,000",
     "h.bungalow.price.s": "非土著 · 土著保留 RM 920,263 起",

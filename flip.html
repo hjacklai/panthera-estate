@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --paper:#efe7d8;
@@ -146,6 +148,13 @@
   .cover .wordmark{font-family:"Cormorant Garamond",serif;font-size:clamp(54px,8vw,104px);line-height:.92}
   .cover .sub{font-family:"JetBrains Mono",monospace;letter-spacing:.34em;font-size:13px;color:var(--terra);text-transform:uppercase}
   .rule{width:64px;height:2px;background:var(--terra);margin:6px 0}
+
+  /* live location map inside a spread */
+  #flipmap{flex:1;min-height:300px;width:100%;border-radius:6px;overflow:hidden;
+    border:1px solid rgba(36,29,23,.18);z-index:3}
+  .site-pin span{display:block;width:18px;height:18px;border-radius:50%;background:var(--terra);
+    border:3px solid #f3ece0;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+  .leaflet-container{font-family:"JetBrains Mono",monospace}
 
   /* ── controls ─────────────────────────────────── */
   .nav{position:fixed;top:50%;transform:translateY(-50%);z-index:50;
@@ -333,9 +342,21 @@
       <span class="coord">SPA · E. &amp; O.E.</span>
     </section>
 
-    <!-- 07 · REGISTER (back cover) -->
+    <!-- 07 · LOCATION (live map) -->
     <section class="leaf"><span class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      <span class="plate">Plate 07 · Be first</span>
+      <span class="plate">Plate 07 · Location</span>
+      <div class="pg" style="gap:13px">
+        <div class="eyebrow">Location</div>
+        <h2 class="title" style="margin:2px 0 0">Where you are.</h2>
+        <p class="lede" style="margin:0;max-width:100%">Off Jalan Bertam, ten minutes from the expressway. Schools, mall and hospital inside a quarter-hour drive.</p>
+        <div id="flipmap" class="no-swipe"></div>
+      </div>
+      <span class="coord">5.5306&deg; N · 100.47&deg; E</span>
+    </section>
+
+    <!-- 08 · REGISTER (back cover) -->
+    <section class="leaf"><span class="holes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="plate">Plate 08 · Be first</span>
       <div class="pg" style="justify-content:center;gap:22px">
         <div class="eyebrow">Be first in line</div>
         <h2 class="title">Claim the home that<br><span class="accent">opens to the green.</span></h2>
@@ -466,17 +487,30 @@
     setTimeout(function(){wheelLock=false;}, 480);
   },{passive:true});
   // swipe / drag to flip on every device (touch, pen, mouse)
-  var sx=0,sy=0,down=false;
+  var sx=0,sy=0,down=false,overMap=false;
   var stage=document.querySelector('.stage');
-  stage.addEventListener('pointerdown',function(e){ down=true; sx=e.clientX; sy=e.clientY; });
+  stage.addEventListener('pointerdown',function(e){ down=true; sx=e.clientX; sy=e.clientY;
+    overMap=!!(e.target.closest && e.target.closest('.no-swipe')); });
   window.addEventListener('pointerup',function(e){
-    if(!down) return; down=false;
+    if(!down) return; down=false; if(overMap){overMap=false; return;}   // let the map pan, do not flip
     var dx=e.clientX-sx, dy=e.clientY-sy;
     if(Math.abs(dx)>44 && Math.abs(dx)>Math.abs(dy)*1.25){ turn(current+(dx<0?1:-1)); }
   });
   // initial state, no animation
   leaves.forEach(function(p,i){ p.classList.toggle('flipped', i<current); });
   settle(); update();
+  // live location map inside the Location spread
+  (function(){
+    var el=document.getElementById('flipmap'); if(!el||!window.L) return;
+    var SITE=[5.530658873884109,100.46554921250969];
+    var map=L.map(el,{zoomControl:true,scrollWheelZoom:false}).setView(SITE,14);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      {subdomains:'abcd',maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+    var icon=L.divIcon({className:'site-pin',html:'<span></span>',iconSize:[20,20],iconAnchor:[10,10]});
+    L.marker(SITE,{icon:icon}).addTo(map).bindTooltip('Panthera Bertam',{direction:'top',offset:[0,-8]});
+    setTimeout(function(){map.invalidateSize();},300);
+    window.addEventListener('resize',function(){map.invalidateSize();});
+  })();
 })();
 </script>
 </body>

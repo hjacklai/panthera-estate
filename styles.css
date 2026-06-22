@@ -3376,7 +3376,7 @@ a:focus-visible,
   50%      { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
 }
 .loc-livemap-coord{ color: rgba(242,233,223,0.6); font-weight: 300; }
-.loc-livemap-actions{ display: inline-flex; align-items: center; gap: 6px; }
+.loc-livemap-actions{ display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .loc-livemap-actions button{
   padding: 7px 14px;
   border-radius: 999px;
@@ -3384,6 +3384,7 @@ a:focus-visible,
   color: rgba(242,233,223,0.78);
   background: transparent;
   font-family: inherit; font-size: 10.5px; letter-spacing: 0.14em;
+  white-space: nowrap;
   cursor: pointer;
   transition: background .15s ease, color .15s ease;
 }
@@ -3396,6 +3397,7 @@ a:focus-visible,
   color: var(--cream);
   font-family: inherit; font-size: 10.5px; letter-spacing: 0.14em;
   text-decoration: none;
+  white-space: nowrap;
   margin-left: 6px;
   transition: background .15s ease;
 }
@@ -3442,13 +3444,17 @@ a:focus-visible,
 }
 @media (max-width: 760px){
   .loc-leaflet{ height: 440px; }
-  .loc-livemap-bar{ padding: 12px 14px; gap: 8px; font-size: 10px; }
+  .loc-livemap-bar{ padding: 14px; gap: 10px; font-size: 10px; }
   .loc-livemap-meta{ gap: 10px; width: 100%; }
   .loc-livemap-coord{ display: none; }
-  .loc-livemap-actions{ width: 100%; }
-  .loc-livemap-actions button, .loc-livemap-actions .open{ padding: 10px 14px; font-size: 11px; }
-  .loc-livemap .map-filters{ padding: 10px 14px; gap: 6px; overflow-x: auto; flex-wrap: nowrap; }
-  .loc-livemap .map-filters button{ flex-shrink: 0; padding: 11px 12px; font-size: 11px; }
+  .loc-livemap-actions{ width: 100%; gap: 8px; }
+  /* toggle pills share one row evenly */
+  .loc-livemap-actions button{ flex: 1 1 0; justify-content: center; text-align: center; padding: 11px 8px; font-size: 11px; letter-spacing: 0.08em; }
+  /* the Maps button gets its own full-width line, so it never wraps into a blob */
+  .loc-livemap-actions .open{ flex: 1 0 100%; margin-left: 0; text-align: center; padding: 13px 14px; font-size: 11px; letter-spacing: 0.08em; }
+  .loc-livemap .map-filters{ padding: 12px 14px; gap: 8px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .loc-livemap .map-filters::-webkit-scrollbar{ display: none; }
+  .loc-livemap .map-filters button{ flex-shrink: 0; padding: 10px 14px; font-size: 11px; letter-spacing: 0.08em; }
 }
 
 .loc-livemap-note{

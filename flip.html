@@ -25,16 +25,23 @@
   body{
     font-family:"Inter Tight",system-ui,sans-serif;
     color:var(--ink);
+    /* dark leather desk: mottled warm light, fine diagonal grain, vignette */
     background:
-      radial-gradient(120% 90% at 50% 8%, #3a312a 0%, #2a231d 55%, #1f1914 100%);
+      radial-gradient(130% 90% at 24% 14%, rgba(99,70,49,.42), transparent 56%),
+      radial-gradient(130% 95% at 84% 82%, rgba(40,28,20,.55), transparent 60%),
+      repeating-linear-gradient(48deg, rgba(255,248,235,.02) 0 3px, rgba(0,0,0,.05) 3px 7px),
+      radial-gradient(150% 120% at 50% 36%, #4a3424 0%, #281c14 58%, #160e09 100%);
     min-height:100vh;
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;
     -webkit-font-smoothing:antialiased;
   }
+  /* stitched edge of the leather desk pad */
+  body::after{content:"";position:fixed;inset:16px;border:1.5px dashed rgba(201,170,128,.16);
+    border-radius:9px;pointer-events:none;z-index:1}
 
   /* ── stage + book ─────────────────────────────── */
-  .stage{position:relative;width:min(1080px,93vw);height:min(86vh,748px)}
+  .stage{position:relative;z-index:2;width:min(1080px,93vw);height:min(86vh,748px)}
   .book{position:absolute;inset:0;perspective:2000px;transform-style:preserve-3d}
   .leaf{
     position:absolute;inset:0;
@@ -43,13 +50,15 @@
     backface-visibility:hidden;
     border-radius:3px 12px 12px 3px;
     background:
-      repeating-linear-gradient(0deg, transparent 0 31px, var(--line) 31px 32px),
       linear-gradient(90deg, var(--paper-edge) 0 46px, var(--paper) 46px 100%);
     box-shadow:0 30px 60px -22px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.25) inset;
     overflow:hidden;
     will-change:transform;
   }
   .leaf.flipped{transform:rotateY(-180deg)}
+  /* faint survey contour lines printed on the page paper */
+  .leaf .paper-topo{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.085;color:var(--ink);overflow:hidden}
+  .leaf .paper-topo svg{position:absolute;left:-6%;top:-10%;width:128%;height:128%}
   /* natural page-turn: weighted arc + travelling shadow, driven by JS one-shot classes */
   .leaf.turn-fwd{animation:turnFwd var(--turn) cubic-bezier(.46,.03,.34,1) forwards}
   .leaf.turn-back{animation:turnBack var(--turn) cubic-bezier(.46,.03,.34,1) forwards}
@@ -354,8 +363,18 @@
   var prev=document.getElementById('prev'), next=document.getElementById('next');
   var counter=document.getElementById('counter');
   var current=0, animating=false, N=leaves.length;
-  // give every sheet a sheen overlay used for the page-turn highlight + shadow
-  leaves.forEach(function(p){ var s=document.createElement('div'); s.className='sheen'; p.appendChild(s); });
+  // faint survey contours printed on every page + a sheen overlay for the turn
+  function hill(cx,cy,rot,n,step,ratio){
+    var s='<g transform="rotate('+rot+' '+cx+' '+cy+')">';
+    for(var i=1;i<=n;i++){ var rx=step*i; s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+(rx*ratio).toFixed(1)+'"/>'; }
+    return s+'</g>';
+  }
+  var TOPO='<svg viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5">'
+    +hill(250,300,-18,6,30,0.82)+hill(560,560,22,6,28,0.86)+hill(360,840,8,5,30,0.72)+'</svg>';
+  leaves.forEach(function(p){
+    var t=document.createElement('div'); t.className='paper-topo'; t.innerHTML=TOPO; p.appendChild(t);
+    var s=document.createElement('div'); s.className='sheen'; p.appendChild(s);
+  });
   function pad(n){return (n<10?'0':'')+n;}
   function settle(){ leaves.forEach(function(p,i){ p.style.zIndex=(i<current)?i:(N-i); }); }
   function update(){

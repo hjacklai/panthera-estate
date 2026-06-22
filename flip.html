@@ -57,8 +57,8 @@
   }
   .leaf.flipped{transform:rotateY(-180deg)}
   /* faint survey contour lines printed on the page paper */
-  .leaf .paper-topo{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.085;color:var(--ink);overflow:hidden}
-  .leaf .paper-topo svg{position:absolute;left:-6%;top:-10%;width:128%;height:128%}
+  .leaf .paper-topo{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.26;
+    background-repeat:no-repeat;background-size:cover;background-position:center}
   /* natural page-turn: weighted arc + travelling shadow, driven by JS one-shot classes */
   .leaf.turn-fwd{animation:turnFwd var(--turn) cubic-bezier(.46,.03,.34,1) forwards}
   .leaf.turn-back{animation:turnBack var(--turn) cubic-bezier(.46,.03,.34,1) forwards}
@@ -363,16 +363,62 @@
   var prev=document.getElementById('prev'), next=document.getElementById('next');
   var counter=document.getElementById('counter');
   var current=0, animating=false, N=leaves.length;
-  // faint survey contours printed on every page + a sheen overlay for the turn
-  function hill(cx,cy,rot,n,step,ratio){
-    var s='<g transform="rotate('+rot+' '+cx+' '+cy+')">';
-    for(var i=1;i<=n;i++){ var rx=step*i; s+='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+(rx*ratio).toFixed(1)+'"/>'; }
-    return s+'</g>';
-  }
-  var TOPO='<svg viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5">'
-    +hill(250,300,-18,6,30,0.82)+hill(560,560,22,6,28,0.86)+hill(360,840,8,5,30,0.72)+'</svg>';
-  leaves.forEach(function(p){
-    var t=document.createElement('div'); t.className='paper-topo'; t.innerHTML=TOPO; p.appendChild(t);
+  // generate real organic survey contours once: noise-warped marching squares,
+  // terracotta index lines every 3rd, like the main site's survey sheet
+  var TOPO_URL=(function(){
+    var W=1200,H=900,CELL=9,SEED=1234.567;
+    var cols=Math.ceil(W/CELL)+1, rows=Math.ceil(H/CELL)+1;
+    function hash(x,y){var n=Math.sin(x*127.1+y*311.7+SEED)*43758.5453;return n-Math.floor(n);}
+    function vn(x,y){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,
+      u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf),
+      a=hash(xi,yi),b=hash(xi+1,yi),c=hash(xi,yi+1),e=hash(xi+1,yi+1);
+      return (a*(1-u)+b*u)*(1-v)+(c*(1-u)+e*u)*v;}
+    function fbm(x,y){var s=0,amp=.5,f=1;for(var o=0;o<4;o++){s+=amp*vn(x*f,y*f);f*=2;amp*=.5;}return s;}
+    var minD=Math.min(W,H), wf=2.2/minD, warp=0.26*minD, nf=3.4/minD, NAMP=0.2;
+    var hills=[[0.28,0.30,1.0,1],[0.72,0.60,0.9,1],[0.52,0.88,0.7,-1],[0.86,0.18,0.6,1]];
+    var field=new Float32Array(cols*rows), k=0;
+    for(var gy=0;gy<rows;gy++)for(var gx=0;gx<cols;gx++){
+      var px=gx*CELL,py=gy*CELL,
+      wx=(fbm(px*wf,py*wf)-.5)*warp, wy=(fbm(px*wf+5.2,py*wf+8.3)-.5)*warp,
+      sx=px+wx, sy=py+wy, sum=0;
+      for(var h=0;h<hills.length;h++){var hx=hills[h][0]*W,hy=hills[h][1]*H,rad=0.26*minD,
+        dx=sx-hx,dy=sy-hy; sum+=hills[h][2]*hills[h][3]*Math.exp(-(dx*dx+dy*dy)/(2*rad*rad));}
+      sum+=(fbm(px*nf+2.1,py*nf+9.9)-.5)*NAMP; field[k++]=sum;
+    }
+    var cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    var d=cv.getContext('2d'); d.lineJoin='round'; d.lineCap='round';
+    function lp(a,b,l){var dd=b-a; return Math.abs(dd)<1e-6?0.5:(l-a)/dd;}
+    function seg(x1,y1,x2,y2){d.moveTo(x1,y1);d.lineTo(x2,y2);}
+    function march(level){
+      d.beginPath();
+      for(var gy=0;gy<rows-1;gy++)for(var gx=0;gx<cols-1;gx++){
+        var i0=gy*cols+gx, tl=field[i0],tr=field[i0+1],br=field[i0+1+cols],bl=field[i0+cols], sq=0;
+        if(tl>level)sq|=8; if(tr>level)sq|=4; if(br>level)sq|=2; if(bl>level)sq|=1;
+        if(sq===0||sq===15)continue;
+        var x=gx*CELL,y=gy*CELL,
+        aT=x+CELL*lp(tl,tr,level), aR=y+CELL*lp(tr,br,level), aB=x+CELL*lp(bl,br,level), aL=y+CELL*lp(tl,bl,level);
+        switch(sq){
+          case 1: seg(x,aL,aB,y+CELL);break; case 2: seg(aB,y+CELL,x+CELL,aR);break;
+          case 3: seg(x,aL,x+CELL,aR);break; case 4: seg(aT,y,x+CELL,aR);break;
+          case 5: seg(x,aL,aT,y);seg(aB,y+CELL,x+CELL,aR);break; case 6: seg(aT,y,aB,y+CELL);break;
+          case 7: seg(x,aL,aT,y);break; case 8: seg(x,aL,aT,y);break;
+          case 9: seg(aT,y,aB,y+CELL);break; case 10: seg(aT,y,x+CELL,aR);seg(x,aL,aB,y+CELL);break;
+          case 11: seg(aT,y,x+CELL,aR);break; case 12: seg(x,aL,x+CELL,aR);break;
+          case 13: seg(aB,y+CELL,x+CELL,aR);break; case 14: seg(x,aL,aB,y+CELL);break;
+        }
+      }
+      d.stroke();
+    }
+    var lv=[]; for(var v=-1.4;v<=1.6;v+=0.2) lv.push(+v.toFixed(2));
+    for(var i=0;i<lv.length;i++){ var emph=(i%3===0);
+      d.lineWidth=emph?2:1.1; d.strokeStyle=emph?'rgba(150,74,54,0.92)':'rgba(40,33,28,0.62)'; march(lv[i]); }
+    return cv.toDataURL('image/png');
+  })();
+  leaves.forEach(function(p,i){
+    var t=document.createElement('div'); t.className='paper-topo';
+    t.style.backgroundImage='url('+TOPO_URL+')';
+    t.style.backgroundPosition=((i*23)%100)+'% '+((i*41)%100)+'%';
+    p.appendChild(t);
     var s=document.createElement('div'); s.className='sheen'; p.appendChild(s);
   });
   function pad(n){return (n<10?'0':'')+n;}

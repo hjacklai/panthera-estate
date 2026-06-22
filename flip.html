@@ -49,6 +49,7 @@
     position:absolute;inset:0;
     transform-origin:left center;
     transform:rotateY(0deg);
+    transition:transform var(--turn) cubic-bezier(.46,.03,.34,1), box-shadow var(--turn) ease;
     backface-visibility:hidden;
     border-radius:3px 12px 12px 3px;
     background:
@@ -61,23 +62,11 @@
   /* faint survey contour lines printed on the page paper */
   .leaf .paper-topo{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.26;
     background-repeat:no-repeat;background-size:cover;background-position:center}
-  /* natural page-turn: weighted arc + travelling shadow, driven by JS one-shot classes */
-  .leaf.turn-fwd{animation:turnFwd var(--turn) cubic-bezier(.46,.03,.34,1) forwards}
-  .leaf.turn-back{animation:turnBack var(--turn) cubic-bezier(.46,.03,.34,1) forwards}
-  @keyframes turnFwd{
-    0%{transform:rotateY(0deg);box-shadow:0 30px 60px -22px rgba(0,0,0,.6)}
-    55%{box-shadow:-58px 30px 96px -6px rgba(0,0,0,.55)}
-    100%{transform:rotateY(-180deg);box-shadow:0 22px 46px -22px rgba(0,0,0,.3)}
-  }
-  @keyframes turnBack{
-    0%{transform:rotateY(-180deg);box-shadow:0 22px 46px -22px rgba(0,0,0,.3)}
-    45%{box-shadow:-58px 30px 96px -6px rgba(0,0,0,.55)}
-    100%{transform:rotateY(0deg);box-shadow:0 30px 60px -22px rgba(0,0,0,.6)}
-  }
-  /* the sheet's own surface shading as it curves through the light */
+  /* the sheet's own surface shading + cast shadow as it curves through the light during a turn */
   .leaf .sheen{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:0;border-radius:inherit;
     background:linear-gradient(100deg, rgba(22,14,8,.34) 0%, rgba(22,14,8,0) 20%, rgba(255,248,236,.13) 50%, rgba(22,14,8,0) 78%, rgba(22,14,8,.26) 100%)}
-  .leaf.turn-fwd .sheen,.leaf.turn-back .sheen{animation:sheen var(--turn) ease-in-out}
+  .leaf.moving{box-shadow:-54px 28px 92px -8px rgba(0,0,0,.5)}
+  .leaf.moving .sheen{animation:sheen var(--turn) ease-in-out}
   @keyframes sheen{0%{opacity:0}50%{opacity:.92}100%{opacity:0}}
   /* spine shading + binding holes on the left edge */
   .leaf::before{
@@ -448,27 +437,24 @@
     counter.textContent=pad(current+1)+' / '+pad(N);
     prev.disabled=current===0; next.disabled=current===N-1;
   }
+  // State-driven turn: `current` is the single source of truth. Every turn
+  // reconciles the flipped state of ALL leaves, so counter and page can never
+  // drift apart; dropped rapid inputs are simply no-ops.
+  var settleT, mover=null;
   function turn(to){
     if(to<0||to>=N||to===current||animating) return;
     animating=true;
-    var fwd=to>current;
-    var leaf=leaves[fwd?current:to];        // the single sheet that physically turns
-    leaf.style.zIndex=N+6;                    // ride on top through the whole arc
-    var cls=fwd?'turn-fwd':'turn-back';
-    var finished=false;
-    function done(e){
-      if(e && e.target!==leaf) return;       // ignore the child sheen's animationend
-      if(finished) return; finished=true;
-      leaf.removeEventListener('animationend', done);
-      leaf.classList.remove('turn-fwd','turn-back');
-      current=to;
-      leaves.forEach(function(p,i){ p.classList.toggle('flipped', i<current); });
-      settle(); animating=false; update();
-    }
-    leaf.addEventListener('animationend', done);
-    setTimeout(done, 1150);                   // safety net if animationend is missed
-    requestAnimationFrame(function(){ leaf.classList.add(cls); });
+    mover = to>current ? leaves[current] : leaves[to];   // the sheet that physically moves
+    mover.style.zIndex = N+6;                              // ride on top through the arc
+    mover.classList.add('moving');                         // drives the sheen sweep + cast shadow
+    current = to;
+    leaves.forEach(function(p,i){ p.classList.toggle('flipped', i<current); });  // CSS transition animates it
     update();
+    clearTimeout(settleT);
+    settleT = setTimeout(function(){
+      if(mover) mover.classList.remove('moving');
+      settle(); animating=false;
+    }, 820);
   }
   prev.addEventListener('click',function(){turn(current-1);});
   next.addEventListener('click',function(){turn(current+1);});

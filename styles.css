@@ -3449,7 +3449,7 @@ a:focus-visible,
   .loc-livemap-coord{ display: none; }
   .loc-livemap-actions{ width: 100%; gap: 8px; }
   /* toggle pills share one row evenly */
-  .loc-livemap-actions button{ flex: 1 1 0; justify-content: center; text-align: center; padding: 11px 8px; font-size: 11px; letter-spacing: 0.08em; }
+  .loc-livemap-actions button{ flex: 1 1 28%; min-width: 0; justify-content: center; text-align: center; padding: 11px 6px; font-size: 11px; letter-spacing: 0.06em; }
   /* the Maps button gets its own full-width line, so it never wraps into a blob */
   .loc-livemap-actions .open{ flex: 1 0 100%; margin-left: 0; text-align: center; padding: 13px 14px; font-size: 11px; letter-spacing: 0.08em; }
   .loc-livemap .map-filters{ padding: 12px 14px; gap: 8px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }

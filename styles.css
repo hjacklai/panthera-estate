@@ -2168,6 +2168,19 @@ footer .baseline{
 .amen{ display: block; margin-top: clamp(28px, 3vw, 44px); columns: 4 220px; column-gap: clamp(20px, 2vw, 36px); }
 @media (max-width: 1000px){ .amen{ columns: 2 240px; } }
 @media (max-width: 600px){  .amen{ columns: 1; } }
+/* Mobile: collapse each amenity category into a tap-to-open dropdown */
+@media (max-width: 600px){
+  .amen-grp.acc .h{ cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .amen-grp.acc .h::after{
+    content: ""; flex: 0 0 auto; width: 9px; height: 9px; margin-right: 2px;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg); transition: transform .25s ease; opacity: .5;
+  }
+  .amen-grp.acc.acc-open .h::after{ transform: rotate(-135deg); }
+  .amen-grp.acc ul{ overflow: hidden; max-height: 0; opacity: 0;
+    transition: max-height .35s ease, opacity .2s ease; }
+  .amen-grp.acc.acc-open ul{ max-height: 1400px; opacity: 1; margin-top: 12px; }
+}
 .amen-grp{
   border-top: 2px solid var(--terra); padding-top: 16px;
   break-inside: avoid; -webkit-column-break-inside: avoid; page-break-inside: avoid;

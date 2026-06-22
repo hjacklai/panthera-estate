@@ -1680,6 +1680,28 @@ function initLeafletListSync(){
       setTimeout(() => m.openPopup(), 350);
     });
   });
+
+  // Collapsible category groups (CSS gates the collapse to mobile only).
+  // Chevron is a CSS ::after so it survives i18n textContent updates.
+  document.querySelectorAll(".amen .amen-grp").forEach((grp, i) => {
+    const h = grp.querySelector(".h");
+    const ul = grp.querySelector("ul");
+    if (!h || !ul || grp.dataset.acc) return;
+    grp.dataset.acc = "1";
+    grp.classList.add("acc");
+    h.setAttribute("role", "button");
+    h.setAttribute("tabindex", "0");
+    if (i === 0) grp.classList.add("acc-open");
+    h.setAttribute("aria-expanded", i === 0 ? "true" : "false");
+    const toggle = () => {
+      const open = grp.classList.toggle("acc-open");
+      h.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    h.addEventListener("click", toggle);
+    h.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
 }
 
 /* ── Pin detail popup ────────────────────────── */

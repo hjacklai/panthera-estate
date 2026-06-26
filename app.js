@@ -1081,6 +1081,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form) form.addEventListener("submit", handleSubmit);
 
   initPlanLightbox();
+  initAmenityAccordion();
 
   // ── Calm reveal-on-scroll, made bulletproof ──────────
   // The CSS hides [data-reveal] (opacity:0) only while <html> carries the
@@ -1680,9 +1681,12 @@ function initLeafletListSync(){
       setTimeout(() => m.openPopup(), 350);
     });
   });
+}
 
-  // Collapsible category groups (CSS gates the collapse to mobile only).
-  // Chevron is a CSS ::after so it survives i18n textContent updates.
+// Collapsible amenity categories. Runs on DOMContentLoaded (independent of
+// the Leaflet map init) so it always applies. Chevron is a CSS ::after so it
+// survives i18n textContent updates.
+function initAmenityAccordion(){
   document.querySelectorAll(".amen .amen-grp").forEach((grp, i) => {
     const h = grp.querySelector(".h");
     const ul = grp.querySelector("ul");

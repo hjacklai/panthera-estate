@@ -589,20 +589,18 @@ footer{ padding-bottom: 60px; }
 }
 .hero-inner{ position: relative; z-index: 2; width: 100%; }
 .hero-split{
-  display: grid; grid-template-columns: 0.88fr 1.12fr;
+  display: grid; grid-template-columns: 1fr 1fr;
   gap: clamp(28px, 3.5vw, 60px); align-items: center;
 }
 .hero-copy{ max-width: 560px; }
-/* The aerial grows and bleeds to the right edge of the viewport so the
-   "homes around a green" layout reads big and immersive, while the copy
-   stays on clean paper. */
+/* The aerial sits contained in its own column so it reads large but never
+   clips off the right edge; the copy stays on clean paper beside it. */
 .hero-art{
-  margin: 0; position: relative;
-  width: calc(100% + var(--gutter) + max(0px, (100vw - var(--maxw)) / 2));
+  margin: 0; position: relative; width: 100%;
 }
 .hero-art img{
   width: 100%; height: auto; display: block;
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px;
   box-shadow: 0 34px 74px -34px rgba(28,23,20,0.5);
 }
 .hero-art figcaption{

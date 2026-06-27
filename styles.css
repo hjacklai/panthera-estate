@@ -268,6 +268,36 @@ section{ position: relative; }
 @media (prefers-reduced-motion: reduce){
   [data-reveal].in{ animation: none; }
 }
+
+/* ── Cinematic premium pass ─────────────────────
+   Hero render is a clipped frame with a slow Ken Burns drift so it feels
+   alive, not static; the hero copy enters in a staggered cascade; the main
+   home renders uncover with an editorial reveal-wipe. The resting state is
+   always fully visible, and every motion honours prefers-reduced-motion. */
+.hero-art{ overflow: hidden; border-radius: 10px; box-shadow: 0 34px 74px -34px rgba(28,23,20,0.5); }
+.hero-art img{ border-radius: 0; box-shadow: none; transform-origin: 55% 45%;
+  animation: heroKen 30s ease-in-out infinite alternate; will-change: transform; }
+@keyframes heroKen {
+  from { transform: scale(1.03) translate3d(0, 0, 0); }
+  to   { transform: scale(1.09) translate3d(-1.4%, -1.8%, 0); }
+}
+.hero-copy.in{ animation: none; }
+.hero-copy.in > *{ animation: revealUp .95s cubic-bezier(.2,.72,.15,1) both; }
+.hero-copy.in > .eyebrow{ animation-delay: .04s; }
+.hero-copy.in > h1{ animation-delay: .16s; }
+.hero-copy.in > .lede{ animation-delay: .30s; }
+.hero-copy.in > .hero-cta{ animation-delay: .44s; }
+.product-img{ overflow: hidden; }
+.product.in .product-img img{ animation: cineWipe 1.35s cubic-bezier(.2,.72,.15,1) both; }
+@keyframes cineWipe {
+  from { clip-path: inset(0 0 16% 0); transform: scale(1.06); opacity: 0; }
+  to   { clip-path: inset(0 0 0 0);   transform: scale(1);    opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-art img{ animation: none; }
+  .hero-copy.in > *{ animation: none; }
+  .product.in .product-img img{ animation: none; }
+}
 .section.dark{ background: var(--ink); color: var(--cream); border-top-color: rgba(242,233,223,0.10); position: relative; overflow: hidden; }
 .section.dark::before{
   content: ""; position: absolute; inset: -10%; pointer-events: none;

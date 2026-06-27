@@ -697,6 +697,60 @@ footer{ padding-bottom: 60px; }
 
 .hero-cta{ display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
 
+/* ── Full-bleed cinematic hero ──────────────────
+   The aerial fills the first screen and drifts (Ken Burns); the copy, CTA
+   and specs sit over a warm-dark scrim for legibility. Reversible via the
+   hero markup + this block. */
+.hero--cinematic{
+  position: relative; overflow: hidden; padding: 0;
+  min-height: clamp(580px, 92vh, 940px);
+  display: flex; align-items: flex-end;
+}
+.hero--cinematic .hero-bg{ position: absolute; inset: 0; margin: 0; z-index: 0; }
+.hero--cinematic .hero-bg img{
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  border-radius: 0; box-shadow: none; transform-origin: 60% 45%;
+  animation: heroKen 24s ease-in-out infinite alternate; will-change: transform;
+}
+.hero--cinematic .hero-scrim{
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(22,15,10,0.85) 0%, rgba(22,15,10,0.58) 38%, rgba(22,15,10,0.14) 70%, rgba(22,15,10,0) 100%),
+    linear-gradient(0deg, rgba(22,15,10,0.62) 0%, rgba(22,15,10,0) 48%);
+}
+.hero--cinematic .hero-inner{
+  position: relative; z-index: 2; width: 100%;
+  padding-top: clamp(90px, 13vh, 150px); padding-bottom: clamp(40px, 6vh, 76px);
+}
+.hero--cinematic .hero-copy{ max-width: 660px; }
+.hero--cinematic .hero-copy .eyebrow{ color: #e9b4a3; }
+.hero--cinematic h1.display{ color: var(--cream); text-shadow: 0 2px 30px rgba(0,0,0,0.3); }
+.hero--cinematic .terra-mark{ color: #e9b4a3; }
+.hero--cinematic .lede{ color: rgba(242,233,223,0.92); text-shadow: 0 1px 16px rgba(0,0,0,0.32); }
+.hero--cinematic .hero-cta{ margin-top: clamp(26px, 3vw, 38px); }
+.hero--cinematic .btn-primary{ background: var(--cream); color: var(--ink); }
+.hero--cinematic .hero-specs{ border-top-color: rgba(242,233,223,0.24); margin-top: clamp(30px, 4vw, 46px); }
+.hero--cinematic .hero-specs li{ border-right-color: rgba(242,233,223,0.2); }
+.hero--cinematic .hero-specs .v{ color: var(--cream); }
+.hero--cinematic .hero-specs .k{ color: rgba(242,233,223,0.72); }
+.hero--cinematic .hero-copy.in > .hero-specs{ animation-delay: .74s; }
+.hero--cinematic .hero-cap{
+  position: absolute; right: clamp(16px, 3vw, 44px); bottom: 12px; z-index: 2;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(242,233,223,0.5);
+}
+@media (max-width: 760px){
+  .hero--cinematic{ min-height: 88vh; }
+  .hero--cinematic .hero-scrim{
+    background: linear-gradient(0deg, rgba(22,15,10,0.9) 4%, rgba(22,15,10,0.52) 46%, rgba(22,15,10,0.24) 100%);
+  }
+  .hero--cinematic .hero-copy{ max-width: none; }
+  .hero--cinematic .hero-cap{ display: none; }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero--cinematic .hero-bg img{ animation: none; }
+}
+
 /* (legacy hero-diagram styles removed; the hero now uses a photo/render
    img, sized and bled to the right edge by the .hero-art rule above) */
 

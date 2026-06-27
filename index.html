@@ -57,7 +57,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=92">
+<link rel="stylesheet" href="styles.css?v=93">
 
 <!-- Structured data for Google rich results -->
 <script type="application/ld+json">
@@ -301,41 +301,40 @@
 </header>
 
 <!-- ─── HERO ──────────────────────────────────── -->
-<section class="hero hero--paper" data-screen-label="01 Hero">
-  <div class="wrap hero-inner">
-    <div class="hero-split">
-      <div class="hero-copy" data-reveal>
-        <div class="eyebrow" data-i18n="hero.eyebrow">Pre-launch · Bertam · wake up to your own green</div>
-        <h1 class="display">
-          <span data-i18n="hero.h1.a">Every home</span><br>
-          <span class="terra-mark" data-i18n="hero.h1.b">opens to the green.</span>
-        </h1>
-        <p class="lede" data-i18n="hero.lede">An intimate enclave of nineteen freehold homes, all facing a shared green of more than 700 m². Floor-to-ceiling glass and full-width sliding doors fold the park into the living room. A calm, private address on the mainland's quiet edge, just as it begins to rise.</p>
+<section class="hero hero--cinematic" data-screen-label="01 Hero">
+  <figure class="hero-bg">
+    <img src="assets/site-render-aerial.webp?v=7" width="920" height="784" alt="Aerial view of Panthera Bertam, nineteen homes around the shared central green and pond" fetchpriority="high">
+  </figure>
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <span class="hero-cap mono" data-i18n="site.aerial.l">Artist's impression · aerial view from north</span>
 
-        <div class="hero-cta">
-          <a href="#register" class="btn btn-primary">
-            <span data-i18n="hero.cta.primary">Register your interest</span>
-            <span class="arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" class="btn btn-wa">
-            <span data-i18n="hero.cta.wa">WhatsApp Sales</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-        </div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy" data-reveal>
+      <div class="eyebrow" data-i18n="hero.eyebrow">Pre-launch · Bertam · wake up to your own green</div>
+      <h1 class="display">
+        <span data-i18n="hero.h1.a">Every home</span><br>
+        <span class="terra-mark" data-i18n="hero.h1.b">opens to the green.</span>
+      </h1>
+      <p class="lede" data-i18n="hero.lede">An intimate enclave of nineteen freehold homes, all facing a shared green of more than 700 m². Floor-to-ceiling glass and full-width sliding doors fold the park into the living room. A calm, private address on the mainland's quiet edge, just as it begins to rise.</p>
+
+      <div class="hero-cta">
+        <a href="#register" class="btn btn-primary">
+          <span data-i18n="hero.cta.primary">Register your interest</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" class="btn btn-wa">
+          <span data-i18n="hero.cta.wa">WhatsApp Sales</span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
       </div>
 
-      <figure class="hero-art" data-reveal>
-        <img src="assets/site-render-aerial.webp?v=7" width="920" height="784" alt="Aerial view of Panthera Bertam, nineteen homes around the shared central green and pond" fetchpriority="high">
-        <figcaption class="mono" data-i18n="site.aerial.l">Artist's impression · aerial view from north</figcaption>
-      </figure>
+      <ul class="hero-specs" aria-label="At a glance">
+        <li><span class="v" data-i18n="hero.f1.v">RM 610k</span><span class="k" data-i18n="hero.f1.k">from</span></li>
+        <li><span class="v" data-i18n="hero.f2.v">Freehold</span><span class="k" data-i18n="hero.f2.k">tenure</span></li>
+        <li><span class="v" data-i18n="hero.f3.v">19</span><span class="k" data-i18n="hero.f3.k">homes</span></li>
+        <li><span class="v" data-i18n="hero.f4.v">5 min</span><span class="k" data-i18n="hero.f4.k">to Tech Park</span></li>
+      </ul>
     </div>
-
-    <ul class="hero-specs" aria-label="At a glance">
-      <li><span class="v" data-i18n="hero.f1.v">RM 610k</span><span class="k" data-i18n="hero.f1.k">from</span></li>
-      <li><span class="v" data-i18n="hero.f2.v">Freehold</span><span class="k" data-i18n="hero.f2.k">tenure</span></li>
-      <li><span class="v" data-i18n="hero.f3.v">19</span><span class="k" data-i18n="hero.f3.k">homes</span></li>
-      <li><span class="v" data-i18n="hero.f4.v">5 min</span><span class="k" data-i18n="hero.f4.k">to Tech Park</span></li>
-    </ul>
   </div>
 </section>
 

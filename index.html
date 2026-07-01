@@ -57,7 +57,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=95">
+<link rel="stylesheet" href="styles.css?v=96">
 
 <!-- Structured data for Google rich results -->
 <script type="application/ld+json">
@@ -303,7 +303,9 @@
 <!-- ─── HERO ──────────────────────────────────── -->
 <section class="hero hero--cinematic" data-screen-label="01 Hero">
   <figure class="hero-bg">
-    <img src="assets/hero-aerial-dusk.webp?v=2" width="1365" height="768" alt="Aerial view of Panthera Bertam at golden hour, homes around the shared central green, artist's impression" fetchpriority="high">
+    <img class="hero-slide" src="assets/hero-aerial-dusk.webp?v=2" alt="Aerial view of Panthera Bertam at golden hour, homes around the shared central green, artist's impression" fetchpriority="high">
+    <img class="hero-slide" src="assets/hero-2.webp?v=1" alt="A Panthera Bertam home, front elevation and driveway, artist's impression" loading="lazy">
+    <img class="hero-slide" src="assets/hero-3.webp?v=1" alt="A Panthera Bertam home facade, artist's impression" loading="lazy">
   </figure>
   <div class="hero-scrim" aria-hidden="true"></div>
   <span class="hero-cap mono" data-i18n="site.aerial.l">Artist's impression · aerial view from north</span>

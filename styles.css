@@ -729,10 +729,23 @@ footer{ padding-bottom: 60px; }
   display: flex; align-items: flex-end;
 }
 .hero--cinematic .hero-bg{ position: absolute; inset: 0; margin: 0; z-index: 0; }
-.hero--cinematic .hero-bg img{
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  border-radius: 0; box-shadow: none; transform-origin: 50% 50%;
-  animation: heroKen 27s ease-in-out infinite alternate; will-change: transform;
+/* Cross-fading hero slideshow: each render drifts (Ken Burns orbit) and
+   fades to the next, showing off all the imagery. */
+.hero--cinematic .hero-slide{
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: 0; border-radius: 0; box-shadow: none; transform-origin: 50% 50%;
+  animation: heroFade 27s linear infinite, heroKen 24s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+.hero--cinematic .hero-slide:nth-child(1){ animation-delay: 0s, 0s; }
+.hero--cinematic .hero-slide:nth-child(2){ animation-delay: 9s, -8s; }
+.hero--cinematic .hero-slide:nth-child(3){ animation-delay: 18s, -16s; }
+@keyframes heroFade {
+  0%   { opacity: 0; }
+  3%   { opacity: 1; }
+  30%  { opacity: 1; }
+  36%  { opacity: 0; }
+  100% { opacity: 0; }
 }
 .hero--cinematic .hero-scrim{
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -770,7 +783,8 @@ footer{ padding-bottom: 60px; }
   .hero--cinematic .hero-cap{ display: none; }
 }
 @media (prefers-reduced-motion: reduce){
-  .hero--cinematic .hero-bg img{ animation: none; }
+  .hero--cinematic .hero-slide{ animation: none; opacity: 0; }
+  .hero--cinematic .hero-slide:nth-child(1){ opacity: 1; }
 }
 
 /* (legacy hero-diagram styles removed; the hero now uses a photo/render

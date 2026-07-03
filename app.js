@@ -46,7 +46,7 @@ const I18N = {
 
     "glance.eyebrow": "At a glance",
     "glance.title": "What you're buying into.",
-    "glance.lede": "Not just a house. A freehold address in a township the country is pouring billions into, bought while it is still quiet enough to call home.",
+    "glance.lede": "Not just a house. A freehold address in a township quietly on the rise, bought while it is still quiet enough to call home.",
     "g1.k": "Green-facing",     "g1.v": "100%",  "g1.u": "Every home opens to the shared park",
     "g2.k": "The enclave",          "g2.v": "Just 19",     "g2.u": "3 bungalow · 16 semi-D",
     "g3.k": "From",           "g3.v": "RM 610k","g3.u": "Pre-launch 2026 · register early",
@@ -63,7 +63,7 @@ const I18N = {
     "site.note1.t": "Over 700 m² of shared open space.",
     "site.note1.b": "Permanent public green at the site's heart. Never built over.",
     "site.note2.h": "Inner ring road",
-    "site.note2.t": "40-foot access roads, all sides.",
+    "site.note2.t": "40-foot access roads, dual entry to the taman.",
     "site.note2.b": "Every home faces the park. No through-traffic.",
     "site.note3.h": "Freehold title",
     "site.note3.t": "Individual titles.",
@@ -80,7 +80,7 @@ const I18N = {
 
     "h.semid.tag": "16 units · Semi-Detached",
     "h.semid.name": "The Semi-D",
-    "h.semid.pitch": "Built to live big. The kitchen, dining and living open as one tall, bright room, straight through the glass and out to the garden. Four proper bedrooms above, and every home faces the green.",
+    "h.semid.pitch": "Built to live big. The kitchen, dining and living open as one tall, bright room, straight through the glass and out to the garden. Four proper bedrooms above.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 610,000 onwards",
     "h.semid.price.s": "Bumi lot · standard from RM 632,917",
@@ -88,7 +88,7 @@ const I18N = {
     "h.semid.s2.k": "Land Size", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 ft²",
     "h.semid.s3.k": "Bedrooms", "h.semid.s3.v": "4",
     "h.semid.s4.k": "Bathrooms", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "Ceilings", "h.semid.s5.v": "3.7 / 3.5 m",
+    "h.semid.s5.k": "Ceilings", "h.semid.s5.v": "3.7 m ground · 3.5 m upstairs",
     "h.semid.s6.k": "Tenure", "h.semid.s6.v": "Freehold",
     "h.semid.ph": "Render · Semi-D Streetscape",
 
@@ -102,7 +102,7 @@ const I18N = {
     "h.bungalow.s2.k": "Land Size", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 ft²",
     "h.bungalow.s3.k": "Bedrooms", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "Bathrooms", "h.bungalow.s4.v": "5",
-    "h.bungalow.s5.k": "Ceilings", "h.bungalow.s5.v": "3.7 / 3.5 m",
+    "h.bungalow.s5.k": "Ceilings", "h.bungalow.s5.v": "3.7 m ground · 3.5 m upstairs",
     "h.bungalow.s6.k": "Tenure", "h.bungalow.s6.v": "Freehold",
     "h.bungalow.ph": "Render · Bungalow Exterior",
 
@@ -367,7 +367,7 @@ const I18N = {
 
     "glance.eyebrow": "Ringkasan",
     "glance.title": "Apa yang anda miliki.",
-    "glance.lede": "Bukan sekadar rumah. Alamat pegangan bebas dalam sebuah bandar yang sedang dilaburkan berbilion oleh negara, dimiliki ketika ia masih cukup tenang untuk dipanggil rumah.",
+    "glance.lede": "Bukan sekadar rumah. Alamat pegangan bebas dalam sebuah bandar yang sedang bangkit perlahan, dimiliki ketika ia masih cukup tenang untuk dipanggil rumah.",
     "g1.k": "Menghadap taman",  "g1.v": "100%",  "g1.u": "Setiap rumah terbuka ke taman dikongsi",
     "g2.k": "Enklaf",         "g2.v": "Hanya 19",     "g2.u": "3 banglo · 16 berkembar",
     "g3.k": "Bermula",       "g3.v": "RM 610k","g3.u": "Pra-pelancaran 2026 · daftar awal",
@@ -384,7 +384,7 @@ const I18N = {
     "site.note1.t": "Lebih 700 m² ruang terbuka dikongsi.",
     "site.note1.b": "Kawasan hijau awam kekal di tengah tapak. Tidak akan dibangunkan.",
     "site.note2.h": "Jalan cincin dalaman",
-    "site.note2.t": "Jalan akses 40 kaki, semua sisi.",
+    "site.note2.t": "Jalan akses 40 kaki, dua pintu masuk ke taman.",
     "site.note2.b": "Setiap rumah menghadap taman. Tiada lalu-lintas merentas.",
     "site.note3.h": "Pegangan bebas",
     "site.note3.t": "Hak milik individu.",
@@ -401,7 +401,7 @@ const I18N = {
 
     "h.semid.tag": "16 unit · Berkembar",
     "h.semid.name": "Rumah Berkembar",
-    "h.semid.pitch": "Direka untuk ruang lapang. Dapur, ruang makan dan ruang tamu terbuka menjadi satu ruang yang tinggi dan terang, terus melalui kaca ke taman. Empat bilik tidur selesa di tingkat atas, dan setiap rumah menghadap kehijauan.",
+    "h.semid.pitch": "Direka untuk ruang lapang. Dapur, ruang makan dan ruang tamu terbuka menjadi satu ruang yang tinggi dan terang, terus melalui kaca ke taman. Empat bilik tidur selesa di tingkat atas.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "Lot Bumi · standard dari RM 632,917",
@@ -409,7 +409,7 @@ const I18N = {
     "h.semid.s2.k": "Saiz tanah", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 kp",
     "h.semid.s3.k": "Bilik tidur", "h.semid.s3.v": "4",
     "h.semid.s4.k": "Bilik air", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "Tinggi siling", "h.semid.s5.v": "3.7 / 3.5 m",
+    "h.semid.s5.k": "Tinggi siling", "h.semid.s5.v": "3.7 m bawah · 3.5 m atas",
     "h.semid.s6.k": "Pegangan", "h.semid.s6.v": "Bebas",
     "h.semid.ph": "Render · Rumah Berkembar",
 
@@ -423,7 +423,7 @@ const I18N = {
     "h.bungalow.s2.k": "Saiz tanah", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 kp",
     "h.bungalow.s3.k": "Bilik tidur", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "Bilik air", "h.bungalow.s4.v": "5",
-    "h.bungalow.s5.k": "Tinggi siling", "h.bungalow.s5.v": "3.7 / 3.5 m",
+    "h.bungalow.s5.k": "Tinggi siling", "h.bungalow.s5.v": "3.7 m bawah · 3.5 m atas",
     "h.bungalow.s6.k": "Pegangan", "h.bungalow.s6.v": "Bebas",
     "h.bungalow.ph": "Render · Banglo Luaran",
 
@@ -688,7 +688,7 @@ const I18N = {
 
     "glance.eyebrow": "一目了然",
     "glance.title": "您所购买的一切。",
-    "glance.lede": "不只是一栋房子。这是一个永久地契的门牌, 落在国家正投入数十亿的新兴市镇, 而您在它仍然宁静、仍能称之为家的时候入手。",
+    "glance.lede": "不只是一栋房子。这是一个永久地契的门牌, 落在一座正静静崛起的市镇, 而您在它仍然宁静、仍能称之为家的时候入手。",
     "g1.k": "面向绿地", "g1.v": "100%",  "g1.u": "每户都向共享公园敞开",
     "g2.k": "私密社区",        "g2.v": "仅 19 户",     "g2.u": "3 独立 · 16 半独立",
     "g3.k": "起价",        "g3.v": "RM 610k","g3.u": "2026 预发布 · 提早登记",
@@ -705,7 +705,7 @@ const I18N = {
     "site.note1.t": "逾 700 m² 的共享开放空间。",
     "site.note1.b": "地段中央的永久公共绿地,永不开发。",
     "site.note2.h": "内部环道",
-    "site.note2.t": "40 英尺宽的进出道路,四面环绕。",
+    "site.note2.t": "40 英尺宽的进出道路,双入口通往园区。",
     "site.note2.b": "每户都面向公园,无过境车辆。",
     "site.note3.h": "永久地契",
     "site.note3.t": "个别地契。",
@@ -722,7 +722,7 @@ const I18N = {
 
     "h.semid.tag": "16 单位 · 半独立式",
     "h.semid.name": "半独立式",
-    "h.semid.pitch": "为大空间而建。厨房、餐厅与客厅连成一个高敞明亮的空间,穿过玻璃直通花园。楼上四间宽敞睡房,户户面向绿意。",
+    "h.semid.pitch": "为大空间而建。厨房、餐厅与客厅连成一个高敞明亮的空间,穿过玻璃直通花园。楼上四间宽敞睡房。",
     "h.semid.price.l": "起价",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "土著保留地 · 一般起价 RM 632,917",
@@ -730,7 +730,7 @@ const I18N = {
     "h.semid.s2.k": "土地面积", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 平方英尺",
     "h.semid.s3.k": "卧室", "h.semid.s3.v": "4",
     "h.semid.s4.k": "浴室", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "层高", "h.semid.s5.v": "3.7 / 3.5 m",
+    "h.semid.s5.k": "层高", "h.semid.s5.v": "地面 3.7 米 · 楼上 3.5 米",
     "h.semid.s6.k": "地契", "h.semid.s6.v": "永久",
     "h.semid.ph": "效果图, 半独立式街景",
 
@@ -744,7 +744,7 @@ const I18N = {
     "h.bungalow.s2.k": "土地面积", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 平方英尺",
     "h.bungalow.s3.k": "卧室", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "浴室", "h.bungalow.s4.v": "5",
-    "h.bungalow.s5.k": "层高", "h.bungalow.s5.v": "3.7 / 3.5 m",
+    "h.bungalow.s5.k": "层高", "h.bungalow.s5.v": "地面 3.7 米 · 楼上 3.5 米",
     "h.bungalow.s6.k": "地契", "h.bungalow.s6.v": "永久",
     "h.bungalow.ph": "效果图, 独立式外观",
 

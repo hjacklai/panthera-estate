@@ -203,14 +203,14 @@ input, textarea, select { font: inherit; color: inherit; }
 .display{
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(40px, 5.8vw, 86px);
+  font-size: clamp(34px, 5.8vw, 86px);
   line-height: 1.0;
   letter-spacing: -0.018em;
 }
 .title{
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(30px, 4vw, 56px);
+  font-size: clamp(26px, 4vw, 56px);
   line-height: 1.02;
   letter-spacing: -0.015em;
 }
@@ -414,7 +414,7 @@ section{ position: relative; }
   color: var(--ink);
 }
 .topbar .brand-mark .wordmark-img{
-  height: 15px;
+  height: 17px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -446,9 +446,17 @@ section{ position: relative; }
 }
 @media (max-width: 780px){
   .topbar-inner{ grid-template-columns: 1fr auto; }
-  .topbar .brand-mark{ justify-self: start; gap: 8px; }
+  .topbar .brand-mark{ justify-self: start; gap: 7px; }
   .topbar .brand-mark .wordmark-img{ height: 15px; }
-  .topbar .brand-mark .sub{ display: none; }
+  /* Show the full "PANTHERA | BERTAM PENANG" wordmark on mobile too, sized to fit. */
+  .topbar .brand-mark .sub{
+    display: inline-block;
+    font-size: 10px; letter-spacing: 0.1em;
+    padding-left: 8px;
+  }
+}
+@media (max-width: 380px){
+  .topbar .brand-mark .sub{ font-size: 9px; letter-spacing: 0.06em; padding-left: 6px; }
 }
 
 /* ── Bottom dock (app-style floating menu) ── */
@@ -729,23 +737,10 @@ footer{ padding-bottom: 60px; }
   display: flex; align-items: flex-end;
 }
 .hero--cinematic .hero-bg{ position: absolute; inset: 0; margin: 0; z-index: 0; }
-/* Cross-fading hero slideshow: each render drifts (Ken Burns orbit) and
-   fades to the next, showing off all the imagery. */
+/* Single static establishing render — the estate aerial at golden hour. */
 .hero--cinematic .hero-slide{
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
-  opacity: 0; border-radius: 0; box-shadow: none; transform-origin: 50% 50%;
-  animation: heroFade 27s linear infinite, heroKen 24s ease-in-out infinite alternate;
-  will-change: opacity, transform;
-}
-.hero--cinematic .hero-slide:nth-child(1){ animation-delay: 0s, 0s; }
-.hero--cinematic .hero-slide:nth-child(2){ animation-delay: 9s, -8s; }
-.hero--cinematic .hero-slide:nth-child(3){ animation-delay: 18s, -16s; }
-@keyframes heroFade {
-  0%   { opacity: 0; }
-  3%   { opacity: 1; }
-  30%  { opacity: 1; }
-  36%  { opacity: 0; }
-  100% { opacity: 0; }
+  opacity: 1; border-radius: 0; box-shadow: none;
 }
 .hero--cinematic .hero-scrim{
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -782,9 +777,18 @@ footer{ padding-bottom: 60px; }
   .hero--cinematic .hero-copy{ max-width: none; }
   .hero--cinematic .hero-cap{ display: none; }
 }
-@media (prefers-reduced-motion: reduce){
-  .hero--cinematic .hero-slide{ animation: none; opacity: 0; }
-  .hero--cinematic .hero-slide:nth-child(1){ opacity: 1; }
+/* Full-width cinematic render band that leads a home section — shown whole, never cropped. */
+.render-band{
+  margin: clamp(24px, 3.5vw, 44px) 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(28,23,20,0.04);
+  box-shadow: 0 34px 80px -50px rgba(28,23,20,0.55);
+}
+.render-band img{
+  display: block;
+  width: 100%;
+  height: auto;   /* natural aspect — the whole render, no crop */
 }
 
 /* (legacy hero-diagram styles removed; the hero now uses a photo/render
@@ -900,7 +904,7 @@ footer{ padding-bottom: 60px; }
 }
 .idea-grid .quote{
   font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: clamp(28px, 3.4vw, 48px); line-height: 1.18; letter-spacing: -0.01em;
+  font-size: clamp(24px, 3.4vw, 48px); line-height: 1.18; letter-spacing: -0.01em;
   color: var(--ink);
   max-width: 24ch;     /* keep the pull-quote short and dense, don't sprawl */
 }
@@ -952,7 +956,7 @@ footer{ padding-bottom: 60px; }
   color: rgba(242,233,223,0.70); margin-bottom: 10px;
 }
 .stats .v{
-  font-family: var(--serif); font-size: clamp(40px, 4.4vw, 70px); line-height: 0.96; letter-spacing: -0.02em; white-space: nowrap;
+  font-family: var(--serif); font-size: clamp(30px, 4.4vw, 70px); line-height: 0.96; letter-spacing: -0.02em; white-space: nowrap;
 }
 .stats .u{ font-size: 14px; color: rgba(242,233,223,0.65); margin-top: 6px; font-family: var(--sans); }
 
@@ -1534,7 +1538,7 @@ footer{ padding-bottom: 60px; }
 .prc-card.dark .tag .units{ color: rgba(242,233,223,0.55); }
 
 .prc-card h3{
-  font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 4.2vw, 60px); line-height: 0.95;
+  font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4.2vw, 60px); line-height: 0.95;
   letter-spacing: -0.02em; margin: 0;
 }
 
@@ -1554,7 +1558,7 @@ footer{ padding-bottom: 60px; }
 }
 .prc-card.dark .prc-range .lbl{ color: rgba(242,233,223,0.55); }
 .prc-range .val{
-  font-family: var(--serif); font-size: clamp(28px, 3vw, 40px); line-height: 1;
+  font-family: var(--serif); font-size: clamp(24px, 3vw, 40px); line-height: 1;
   letter-spacing: -0.015em;
 }
 .prc-range .val small{ font-family: var(--sans); font-size: 13px; color: var(--text-mute); letter-spacing: 0; margin-left: 4px; }
@@ -2155,7 +2159,7 @@ footer .baseline{
   font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; color: rgba(242,233,223,0.45);
 }
 .calc-result .big{
-  font-family: var(--serif); font-size: clamp(56px, 7vw, 96px); line-height: 0.96; letter-spacing: -0.025em;
+  font-family: var(--serif); font-size: clamp(40px, 7vw, 96px); line-height: 0.96; letter-spacing: -0.025em;
   color: var(--cream);
 }
 .calc-result .big small{ font-family: var(--sans); font-size: 16px; color: rgba(242,233,223,0.55); letter-spacing: 0.16em; text-transform: uppercase; display: block; margin-top: 8px; }
@@ -2590,7 +2594,7 @@ footer .baseline{
 
 .bertam-thesis{
   font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: clamp(26px, 3vw, 42px); line-height: 1.18; letter-spacing: -0.01em;
+  font-size: clamp(22px, 3vw, 42px); line-height: 1.18; letter-spacing: -0.01em;
   color: var(--ink);
 }
 .bertam-thesis .accent{ color: var(--terra-2); }
@@ -2615,7 +2619,7 @@ footer .baseline{
   color: var(--text-mute); margin-bottom: 6px;
 }
 .bertam-stats .v{
-  font-family: var(--serif); font-size: clamp(30px, 3.2vw, 44px); line-height: 0.98; letter-spacing: -0.02em;
+  font-family: var(--serif); font-size: clamp(26px, 3.2vw, 44px); line-height: 0.98; letter-spacing: -0.02em;
 }
 .bertam-stats .u{ font-size: 12.5px; color: var(--text-mute); margin-top: 6px; max-width: 30ch; line-height: 1.4; }
 
@@ -2647,7 +2651,7 @@ footer .baseline{
 }
 .cat .yr small{ display: block; font-size: 9.5px; letter-spacing: 0.18em; color: var(--text-mute); text-transform: uppercase; margin-top: 3px; }
 .cat h4{
-  font-family: var(--serif); font-weight: 400; font-size: 21px; line-height: 1.2; letter-spacing: -0.005em;
+  font-family: var(--serif); font-weight: 400; font-size: 18px; line-height: 1.25; letter-spacing: -0.005em;
   margin: 0 0 6px;
 }
 .cat p{ margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); max-width: 50ch; }
@@ -3585,9 +3589,9 @@ a:focus-visible,
   .loc-livemap-coord{ display: none; }
   .loc-livemap-actions{ width: 100%; gap: 8px; }
   /* toggle pills share one row evenly */
-  .loc-livemap-actions button{ flex: 1 1 28%; min-width: 0; justify-content: center; text-align: center; padding: 11px 6px; font-size: 11px; letter-spacing: 0.06em; }
+  .loc-livemap-actions button{ flex: 1 1 28%; min-width: 0; justify-content: center; text-align: center; padding: 8px 6px; font-size: 10px; letter-spacing: 0.06em; }
   /* the Maps button gets its own full-width line, so it never wraps into a blob */
-  .loc-livemap-actions .open{ flex: 1 0 100%; margin-left: 0; text-align: center; padding: 13px 14px; font-size: 11px; letter-spacing: 0.08em; }
+  .loc-livemap-actions .open{ flex: 1 0 100%; margin-left: 0; text-align: center; padding: 9px 14px; font-size: 10px; letter-spacing: 0.08em; }
   .loc-livemap .map-filters{ padding: 12px 14px; gap: 8px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .loc-livemap .map-filters::-webkit-scrollbar{ display: none; }
   .loc-livemap .map-filters button{ flex-shrink: 0; padding: 10px 14px; font-size: 11px; letter-spacing: 0.08em; }
@@ -4149,7 +4153,7 @@ body:not(.lang-zh) .zh-only-inline{ display: none; }
   .calc-preset{ padding: 9px 14px; font-size: 11px; }
   .map-filters button{ padding: 11px 14px; font-size: 11px; }
   .loc-livemap-actions button,
-  .loc-livemap-actions .open{ padding: 10px 14px; font-size: 11px; }
+  .loc-livemap-actions .open{ padding: 7px 12px; font-size: 10px; }
   /* Map zoom controls (+/-) larger on touch */
   .leaflet-bar a{
     width: 36px !important;

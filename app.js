@@ -1704,11 +1704,19 @@ function initAmenityAccordion(){
     grp.classList.add("acc");
     h.setAttribute("role", "button");
     h.setAttribute("tabindex", "0");
-    if (i === 0) grp.classList.add("acc-open");
-    h.setAttribute("aria-expanded", i === 0 ? "true" : "false");
+    // All categories start collapsed; clicking one opens it and closes the rest.
+    h.setAttribute("aria-expanded", "false");
     const toggle = () => {
-      const open = grp.classList.toggle("acc-open");
-      h.setAttribute("aria-expanded", open ? "true" : "false");
+      const willOpen = !grp.classList.contains("acc-open");
+      document.querySelectorAll(".amen .amen-grp.acc").forEach(g => {
+        g.classList.remove("acc-open");
+        const gh = g.querySelector(".h");
+        if (gh) gh.setAttribute("aria-expanded", "false");
+      });
+      if (willOpen){
+        grp.classList.add("acc-open");
+        h.setAttribute("aria-expanded", "true");
+      }
     };
     h.addEventListener("click", toggle);
     h.addEventListener("keydown", (e) => {

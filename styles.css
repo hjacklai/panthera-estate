@@ -303,6 +303,7 @@ section{ position: relative; }
 }
 @media (prefers-reduced-motion: reduce){
   .hero-art img{ animation: none; }
+  .hero--cinematic .hero-slide{ animation: none; }
   .hero-copy.in > *{ animation: none; }
   .product.in .product-img img{ animation: none; }
 }
@@ -741,6 +742,9 @@ footer{ padding-bottom: 60px; }
 .hero--cinematic .hero-slide{
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
   opacity: 1; border-radius: 0; box-shadow: none;
+  transform-origin: 50% 50%;
+  animation: heroKen 32s ease-in-out infinite alternate;
+  will-change: transform;
 }
 .hero--cinematic .hero-scrim{
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -750,7 +754,14 @@ footer{ padding-bottom: 60px; }
 }
 .hero--cinematic .hero-inner{
   position: relative; z-index: 2; width: 100%;
-  padding-top: clamp(90px, 13vh, 150px); padding-bottom: clamp(40px, 6vh, 76px);
+  padding-top: clamp(90px, 13vh, 150px); padding-bottom: clamp(96px, 13vh, 152px);
+}
+/* Bottom fade so the hero dissolves into the cream section below instead of
+   ending on a hard horizontal seam. Sits above the photo/scrim, below copy. */
+.hero--cinematic::after{
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  height: clamp(78px, 12vh, 150px); pointer-events: none;
+  background: linear-gradient(to bottom, rgba(242,233,223,0) 0%, rgba(242,233,223,0.55) 60%, var(--cream) 100%);
 }
 .hero--cinematic .hero-copy{ max-width: 660px; }
 .hero--cinematic .hero-copy .eyebrow{ color: #e9b4a3; }
@@ -789,6 +800,49 @@ footer{ padding-bottom: 60px; }
   display: block;
   width: 100%;
   height: auto;   /* natural aspect — the whole render, no crop */
+}
+
+/* Home-section cover: the render becomes the backdrop and the section title +
+   pitch sit over a warm-dark scrim, like the hero. On phones the render shows
+   whole and the copy drops below it, so it always stays legible. */
+.home-cover{
+  position: relative;
+  margin: clamp(24px, 3.5vw, 46px) 0;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 34px 80px -50px rgba(28,23,20,0.55);
+}
+.home-cover img{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 60%;
+  display: block;
+}
+.home-cover-scrim{
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(22,15,10,0.86) 0%, rgba(22,15,10,0.52) 42%, rgba(22,15,10,0.08) 74%, rgba(22,15,10,0) 100%),
+    linear-gradient(0deg, rgba(22,15,10,0.74) 0%, rgba(22,15,10,0) 54%);
+}
+.home-cover-copy{
+  position: absolute; left: 0; bottom: 0; z-index: 2;
+  padding: clamp(24px, 4vw, 58px);
+  max-width: 660px;
+}
+.home-cover-copy .title{ color: var(--cream); margin: 0; }
+.home-cover-copy .product-pitch{
+  color: rgba(242,233,223,0.94); margin: 14px 0 0;
+  text-shadow: 0 1px 18px rgba(0,0,0,0.4);
+  max-width: 54ch;
+}
+@media (max-width: 760px){
+  .home-cover{ aspect-ratio: auto; overflow: visible; box-shadow: none; border-radius: 0; margin: clamp(18px,5vw,28px) 0; }
+  .home-cover img{ position: static; height: auto; border-radius: 12px; box-shadow: 0 20px 44px -30px rgba(28,23,20,0.5); }
+  .home-cover-scrim{ display: none; }
+  .home-cover-copy{ position: static; max-width: none; padding: 18px 2px 4px; }
+  .home-cover-copy .title{ color: var(--ink-deep); }
+  .home-cover-copy .product-pitch{ color: var(--text); text-shadow: none; max-width: none; }
 }
 
 /* (legacy hero-diagram styles removed; the hero now uses a photo/render

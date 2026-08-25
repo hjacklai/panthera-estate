@@ -80,7 +80,7 @@ const I18N = {
 
     "h.semid.tag": "16 units · Semi-Detached",
     "h.semid.name": "The Semi-D",
-    "h.semid.pitch": "Built to live big. The kitchen, dining and living open as one tall, bright room, straight through the glass and out to the garden. Four proper bedrooms above.",
+    "h.semid.pitch": "A big open-plan kitchen, living and dining, with high ceilings and floor-to-ceiling glass to the garden. Three bedrooms upstairs, one on the ground floor.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 610,000 onwards",
     "h.semid.price.s": "Bumi lot · standard from RM 632,917",
@@ -94,7 +94,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 units · Bungalow",
     "h.bungalow.name": "The Bungalow",
-    "h.bungalow.pitch": "Room for three generations under one roof. A private ground-floor suite keeps your parents close, with their own front door and no stairs to climb, while the children grow up just down the hall. On the estate's largest lots.",
+    "h.bungalow.pitch": "The estate's biggest homes, with room for three generations. A ground-floor bedroom and bathroom mean parents or guests skip the stairs, with the rest upstairs.",
     "h.bungalow.price.l": "From",
     "h.bungalow.price.v": "RM 860,000 onwards",
     "h.bungalow.price.s": "Non-Bumi · Bumi from RM 920,263",
@@ -401,7 +401,7 @@ const I18N = {
 
     "h.semid.tag": "16 unit · Berkembar",
     "h.semid.name": "Rumah Berkembar",
-    "h.semid.pitch": "Direka untuk ruang lapang. Dapur, ruang makan dan ruang tamu terbuka menjadi satu ruang yang tinggi dan terang, terus melalui kaca ke taman. Empat bilik tidur selesa di tingkat atas.",
+    "h.semid.pitch": "Dapur, ruang tamu dan ruang makan konsep terbuka yang luas, dengan siling tinggi dan kaca dari lantai ke siling ke taman. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "Lot Bumi · standard dari RM 632,917",
@@ -415,7 +415,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 unit · Banglo",
     "h.bungalow.name": "Banglo",
-    "h.bungalow.pitch": "Ruang untuk tiga generasi di bawah satu bumbung. Suite tingkat bawah persendirian membolehkan ibu bapa tinggal dekat, dengan pintu masuk mereka sendiri dan tanpa tangga, sementara anak-anak membesar di hujung laluan yang sama. Di atas lot terbesar dalam pembangunan.",
+    "h.bungalow.pitch": "Rumah terbesar di taman ini, cukup ruang untuk tiga generasi. Bilik tidur dan bilik air di tingkat bawah bermakna ibu bapa atau tetamu tidak perlu naik tangga, selebihnya di tingkat atas.",
     "h.bungalow.price.l": "Bermula",
     "h.bungalow.price.v": "RM 860,000",
     "h.bungalow.price.s": "Bukan-Bumi · Bumi dari RM 920,263",
@@ -722,7 +722,7 @@ const I18N = {
 
     "h.semid.tag": "16 单位 · 半独立式",
     "h.semid.name": "半独立式",
-    "h.semid.pitch": "为大空间而建。厨房、餐厅与客厅连成一个高敞明亮的空间,穿过玻璃直通花园。楼上四间宽敞睡房。",
+    "h.semid.pitch": "开放式厨房、客厅与餐厅连成一片,楼底挑高,落地玻璃直通花园。楼上三间睡房,楼下一间。",
     "h.semid.price.l": "起价",
     "h.semid.price.v": "RM 610,000",
     "h.semid.price.s": "土著保留地 · 一般起价 RM 632,917",
@@ -736,7 +736,7 @@ const I18N = {
 
     "h.bungalow.tag": "3 单位 · 独立式洋房",
     "h.bungalow.name": "独立式",
-    "h.bungalow.pitch": "三代同堂,同在一个屋檐下。底层私人套房让长辈住得安心,有自己的大门,无需上下楼梯,孩子就在同一层长大。坐落全区最大地段。",
+    "h.bungalow.pitch": "本项目最大的住宅,足以容纳三代同堂。楼下设有睡房和浴室,长辈或访客无需上下楼梯,其余在楼上。",
     "h.bungalow.price.l": "起价",
     "h.bungalow.price.v": "RM 860,000",
     "h.bungalow.price.s": "非土著 · 土著保留 RM 920,263 起",

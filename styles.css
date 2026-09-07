@@ -754,14 +754,21 @@ footer{ padding-bottom: 60px; }
 }
 .hero--cinematic .hero-inner{
   position: relative; z-index: 2; width: 100%;
-  padding-top: clamp(90px, 13vh, 150px); padding-bottom: clamp(96px, 13vh, 152px);
+  padding-top: clamp(90px, 13vh, 150px); padding-bottom: clamp(120px, 16vh, 205px);
 }
 /* Bottom fade so the hero dissolves into the cream section below instead of
    ending on a hard horizontal seam. Sits above the photo/scrim, below copy. */
 .hero--cinematic::after{
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
-  height: clamp(78px, 12vh, 150px); pointer-events: none;
-  background: linear-gradient(to bottom, rgba(242,233,223,0) 0%, rgba(242,233,223,0.55) 60%, var(--cream) 100%);
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; z-index: 1;
+  height: clamp(150px, 22vh, 290px); pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(242,233,223,0) 0%,
+    rgba(242,233,223,0.05) 24%,
+    rgba(242,233,223,0.18) 44%,
+    rgba(242,233,223,0.42) 63%,
+    rgba(242,233,223,0.72) 82%,
+    rgba(242,233,223,0.92) 93%,
+    var(--cream) 100%);
 }
 .hero--cinematic .hero-copy{ max-width: 660px; }
 .hero--cinematic .hero-copy .eyebrow{ color: #e9b4a3; }

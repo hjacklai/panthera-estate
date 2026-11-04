@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semi-D Walkthrough · Panthera Bertam</title>
+<meta name="description" content="Walk through the Panthera Bertam Semi-D, built in 3D from the approved building plans.">
+<meta name="robots" content="noindex">
+<!-- Start the drawings downloading straight away, in parallel with the 3D code. -->
+<script>
+(function () {
+  var b = /[?&]home=bungalow/.test(location.search), h = b ? 'bungalow' : 'semid', o = b ? 'semid' : 'bungalow';
+  [h + '.json?v=4', h + '_detail.json?v=4', h + '_fittings.json?v=4', b ? 'bungalow_furniture.json?v=1' : 'semid_cars.json?v=1',
+   'estate.json?v=1', o + '.json?v=4', o + '_detail.json?v=4', 'parapets.json?v=1'].forEach(function (u) {
+    var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = u; document.head.appendChild(l);
+  });
+})();
+</script>
+<link rel="icon" href="../assets/panthera-logo-full.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<!-- The main site's own stylesheet: same tokens, logo ribbon and buttons. -->
+<link rel="stylesheet" href="../styles.css?v=99">
+<link rel="stylesheet" href="walk.css?v=9">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+<!-- (after the import map, so bare "three" imports resolve) -->
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" crossorigin>
+<link rel="modulepreload" href="walk.js?v=60">
+<link rel="modulepreload" href="estate.js?v=8">
+</head>
+<body>
+<canvas id="scene" aria-label="3D model of the Panthera Bertam Semi-D, built from the approved plans"></canvas>
+
+<div class="loader" id="loader"><span class="wt-mono">Unrolling the drawings</span></div>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="topbar-side left" href="../#homes">
+      <span aria-hidden="true">←</span>
+      <span>Back to the site</span>
+    </a>
+    <a href="../" class="brand-mark" aria-label="Panthera Bertam">
+      <img src="../assets/panthera-logo-full.png" alt="Panthera" class="wordmark-img">
+      <span class="sub">BERTAM PENANG</span>
+    </a>
+    <div class="topbar-side right">
+      <div class="hud" id="hud" aria-hidden="true">
+        Lens <b id="h-lens">2.2°</b><i>·</i>Eye <b id="h-eye">–</b><i>·</i>Cut <b id="h-cut">+1.20 m</b>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="chapters wt-mono" id="chapters" aria-label="Chapters">
+  <button type="button" data-p="0">01 Plan</button>
+  <button type="button" data-p="0.124">02 Walls</button>
+  <button type="button" data-p="0.279">03 Model</button>
+  <button type="button" data-p="0.42">04 Porch</button>
+  <button type="button" data-p="0.533">05 Living</button>
+  <button type="button" data-p="0.70">06 Upstairs</button>
+  <button type="button" data-p="0.90">07 Estate</button>
+</nav>
+
+<nav class="hometoggle wt-mono" aria-label="Choose the home">
+  <a href="?home=semid" data-home="semid">Semi-D</a><a href="?home=bungalow" data-home="bungalow">Bungalow</a>
+</nav>
+
+<!-- Brochure images that pop up at the matching point of the walk (existing site assets). -->
+<figure class="photo" id="photo" aria-live="polite">
+  <button type="button" class="photo-open" id="photo-open" aria-label="Enlarge image"><img id="photo-img" alt=""></button>
+  <figcaption id="photo-cap"></figcaption>
+</figure>
+<div class="lightbox" id="lightbox" hidden><img id="lightbox-img" alt=""><span class="wt-mono">Tap to close</span></div>
+
+<section class="intro" id="intro">
+  <div class="eyebrow">Semi-D · ground floor · after amendment</div>
+  <h1>The plan<br><em>is the house.</em></h1>
+  <p>This is the approved Semi-D drawing, built in 3D. Scroll and the walls go up. Keep going and you walk in through the front door.</p>
+  <div class="scrollcue wt-mono">Scroll</div>
+</section>
+
+<div class="caption" id="caption" aria-live="polite">
+  <span class="num wt-mono" id="cap-num"></span>
+  <p id="cap-text"></p>
+</div>
+
+<aside class="titleblock wt-mono" id="titleblock" aria-label="Drawing details">
+  <div><span class="k">Project</span><span class="big">Panthera Bertam</span></div>
+  <div><span class="k">Drawing</span>Semi-D pair · ground floor</div>
+  <div class="row"><span><span class="k">Unit</span>22 × 43.5 ft</span><span><span class="k">Lot</span>31 ft wide</span></div>
+  <div><span class="k">Source</span>Amended building plan · Oct 2025</div>
+</aside>
+
+<section class="endcard" id="endcard">
+  <h2>Like the layout?</h2>
+  <p>Semi-D, 2,006 sq ft built-up, 4 bedrooms and 4 bathrooms, freehold. Registration is open while we're in pre-launch.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="../#register"><span>Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
+    <a class="btn btn-ghost" href="../#homes"><span>Back to the site</span></a>
+  </div>
+</section>
+
+
+<noscript><p class="noscript">This walkthrough needs JavaScript. <a href="../">Back to Panthera Bertam</a></p></noscript>
+
+<div class="spacer" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script type="module" src="walk.js?v=60"></script>
+</body>
+</html>

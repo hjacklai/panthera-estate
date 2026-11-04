@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Furniture Test</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #efe9e1; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #info { position: fixed; left: 8px; top: 8px; max-width: 46vw; font: 11px/1.45 monospace; color: #222; background: rgba(255,255,255,0.78); padding: 5px 7px; white-space: pre; pointer-events: none; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="info"></div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+const { makeFurniture } = await import('./furniture.js?v=' + Date.now());
+
+const q = new URLSearchParams(location.search);
+const only = q.get('kind');
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = +(q.get('exp') || 1.05);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xEFE9E1);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environment = env; scene.environmentIntensity = +(q.get('env') || 0.5);
+scene.add(new THREE.HemisphereLight(0xfff4e4, 0xcbb8a2, 0.55));
+const sun = new THREE.DirectionalLight(0xffe2bf, 2.3);
+sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 3;
+scene.add(sun, sun.target);
+
+// --- the walkthrough's own canvas textures (copied from walk.js) ---
+function rnd() { rnd.s = ((rnd.s || 7) * 16807) % 2147483647; return rnd.s / 2147483647; }
+function canvasTex(size, draw, { srgb = true, repeat = 1 } = {}) {
+  const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size);
+  const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat, repeat); t.anisotropy = 8; return t;
+}
+function woodTexture() {
+  return canvasTex(512, (g, s) => {
+    g.fillStyle = '#f4f1ec'; g.fillRect(0, 0, s, s);
+    for (let i = 0; i < 140; i++) {
+      const y0 = rnd() * s, amp = 2 + rnd() * 7, f = 0.004 + rnd() * 0.01, a = 0.05 + rnd() * 0.13;
+      g.strokeStyle = `rgba(${70 + rnd() * 40},${45 + rnd() * 25},${25},${a})`; g.lineWidth = 0.6 + rnd() * 2.2;
+      g.beginPath(); for (let x = 0; x <= s; x += 8) g.lineTo(x, y0 + Math.sin(x * f + i) * amp); g.stroke();
+    }
+  });
+}
+function weaveBump() {
+  return canvasTex(256, (g, s) => {
+    g.fillStyle = '#808080'; g.fillRect(0, 0, s, s);
+    for (let k = 0; k < 5000; k++) { const v = Math.round(rnd() * 255); g.fillStyle = `rgba(${v},${v},${v},0.55)`; g.beginPath(); g.arc(rnd() * s, rnd() * s, 0.8 + rnd() * 1.8, 0, 7); g.fill(); }
+  }, { srgb: false, repeat: 3 });
+}
+function stoneTexture() {
+  return canvasTex(512, (g, s) => {
+    g.fillStyle = '#f3ede3'; g.fillRect(0, 0, s, s);
+    for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(${150 + rnd() * 40},${125 + rnd() * 30},${95},${0.04 + rnd() * 0.06})`; g.fillRect(0, rnd() * s, s, 2 + rnd() * 10); }
+    for (let k = 0; k < 400; k++) { g.fillStyle = `rgba(120,100,80,${0.15 + rnd() * 0.2})`; g.beginPath(); g.ellipse(rnd() * s, rnd() * s, 1 + rnd() * 4, 0.6 + rnd() * 1.2, 0, 0, 7); g.fill(); }
+  });
+}
+function tileTexture() {
+  return canvasTex(1024, (g, s) => {
+    const n = 4, step = s / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) { const v = Math.round((rnd() - 0.5) * 8); g.fillStyle = `rgb(${206 + v},${199 + v},${189 + v})`; g.fillRect(i * step, j * step, step, step); }
+    g.strokeStyle = 'rgba(150,140,128,0.9)'; g.lineWidth = 2.2;
+    for (let i = 0; i <= n; i++) { g.beginPath(); g.moveTo(i * step, 0); g.lineTo(i * step, s); g.stroke(); g.beginPath(); g.moveTo(0, i * step); g.lineTo(s, i * step); g.stroke(); }
+  });
+}
+const ctx = { tex: { wood: woodTexture(), weave: weaveBump(), stone: stoneTexture() }, envMap: env };
+
+// --- sample pieces: [kind, spec relative to the cell (back wall at z = 0, x centred), extra pieces] ---
+const C = { RUST: 0xA85C3B, OLIVE: 0x7B7D55, CLAY: 0xC08C70 };
+const rect = (w, d, o = {}) => ({ x0: -w / 2, z0: 0.0, x1: w / 2, z1: d, back: '-z', y0: 0, ...o });
+const SAMPLES = {
+  wc: [[rect(0.53, 0.67, { h: 0.8 })], [rect(0.6, 0.76, { h: 0.8, lid: 'closed' })], [rect(0.38, 0.67, { h: 0.8 })]],   // the last is the bungalow's 0.38 x 0.67 slot
+  basin: [[rect(0.523, 0.41, { y0: 0.70, h: 0.15, rim: 0.85 })], [rect(0.6, 0.48, { h: 0.86, vanity: true })]],          // first as in bungalow_furniture.json
+  vanity: [[rect(1.6, 0.55, { h: 0.86, basins: 2 })]],
+  shower: [[rect(1.0, 1.0, { h: 2.0, enclosure: true })], [rect(1.2, 0.8, { h: 0, enclosure: false })]],
+  bath: [[rect(1.8, 0.8, { h: 0.55 })]],
+  counter: [[rect(2.6, 0.6, { h: 0.9, upper: true, cutouts: [[-0.95, 0.05, -0.1, 0.55]] }), ['sink', rect(0.85, 0.5, { x0: -0.95, x1: -0.1, z0: 0.05, z1: 0.55, y0: 0.9, h: 0.02 })], ['hob', rect(0.78, 0.48, { x0: 0.35, x1: 1.13, z0: 0.06, z1: 0.54, y0: 0.9, h: 0.02 })]]],
+  sink: [[rect(0.86, 0.5, { y0: 0.9, h: 0.02 }), ['counter', rect(1.4, 0.6, { x0: -0.7, x1: 0.7, z0: -0.05, z1: 0.55, h: 0.9, cutouts: [[-0.43, 0, 0.43, 0.5]] })]], [rect(0.5, 0.45, { y0: 0.9, h: 0.02, bowls: 1 })]],
+  hob: [[rect(0.78, 0.48, { y0: 0.9, h: 0.02 })], [rect(0.6, 0.52, { y0: 0.9, h: 0.02, gas: false, burners: 4 })]],
+  fridge: [[rect(0.9, 0.7, { h: 1.8 })], [rect(0.7, 0.68, { h: 1.75, layout: 'top' })]],
+  sofa: [[rect(2.03, 0.81, { h: 0.82, seats: 3 })], [rect(0.815, 0.76, { h: 0.82, armchair: true, cushions: [] })]],
+  bed: [[rect(1.88, 2.06, { h: 0.55, throw: C.RUST })], [rect(1.07, 2.03, { h: 0.55, throw: C.OLIVE })]],
+  bedside: [[rect(0.51, 0.45, { h: 0.5, lamp: true })]],
+  lamp: [[{ cx: 0, cz: 0.2, w: 0.295, d: 0.295, y0: 0, h: 0.42 }]],
+  chair: [[rect(0.468, 0.45, { h: 0.85 })], [rect(0.45, 0.45, { h: 0.95, stool: true })]],
+  table: [[rect(1.95, 0.91, { h: 0.76 })], [{ cx: 0, cz: 0.5, w: 0.72, d: 0.72, y0: 0, h: 0.36, round: true }], [rect(1.8, 0.9, { h: 0.76, base: 'trestle', wood: 0x5E412F })]],
+  tv_console: [[rect(2.4, 0.45, { h: 0.45 }), ['tv', rect(1.24, 0.035, { x0: -0.62, x1: 0.62, z0: 0.2, z1: 0.235, y0: 0.53, h: 0.72 })], ['tv_stand', { cx: 0, cz: 0.215, w: 0.244, d: 0.244, y0: 0.45, h: 0.08 }]]],
+  tv: [[rect(1.24, 0.25, { y0: 0.45, h: 0.79, stand: 'pedestal' }), ['tv_console', rect(1.8, 0.45, { x0: -0.9, x1: 0.9, z0: 0, z1: 0.45, h: 0.45 })]]],
+  wardrobe: [[rect(1.8, 0.6, { h: 2.4 })]],
+  desk: [[rect(1.0, 0.55, { h: 0.75, chair: true, lamp: true })]],
+  task_chair: [[rect(0.65, 0.65, { h: 1.15 })]],   // fixed size: 1.12 m to the top of the back
+  rug: [[rect(2.07, 1.35, { h: 0.014, z0: 0.3, z1: 1.65 })]],
+  panel: [[rect(2.0, 0.1, { h: 1.2 })]],
+  floor_trap: [[rect(0.25, 0.25, { h: 0 })]],
+  tank: [[rect(0.93, 0.33, { h: 0.79 })]],
+};
+const kinds = only ? only.split(',') : Object.keys(SAMPLES);
+const wallMat = new THREE.MeshStandardMaterial({ color: 0xF2EEE8, roughness: 0.95 });
+const floorMat = new THREE.MeshStandardMaterial({ map: tileTexture(), roughness: 0.55 });
+floorMat.map.repeat.set(30 / 2.4, 30 / 2.4);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), floorMat); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+
+const shift = (sp, dx, dz) => { const o = { ...sp }; if (o.x0 != null) { o.x0 += dx; o.x1 += dx; o.z0 += dz; o.z1 += dz; } else { o.cx += dx; o.cz += dz; }
+  if (o.cutouts) o.cutouts = o.cutouts.map(r => [r[0] + dx, r[1] + dz, r[2] + dx, r[3] + dz]); return o; };
+const report = [], pieces = [], groupAll = new THREE.Group(); scene.add(groupAll);
+const cellW = only ? 3.0 : 3.4, cols = only ? 4 : 6;
+let cell = 0;
+for (const k of kinds) for (const variant of SAMPLES[k] || []) {
+  const cx = (cell % cols) * cellW, cz = -Math.floor(cell / cols) * 3.6; cell++;
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(cellW - 0.02, 2.7, 0.1), wallMat); wall.position.set(cx, 1.35, cz - 0.05); wall.receiveShadow = true; wall.castShadow = true; groupAll.add(wall);
+  const [main, ...extra] = variant;
+  for (const [kind, spec] of [[k, main], ...extra]) {
+    const sp = shift(spec, cx, cz);
+    const t0 = performance.now();
+    const g = makeFurniture(THREE, kind, sp, ctx);
+    const ms = performance.now() - t0;
+    if (!g) { report.push(`${kind}: unknown`); continue; }
+    groupAll.add(g); pieces.push(g);
+    g.updateMatrixWorld(true);
+    const bb = new THREE.Box3().setFromObject(g);
+    let fit = '';
+    if (sp.x0 != null && !sp.rot) {
+      const e = 0.003, over = [sp.x0 - bb.min.x, bb.max.x - sp.x1, sp.z0 - bb.min.z, bb.max.z - sp.z1].map(v => Math.max(0, v - e));
+      const yo = [Math.max(0, (sp.y0 ?? 0) - bb.min.y - e), Math.max(0, bb.max.y - ((sp.y0 ?? 0) + (sp.h || 0)) - e)];
+      fit = over.some(v => v > 0) ? ` XZ-OVER ${over.map(v => v.toFixed(3)).join('/')}` : ' xz-ok';
+      fit += ` y[-${yo[0].toFixed(2)} +${yo[1].toFixed(2)}]`;
+    }
+    report.push(`${kind.padEnd(10)} ${String(g.userData.triangles).padStart(6)} tris ${g.userData.drawCalls} calls ${ms.toFixed(0)}ms${fit}`);
+  }
+}
+const cam = new THREE.PerspectiveCamera(+(q.get('fov') || 35), innerWidth / innerHeight, 0.02, 200);
+const controls = new OrbitControls(cam, renderer.domElement);
+const bb = new THREE.Box3();
+for (const p of pieces) bb.expandByObject(p);
+const ctr = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
+sun.position.set(ctr.x - 6, 9, ctr.z + 7); sun.target.position.copy(ctr);
+const ext = Math.max(size.x, size.z) / 2 + 2;
+Object.assign(sun.shadow.camera, { left: -ext, right: ext, top: ext, bottom: -ext, near: 0.5, far: 40 }); sun.shadow.camera.updateProjectionMatrix();
+function setView(az = 25, el = 22, dist = null, target = null) {
+  const t = target ? new THREE.Vector3(...target) : ctr.clone();
+  const d = dist ?? Math.max(size.x * 0.9, size.y * 1.6, size.z * 1.2, 1.2) * (only ? 1.15 : 0.75);
+  const a = az * Math.PI / 180, e = el * Math.PI / 180;
+  cam.position.set(t.x + d * Math.sin(a) * Math.cos(e), t.y + d * Math.sin(e), t.z + d * Math.cos(a) * Math.cos(e));
+  controls.target.copy(t); cam.lookAt(t); controls.update(); render();
+}
+// Frame one piece (index into pieces) from azimuth / elevation (degrees, relative to the piece's front), distance factor k.
+function focus(i = 0, az = 30, el = 25, k = 1.6) {
+  const p = pieces[i], b = new THREE.Box3().setFromObject(p), c = b.getCenter(new THREE.Vector3()), s = b.getSize(new THREE.Vector3());
+  const d = Math.max(s.x, s.y, s.z) * k + 0.4;
+  setView(az + p.rotation.y * 180 / Math.PI, el, d, [c.x, c.y, c.z]);
+}
+if (q.get('focus') != null) setTimeout(() => focus(+q.get('focus'), +(q.get('az') ?? 30), +(q.get('el') ?? 25), +(q.get('k') ?? 1.6)), 0);
+let total = 0; for (const p of pieces) total += p.userData.triangles;
+function render() {
+  renderer.setSize(innerWidth, innerHeight, false);
+  cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix();
+  renderer.info.autoReset = false; renderer.info.reset();
+  renderer.render(scene, cam);
+  document.getElementById('info').textContent = report.join('\n') + `\nframe: ${renderer.info.render.calls} calls, ${renderer.info.render.triangles} tris`;
+}
+controls.addEventListener('change', render);
+addEventListener('resize', render);
+const T = q.get('t') ? q.get('t').split(',').map(Number) : null;
+setView(+(q.get('az') ?? 25), +(q.get('el') ?? 22), q.get('dist') ? +q.get('dist') : null, T);
+if (q.get('hideinfo')) document.getElementById('info').style.display = 'none';
+// ---------------------------------------------------------------- automated footprint / orientation check
+// Builds every kind in a few real footprints (mostly from bungalow_furniture.json), against each of the four walls
+// plus a rotated (cx, cz, w, d, rot) case, and asserts on the exact vertex bounds:
+//   xz: every vertex inside the footprint (2 mm), for every kind (desk with chair: true is the one documented exception);
+//   y:  nothing below y0 and nothing above y0 + h, except the documented allowances (taps, open lid, headboard ...);
+//   orientation: a kind-specific part (cistern, tap, back cushions, headboard, handles ...) sits on the side the
+//   back / head / front key names.
+function runCheck() {
+  const TOL = 0.002, SIDES = ['-z', '+z', '-x', '+x'];
+  // [W along the wall, D away from it, spec extras]
+  const CASES = {
+    wc: [[0.38, 0.67, { h: 0.8 }], [0.38, 0.67, { h: 0.8, lid: 'closed' }], [0.5, 0.75, { h: 0.8 }]],
+    basin: [[0.523, 0.41, { y0: 0.7, h: 0.15, rim: 0.85 }], [0.6, 0.48, { h: 0.86, vanity: true }]],
+    vanity: [[1.2, 0.5, { h: 0.86, basins: 1 }], [1.6, 0.55, { h: 0.86, basins: 2 }]],
+    shower: [[0.9, 1.2, { h: 0 }], [1.0, 1.0, { h: 2.0, enclosure: true, glass: ['front', 'right'] }], [1.34, 0.75, { h: 0, enclosure: true }]],
+    bath: [[1.7, 0.75, { h: 0.55 }]],
+    sink: [[0.9, 0.5, { y0: 0.88, h: 0.02, bowls: 2 }], [0.5, 0.45, { y0: 0.9, h: 0.02, bowls: 1 }]],
+    hob: [[0.85, 0.5, { y0: 0.9, h: 0.01, burners: 2 }], [0.6, 0.52, { y0: 0.9, h: 0.01, gas: false, burners: 4 }]],
+    fridge: [[0.905, 0.648, { h: 1.8 }], [0.7, 0.68, { h: 1.75, layout: 'top' }]],
+    counter: [[3.678, 0.6, { h: 0.9 }], [1.94, 0.7, { h: 0.9, upper: true }]],
+    sofa: [[2.03, 0.813, { h: 0.82, seats: 3 }], [0.815, 0.76, { h: 0.8, armchair: true }]],
+    bed: [[1.56, 1.95, { h: 0.55 }], [0.949, 1.956, { h: 0.5 }], [1.88, 1.956, { h: 0.55, throw: false }]],
+    bedside: [[0.45, 0.5, { h: 0.55 }], [0.5, 0.45, { h: 0.5, lamp: true }]],
+    lamp: [[0.3, 0.3, { h: 0.45 }]],
+    chair: [[0.45, 0.45, { h: 0.85, seat_h: 0.45 }], [0.42, 0.42, { h: 0.9, stool: true, seat_h: 0.65 }]],
+    table: [[1.951, 0.91, { h: 0.75 }], [1.8, 0.9, { h: 0.76, base: 'trestle' }]],
+    round: [[0.721, 0.721, { h: 0.4, round: true }], [0.6, 0.6, { h: 0.45, round: true, pedestal: true }]],
+    tv_console: [[3.393, 0.452, { h: 0.45 }]],
+    tv: [[1.24, 0.036, { y0: 0.53, h: 0.72 }], [1.24, 0.25, { y0: 0.45, h: 0.79, stand: 'pedestal' }], [1.24, 0.25, { y0: 0.45, h: 0.79, stand: 'feet' }]],
+    tv_stand: [[0.244, 0.244, { y0: 0.45, h: 0.08 }]],
+    wardrobe: [[1.402, 0.599, { h: 2.2 }], [3.099, 0.597, { h: 2.2 }]],
+    desk: [[1.0, 0.55, { h: 0.75 }], [1.2, 0.6, { h: 0.75, lamp: true }]],
+    task_chair: [[0.65, 0.65, { h: 1.15 }]],
+    rug: [[2.078, 1.347, { h: 0.012 }]],
+    panel: [[1.56, 0.08, { h: 1.1 }]],
+    floor_trap: [[0.249, 0.248, { h: 0 }]],
+    tank: [[0.93, 0.33, { h: 0.79 }]],
+  };
+  // allowed overshoot above y0 + h, and below y0 (metres), as documented in furniture.js
+  const ABOVE = (k, sp) => ({
+    wc: sp.lid === 'closed' ? 0 : 0.1, basin: 0.2, vanity: 0.2, sink: 0.43, bath: 0.17, hob: 0.06,
+    shower: Math.max(0, 2.25 - (sp.h || 0)), bed: Math.max(0, (sp.headboard ?? 1.1) - sp.h) + 0.005,
+    bedside: sp.lamp ? 0.43 : 0, desk: sp.lamp ? 0.37 : 0, counter: sp.upper ? 1.3 : 0, panel: 0,
+    floor_trap: Math.max(0, 0.0032 - (sp.h || 0)),
+  })[k] ?? 0;
+  const BELOW = (k, sp) => ({ basin: sp.vanity ? 0 : 0.21, sink: 0.22 })[k] ?? 0;
+  // orientation probes: which vertices, and whether they belong on the back or the front half
+  const isHandle = m => m.material.metalness > 0.8 && m.material.roughness === 0.32;
+  // y is measured from y0; `when` skips the probe for variants that have no such part
+  const PROBE = {
+    wc: { sel: (m, y) => y > 0.55, half: 'back' },                                                   // cistern
+    basin: { sel: (m, y, sp) => y > (sp.rim ?? sp.y0 + sp.h) - sp.y0 + 0.06, half: 'back' },         // mixer tap
+    vanity: { sel: (m, y, sp) => y > sp.h + 0.06, half: 'back' },
+    sink: { sel: (m, y) => y > 0.1, half: 'back' },                                                  // gooseneck
+    sofa: { sel: (m, y) => y > 0.64, half: 'back' },                                                 // back cushions
+    chair: { sel: (m, y, sp) => y > (sp.seat_h ?? 0.45) + 0.2, half: 'back' },                       // back rail
+    bed: { sel: (m, y, sp) => y > sp.h + 0.25, half: 'back' },                                       // headboard
+    shower: { sel: (m, y) => !m.material.transparent && y > 1.2, half: 'back', when: sp => !sp.enclosure },   // rail, head
+    fridge: { sel: m => m.material.map && m.material.metalness > 0.9, half: 'front' },               // doors, handles
+    wardrobe: { sel: m => isHandle(m), half: 'front' }, counter: { sel: m => isHandle(m), half: 'front' },
+    bedside: { sel: m => isHandle(m), half: 'front' }, desk: { sel: m => isHandle(m), half: 'front' },
+    hob: { sel: (m, y) => y > 0.03 && m.material.roughness === 0.35, half: 'front', when: sp => sp.gas !== false },   // knobs
+    tv: { sel: m => m.material.clearcoat === 1, half: 'front' },                                      // screen
+  };
+  const rows = [], v = new THREE.Vector3();
+  let n = 0, fails = 0;
+  for (const kind of Object.keys(CASES)) for (const [W, D, extra] of CASES[kind]) {
+    const variants = [];
+    for (const side of SIDES) {
+      const alongX = side === '-z' || side === '+z', fw = alongX ? W : D, fd = alongX ? D : W, x0 = 5.13, z0 = -2.27;
+      const sp = { x0, z0, x1: x0 + fw, z1: z0 + fd, y0: 0.3, ...extra, h: extra.h ?? 0 };
+      if (extra.y0 != null) sp.y0 = extra.y0 + 0.3; if (extra.rim != null) sp.rim = extra.rim + 0.3;
+      if (kind === 'bed') sp.head = side; else if (kind === 'wardrobe') sp.front = { '-z': '+z', '+z': '-z', '-x': '+x', '+x': '-x' }[side]; else sp.back = side;
+      variants.push({ sp, side });
+    }
+    // rotated footprint (like the bungalow armchair): back on the local +z side
+    { const sp = { cx: 1.7, cz: -0.4, w: W, d: D, rot: 0.342, y0: 0.3, ...extra, h: extra.h ?? 0, back: 'local +z' };
+      if (extra.y0 != null) sp.y0 = extra.y0 + 0.3; if (extra.rim != null) sp.rim = extra.rim + 0.3;
+      if (kind === 'bed') { delete sp.back; sp.head = '+z'; } if (kind === 'wardrobe') { delete sp.back; sp.front = '-z'; }
+      variants.push({ sp, side: 'rot' }); }
+    for (const { sp, side } of variants) {
+      const g = makeFurniture(THREE, kind, sp, ctx); n++;
+      if (!g) { rows.push(`FAIL ${kind} ${side}: null`); fails++; continue; }
+      g.updateMatrixWorld(true);
+      const rot = sp.rot != null, c = Math.cos(rot ? sp.rot : 0), s = Math.sin(rot ? sp.rot : 0);
+      // footprint frame: u across, w deep (for the axis-aligned cases u = x, w = z)
+      const toFP = p => rot ? [c * (p.x - sp.cx) - s * (p.z - sp.cz), s * (p.x - sp.cx) + c * (p.z - sp.cz)] : [p.x, p.z];
+      // with three's rotation.y = rot, local (x, z) -> world (x c + z s, -x s + z c); the inverse is above
+      const lim = rot ? [-sp.w / 2, -sp.d / 2, sp.w / 2, sp.d / 2] : [sp.x0, sp.z0, sp.x1, sp.z1];
+      let mnU = 1e9, mxU = -1e9, mnW = 1e9, mxW = -1e9, mnY = 1e9, mxY = -1e9;
+      const probe = PROBE[kind] && (!PROBE[kind].when || PROBE[kind].when(sp)) ? PROBE[kind] : null, acc = [0, 0, 0];
+      g.traverse(m => {
+        if (!m.isMesh) return;
+        const p = m.geometry.attributes.position;
+        for (let i = 0; i < p.count; i++) {
+          v.fromBufferAttribute(p, i).applyMatrix4(m.matrixWorld);
+          const [u, w] = toFP(v);
+          mnU = Math.min(mnU, u); mxU = Math.max(mxU, u); mnW = Math.min(mnW, w); mxW = Math.max(mxW, w); mnY = Math.min(mnY, v.y); mxY = Math.max(mxY, v.y);
+          if (probe && probe.sel(m, v.y - sp.y0, sp)) { acc[0] += u; acc[1] += w; acc[2]++; }
+        }
+      });
+      const xzOver = Math.max(lim[0] - mnU, mxU - lim[2], lim[1] - mnW, mxW - lim[3], 0);
+      const below = Math.max(0, sp.y0 - mnY), above = Math.max(0, mxY - (sp.y0 + sp.h));
+      const exempt = kind === 'desk' && sp.chair;
+      const errs = [];
+      if (xzOver > TOL && !exempt) errs.push(`xz over ${(xzOver * 1000).toFixed(1)} mm`);
+      if (below > BELOW(kind, sp) + TOL) errs.push(`below y0 ${(below * 1000).toFixed(0)} mm`);
+      if (above > ABOVE(kind, sp) + TOL) errs.push(`above y0+h ${(above * 1000).toFixed(0)} mm`);
+      if (probe && acc[2]) {
+        const cu = acc[0] / acc[2], cw = acc[1] / acc[2];
+        // depth from the back edge in footprint coordinates
+        const key = rot ? '+z' : side, [a0, b0, a1, b1] = lim;
+        const depth = key === '-z' ? cw - b0 : key === '+z' ? b1 - cw : key === '-x' ? cu - a0 : a1 - cu;
+        const full = key === '-z' || key === '+z' ? b1 - b0 : a1 - a0;
+        const onBack = depth < full / 2;
+        if (onBack !== (probe.half === 'back')) errs.push(`orientation: probe on the ${onBack ? 'back' : 'front'} half`);
+      } else if (probe) errs.push('orientation probe found nothing');
+      if (errs.length) fails++;
+      rows.push(`${errs.length ? 'FAIL' : 'ok  '} ${kind.padEnd(10)} ${side.padEnd(3)} W${W} D${D} xz+${(xzOver * 1000).toFixed(1)}mm y-${(below * 1000).toFixed(0)} y+${(above * 1000).toFixed(0)}mm ${errs.join('; ')}`);
+      g.traverse(m => m.isMesh && m.geometry.dispose());
+    }
+  }
+  return { cases: n, fails, pass: fails === 0, rows };
+}
+const check = runCheck();
+document.getElementById('info').textContent += `\nfit check: ${check.cases - check.fails}/${check.cases} pass`;
+if (q.get('check')) { document.getElementById('info').style.display = ''; document.getElementById('info').textContent = `fit check: ${check.cases - check.fails}/${check.cases} pass\n` + check.rows.filter(r => r.startsWith('FAIL') || q.get('check') === 'all').join('\n'); }
+window.__dbg = { THREE, scene, cam, renderer, render, setView, focus, pieces, report, controls, makeFurniture, ctx, runCheck };
+window.__info = { report, total };
+window.__check = check;
+window.__ready = true;
+</script>
+</body>
+</html>

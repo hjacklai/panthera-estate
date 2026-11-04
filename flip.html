@@ -485,15 +485,58 @@
   // initial state, no animation
   leaves.forEach(function(p,i){ p.classList.toggle('flipped', i<current); });
   settle(); update();
-  // live location map inside the Location spread
+  // live location map: the site + every verified amenity pin (coords copied
+  // verbatim from the main site's PIN_DATA; nothing invented)
   (function(){
     var el=document.getElementById('flipmap'); if(!el||!window.L) return;
     var SITE=[5.530658873884109,100.46554921250969];
-    var map=L.map(el,{zoomControl:true,scrollWheelZoom:false}).setView(SITE,14);
+    var map=L.map(el,{zoomControl:true,scrollWheelZoom:false}).setView(SITE,13);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
       {subdomains:'abcd',maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
-    var icon=L.divIcon({className:'site-pin',html:'<span></span>',iconSize:[20,20],iconAnchor:[10,10]});
-    L.marker(SITE,{icon:icon}).addTo(map).bindTooltip('Panthera Bertam',{direction:'top',offset:[0,-8]});
+    var CAT={daily:'#5d6b4f',schools:'#3f6b8a',connect:'#6d6354',future:'#9c4a36',lifestyle:'#b0833f'};
+    var PINS={
+      "1":{name:"Sunshine Bertam Shopping Mall",cat:"daily",catLabel:"Daily life",time:"5 min",dist:"2.4 km SW",gmaps:"5.5161017,100.4503648"},
+      "2":{name:"Lotus's Kepala Batas",cat:"daily",catLabel:"Daily life",time:"8 min",dist:"3.1 km SW",gmaps:"5.5169232,100.4424866"},
+      "3":{name:"Mydin Bertam Hypermarket",cat:"daily",catLabel:"Daily life",time:"5 min",dist:"1.9 km SE",gmaps:"5.5189118,100.4783364"},
+      "4":{name:"Hospital Kepala Batas",cat:"daily",catLabel:"Daily life",time:"9 min",dist:"3.8 km SW",gmaps:"5.5113324,100.4380547"},
+      "5":{name:"Bertam Resort & Water Park",cat:"daily",catLabel:"Daily life",time:"5 min",dist:"1.9 km SW",gmaps:"5.5208274,100.4526307"},
+      "6":{name:"Masjid At-Taqwa Bertam Indah",cat:"daily",catLabel:"Daily life",time:"8 min",dist:"3.5 km SW",gmaps:"5.5215854,100.4359896"},
+      "7":{name:"SMK Sains Kepala Batas",cat:"schools",catLabel:"Schools",time:"5 min",dist:"1.7 km S",gmaps:"5.5193397,100.4685862"},
+      "8":{name:"Kolej Matrikulasi Pulau Pinang",cat:"schools",catLabel:"Schools",time:"12 min",dist:"5.6 km SW",gmaps:"5.4911848,100.4355294"},
+      "9":{name:"AMDI USM (Advanced Medical & Dental Institute)",cat:"schools",catLabel:"Schools",time:"4 min",dist:"1.3 km SE",gmaps:"5.5257168,100.4775056"},
+      "10":{name:"UiTM Cawangan Pulau Pinang Kampus Bertam",cat:"schools",catLabel:"Schools",time:"3 min",dist:"0.9 km E",gmaps:"5.5292220,100.4742930"},
+      "12":{name:"NSE Bertam Interchange (Exit 166)",cat:"connect",catLabel:"Connectivity",time:"7 min",dist:"3.2 km SW",gmaps:"5.5209366,100.4391366"},
+      "13":{name:"Butterworth Town",cat:"connect",catLabel:"Connectivity",time:"25 min",dist:"16 km S",gmaps:"5.3980,100.3630"},
+      "14":{name:"Penang Sentral",cat:"connect",catLabel:"Connectivity",time:"28 min",dist:"16 km S",gmaps:"5.3944867,100.3657620"},
+      "15":{name:"Penang Bridge",cat:"connect",catLabel:"Connectivity",time:"30 min",dist:"17 km S",gmaps:"5.3820,100.3980"},
+      "16":{name:"Penang International Airport",cat:"connect",catLabel:"Connectivity",time:"45 min",dist:"30 km SW",gmaps:"5.2971,100.2769"},
+      "17":{name:"Penang Technology Park @ Bertam",cat:"future",catLabel:"Jobs & Industry",time:"6 min",dist:"2.9 km E",gmaps:"5.5339619,100.4924177"},
+      "18":{name:"INV Lithium Battery Plant (under construction)",cat:"future",catLabel:"Jobs & Industry",time:"6 min",dist:"3 km E",gmaps:"5.5360,100.4920"},
+      "19":{name:"Setia Fontaines Township",cat:"future",catLabel:"Jobs & Industry",time:"6 min",dist:"2.6 km SE",gmaps:"5.5151210,100.4837305"},
+      "20":{name:"SK Bertam Perdana (primary school)",cat:"schools",catLabel:"Schools",time:"2 min walk",dist:"200 m E",gmaps:"5.5306414,100.4681606"},
+      "21":{name:"Surau Bertam Perdana",cat:"daily",catLabel:"Daily life",time:"3 min walk",dist:"0.9 km SW",gmaps:"5.5262477,100.4591392"},
+      "22":{name:"Taman Bandaraya Vision Park",cat:"lifestyle",catLabel:"Lifestyle",time:"3 min",dist:"1.4 km SW",gmaps:"5.5210065,100.4609212"},
+      "24":{name:"Bertam Indah sports pitches & tennis",cat:"lifestyle",catLabel:"Lifestyle",time:"4 min",dist:"1.5 km SE",gmaps:"5.5210065,100.4731626"},
+      "25":{name:"Bertam Plaza (Pizza Hut, Domino's, Secret Recipe, 7-Eleven, Maybank, Bank Rakyat)",cat:"lifestyle",catLabel:"Lifestyle",time:"5 min",dist:"2.5 km SW",gmaps:"5.5172,100.4475"},
+      "26":{name:"Petronas Bertam",cat:"daily",catLabel:"Daily life",time:"5 min",dist:"2.4 km SW",gmaps:"5.5174896,100.4495931"},
+      "27":{name:"Klinik Desa Paya Keladi",cat:"daily",catLabel:"Daily life",time:"6 min",dist:"2.5 km NW",gmaps:"5.5383479,100.4427886"},
+      "28":{name:"Ibu Pejabat Polis SPU (district police)",cat:"daily",catLabel:"Daily life",time:"7 min",dist:"3.1 km SW",gmaps:"5.5145973,100.4409252"},
+      "29":{name:"KFC Bertam",cat:"lifestyle",catLabel:"Lifestyle",time:"8 min",dist:"4.4 km SW",gmaps:"5.5151,100.4303"},
+      "30":{name:"Kepala Batas Town (Public Bank, Hong Leong, Bank Islam, Pizza Hut, Agrobank)",cat:"lifestyle",catLabel:"Lifestyle",time:"8 min",dist:"4.0 km SW",gmaps:"5.5171,100.4314"},
+      "31":{name:"Kulim Hi-Tech Park (Intel, Infineon, ams Osram, Sandisk)",cat:"future",catLabel:"Jobs & Industry",time:"45 min",dist:"42 km NE",gmaps:"5.4061,100.5728"},
+      "32":{name:"Prai Industrial Area & Free Zone",cat:"future",catLabel:"Jobs & Industry",time:"20 min",dist:"13 km S",gmaps:"5.3729,100.3942"},
+      "33":{name:"Bayan Lepas Free Industrial Zone (semiconductor cluster)",cat:"future",catLabel:"Jobs & Industry",time:"40 min",dist:"30 km SW",gmaps:"5.3303,100.2806"},
+      "34":{name:"Penang Port (North Butterworth Container Terminal)",cat:"future",catLabel:"Jobs & Industry",time:"25 min",dist:"15 km S",gmaps:"5.4243,100.3683"}
+    };
+    Object.keys(PINS).forEach(function(id){
+      var d=PINS[id], ll=d.gmaps.split(',').map(parseFloat), col=CAT[d.cat]||'#6d6354';
+      var ic=L.divIcon({className:'amen-pin',iconSize:[22,22],iconAnchor:[11,11],
+        html:'<div style="width:22px;height:22px;border-radius:50%;background:'+col+';border:2px solid #f3ece0;color:#fff;font-family:monospace;font-weight:600;font-size:11px;line-height:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.35)">'+id+'</div>'});
+      L.marker(ll,{icon:ic,riseOnHover:true}).addTo(map)
+        .bindPopup('<strong>'+d.name+'</strong><br><span style="font-family:monospace;font-size:11px;color:#6d6354">'+d.catLabel+' · '+d.time+' · '+d.dist+'</span>');
+    });
+    var sIcon=L.divIcon({className:'site-pin',html:'<span></span>',iconSize:[22,22],iconAnchor:[11,11]});
+    L.marker(SITE,{icon:sIcon,zIndexOffset:1000}).addTo(map).bindTooltip('Panthera Bertam',{direction:'top',offset:[0,-10]});
     setTimeout(function(){map.invalidateSize();},300);
     window.addEventListener('resize',function(){map.invalidateSize();});
   })();

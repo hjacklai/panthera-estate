@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Car Test</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #cfd5da; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #info { position: fixed; left: 8px; top: 8px; font: 12px/1.4 monospace; color: #222; background: rgba(255,255,255,0.7); padding: 4px 6px; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="info"></div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+const { buildCar } = await import('./car.js?v=' + Date.now());
+
+const q = new URLSearchParams(location.search);
+const view = q.get('view') || 'front', only = q.get('only'), lights = q.get('lights') === '1';
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = lights ? 0.6 : 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(lights ? 0x3a4250 : 0xcfd6dc);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environment = env;
+scene.environmentIntensity = lights ? 0.25 : 1;
+
+const sun = new THREE.DirectionalLight(0xffe0bd, lights ? 0.4 : 2.6);
+sun.position.set(-8, 5.5, 6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 0.5, far: 30 });
+sun.shadow.bias = -0.0002; sun.shadow.normalBias = 0.02; sun.shadow.radius = 4;
+scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xdfe8f0, 0x6d665c, lights ? 0.1 : 0.35));
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshStandardMaterial({ color: 0x9a968e, roughness: 0.92 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+const t0 = performance.now();
+const cars = [];
+const color = q.get('color') ? parseInt(q.get('color'), 16) : undefined;
+for (const [style, x] of [['sedan', -1.35], ['suv', 1.35]]) {
+  if (only && only !== style) continue;
+  const c = buildCar(THREE, { style, lights, color, envMap: q.get('env') === '1' ? env : undefined });
+  c.position.x = only ? 0 : x; scene.add(c); cars.push(c);
+}
+const buildMs = performance.now() - t0;
+
+const cam = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.05, 200);
+const V = {
+  front: [[6.2, 1.7, 7.4], [0, 0.65, 0.2]],
+  rear: [[-6.0, 1.8, -7.2], [0, 0.7, -0.2]],
+  side: [[11.5, 0.9, 0], [0, 0.72, 0]],
+  top: [[0, 13, 0.01], [0, 0, 0]],
+  close: [[2.2, 0.9, 4.4], [only ? 0 : -1.35, 0.6, 1.6]],
+  wheel: [[2.4, 0.45, 1.6], [only ? 0.75 : -0.6, 0.35, 1.37]],
+  rear34: [[5.5, 1.5, -6.5], [0, 0.7, -0.4]],
+  low: [[4.2, 0.55, 5.6], [0, 0.6, 0.3]],
+  nose: [[0, 0.75, 7.5], [0, 0.62, 0]],
+  tail: [[0, 0.95, -7.5], [0, 0.7, 0]],
+  top3: [[3.5, 4.5, 4.5], [0, 0.6, 0]]
+};
+const [cp, ct] = V[view] || V.front;
+cam.position.set(...cp); cam.lookAt(...ct);
+if (q.get('fov')) cam.fov = +q.get('fov');
+if (view === 'side' && !only) cam.fov = 26;
+cam.updateProjectionMatrix();
+
+function render() {
+  renderer.setSize(innerWidth, innerHeight, false);
+  cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix();
+  renderer.info.reset(); renderer.info.autoReset = false;
+  renderer.render(scene, cam);
+  const per = cars.map(c => `${c.userData.style}: ${c.userData.triangles} tris, ${c.userData.drawCalls} meshes`).join(' | ');
+  document.getElementById('info').textContent = `${per} | frame: ${renderer.info.render.calls} calls, ${renderer.info.render.triangles} tris | build ${buildMs.toFixed(0)} ms`;
+  window.__info = { cars: cars.map(c => c.userData), calls: renderer.info.render.calls, triangles: renderer.info.render.triangles, buildMs };
+}
+window.__dbg = { THREE, scene, cam, renderer, render, cars };
+render();
+addEventListener('resize', render);
+window.__ready = true;
+</script>
+</body>
+</html>

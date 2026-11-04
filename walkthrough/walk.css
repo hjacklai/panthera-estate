@@ -1,0 +1,144 @@
+/* Panthera Bertam · Semi-D walkthrough.
+   Loaded after the main site's styles.css, so the logo ribbon (.topbar),
+   buttons (.btn-primary / .btn-ghost), .eyebrow and every colour token are
+   the site's own. This file only lays out the walkthrough's overlays. */
+:root{ --wt-card: rgba(242,233,223,0.92); }
+
+html{ scroll-behavior: auto; }            /* Lenis drives the scroll */
+body{ padding-bottom: 0 !important; background: var(--cream); overflow-x: hidden; }
+
+#scene{ position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; z-index: 0; }
+/* cinematic vignette on every device (the desktop HD path adds its own grade on top) */
+body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse 120% 95% at 50% 48%, transparent 58%, rgba(28,20,14,0.22) 100%); }
+.spacer{ height: 1500vh; }
+
+/* Semi-D / Bungalow switch */
+.hometoggle{ position: fixed; z-index: 7; top: 74px; left: 50%; transform: translateX(-50%); display: flex; padding: 3px;
+  background: var(--wt-card); border: 1px solid var(--rule); border-radius: 999px; box-shadow: 0 12px 28px -20px rgba(28,23,20,0.5); }
+.hometoggle a{ padding: 6px 14px; border-radius: 999px; color: var(--text-mute); text-decoration: none; transition: background .2s, color .2s; }
+.hometoggle a:hover{ color: var(--ink); }
+.hometoggle a.on{ background: var(--ink); color: var(--cream); }
+.hometoggle{ transition: opacity .35s ease; }
+.hometoggle.dim{ opacity: .38; }
+.hometoggle.dim:hover, .hometoggle.dim:focus-within{ opacity: 1; }
+
+/* brochure photo that pops up along the walk */
+.photo{ position: fixed; z-index: 6; right: clamp(16px,3vw,36px); bottom: clamp(32px,5vh,52px); width: min(300px, 30vw, 34vh); margin: 0;
+  background: var(--wt-card); border: 1px solid var(--rule); border-radius: 14px; padding: 8px 8px 10px;
+  box-shadow: 0 24px 48px -30px rgba(28,23,20,0.55);
+  opacity: 0; transform: translateY(-10px) scale(.98); transition: opacity .45s ease, transform .45s ease; pointer-events: none; }
+.photo.show{ opacity: 1; transform: none; pointer-events: auto; }
+.photo-open{ display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.photo img{ display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; }
+.photo figcaption{ margin: 8px 4px 0; font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-mute); line-height: 1.5; }
+.lightbox{ position: fixed; inset: 0; z-index: 3000; display: grid; place-items: center; gap: 12px; padding: 24px;
+  background: rgba(28,23,20,0.82); cursor: zoom-out; }
+.lightbox[hidden]{ display: none; }
+.lightbox img{ max-width: min(1400px, 94vw); max-height: 82vh; border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+.lightbox span{ color: var(--cream); }
+
+.wt-mono{ font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+/* loader */
+.loader{ position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; background: var(--cream); color: var(--ink);
+  transition: opacity .7s ease; }
+.loader.done{ opacity: 0; pointer-events: none; }
+.loader.fail span{ text-transform: none; letter-spacing: 0; font-family: var(--sans); font-size: 15px; }
+
+/* the site's logo ribbon, fixed over the 3D page */
+.topbar{ position: fixed; top: 0; left: 0; right: 0; }
+.hud{ font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+.hud b{ font-weight: 500; color: var(--ink-deep); }
+.hud i{ font-style: normal; opacity: .4; margin: 0 .65em; }
+
+/* chapter rail */
+.chapters{ position: fixed; right: clamp(16px,3vw,36px); top: 44%; transform: translateY(-50%); z-index: 6;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.chapters button{ font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer;
+  color: var(--text-mute); background: var(--wt-card); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px;
+  transition: color .2s, border-color .2s, background .2s; }
+.chapters button:hover{ color: var(--ink); border-color: var(--ink); }
+.chapters button.on{ color: var(--cream); background: var(--ink); border-color: var(--ink); }
+
+/* opening copy */
+.intro{ position: fixed; z-index: 5; left: var(--gutter); top: 50%; transform: translateY(-50%); max-width: 400px; transition: opacity .45s ease; }
+.intro h1{ margin: .35em 0 .4em; font-family: var(--serif); font-weight: 400; color: var(--ink-deep);
+  font-size: clamp(46px, 6vw, 82px); line-height: .97; letter-spacing: -0.01em; }
+.intro h1 em{ color: var(--terra); }
+.intro p{ margin: 0; max-width: 34ch; color: var(--text-mute); font-size: 16px; line-height: 1.6; }
+.scrollcue{ margin-top: 28px; padding-left: 12px; border-left: 1px solid var(--ink); color: var(--ink); }
+
+/* captions */
+.caption{ position: fixed; z-index: 6; left: clamp(16px,3vw,36px); bottom: clamp(32px,5vh,52px); max-width: 450px;
+  background: var(--wt-card); border: 1px solid var(--rule); border-radius: 14px; padding: 15px 20px;
+  box-shadow: 0 20px 40px -28px rgba(28,23,20,0.45);
+  opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; pointer-events: none; }
+.caption.show{ opacity: 1; transform: none; }
+.caption .num{ display: block; margin-bottom: 6px; color: var(--terra-2); }
+.caption p{ margin: 0; font-family: var(--serif); font-size: 22px; line-height: 1.28; color: var(--ink-deep); }
+
+/* title block, like the corner of a real drawing sheet */
+.titleblock{ position: fixed; z-index: 5; right: clamp(16px,3vw,36px); bottom: clamp(32px,5vh,52px); width: 290px;
+  color: var(--ink); background: var(--wt-card); border: 1px solid var(--ink); transition: opacity .45s ease; }
+.titleblock > div{ padding: 8px 12px; border-top: 1px solid var(--rule); font-size: 10px; }
+.titleblock > div:first-child{ border-top: 0; }
+.titleblock .k{ display: block; margin-bottom: 3px; color: var(--text-mute); font-size: 9px; }
+.titleblock .big{ font-family: var(--serif); font-size: 25px; letter-spacing: 0; text-transform: none; color: var(--ink-deep); }
+.titleblock .row{ display: flex; gap: 18px; }
+
+/* end card */
+.endcard{ position: fixed; z-index: 7; left: 50%; bottom: clamp(32px,6vh,64px); transform: translate(-50%,12px); width: min(540px, calc(100vw - 32px));
+  background: var(--wt-card); border: 1px solid var(--rule); border-radius: 16px; padding: 24px 26px;
+  box-shadow: 0 30px 60px -36px rgba(28,23,20,0.5);
+  opacity: 0; pointer-events: none; transition: opacity .4s ease, transform .4s ease; }
+.endcard.show{ opacity: 1; transform: translate(-50%,0); pointer-events: auto; }
+.endcard h2{ margin: 0 0 6px; font-family: var(--serif); font-weight: 400; font-size: 34px; color: var(--ink-deep); }
+.endcard p{ margin: 0 0 18px; color: var(--text-mute); font-size: 15px; line-height: 1.55; }
+.actions{ display: flex; flex-wrap: wrap; gap: 10px; }
+
+.noscript{ position: fixed; inset: auto 16px 50% 16px; text-align: center; z-index: 3000; }
+
+.is-hidden{ opacity: 0 !important; pointer-events: none !important; }
+
+@media (max-width: 900px){ .hud{ display: none; } }   /* no room beside the logo on phones and small tablets */
+@media (max-width: 780px){
+  .hud{ font-size: 8.5px; padding: 4px 8px; letter-spacing: .1em; }
+  .hud i{ margin: 0 .35em; }
+  .chapters{ display: none; }
+  .hometoggle{ top: 66px; }
+  .photo{ top: 112px; bottom: auto; right: 16px; width: min(46vw, 300px); padding: 6px 6px 8px; }
+  .photo figcaption{ font-size: 8px; }
+  .intro{ top: 116px; transform: none; left: 16px; right: 16px; max-width: 520px; }
+  .intro h1{ font-size: 44px; margin: .25em 0 .3em; }
+  .intro p{ font-size: 14px; }
+  .scrollcue{ margin-top: 16px; }
+  .titleblock{ display: none; }
+  .caption{ left: 16px; right: 16px; max-width: none; bottom: 30px; padding: 12px 15px; }
+  .caption p{ font-size: 18px; }
+  .endcard{ bottom: 30px; }
+}
+
+/* tablets: a little more room for the copy and the photo */
+@media (min-width: 600px) and (max-width: 780px){
+  .intro h1{ font-size: 56px; }
+  .caption{ left: 24px; right: 24px; }
+}
+/* phones held sideways: short screens */
+@media (max-height: 520px) and (orientation: landscape){
+  .chapters{ display: none; }
+  .hometoggle{ top: 60px; }
+  .intro{ top: 104px; transform: none; }
+  .intro h1{ font-size: 38px; margin: .2em 0 .25em; }
+  .intro p{ font-size: 13px; }
+  .scrollcue{ margin-top: 10px; }
+  .titleblock{ display: none; }
+  .photo{ top: 60px; bottom: auto; width: min(30vw, 240px); }
+  .caption{ bottom: 14px; padding: 10px 14px; max-width: 56vw; }
+  .caption p{ font-size: 16px; }
+  .endcard{ bottom: 12px; padding: 14px 18px; }
+  .endcard h2{ font-size: 24px; }
+  .endcard p{ font-size: 13px; margin-bottom: 10px; }
+}
+

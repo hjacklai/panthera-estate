@@ -1,0 +1,133 @@
+/* walk-hud.css · the walkthrough HUD inside the estate hero's tour overlay (.pbw).
+   Generated from walk.css with every rule scoped under .pbw; the page-level rules (html, body, #scene,
+   .spacer, .topbar, .hometoggle, .hud) are left out and the intro heading is an h2. Regenerate after editing walk.css. */
+.pbw{ --wt-card: rgba(242,233,223,0.92); }
+.pbw .wt-mono{ font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+.pbw .loader{ position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; background: var(--cream); color: var(--ink); transition: opacity .7s ease; }
+.pbw .loader.done{ opacity: 0; pointer-events: none; }
+.pbw .loader.fail span{ text-transform: none; letter-spacing: 0; font-family: var(--sans); font-size: 15px; }
+.pbw .chapters{ position: fixed; right: clamp(16px,3vw,36px); top: 44%; transform: translateY(-50%); z-index: 6; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.pbw .chapters button{ font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; color: var(--text-mute); background: var(--wt-card); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; transition: color .2s, border-color .2s, background .2s; }
+.pbw .chapters button:hover{ color: var(--ink); border-color: var(--ink); }
+.pbw .chapters button.on{ color: var(--cream); background: var(--ink); border-color: var(--ink); }
+.pbw .intro{ position: fixed; z-index: 5; left: var(--gutter); top: 50%; transform: translateY(-50%); max-width: 420px; padding: 22px 26px 20px; background: var(--wt-card); border: 1px solid var(--rule); border-radius: 16px; box-shadow: 0 24px 48px -32px rgba(28,23,20,0.5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: opacity .45s ease; }
+.pbw .intro .eyebrow{ margin: 0; }
+.pbw .intro h2{ margin: .3em 0 .35em; font-family: var(--serif); font-weight: 400; color: var(--ink-deep); font-size: clamp(42px, 5vw, 72px); line-height: .97; letter-spacing: -0.01em; }
+.pbw .intro h2 em{ color: var(--terra); }
+.pbw .intro p{ margin: 0; max-width: 34ch; color: var(--text-mute); font-size: 16px; line-height: 1.6; }
+.pbw .scrollcue{ margin-top: 20px; padding-left: 12px; border-left: 1px solid var(--ink); color: var(--ink); }
+.pbw .caption{ position: fixed; z-index: 6; left: clamp(16px,3vw,36px); bottom: clamp(32px,5vh,52px); max-width: 450px; background: var(--wt-card); border: 1px solid var(--rule); border-radius: 14px; padding: 15px 20px; box-shadow: 0 20px 40px -28px rgba(28,23,20,0.45); opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; pointer-events: none; }
+.pbw .caption.show{ opacity: 1; transform: none; }
+.pbw .caption .num{ display: block; margin-bottom: 6px; color: var(--terra-2); }
+.pbw .caption p{ margin: 0; font-family: var(--serif); font-size: 22px; line-height: 1.28; color: var(--ink-deep); }
+.pbw .titleblock{ position: fixed; z-index: 5; right: clamp(16px,3vw,36px); bottom: clamp(32px,5vh,52px); width: 290px; color: var(--ink); background: var(--wt-card); border: 1px solid var(--ink); transition: opacity .45s ease; }
+.pbw .titleblock > div{ padding: 8px 12px; border-top: 1px solid var(--rule); font-size: 10px; }
+.pbw .titleblock > div:first-child{ border-top: 0; }
+.pbw .titleblock .k{ display: block; margin-bottom: 3px; color: var(--text-mute); font-size: 10px; }
+.pbw .titleblock .big{ font-family: var(--serif); font-size: 25px; letter-spacing: 0; text-transform: none; color: var(--ink-deep); }
+.pbw .titleblock .row{ display: flex; gap: 18px; }
+.pbw .endcard{ position: fixed; z-index: 7; left: 50%; bottom: clamp(32px,6vh,64px); transform: translate(-50%,12px); width: min(540px, calc(100vw - 32px)); background: var(--wt-card); border: 1px solid var(--rule); border-radius: 16px; padding: 24px 26px; box-shadow: 0 30px 60px -36px rgba(28,23,20,0.5); opacity: 0; pointer-events: none; transition: opacity .4s ease, transform .4s ease; }
+.pbw .endcard.show{ opacity: 1; transform: translate(-50%,0); pointer-events: auto; }
+.pbw .endcard h2{ margin: 0 0 6px; font-family: var(--serif); font-weight: 400; font-size: 34px; color: var(--ink-deep); }
+.pbw .endcard p{ margin: 0 0 18px; color: var(--text-mute); font-size: 15px; line-height: 1.55; }
+.pbw .actions{ display: flex; flex-wrap: wrap; gap: 10px; }
+.pbw .is-hidden{ opacity: 0 !important; pointer-events: none !important; }
+@media (max-width: 780px){
+  .pbw .chapters{ display: none; }
+  .pbw .intro{ top: calc(max(14px, env(safe-area-inset-top, 0px)) + 54px); transform: none; left: 16px; right: 16px; max-width: none; padding: 14px 16px 12px; border-radius: 14px; }
+  .pbw .intro h2{ font-size: 34px; margin: .2em 0 .25em; }
+  .pbw .intro p{ font-size: 13.5px; line-height: 1.5; }
+  .pbw .intro .eyebrow{ font-size: 10px; letter-spacing: .12em; }
+  .pbw .scrollcue{ margin-top: 10px; }
+  .pbw .titleblock{ display: none; }
+  .pbw .caption{ left: 16px; right: 16px; max-width: none; bottom: 30px; padding: 12px 15px; }
+  .pbw .caption p{ font-size: 18px; }
+  .pbw .endcard{ bottom: 30px; }
+}
+@media (max-width: 780px) and (max-height: 700px){
+  .pbw .intro{ padding: 12px 14px 10px; }
+  .pbw .intro h2{ font-size: 29px; }
+  .pbw .intro p{ font-size: 12.5px; line-height: 1.45; }
+  .pbw .scrollcue{ margin-top: 8px; }
+}
+@media (min-width: 600px) and (max-width: 780px){
+  .pbw .intro h2{ font-size: 44px; }
+  .pbw .caption{ left: 24px; right: 24px; }
+}
+@media (max-height: 520px) and (orientation: landscape){
+  .pbw .chapters{ display: none; }
+  .pbw .intro{ top: 60px; transform: none; max-width: 360px; padding: 12px 14px; }
+  .pbw .intro h2{ font-size: 30px; margin: .2em 0 .25em; }
+  .pbw .intro p{ font-size: 13px; }
+  .pbw .scrollcue{ margin-top: 10px; }
+  .pbw .titleblock{ display: none; }
+  .pbw .caption{ bottom: 14px; padding: 10px 14px; max-width: 56vw; }
+  .pbw .caption p{ font-size: 16px; }
+  .pbw .endcard{ bottom: 12px; padding: 14px 18px; }
+  .pbw .endcard h2{ font-size: 24px; }
+  .pbw .endcard p{ font-size: 13px; margin-bottom: 10px; }
+}
+@media (min-width: 781px) and (max-height: 640px){
+  .pbw .chapters{ top: 120px; transform: none; gap: 3px; }
+  .pbw .chapters button{ padding: 4px 10px; }
+}
+@media (pointer: coarse){
+  .pbw .chapters{ gap: 4px; }
+  .pbw .chapters button{ position: relative; padding: 9px 14px; }
+  .pbw .chapters button::after{ content: ''; position: absolute; left: 0; right: 0; top: -4px; bottom: -4px; }
+}
+@supports (padding: env(safe-area-inset-left)){
+  .pbw .chapters, .pbw .titleblock{ right: max(clamp(16px,3vw,36px), env(safe-area-inset-right, 0px)); }
+  .pbw .caption{ left: max(clamp(16px,3vw,36px), env(safe-area-inset-left, 0px)); bottom: calc(clamp(32px,5vh,52px) + env(safe-area-inset-bottom, 0px)); }
+  .pbw .intro{ left: max(var(--gutter), env(safe-area-inset-left, 0px)); }
+  .pbw .endcard{ bottom: calc(clamp(32px,6vh,64px) + env(safe-area-inset-bottom, 0px)); }
+  @media (max-width: 780px){
+    .pbw .caption{ left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
+  }
+}
+.pbw .btn:focus-visible{ border-radius: 999px; }
+@media (prefers-reduced-motion: reduce){
+  .pbw .caption, .pbw .endcard{ transition: opacity .2s linear; }
+  .pbw .caption, .pbw .caption.show{ transform: none; }
+  .pbw .endcard, .pbw .endcard.show{ transform: translate(-50%, 0); }
+}
+.pbw .endcard p:first-child{ font-family: var(--serif); font-size: 21px; line-height: 1.4; color: var(--ink-deep); }
+@media (max-width: 780px){
+  .pbw .endcard p:first-child{ font-size: 18px; }
+}
+/* the camera readout (lens, eye height, cut) is for authoring, not for buyers: hidden (it overlapped the button beside it) */
+.pbw .pbw-lens{ display: none !important; }
+/* the tour's speaker: the site's one sound switch */
+.pbw .pbw-snd{ display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0; margin-left: 6px; border-radius: 50%; border: 1px solid rgba(46,40,37,0.22); background: rgba(242,233,223,0.92); color: #2E2825; cursor: pointer; }
+.pbw .pbw-snd[aria-pressed="true"]{ background: #2E2825; color: #F2E9DF; border-color: #2E2825; }
+.pbw .pbw-snd[hidden]{ display: none; }
+/* room captions: the room name alone, no card (owner, Nov 2026: "just show the room name enough ... no need the card,
+   more minimalist"); a soft paper glow keeps it readable over the rooms */
+.pbw .caption, .pbw .caption.show{ background: none; border: 0; border-radius: 0; box-shadow: none; padding: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.pbw .caption p{ display: none; }
+/* the room's name as a title over the photograph (owner, Nov 2026: "make it more nicer, u decide"): a large light serif
+   that settles into place each time a room opens (a soft blur-in and the letters drawing together), a wide, faint
+   paper glow instead of a sticker edge, so it reads over pale floors and dark rooms alike */
+.pbw .caption .num{ display: block; margin: 0; font-family: var(--serif); font-weight: 300; font-size: clamp(34px, 3.4vw, 52px); line-height: 1; letter-spacing: -0.012em;
+  text-transform: none; color: var(--ink-deep);
+  text-shadow: 0 1px 1px rgba(242,233,223,0.55), 0 0 22px rgba(242,233,223,0.75), 0 0 46px rgba(242,233,223,0.5);
+  opacity: 0; filter: blur(6px); transform: translateY(10px) scale(1.015); transform-origin: 0 100%;
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), filter .8s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); }
+.pbw .caption.show .num{ opacity: 1; filter: none; transform: none; }
+.pbw .caption, .pbw .caption.show{ transform: none; transition: opacity .35s ease; }
+@media (max-width: 720px){ .pbw .caption .num{ font-size: 30px; } }
+@media (prefers-reduced-motion: reduce){ .pbw .caption .num{ transition: opacity .3s linear; filter: none; transform: none; letter-spacing: -0.012em; } }
+/* the tour intro card (owner, Nov 2026): no heading; the home's type, name, figures and price, then the line */
+.pbw .intro .pbw-intro-t{ margin: .2em 0 .35em; font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 2.6vw, 38px); line-height: 1.05; color: var(--ink-deep); }
+.pbw .intro .pbw-specs{ display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 10px 26px; margin: 12px 0 0; }
+.pbw .intro .pbw-specs dt{ font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-mute); }
+.pbw .intro .pbw-specs dd{ margin: 3px 0 0; font-family: var(--serif); font-size: 17px; line-height: 1.2; color: var(--ink-deep); }
+.pbw .intro .pbw-price{ margin: 12px 0 0; font-family: var(--serif); font-size: 19px; color: var(--ink-deep); }
+.pbw .intro p:not(.pbw-price){ margin-top: 12px; }
+@media (max-width: 760px){
+  .pbw .intro .pbw-intro-t{ font-size: 26px; }
+  .pbw .intro .pbw-specs{ gap: 8px 16px; margin-top: 8px; }
+  .pbw .intro .pbw-specs dd{ font-size: 15px; }
+  .pbw .intro .pbw-price{ font-size: 16px; margin-top: 8px; }
+  .pbw .intro p:not(.pbw-price){ margin-top: 8px; }
+}

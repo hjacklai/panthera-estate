@@ -1,32 +1,13 @@
 # Panthera Bertam, pantheraestate.com
-# All crawlers welcome, including AI / LLM answer engines.
+# All crawlers welcome, including AI answer engines (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-User,
+# Claude-SearchBot, PerplexityBot, Perplexity-User, Google-Extended, Applebot-Extended, Bingbot, CCBot, Amazonbot,
+# DuckAssistBot, meta-externalagent).
+# One "*" group on purpose: a named group replaces "*" for that bot, so every Disallow would have to be repeated in it.
+# Plain-text facts for AI: /llms.txt and /llms-full.txt
 
 User-agent: *
 Allow: /
-
-# Explicitly allow major AI crawlers so the site can appear in AI answers.
-User-agent: GPTBot
-Allow: /
-
-User-agent: OAI-SearchBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
+Disallow: /flip.html
+Disallow: /walkthrough/tools/
 
 Sitemap: https://www.pantheraestate.com/sitemap.xml

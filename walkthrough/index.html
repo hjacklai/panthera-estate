@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3D Walkthrough · Semi-D &amp; Bungalow · Panthera Bertam</title>
+<meta name="description" content="Scroll through 3D models of the Panthera Bertam semi-D and bungalow in Bertam, Penang: every room, built from the floor plans. Freehold.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://www.pantheraestate.com/walkthrough/">
+<meta name="theme-color" content="#F2E9DF">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Panthera Bertam">
+<meta property="og:title" content="Panthera Bertam · 3D walkthrough">
+<meta property="og:description" content="Walk through the Semi-D and the bungalow in 3D, room by room, built from the floor plans. Bertam, Penang.">
+<meta property="og:image" content="https://www.pantheraestate.com/walkthrough/og-3d.jpg?v=1">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="3D walkthrough of a Panthera Bertam home: living and dining room">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Panthera Bertam · 3D walkthrough">
+<meta name="twitter:description" content="Walk through the Semi-D and the bungalow in 3D, room by room, built from the floor plans.">
+<meta name="twitter:image" content="https://www.pantheraestate.com/walkthrough/og-3d.jpg?v=1">
+<link rel="icon" type="image/png" href="../assets/e-mark-square.png?v=4">
+<link rel="apple-touch-icon" href="../assets/e-mark-square.png?v=4">
+<!-- Start the drawings and the 3D code downloading straight away, all in parallel. -->
+<script>
+(function () {
+  var b = /[?&]home=bungalow/.test(location.search), h = b ? 'bungalow' : 'semid', o = b ? 'semid' : 'bungalow';
+  var desk = !matchMedia('(max-width: 760px)').matches && !matchMedia('(pointer: coarse)').matches;
+  if (b) {   // the bungalow page: its own title and description for visitors (the canonical stays /walkthrough/: Google advises
+             // against changing it with JavaScript, and the static head already covers both homes)
+    document.title = 'Bungalow 3D Walkthrough · Panthera Bertam';
+    var d = document.querySelector('meta[name=description]'); if (d) d.content = 'Scroll through a 3D model of the Panthera Bertam bungalow in Bertam, Penang: every room from the porch to the balcony, built from the floor plans. 2,642 sq ft, 4+1 bedrooms, 4+1 bathrooms, freehold.';
+  }
+  var u = [h + '.json?v=10', h + '_detail.json?v=5', h + '_fittings.json?v=7', 'bungalow_furniture.json?v=14', 'semid_cars.json?v=1',
+           'estate.json?v=12', 'parapets.json?v=1'];
+  if (/[?&](live|bake)/.test(location.search)) u.push(o + '.json?v=10', o + '_detail.json?v=5');   // the other home: only without the baked estate pack
+  if (!b) u.push('semid_lights.json?v=5', 'semid_furniture.json?v=15');
+  if (!/[?&](bake|tourdev)/.test(location.search)) u.push('tour_' + h + '.json?v=11');
+  u.forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = x; document.head.appendChild(l); });
+  // the baked estate pack (1.2 to 1.7 MB) starts now, not after the whole module graph has run: the same files and tier as
+  // walk.js's fetchPack (TEXHI = desk outside ?bake); 'e1' must follow BAKE_VER in versions.js
+  if (!/[?&](bake|live)/.test(location.search)) ['estate.e1.json', 'estate.e1.bin.gz', 'estate.e1.tex' + (desk ? 1024 : 512) + '.bin'].forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = 'bake/' + x; document.head.appendChild(l); });
+  var m = [];
+  if (desk) {   // desktop only: the post-processing modules (and the Semi-D's area-light tables)
+    ['postprocessing/EffectComposer.js', 'postprocessing/RenderPass.js', 'postprocessing/GTAOPass.js', 'postprocessing/OutputPass.js', 'postprocessing/UnrealBloomPass.js',
+     'postprocessing/ShaderPass.js', 'postprocessing/Pass.js', 'postprocessing/MaskPass.js', 'shaders/CopyShader.js', 'shaders/GTAOShader.js', 'shaders/PoissonDenoiseShader.js',
+     'shaders/OutputShader.js', 'shaders/LuminosityHighPassShader.js', 'math/SimplexNoise.js'].forEach(function (x) { m.push('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/' + x); });
+    if (!b) m.push('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lights/RectAreaLightUniformsLib.js', 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lights/RectAreaLightTexturesLib.js');
+  }
+  m.forEach(function (x) { var l = document.createElement('link'); l.rel = 'modulepreload'; l.crossOrigin = 'anonymous'; l.href = x; document.head.appendChild(l); });
+})();
+</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Montserrat:wght@400&display=swap" rel="stylesheet">
+<!-- The main site's own stylesheet: same tokens, logo ribbon and buttons. -->
+<link rel="stylesheet" href="../styles.css?v=105">
+<link rel="stylesheet" href="walk.css?v=17">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+<!-- (after the import map, so bare "three" imports resolve) -->
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/environments/RoomEnvironment.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lines/LineSegments2.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lines/LineSegmentsGeometry.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lines/LineMaterial.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/geometries/RoundedBoxGeometry.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/utils/BufferGeometryUtils.js" crossorigin>
+<link rel="modulepreload" href="walk.js?v=144">
+<link rel="modulepreload" href="estate.js?v=32">
+<link rel="modulepreload" href="furniture.js?v=12">
+<link rel="modulepreload" href="car.js?v=4">
+<link rel="modulepreload" href="hd.js?v=7">
+<link rel="modulepreload" href="versions.js?v=1">
+<link rel="modulepreload" href="pack.js?v=3">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Panthera Bertam 3D walkthrough",
+  "url": "https://www.pantheraestate.com/walkthrough/",
+  "description": "A scroll-driven 3D walkthrough of the two home types at Panthera Bertam, a freehold estate of 19 homes in Bertam, Penang, Malaysia, built from the floor plans.",
+  "inLanguage": "en",
+  "isPartOf": { "@type": "WebSite", "name": "Panthera Bertam", "url": "https://www.pantheraestate.com/" },
+  "about": [
+    { "@type": "SingleFamilyResidence", "name": "Panthera Bertam Semi-D", "url": "https://www.pantheraestate.com/walkthrough/",
+      "floorSize": { "@type": "QuantitativeValue", "value": 2006, "unitCode": "FTK" }, "numberOfBedrooms": 4, "numberOfBathroomsTotal": 4,
+      "address": { "@type": "PostalAddress", "addressLocality": "Bertam", "addressRegion": "Pulau Pinang", "addressCountry": "MY" } },
+    { "@type": "SingleFamilyResidence", "name": "Panthera Bertam Bungalow", "url": "https://www.pantheraestate.com/walkthrough/?home=bungalow",
+      "floorSize": { "@type": "QuantitativeValue", "value": 2642, "unitCode": "FTK" }, "numberOfBedrooms": 5, "numberOfBathroomsTotal": 5,
+      "address": { "@type": "PostalAddress", "addressLocality": "Bertam", "addressRegion": "Pulau Pinang", "addressCountry": "MY" } }
+  ]
+}
+</script>
+</head>
+<body>
+<canvas id="scene" aria-label="3D model of the Panthera Bertam Semi-D, built from its building plans"></canvas>
+
+<div class="loader" id="loader"><span class="wt-mono">Unrolling the drawings</span></div>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="topbar-side left" href="../#homes">
+      <span aria-hidden="true">←</span>
+      <span>Back to the site</span>
+    </a>
+    <a href="../" class="brand-mark" aria-label="Panthera Bertam">
+      <img src="../assets/panthera-logo-640.webp" width="640" height="91" alt="Panthera" class="wordmark-img">
+      <span class="sub">BERTAM PENANG</span>
+    </a>
+    <div class="topbar-side right">
+      <div class="hud" id="hud" aria-hidden="true">
+        Lens <b id="h-lens">2.2°</b><i>·</i>Eye <b id="h-eye">–</b><i>·</i>Cut <b id="h-cut">+1.20 m</b>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="chapters wt-mono" id="chapters" aria-label="Chapters">
+  <button type="button" data-p="0">01 Plan</button>
+  <button type="button" data-p="0.124">02 Walls</button>
+  <button type="button" data-p="0.279">03 Model</button>
+  <button type="button" data-p="0.42">04 Porch</button>
+  <button type="button" data-p="0.533">05 Living</button>
+  <button type="button" data-p="0.70">06 Upstairs</button>
+  <button type="button" data-p="0.90">07 Estate</button>
+</nav>
+
+<nav class="hometoggle wt-mono" aria-label="Choose the home">
+  <a href="?home=semid" data-home="semid">Semi-D</a><a href="?home=bungalow" data-home="bungalow">Bungalow</a>
+</nav>
+
+<section class="intro" id="intro">
+  <div class="eyebrow">Semi-D · 2,006 sq ft · 4 bed · 4 bath</div>
+  <h1>The plan<br><em>is the house.</em></h1>
+  <p>The Semi-D in 3D. Scroll to walk through every room.</p>
+  <div class="scrollcue wt-mono">Scroll</div>
+</section>
+
+<div class="caption" id="caption" aria-live="polite">
+  <span class="num wt-mono" id="cap-num"></span>
+  <p id="cap-text"></p>
+</div>
+
+<aside class="titleblock wt-mono" id="titleblock" aria-label="Drawing details">
+  <div><span class="k">Project</span><span class="big">Panthera Bertam</span></div>
+  <div><span class="k">Drawing</span>Semi-D pair · ground floor</div>
+  <div class="row"><span><span class="k">Unit</span>22 × 43.5 ft</span><span><span class="k">Lot</span>31 ft wide</span></div>
+</aside>
+
+<section class="endcard" id="endcard">
+  <p>Semi-D · 2,006 sq ft built-up · 4 bedrooms · 4 bathrooms · freehold. Pre-launch registration is open.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="../#register"><span>Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
+    <a class="btn btn-ghost" href="../#homes"><span>Back to the site</span></a>
+  </div>
+</section>
+
+
+<noscript><p class="noscript">This walkthrough needs JavaScript. <a href="../">Back to Panthera Bertam</a></p></noscript>
+
+<div class="spacer" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
+<section class="tour-text" aria-label="What the 3D walkthrough shows">
+  <h2>Panthera Bertam 3D walkthrough</h2>
+  <p>A 3D model of each home type at Panthera Bertam, a freehold estate of 19 homes in Bertam, Penang, built from the floor plans. Scroll to raise the walls, then walk through every room.</p>
+  <h3><a href="./">The Semi-D</a></h3>
+  <p>2,006 sq ft built-up, 4 bedrooms, 4 bathrooms, freehold.</p>
+  <ul>
+    <li>Walls: Built from the floor plan. Each home is 22 ft wide and 43.5 ft deep.</li>
+    <li>The pair: Two homes share a party wall. Each has its own gate, car porch and side patio.</li>
+    <li>Porch: 415 sq ft, for two cars, under the first-floor balcony.</li>
+    <li>Living: 321 sq ft, with a 3.5 m (11 ft 6 in) ceiling.</li>
+    <li>Patio: A 293 sq ft side patio, through sliding glass doors from the living room.</li>
+    <li>Dining room: 151 sq ft. Sliding glass doors to the side patio.</li>
+    <li>Dry kitchen: 128 sq ft, open to the dining room.</li>
+    <li>Wet kitchen: 78 sq ft, with a back door to the yard.</li>
+    <li>Guest bedroom: 145 sq ft, on the ground floor.</li>
+    <li>Bathroom: 50 sq ft. Doors from the guest bedroom and the wet kitchen.</li>
+    <li>Utility room: 57 sq ft, off the dry kitchen.</li>
+    <li>Stair: 21 risers of 176 mm, with a quarter landing.</li>
+    <li>Corridor: 80 sq ft. Leads to all three bedrooms.</li>
+    <li>Bedroom 1: 192 sq ft, with its own bathroom.</li>
+    <li>Bathroom: 40 sq ft, attached to Bedroom 1.</li>
+    <li>Bedroom 2: 156 sq ft, with its own bathroom.</li>
+    <li>Bathroom: 40 sq ft, attached to Bedroom 2.</li>
+    <li>Master bedroom: 337 sq ft, with a dressing area, its own bathroom and the front balcony.</li>
+    <li>Master bathroom: 80 sq ft.</li>
+    <li>Balcony: 105 sq ft, over the car porch.</li>
+  </ul>
+  <h3><a href="./?home=bungalow">The Bungalow</a></h3>
+  <p>2,642 sq ft built-up, 4+1 bedrooms, 4+1 bathrooms (the +1 is the maid's room and its bathroom), freehold.</p>
+  <ul>
+    <li>Walls: Built from the floor plan. The house is 46 ft wide and 28 ft deep.</li>
+    <li>The house: Five bedrooms on a 5,308 sq ft corner lot. Two pitched roofs with a flat roof between them.</li>
+    <li>Porch: 491 sq ft, for two cars, beside the entrance.</li>
+    <li>Entrance hall: 279 sq ft, double height, behind a timber double door.</li>
+    <li>Living: 276 sq ft. Sliding glass doors to the garden.</li>
+    <li>Guest bedroom: 138 sq ft, on the ground floor, with its own bathroom.</li>
+    <li>Guest bathroom: 40 sq ft, with a shower.</li>
+    <li>Powder room: 33 sq ft, off the entrance hall.</li>
+    <li>Dining room: 252 sq ft. Open to the wet kitchen, glass doors across the front.</li>
+    <li>Wet kitchen: 111 sq ft, with a breakfast counter and a back door.</li>
+    <li>Bathroom: 29 sq ft. Doors to the wet kitchen and the maid&#x27;s room.</li>
+    <li>Maid&#x27;s room: 62 sq ft, off the dining room.</li>
+    <li>Utility room: 76 sq ft, under the stair.</li>
+    <li>Corridor: 89 sq ft, overlooking the double-height hall.</li>
+    <li>Bedroom 1: 209 sq ft. Sliding doors to a 36 sq ft rear balcony.</li>
+    <li>Bathroom 1: 38 sq ft, attached to Bedroom 1.</li>
+    <li>Bedroom 2: 208 sq ft. Sliding doors to a 43 sq ft front balcony.</li>
+    <li>Bathroom 2: 42 sq ft, attached to Bedroom 2.</li>
+    <li>Master bedroom: 344 sq ft. Sliding doors to a 43 sq ft rear balcony.</li>
+    <li>Master bathroom: 114 sq ft, with a bathtub and a separate shower.</li>
+    <li>Balcony: 159 sq ft, over the porch.</li>
+  </ul>
+  <h3>The estate</h3>
+  <ul>
+    <li>The street: A 40 ft estate road with open drains and LED street lights on 9 m poles.</li>
+    <li>The estate: 19 homes on 1.96 acres: 16 Semi-Ds and 3 bungalows around a central green.</li>
+  </ul>
+  <p>Furniture, kitchen cabinetry, appliances, art and landscaping in the walkthrough are illustrative. The signed Sale and Purchase Agreement and the stamped drawings are the binding documents.</p>
+</section>
+<script type="module" src="walk.js?v=144"></script>
+</body>
+</html>

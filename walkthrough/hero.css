@@ -1,0 +1,921 @@
+/* hero.css · the live estate hero (added by hero-boot.js; nothing here applies until the 3D is running). */
+
+/* stage: over the poster, under the scrim (z 1) and the copy (z 2). Its opacity is the photo-to-3D dissolve,
+   set by hero.js from the scroll (no transition here, the script damps it). */
+.hero--cinematic .h3d-stage{
+  position: absolute; inset: 0; z-index: 0; opacity: 0;
+  outline: none; overflow: hidden;
+  touch-action: pan-y pinch-zoom;
+}
+.hero--cinematic .h3d-stage:focus-visible{ box-shadow: inset 0 0 0 2px rgba(242,233,223,0.7); }
+.hero--cinematic .h3d-stage canvas{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; transform-origin: 50% 50%; }
+.hero--cinematic .hx-snap{ opacity: 0; pointer-events: none; }
+.hero--cinematic .h3d-stage.hx-orbit{ cursor: grab; }
+.hero--cinematic .h3d-stage.hx-dragging{ cursor: grabbing; }
+/* while the photo dissolves its slow drift holds still, so the 3D can line up with it */
+.hx-mix .hero-slide{ animation-play-state: paused; }
+.hx-done .hero-bg{ visibility: hidden; }
+
+/* the copy stays on top and clickable; the rest of its box lets the pointer through to the stage */
+.hx-live .hero-inner{ pointer-events: none; }
+.hx-live .hero-inner h1, .hx-live .hero-inner .lede, .hx-live .hero-inner .hero-cta, .hx-live .hero-inner .hero-specs{ pointer-events: auto; }
+/* a touch more scrim behind the copy than over the poster, the 3D is brighter. It sits in the stage, so it fades in
+   with the 3D while the poster's own scrim fades out (hero.js sets that one's opacity). */
+.hero--cinematic .hx-veil{
+  position: absolute; inset: 0; pointer-events: none; transition: opacity .35s ease;   /* fades with the copy while the tour or the Location move runs */
+  background:
+    linear-gradient(90deg, rgba(22,15,10,0.88) 0%, rgba(22,15,10,0.7) 36%, rgba(22,15,10,0.26) 60%, rgba(22,15,10,0) 82%),
+    linear-gradient(0deg, rgba(22,15,10,0.64) 0%, rgba(22,15,10,0) 46%),
+    linear-gradient(180deg, rgba(22,15,10,0.22) 0%, rgba(22,15,10,0) 22%);
+}
+
+/* overlay: lines, pins, card, time of day */
+.hero--cinematic .h3d-ui{ position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity .9s ease; }
+.hx-live .h3d-ui{ opacity: 1; }
+.h3d-ui button, .h3d-ui a, .h3d-ui .hx-card{ pointer-events: auto; }
+
+.hx-lines{ position: absolute; right: var(--gutter, 40px); bottom: clamp(215px, 27vh, 300px); width: min(30ch, 36vw); text-align: right; }
+.hx-line{
+  position: absolute; right: 0; bottom: 0; margin: 0; width: 100%;
+  font-family: var(--serif, Georgia, serif); font-weight: 400; font-size: clamp(22px, 2.1vw, 32px); line-height: 1.18; letter-spacing: -0.005em;
+  color: var(--cream, #F2E9DF); text-shadow: 0 1px 2px rgba(0,0,0,0.35), 0 2px 24px rgba(0,0,0,0.45);
+  opacity: 0; will-change: opacity, transform;
+}
+
+/* a soft dark pool behind each line, so it reads over a bright roof or lawn */
+.hx-line::before{
+  content: ""; position: absolute; z-index: -1; inset: -42% -14% -42% -30%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(22,15,10,0.7), rgba(22,15,10,0.42) 55%, rgba(22,15,10,0) 100%);
+}
+.hx-pins{ position: absolute; inset: 0; pointer-events: none; }
+.hx-pin{
+  position: absolute; left: 0; top: 0; margin: 0; padding: 0; border: 0; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center;
+  translate: -50% -100%; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
+  pointer-events: auto; -webkit-tap-highlight-color: transparent;
+}
+.hx-pin.on{ opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+.hx-pin-l{
+  order: 0; display: block; white-space: nowrap;
+  padding: 6px 11px 6px; border-radius: 999px;
+  background: rgba(242,233,223,0.94); color: var(--ink, #4A413E);
+  font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.2;
+  box-shadow: 0 6px 18px -8px rgba(20,14,10,0.55);
+  transition: background .2s ease, color .2s ease;
+}
+.hx-pin-dot{
+  order: 1; display: block; width: 2px; height: 12px; background: rgba(242,233,223,0.9); position: relative;
+}
+.hx-pin-dot::after{
+  content: ""; position: absolute; left: 50%; bottom: -4px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%;
+  background: var(--terra, #B17664); box-shadow: 0 0 0 2px rgba(242,233,223,0.95);
+}
+.hx-pin:hover .hx-pin-l, .hx-pin.sel .hx-pin-l{ background: var(--ink, #4A413E); color: var(--cream, #F2E9DF); }
+/* the Location pin: terracotta, a compass mark before its name (it goes straight out to the map, no card) */
+.hx-pin-go .hx-pin-l{ display: inline-flex; align-items: center; gap: 6px; padding-left: 8px; background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }
+.hx-pin-ic{ display: grid; place-items: center; }
+.hx-pin-go:hover .hx-pin-l{ background: var(--terra, #B17664); }
+.hx-pin:focus-visible{ outline: none; }
+.hx-pin:focus-visible .hx-pin-l{ box-shadow: 0 0 0 2px var(--cream, #F2E9DF), 0 0 0 4px var(--terra, #B17664); }
+
+.hx-card{
+  position: absolute; left: 0; top: 0; width: 300px; max-width: calc(100% - 32px); box-sizing: border-box;
+  padding: 18px 18px 16px; border-radius: 14px;
+  background: var(--cream, #F2E9DF); color: var(--ink, #4A413E);
+  box-shadow: 0 24px 60px -24px rgba(20,14,10,0.6);
+  font-family: var(--sans, system-ui, sans-serif);
+}
+.hx-card[hidden]{ display: none; }
+.hx-card-h{ margin: 0 26px 8px 0; font-family: var(--serif, Georgia, serif); font-weight: 500; font-size: 26px; line-height: 1.05; color: var(--ink, #4A413E); outline: none; }
+.hx-card-t{ margin: 0; font-size: 14px; line-height: 1.45; }
+.hx-card-p{ margin: 6px 0 0; font-family: var(--serif, Georgia, serif); font-size: 20px; line-height: 1.2; color: var(--terra-2, #8A4638); }
+.hx-card-open .hx-lines{ opacity: 0; }
+.hx-card-n{ margin: 8px 0 0; font-size: 12px; font-style: italic; opacity: 0.72; }
+.hx-card-p[hidden], .hx-card-n[hidden], .hx-card-walk[hidden]{ display: none; }
+.hx-card-walk{
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 10px 16px; border-radius: 999px;
+  background: var(--ink, #4A413E); color: var(--cream, #F2E9DF); text-decoration: none;
+  font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
+}
+.hx-card-walk::after{ content: "→"; }
+.hx-card-walk:hover{ background: var(--terra-2, #8A4638); }
+.hx-card-x{
+  position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border: 0; border-radius: 50%;
+  background: transparent; color: var(--ink, #4A413E); font-size: 20px; line-height: 1; cursor: pointer;
+}
+.hx-card-x:hover{ background: rgba(74,65,62,0.1); }
+/* phones: a bottom sheet, kept above the site's bottom dock */
+.hx-card.sheet{ left: 12px; right: 12px; top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); width: auto; max-width: none; transform: none; }
+
+.hx-tod{
+  position: absolute; right: var(--gutter, 40px); bottom: clamp(150px, 19vh, 230px);
+  display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px;
+  background: rgba(22,15,10,0.42); border: 1px solid rgba(242,233,223,0.22);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;   /* only once the flight has ended */
+}
+.hx-end .hx-tod{ opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+.hx-tod-b{
+  border: 0; margin: 0; padding: 7px 12px; border-radius: 999px; cursor: pointer; background: transparent;
+  color: rgba(242,233,223,0.82); font-family: var(--mono, monospace); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.2;
+}
+.hx-tod-b:hover{ color: var(--cream, #F2E9DF); }
+.hx-tod-b[aria-checked="true"]{ background: rgba(242,233,223,0.94); color: var(--ink, #4A413E); }
+.hx-tod-b:focus-visible{ outline: 2px solid var(--cream, #F2E9DF); outline-offset: 1px; }
+
+
+/* portrait screens (tablets too): lines and time of day in the band under the top bar, the copy holds the bottom */
+@media (max-aspect-ratio: 9/10){
+  .hx-lines{ left: var(--gutter, 24px); right: var(--gutter, 24px); width: auto; top: calc(var(--hx-top, 74px) + 60px); bottom: auto; text-align: left; }
+  .hx-line{ left: 0; right: auto; top: 0; bottom: auto; max-width: 28ch; }
+  .hx-tod{ right: 16px; top: calc(var(--hx-top, 74px) + 12px); bottom: auto; }
+}
+@media (max-width: 760px){
+  /* phones: the copy fills most of the screen, so the 3D gets the band under the top bar
+     (the copy's lower padding is set by hero-boot.js before first paint, to avoid a layout shift) */
+  .hx-lines{ left: 20px; right: 20px; width: auto; top: calc(var(--hx-top, 74px) + 12px); bottom: auto; text-align: left; }
+  .hx-line{ left: 0; right: auto; top: 0; bottom: auto; font-size: 19px; max-width: 24ch; }
+  .hx-tod{ right: 12px; top: calc(var(--hx-top, 74px) + 10px); bottom: auto; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
+  .hx-end .hx-tod{ opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+  .hx-tod-b{ padding: 6px 9px; font-size: 9px; letter-spacing: 0.1em; }
+  .hx-pin-l{ font-size: 9.5px; padding: 5px 9px; }
+  .hero--cinematic .hx-veil{
+    background: linear-gradient(0deg, rgba(22,15,10,0.92) 4%, rgba(22,15,10,0.74) 42%, rgba(22,15,10,0.62) 64%, rgba(22,15,10,0.34) 75%, rgba(22,15,10,0.1) 84%, rgba(22,15,10,0.3) 100%);
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .hx-line{ transition: opacity .4s ease; transform: none !important; }
+}
+
+/* Semi-D | Bungalow on the estate (straight into a home's tour), where the time of day sat; once the flight ends */
+.hx-homes{
+  position: absolute; right: var(--gutter, 40px); bottom: clamp(150px, 19vh, 230px);
+  display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px;
+  background: rgba(22,15,10,0.42); border: 1px solid rgba(242,233,223,0.22);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.hx-end .hx-homes{ opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+/* the walk-in pill shows from the start (owner, Nov 2026: "this can show immediately during website load") */
+.h3d-ui .hx-homes.hx-two{ opacity: 1; visibility: visible; }
+.hx-homes-b{
+  border: 0; margin: 0; padding: 8px 14px; border-radius: 999px; cursor: pointer; background: transparent;
+  color: rgba(242,233,223,0.9); font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.2;
+  transition: background .2s ease, color .2s ease;
+}
+.hx-homes-b:hover{ background: rgba(242,233,223,0.18); color: var(--cream, #F2E9DF); }
+.hx-homes-b[aria-pressed="true"]{ background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }   /* the home the page is on, as the landing pill marks it */
+.hx-homes-b:focus-visible{ outline: 2px solid var(--cream, #F2E9DF); outline-offset: 1px; }
+.hx-homes-b[hidden]{ display: none; }
+/* one pill, two ways into the tour (owner, Nov 2026): a '3D walkthrough / Walk inside' head, then big Semi-D and
+   Bungalow buttons; the home the landing page is on is filled terracotta, the other outlined in cream */
+.hx-homes.hx-two{ align-items: center; gap: 6px; padding: 6px; background: rgba(22,15,10,0.55); border-color: rgba(242,233,223,0.3);
+  box-shadow: 0 14px 34px rgba(20,10,5,0.38); }
+.hx-homes.hx-two::after{ content: ""; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid rgba(242,233,223,0.55); opacity: 0; pointer-events: none; }
+.hx-end .hx-homes.hx-two::after{ animation: hx-walk-pulse 2.6s ease-out .6s infinite; }
+@keyframes hx-walk-pulse{ 0%{ opacity: .9; transform: scale(1); } 70%, 100%{ opacity: 0; transform: scale(1.06, 1.3); } }
+.hx-walk-ic{ flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--cream, #F2E9DF); color: var(--terra-2, #8A4638); }
+.hx-walk-tx{ display: flex; flex-direction: column; gap: 3px; padding: 0 10px 0 4px; color: var(--cream, #F2E9DF); }
+.hx-walk-k{ font-family: var(--mono, monospace); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.82; white-space: nowrap; }
+.hx-walk-l{ font-family: var(--serif, Georgia, serif); font-weight: 500; font-size: 19px; line-height: 1.1; white-space: nowrap; }
+.hx-walk{
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; text-transform: none; letter-spacing: 0;
+  font-family: var(--serif, Georgia, serif); font-weight: 500; font-size: 20px; line-height: 1.1; white-space: nowrap;
+  color: var(--cream, #F2E9DF); background: transparent; box-shadow: 0 0 0 1px rgba(242,233,223,0.5) inset;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.hx-walk.hx-cur{ background: var(--terra-2, #8A4638); box-shadow: 0 0 0 1px rgba(242,233,223,0.28) inset; }
+.hx-walk:hover, .hx-walk.hx-cur:hover{ background: var(--terra, #B17664); color: var(--cream, #F2E9DF); transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(242,233,223,0.4) inset; }
+.hx-walk-ar{ font-family: var(--sans, system-ui, sans-serif); font-size: 0.85em; transition: transform .2s ease; }
+.hx-walk:hover .hx-walk-ar{ transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce){ .hx-end .hx-homes.hx-two::after{ animation: none; } .hx-walk:hover, .hx-walk:hover .hx-walk-ar{ transform: none; } }
+@media (max-width: 720px){ .hx-homes.hx-two{ left: 16px; right: 16px; top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 70px); } }   /* just above the page's full-width bottom bar */
+@media (max-width: 760px), (max-aspect-ratio: 9/10){ .hx-card-open .hx-homes.hx-two{ opacity: 0; visibility: hidden; } }   /* a pin's card (with its own walk link) takes the bottom of the screen */
+@media (min-width: 721px) and (max-width: 1240px){ .hx-homes.hx-two{ right: 16px; top: calc(var(--hx-top, 74px) + 14px); bottom: auto; } }   /* up to 1240 px the pill would sit on the hero's spec row: keep it under the top bar */
+@media (max-aspect-ratio: 9/10){ .hx-homes{ right: 16px; top: calc(var(--hx-top, 74px) + 12px); bottom: auto; }
+  .hx-homes.hx-two{ left: 16px; right: 16px; top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 86px); max-width: 520px; margin: 0 auto; }   /* above the page's bottom dock */
+  .hx-homes.hx-two .hx-walk{ flex: 1 1 0; justify-content: center; } }   /* the two buttons share the pill's width */
+@media (max-width: 760px){ .hx-homes{ right: 12px; top: calc(var(--hx-top, 74px) + 10px); bottom: auto; }
+  .hx-homes.hx-two{ gap: 4px; padding: 4px; }
+  .hx-homes.hx-two .hx-walk{ flex: 1 1 0; justify-content: center; padding: 8px 6px; font-size: 16px; }
+  .hx-walk-ic{ width: 32px; height: 32px; } .hx-walk-ic svg{ width: 18px; height: 18px; } .hx-walk-tx{ padding: 0 4px 0 2px; } .hx-walk-l{ font-size: 14.5px; } .hx-walk-k{ font-size: 8px; letter-spacing: 0.12em; }
+  .hx-end .hx-lines{ visibility: hidden; } }   /* the band under the top bar holds the pill now */
+@media (max-width: 420px){ .hx-homes.hx-two .hx-walk-k{ display: none; } }   /* narrow phones: 'Walk inside' alone heads the pill */
+@media (max-width: 400px){ .hx-homes.hx-two .hx-walk{ min-width: 0; gap: 5px; padding: 8px 5px; font-size: 15px; } }   /* 360 px phones: both buttons fit inside the pill */
+@media (max-width: 340px){ .hx-homes.hx-two .hx-walk-tx{ display: none; } }   /* 320 px: the 3D-house mark alone heads the pill (the group keeps its label) */
+
+/* ---------- the tour overlay (explore.js); its HUD rules are in walk-hud.css ---------- */
+html.pbw-lock{ overflow: hidden; scroll-behavior: auto; }
+/* leaving for a tour: the hero copy, pins and the site's bars fade while the camera sets off */
+.hx-leave .hero-inner, .hx-leave .hero-scrim, .hx-leave .h3d-ui, .hx-leave .hx-veil{ opacity: 0 !important; transition: opacity .35s ease; pointer-events: none; }
+.hx-leave .h3d-ui button, .hx-leave .h3d-ui a, .hx-leave .h3d-ui .hx-card{ pointer-events: none !important; }   /* faded: no clicks (hero.js also makes the UI inert) */
+.pbw-going .topbar, .pbw-going .dock, .pbw-going .prelaunch-bar{ opacity: 0; transition: opacity .35s ease; }
+.pbw{ position: fixed; inset: 0; z-index: 2500; height: 100vh; height: 100dvh; overflow: hidden; background: var(--cream, #F2E9DF); }
+.pbw[hidden]{ display: none; }
+.pbw-stage{ position: absolute; inset: 0; z-index: 0; }
+.pbw-stage canvas{ position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pbw-snap{ pointer-events: none; opacity: 0; transform-origin: 50% 50%; }
+/* the walkthrough's own soft vignette, only while a walk is on screen */
+.pbw-stage::after{ content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .6s ease;
+  background: radial-gradient(ellipse 120% 95% at 50% 48%, transparent 58%, rgba(28,20,14,0.22) 100%); }
+.pbw.pbw-ui .pbw-stage::after{ opacity: 1; }
+.pbw-walk{ position: absolute; inset: 0; transition: opacity .45s ease; }
+.pbw:not(.pbw-ui) .pbw-walk{ opacity: 0; pointer-events: none; }
+.pbw-scroll{ position: absolute; inset: 0; z-index: 1; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; outline: none; }
+.pbw-scroll::-webkit-scrollbar{ display: none; }
+.pbw .spacer{ height: 1500vh; }
+/* copy that only sits over the 3D lets a touch scroll the tour */
+.pbw .intro, .pbw .titleblock{ pointer-events: none; }
+.pbw .intro .eyebrow{ margin: 0; }
+/* lens, eye and cut readout (the walkthrough's top-bar HUD) */
+.pbw .pbw-lens{ position: fixed; z-index: 8; right: clamp(16px,3vw,36px); top: max(14px, env(safe-area-inset-top, 0px));
+  font-family: var(--mono, monospace); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink, #4A413E);
+  background: rgba(242,233,223,0.92); border: 1px solid var(--rule, rgba(74,65,62,0.18)); border-radius: 999px; padding: 7px 12px; white-space: nowrap;
+  opacity: 0; transition: opacity .45s ease; pointer-events: none; }
+.pbw.pbw-ui .pbw-lens{ opacity: 1; }
+.pbw .pbw-lens b{ font-weight: 500; color: var(--ink-deep, #2E2825); }
+.pbw .pbw-lens i{ font-style: normal; opacity: .4; margin: 0 .65em; }
+@media (max-width: 900px){ .pbw .pbw-lens{ display: none; } }
+/* top bar: Back to estate, and the Semi-D | Bungalow pill */
+.pbw-bar{ position: absolute; z-index: 8; left: 0; right: 0; top: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity .45s ease; }
+.pbw.pbw-ui .pbw-bar{ opacity: 1; }
+.pbw.pbw-ui .pbw-bar.dim{ opacity: .45; }
+.pbw.pbw-ui .pbw-bar.dim:hover, .pbw.pbw-ui .pbw-bar.dim:focus-within{ opacity: 1; }
+.pbw:not(.pbw-ui) .pbw-bar *{ pointer-events: none !important; }
+.pbw-back, .pbw-pill{ position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); pointer-events: auto;
+  background: rgba(242,233,223,0.92); border: 1px solid var(--rule, rgba(74,65,62,0.18)); border-radius: 999px; box-shadow: 0 12px 28px -20px rgba(28,23,20,0.5);
+  font-family: var(--mono, monospace); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1.2; }
+.pbw-back{ left: clamp(16px,3vw,36px); display: inline-flex; gap: 8px; align-items: center; padding: 9px 15px; color: var(--ink, #4A413E); cursor: pointer; }
+.pbw-back:hover{ background: var(--ink, #4A413E); color: var(--cream, #F2E9DF); }
+.pbw-pill{ left: 50%; transform: translateX(-50%); display: flex; padding: 3px; }
+.pbw-pill button{ border: 0; margin: 0; background: transparent; cursor: pointer; white-space: nowrap; padding: 6px 14px; border-radius: 999px;
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--text-mute, #7A6F69); transition: background .2s, color .2s; }
+.pbw-pill button:hover{ color: var(--ink, #4A413E); }
+.pbw-pill button[aria-pressed="true"]{ background: var(--ink, #4A413E); color: var(--cream, #F2E9DF); }
+.pbw-back:focus-visible, .pbw-pill button:focus-visible{ outline: 2px solid var(--terra, #B17664); outline-offset: 2px; }
+@media (max-width: 780px){
+  .pbw-back{ padding: 9px 12px; }
+  .pbw-back span + span{ display: none; }   /* phones: the arrow only (the button keeps its name) */
+  .pbw-pill{ left: auto; right: 16px; transform: none; }
+  .pbw-pill button{ padding: 7px 12px; }
+}
+@media (pointer: coarse){ .pbw-pill button, .pbw-back{ min-height: 40px; } }
+/* building the home: a quiet status pill over the plot */
+.pbw-wait{ position: absolute; z-index: 9; left: 50%; bottom: clamp(28px, 7vh, 64px); transform: translateX(-50%);
+  display: inline-flex; gap: 10px; align-items: center; padding: 10px 16px; border-radius: 999px;
+  background: rgba(22,15,10,0.55); color: var(--cream, #F2E9DF); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; }
+.pbw-wait[hidden]{ display: none; }
+.pbw-wait b{ font-weight: 500; min-width: 3.2em; text-align: right; }
+.pbw-ring{ width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(242,233,223,0.3); border-top-color: var(--cream, #F2E9DF); animation: pbw-spin .9s linear infinite; }
+@keyframes pbw-spin{ to{ transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce){ .pbw-ring{ animation: none; } .pbw-walk, .pbw-bar{ transition: none; } }
+
+/* the map layer between the estate and the Location section (hero-location.js): fixed over everything, never
+   catches the pointer; shrinks into (or grows out of) the section's map box */
+.hxl{ position: fixed; inset: 0; z-index: 2400; opacity: 0; pointer-events: none; background: #EFE9DF; }
+.hxl.leaflet-container{ background: #EFE9DF; }
+.hxl .leaflet-control-attribution{ font-size: 10px; }
+/* Back to the 3D estate, first in the Location map's toolbar */
+.loc-livemap-actions .loc-back3d{ display: inline-flex; align-items: center; gap: 7px; background: var(--terra-2, #8A4638); border-color: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); margin-right: 4px; }
+.loc-livemap-actions .loc-back3d:hover{ background: var(--terra, #B17664); color: var(--cream, #F2E9DF); }
+@media (max-width: 760px){ .loc-livemap-actions .loc-back3d{ flex: 1 1 100%; justify-content: center; margin-right: 0; } }
+
+/* =====================================================================================================================
+   App mode (hero-app.js): the site as one 3D screen, tapped through like an app; the page does not scroll
+   ===================================================================================================================== */
+html.hx-app, html.hx-app body{ height: 100%; overflow: hidden; overscroll-behavior: none; }
+html.hx-app body{ padding-bottom: 0; }
+html.hx-app .hero--cinematic{ position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 1; }
+html.hx-app .dock{ display: none !important; }
+html.hx-app .h3d-stage{ touch-action: none; }
+html.hx-app .h3d-stage.hx-rig{ cursor: grab; }
+html.hx-app .h3d-stage.hx-rig.hx-dragging{ cursor: grabbing; }
+/* a panel or a feature caption takes over: the hero copy, the lines, the pins and the walk pill step aside */
+html.hx-app .hero-inner, html.hx-app .hx-lines, html.hx-app .hx-pins, html.hx-app .h3d-ui .hx-homes{ transition: opacity .35s ease, visibility 0s linear 0s; }
+html.hxa-open .hero-inner, html.hxa-open .hx-lines, html.hxa-open .hx-pins, html.hxa-open .h3d-ui .hx-homes,
+html.hxa-cap-on .hero-inner, html.hxa-cap-on .hx-lines{ opacity: 0 !important; visibility: hidden !important; transition: opacity .3s ease, visibility 0s linear .3s; }
+
+/* ---------- the menu, inside the 3D ---------- */
+.hxa-menu{
+  position: fixed; left: 50%; bottom: 18px; z-index: 1060; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 2px; padding: 5px; max-width: calc(100vw - 110px);
+  border-radius: 999px; background: rgba(28,23,20,0.92); box-shadow: 0 10px 40px rgba(28,23,20,0.3), 0 2px 6px rgba(28,23,20,0.14);
+  -webkit-backdrop-filter: saturate(140%) blur(14px); backdrop-filter: saturate(140%) blur(14px);
+  overflow-x: auto; scrollbar-width: none;
+  opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility 0s linear .4s;
+}
+.hxa-menu::-webkit-scrollbar{ display: none; }
+html.hx-app .hxa-menu{ opacity: 1; visibility: visible; transition: opacity .4s ease, visibility 0s; }
+.hxa-m{
+  flex: none; border: 0; margin: 0; padding: 10px 15px; border-radius: 999px; cursor: pointer; background: transparent;
+  color: rgba(242,233,223,0.78); font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap;
+  transition: background .2s ease, color .2s ease;
+}
+.hxa-m:hover{ color: var(--cream, #F2E9DF); background: rgba(242,233,223,0.08); }
+.hxa-m.on{ background: rgba(242,233,223,0.14); color: var(--cream, #F2E9DF); }
+.hxa-m-cta{ background: var(--cream, #F2E9DF); color: var(--ink, #4A413E); padding: 8px 13px; }
+.hxa-m-cta:hover, .hxa-m-cta.on{ background: #fff; color: var(--ink, #4A413E); }
+.hxa-m:focus-visible{ outline: 2px solid var(--cream, #F2E9DF); outline-offset: 1px; }
+@media (max-width: 720px){
+  .hxa-menu{ left: 0; right: 76px; bottom: 0; transform: none; max-width: none; border-radius: 0 18px 0 0; padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .hxa-m{ padding: 10px 11px; font-size: 9.5px; letter-spacing: 0.1em; }
+  html.hx-app .fab-wa{ right: 10px; bottom: calc(6px + env(safe-area-inset-bottom, 0px)); width: 52px; height: 52px; }
+  html.hx-app .hero--cinematic .hero-inner{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 128px); }
+}
+
+/* ---------- the panel: the page's own sections, on the right (desktop) or as a bottom sheet (phones) ---------- */
+.hxa-panel{
+  position: fixed; z-index: 1050; top: 86px; right: 16px; bottom: 84px; width: min(720px, 52vw);
+  display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 20px; background: var(--cream, #F2E9DF); color: var(--ink, #4A413E);
+  box-shadow: 0 24px 60px -18px rgba(28,23,20,0.55), 0 2px 8px rgba(28,23,20,0.12);
+  transform: translateX(calc(100% + 32px)); visibility: hidden;
+  transition: transform .55s cubic-bezier(.2,.75,.2,1), visibility 0s linear .55s;
+}
+.hxa-panel.wide{ width: min(980px, 64vw); }
+.hxa-panel.open{ transform: none; visibility: visible; transition: transform .55s cubic-bezier(.2,.75,.2,1), visibility 0s; }
+.hxa-panel.instant{ transition: none !important; }
+.hxa-panel:focus{ outline: none; }
+.hxa-head{ flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 12px 26px; border-bottom: 1px solid rgba(74,65,62,0.12); }
+.hxa-title{ margin: 0; font-family: var(--serif, Georgia, serif); font-weight: 400; font-size: 24px; line-height: 1.1; }
+.hxa-x{ flex: none; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(74,65,62,0.2); background: transparent; color: inherit; font-size: 22px; line-height: 1; cursor: pointer; }
+.hxa-x:hover{ background: rgba(74,65,62,0.08); }
+.hxa-homebar{ display: none; flex: none; gap: 6px; align-items: center; padding: 12px 20px; border-bottom: 1px solid rgba(74,65,62,0.12); }
+.hxa-panel.homes .hxa-homebar{ display: flex; }
+.hxa-hb{ border: 1px solid rgba(74,65,62,0.25); background: transparent; color: inherit; padding: 8px 16px; border-radius: 999px; font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
+.hxa-hb.on{ background: var(--terra-2, #8A4638); border-color: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }
+.hxa-walk{ margin-left: auto; display: inline-flex; align-items: center; gap: 8px; border: 0; padding: 9px 16px; border-radius: 999px; background: var(--ink, #4A413E); color: var(--cream, #F2E9DF); font-family: var(--serif, Georgia, serif); font-size: 16px; cursor: pointer; }
+.hxa-walk:hover{ background: var(--terra-2, #8A4638); }
+.hxa-body{ flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+/* the borrowed sections, tightened for a panel */
+.hxa-body > .section, .hxa-body > section, .hxa-body > footer{ padding-top: 28px !important; padding-bottom: 36px !important; }
+.hxa-body .wrap{ max-width: none; padding-left: 26px; padding-right: 26px; }
+.hxa-body .hd{ margin-bottom: 24px; }
+.hxa-body [data-reveal]{ opacity: 1 !important; transform: none !important; animation: none !important; }
+.hxa-panel.hide-site #site{ display: none; }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  .hxa-panel, .hxa-panel.wide{ top: 34vh; left: 0; right: 0; bottom: 0; width: auto; border-radius: 20px 20px 0 0; transform: translateY(105%); }
+  .hxa-panel.open{ transform: none; }
+  .hxa-body{ padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+  .hxa-body .wrap{ padding-left: 18px; padding-right: 18px; }
+  .hxa-title{ font-size: 21px; }
+  .hxa-head{ padding: 12px 12px 10px 18px; }
+  .hxa-homebar{ padding: 10px 14px; flex-wrap: wrap; }
+}
+
+/* ---------- feature icons on the estate (quiet until pointed at) and their caption ---------- */
+.hx-pin.hx-feat{ translate: -50% -50%; }
+.hx-feat .hx-feat-ic{
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(242,233,223,0.62); color: var(--terra-2, #8A4638); border: 1px solid rgba(255,255,255,0.7);
+  box-shadow: 0 6px 18px -8px rgba(20,14,10,0.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  opacity: 0.8; transition: opacity .2s ease, transform .2s ease, background .2s ease, color .2s ease;
+}
+.hx-feat .hx-feat-ic svg{ width: 22px; height: 22px; }
+.hx-feat .hx-pin-l{ position: absolute; left: 50%; bottom: calc(100% + 6px); translate: -50% 0; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.hx-feat:hover .hx-feat-ic, .hx-feat:focus-visible .hx-feat-ic{ opacity: 1; transform: scale(1.08); }
+.hx-feat:hover .hx-pin-l, .hx-feat:focus-visible .hx-pin-l{ opacity: 1; }
+.hx-feat.sel .hx-feat-ic{ opacity: 1; background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); border-color: var(--terra-2, #8A4638); }
+.hx-feat .hx-pin-dot{ display: none; }
+html.hxa-cap-on .hx-pins{ opacity: 1; visibility: visible; }
+.hxa-cap{
+  position: absolute; z-index: 4; left: var(--gutter, 40px); bottom: clamp(130px, 17vh, 200px); width: min(460px, 40vw);
+  color: var(--cream, #F2E9DF); pointer-events: auto;
+}
+.hxa-cap[hidden]{ display: none; }
+.hxa-cap-ic{ display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--cream, #F2E9DF); color: var(--terra-2, #8A4638); margin-bottom: 16px; }
+.hxa-cap-ic svg{ width: 26px; height: 26px; }
+.hxa-cap-h{ font-family: var(--mono, monospace); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(242,233,223,0.8); margin-bottom: 10px; }
+.hxa-cap-t{ margin: 0 0 10px; font-family: var(--serif, Georgia, serif); font-size: clamp(26px, 2.6vw, 36px); line-height: 1.12; }
+.hxa-cap-b{ margin: 0 0 6px; font-size: 15px; line-height: 1.55; color: rgba(242,233,223,0.82); max-width: 40ch; }
+.hxa-cap-nav{ display: flex; gap: 8px; align-items: center; margin-top: 18px; }
+.hxa-cap-nav button{ height: 40px; min-width: 40px; border-radius: 999px; border: 1px solid rgba(242,233,223,0.4); background: rgba(22,15,10,0.35); color: var(--cream, #F2E9DF); font-size: 18px; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.hxa-cap-nav button:hover{ background: rgba(242,233,223,0.16); }
+.hxa-cap-nav .hxa-cap-more{ padding: 0 16px; font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--terra-2, #8A4638); border-color: var(--terra-2, #8A4638); }
+.hxa-cap-nav .hxa-cap-more[hidden]{ display: none; }
+.hxa-cap-nav .hxa-cap-x{ margin-left: auto; }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  .hxa-cap{ left: 16px; right: 16px; width: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 128px); }
+  .hxa-cap-ic{ width: 40px; height: 40px; margin-bottom: 10px; }
+  .hxa-cap-t{ font-size: 24px; }
+  .hxa-cap-b{ font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce){ .hxa-panel, .hxa-panel.open{ transition: none; } }
+
+/* ---------- the gallery (gallery.js): a home's pictures, one at a time ---------- */
+.pbw-gal, .hxa-gal{ display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.pbw-gal{ position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: clamp(16px,3vw,36px); pointer-events: auto; padding: 9px 15px;
+  background: rgba(242,233,223,0.92); border: 1px solid var(--rule, rgba(74,65,62,0.18)); border-radius: 999px; box-shadow: 0 12px 28px -20px rgba(28,23,20,0.5);
+  color: var(--ink, #4A413E); font-family: var(--mono, monospace); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; line-height: 1.2; }
+.pbw-gal:hover{ background: var(--ink, #4A413E); color: var(--cream, #F2E9DF); }
+@media (max-width: 780px){ .pbw-gal{ top: calc(max(14px, env(safe-area-inset-top, 0px)) + 52px); right: 16px; padding: 9px 12px; } }
+.hxa-gal{ margin-left: auto; border: 1px solid rgba(74,65,62,0.25); background: transparent; color: inherit; padding: 9px 14px; border-radius: 999px; font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; }
+.hxa-gal:hover{ background: rgba(74,65,62,0.08); }
+.hxa-gal + .hxa-walk{ margin-left: 0; }
+.pbg{ position: fixed; inset: 0; z-index: 2700; display: grid; place-items: center; background: rgba(18,14,11,0.94); opacity: 0; transition: opacity .25s ease; touch-action: pan-y; }
+.pbg.open{ opacity: 1; }
+.pbg-fig{ width: 100%; height: 100%; display: grid; place-items: center; padding: clamp(56px, 8vh, 90px) clamp(56px, 8vw, 120px); box-sizing: border-box; }
+.pbg-img{ width: auto; height: auto; object-fit: contain;   /* always whole and in proportion, never cropped or stretched */
+  max-width: calc(100vw - 2 * clamp(56px, 8vw, 120px)); max-height: calc(100vh - 2 * clamp(56px, 8vh, 90px)); max-height: calc(100dvh - 2 * clamp(56px, 8vh, 90px)); border-radius: 6px; box-shadow: 0 30px 80px -30px rgba(0,0,0,0.8); opacity: 0; transition: opacity .3s ease; user-select: none; -webkit-user-drag: none; }
+.pbg-img.in{ opacity: 1; }
+.pbg-prev, .pbg-next, .pbg-x{ position: absolute; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(242,233,223,0.35);
+  background: rgba(242,233,223,0.08); color: #F2E9DF; font-size: 26px; line-height: 1; cursor: pointer; }
+.pbg-prev:hover, .pbg-next:hover, .pbg-x:hover{ background: rgba(242,233,223,0.2); }
+.pbg-prev{ left: clamp(10px, 2vw, 28px); top: 50%; translate: 0 -50%; }
+.pbg-next{ right: clamp(10px, 2vw, 28px); top: 50%; translate: 0 -50%; }
+.pbg-x{ right: clamp(10px, 2vw, 28px); top: clamp(10px, 2vh, 24px); font-size: 22px; }
+.pbg-count{ position: absolute; left: 50%; bottom: clamp(14px, 3vh, 30px); translate: -50% 0; color: rgba(242,233,223,0.8); font-family: var(--mono, monospace); font-size: 11px; letter-spacing: 0.18em; }
+@media (max-width: 720px){ .pbg-fig{ padding: 70px 12px; } .pbg-img{ max-width: calc(100vw - 24px); max-height: calc(100vh - 140px); max-height: calc(100dvh - 140px); } .pbg-prev, .pbg-next{ top: auto; bottom: 12px; translate: none; width: 44px; height: 44px; } .pbg-count{ bottom: 26px; } }
+@media (prefers-reduced-motion: reduce){ .pbg, .pbg-img{ transition: none; } }
+/* WhatsApp in the app menu on phones (the page's bottom bar, which carried it, is hidden in app mode) */
+.hxa-wa{ display: grid; place-items: center; flex: none; width: 34px; height: 34px; margin: 0 3px; border-radius: 50%; background: #2E7D4F; color: #fff; }
+.hxa-wa:hover{ background: #256B42; }
+.hxa-wa svg{ width: 18px; height: 18px; }
+@media (max-width: 720px){
+  .hxa-menu{ right: 0; border-radius: 0; }
+
+}
+
+/* a house's caption: its figures in a compact grid, then Gallery and Walk inside */
+.hxa-cap.house{ width: min(500px, 42vw); }
+.hxa-cap-specs{ display: grid; grid-template-columns: repeat(3, auto); gap: 12px 22px; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px solid rgba(242,233,223,0.22); }
+.hxa-cap-specs[hidden], .hxa-cap-price[hidden], .hxa-cap-home[hidden]{ display: none; }
+.hxa-cap-specs dt{ font-family: var(--mono, monospace); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(242,233,223,0.62); }
+.hxa-cap-specs dd{ margin: 3px 0 0; font-family: var(--serif, Georgia, serif); font-size: 19px; line-height: 1.15; color: var(--cream, #F2E9DF); }
+.hxa-cap-price{ margin: 14px 0 0; font-family: var(--serif, Georgia, serif); font-size: 22px; color: var(--cream, #F2E9DF); }
+.hxa-cap-home{ display: flex; gap: 8px; margin-top: 14px; }
+.hxa-cap-home button{ height: 40px; padding: 0 16px; border-radius: 999px; cursor: pointer; font-family: var(--mono, monospace); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; }
+.hxa-cap-gal{ border: 1px solid rgba(242,233,223,0.45); background: rgba(22,15,10,0.35); color: var(--cream, #F2E9DF); }
+.hxa-cap-walk{ border: 0; background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }
+.hxa-cap-gal:hover{ background: rgba(242,233,223,0.16); } .hxa-cap-walk:hover{ background: var(--terra, #B17664); }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  .hxa-cap.house{ width: auto; }
+  .hxa-cap.house .hxa-cap-b{ display: none; }   /* phones: the figures say it */
+  .hxa-cap-specs{ gap: 8px 14px; margin-top: 10px; padding-top: 10px; }
+  .hxa-cap-specs dd{ font-size: 16px; }
+  .hxa-cap-price{ font-size: 18px; margin-top: 8px; }
+}
+/* an icon whose place is off screen or behind the camera: held at the edge, a ring says it leads somewhere */
+.hx-feat.edge .hx-feat-ic{ opacity: 0.95; box-shadow: 0 0 0 2px rgba(177,118,100,0.75), 0 6px 18px -8px rgba(20,14,10,0.6); }
+.hx-pin-go.edge .hx-pin-l{ box-shadow: 0 0 0 2px rgba(242,233,223,0.8); }
+/* Phones in app mode (owner, Nov 2026: "the font so big, the ribbon on the header so big, make it hard to see the 3d"):
+   a slim header, a smaller headline and intro, no figures row (the house icons carry the figures), a lighter shade
+   only behind the text, and a smaller caption */
+@media (max-width: 720px){
+  html.hx-app .topbar{ background: rgba(242,233,223,0.7); }
+  html.hx-app .topbar-inner{ padding: 6px 16px; }
+  html.hx-app .topbar .lang{ padding: 2px; font-size: 10px; }
+  html.hx-app .topbar .lang button{ min-height: 30px; padding: 2px 8px; }
+  html.hx-app .hero-copy h1.display{ font-size: 25px; line-height: 1.08; margin: 0 0 8px; }
+  html.hx-app .hero-copy .lede{ font-size: 13px; line-height: 1.45; margin-top: 0; }
+  html.hx-app .hero--cinematic .hero-cta{ margin-top: 12px; }
+  html.hx-app .hero--cinematic .hero-specs{ display: none; }
+  html.hx-app .hero--cinematic .hero-inner{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }   /* low, just clear of the walk pill and the menu */
+  html.hx-app .hero--cinematic .hx-veil{ background: linear-gradient(0deg, rgba(22,15,10,0.86) 0%, rgba(22,15,10,0.66) 24%, rgba(22,15,10,0.22) 40%, rgba(22,15,10,0) 50%, rgba(22,15,10,0) 88%, rgba(22,15,10,0.22) 100%); }
+  html.hx-app .hxa-cap-ic{ width: 34px; height: 34px; margin-bottom: 8px; }
+  html.hx-app .hxa-cap-ic svg{ width: 20px; height: 20px; }
+  html.hx-app .hxa-cap-h{ font-size: 9.5px; margin-bottom: 6px; }
+  html.hx-app .hxa-cap-t{ font-size: 20px; margin-bottom: 6px; }
+  html.hx-app .hxa-cap-b{ font-size: 13px; }
+  html.hx-app .hxa-cap-specs dd{ font-size: 14px; }
+  html.hx-app .hxa-cap-specs dt{ font-size: 8.5px; }
+  html.hx-app .hxa-cap-price{ font-size: 16px; }
+  html.hx-app .hxa-cap-nav{ margin-top: 10px; }
+  html.hx-app .hxa-cap-nav button, html.hx-app .hxa-cap-home button{ height: 36px; min-width: 36px; }
+  html.hx-app .hxa-cap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 118px); }
+}
+
+/* One set of calls to action, in the bar (owner, Nov 2026): no hero buttons, no floating WhatsApp, no top-bar sales
+   line in app mode; the bar shows all its items at once (it never scrolls sideways) */
+html.hx-app .fab-wa, html.hx-app .hero--cinematic .hero-cta, html.hx-app .topbar-side.left{ display: none !important; }
+html.hx-app .hxa-menu{ overflow: visible; max-width: none; }
+@media (max-width: 720px){
+  html.hx-app .hxa-menu{ left: 0; right: 0; justify-content: space-between; gap: 0; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  html.hx-app .hxa-m{ padding: 9px 8px; font-size: 9.5px; letter-spacing: 0.08em; }
+  html.hx-app .hxa-m-cta{ padding: 8px 11px; }
+}
+@media (max-width: 360px){ html.hx-app .hxa-m{ padding: 9px 6px; font-size: 9px; letter-spacing: 0.05em; } html.hx-app .hxa-wa{ width: 32px; height: 32px; } }
+
+/* app mode: the floor-plan zoom above the panel and the menu (below the gallery) */
+html.hx-app .plan-lightbox{ z-index: 1100; }
+/* the borrowed sections laid out for the panel's width, not the window's (their own rules follow the window) */
+.hxa-body{ container-type: inline-size; }
+.hxa-body > *{ min-width: 0; }
+@container (max-width: 760px){
+  .calc-grid, .product, .site-grid, .arch-grid, .loc-grid, .reg-grid, .faq-grid, .price-ranges, .bertam-grid, .homes-grid{ grid-template-columns: 1fr !important; gap: 24px !important; }
+  .product--flip .product-art{ order: 0; }
+  .product-art, .product--flip .product-art{ transform: none !important; }
+  .product{ padding: 24px 0 !important; }
+  .product-body h3{ font-size: 40px !important; }
+  .calc-result{ padding: 24px !important; }
+  .calc-result .big{ font-size: 52px !important; }
+  .specs.specs-6{ grid-template-columns: 1fr 1fr !important; }
+  .specs.specs-6 > div{ padding: 12px !important; border-right: 1px solid var(--rule-soft) !important; border-bottom: 1px solid var(--rule-soft) !important; }
+  .specs.specs-6 > div:nth-child(2n){ border-right: 0 !important; }
+  .specs.specs-6 > div:nth-last-child(-n+2){ border-bottom: 0 !important; }
+}
+/* tablets and phones: a caption sits clear of the walk pill (a house caption has its own Walk inside, so the pill
+   steps aside while a caption is open) */
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  html.hxa-cap-on .h3d-ui .hx-homes.hx-two{ opacity: 0; visibility: hidden; }
+  html.hx-app .hxa-cap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }
+  html.hx-app .hero--cinematic .hero-specs{ display: none; }
+}
+/* zoomed into one feature: only its icon stays (the caption's arrows step to the others; closing it brings them back) */
+html.hx-app.hxa-cap-on .hx-pin:not(.sel){ opacity: 0 !important; visibility: hidden; pointer-events: none; transition: opacity .25s ease, visibility 0s .25s; }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  html.hx-app .hx-feat .hx-feat-ic{ width: 34px; height: 34px; }
+  html.hx-app .hx-feat .hx-feat-ic svg{ width: 19px; height: 19px; }
+}
+/* phones: Pricing and FAQ in the panel a size down (owner: "font can smaller, more nicer on mobile") */
+@media (max-width: 760px){
+  html.hx-app .hxa-body .section .title{ font-size: 21px; line-height: 1.2; }
+  html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ font-size: 13.5px; line-height: 1.55; }
+  html.hx-app .hxa-body .section .eyebrow{ font-size: 10.5px; }
+  html.hx-app .hxa-body .section h3{ font-size: 19px; }
+  html.hx-app .hxa-body .price-ranges h3{ font-size: 22px; }
+  html.hx-app .hxa-body .section .val{ font-size: 19px; }
+  html.hx-app .hxa-body .calc-result .big, html.hx-app .hxa-body .calc-result .big span{ font-size: 34px !important; }
+  html.hx-app .hxa-body .calc-result .big small{ font-size: 12.5px; }
+  html.hx-app .hxa-body .section .v, html.hx-app .hxa-body .section .v span{ font-size: 17px; }
+  html.hx-app .hxa-body .calc-preapprove-title{ font-size: 17px; }
+  html.hx-app .hxa-body .calc-preapprove-sub{ font-size: 12.5px; }
+  html.hx-app .hxa-body .faq-aside .h{ font-size: 19px; }
+  html.hx-app .hxa-body details.faq summary span:not(.ix):not(.tog){ font-size: 15px; line-height: 1.35; }
+  html.hx-app .hxa-body details.faq summary .tog{ font-size: 18px; }
+  html.hx-app .hxa-body details.faq p{ font-size: 13.5px; }
+}
+/* app mode, wider screens: the estate sits mid-screen now, so no dark band down the left; only a soft shade behind the
+   copy (and the feature caption) at the bottom left, and a light fade at the top and bottom (owner: "left side too dark?") */
+@media (min-width: 761px) and (min-aspect-ratio: 9/10){
+  html.hx-app .hero--cinematic .hx-veil{
+    background:
+      radial-gradient(ellipse 64% 70% at 0% 100%, rgba(22,15,10,0.8) 0%, rgba(22,15,10,0.5) 42%, rgba(22,15,10,0) 78%),
+      linear-gradient(0deg, rgba(22,15,10,0.34) 0%, rgba(22,15,10,0) 24%),
+      linear-gradient(180deg, rgba(22,15,10,0.16) 0%, rgba(22,15,10,0) 15%);
+  }
+}
+/* the copy reads over the houses as well as over the shade */
+html.hx-app .hero--cinematic .hero-copy h1, html.hx-app .hero--cinematic .hero-copy .lede{ text-shadow: 0 1px 2px rgba(18,12,8,0.55), 0 2px 18px rgba(18,12,8,0.6); }
+/* phones: LOCATION as a compass icon only (its name stays for screen readers), like the other icons */
+@media (max-width: 760px){
+  html.hx-app .hx-pin-go .hx-pin-t{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  html.hx-app .hx-pin-go .hx-pin-l{ width: 34px; height: 34px; padding: 0; justify-content: center; border-radius: 50%; gap: 0; }
+  html.hx-app .hx-pin-go .hx-pin-l svg{ width: 18px; height: 18px; }
+}
+/* phones: the Location panel full height (the map needs the room); its map controls and text a size down */
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  html.hx-app .hxa-panel.wide{ top: calc(env(safe-area-inset-top, 0px) + 58px); border-radius: 16px 16px 0 0; }
+}
+@media (max-width: 760px){
+  html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ font-size: 13px; }
+  html.hx-app .hxa-body .loc-livemap-actions button, html.hx-app .hxa-body .loc-livemap-actions a{ padding: 6px 10px !important; font-size: 9.5px !important; min-height: 0 !important; letter-spacing: 0.06em; }
+  html.hx-app .hxa-body .map-filters button{ padding: 6px 10px !important; font-size: 10px !important; min-height: 0 !important; }
+}
+
+/* app mode: the top bar is the logo on the left and the language button in the right corner, at every width (its
+   sales line is hidden here, so the page's three-column grid would leave the language mid-bar) */
+html.hx-app .topbar-inner{ grid-template-columns: 1fr auto; }
+html.hx-app .topbar .brand-mark{ justify-self: start; }
+html.hx-app .topbar-side.right{ justify-self: end; }
+/* the caption's buttons: solid and clearly tappable (owner: "shud these be abit more obvious") */
+html.hx-app .hxa-cap-nav button{ background: rgba(242,233,223,0.94); color: var(--ink, #2E2825); border-color: rgba(242,233,223,0.94); box-shadow: 0 6px 16px -8px rgba(18,12,8,0.6); font-weight: 600; }
+html.hx-app .hxa-cap-nav button:hover{ background: #fff; color: var(--ink, #2E2825); }
+html.hx-app .hxa-cap-nav .hxa-cap-next{ display: inline-flex; align-items: center; gap: 8px; padding: 0 16px 0 18px; font-family: var(--mono, monospace); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--terra-2, #8A4638); border-color: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }
+html.hx-app .hxa-cap-nav .hxa-cap-next span[aria-hidden]{ font-size: 18px; letter-spacing: 0; }
+html.hx-app .hxa-cap-nav .hxa-cap-next:hover{ background: var(--terra, #B17664); color: var(--cream, #F2E9DF); }
+html.hx-app .hxa-cap-nav .hxa-cap-more{ background: rgba(242,233,223,0.94); border-color: rgba(242,233,223,0.94); color: var(--ink, #2E2825); }
+/* app mode, wider screens: the walk pill sits centred just above the bottom menu, one group with it (owner: "the walk
+   inside pill too far away"), at every desktop width */
+@media (min-width: 761px) and (min-aspect-ratio: 9/10){
+  html.hx-app .h3d-ui .hx-homes.hx-two{ left: 50%; right: auto; top: auto; bottom: 78px; translate: -50% 0; }
+}
+/* the headline a size down in app mode, every language (owner: "maybe font can be smaller"); one line each on desktop */
+@media (min-width: 761px){
+  html.hx-app .hero--cinematic .hero-copy h1.display{ font-size: clamp(30px, 3vw, 48px); line-height: 1.06; max-width: none; }
+  html.hx-app .hero--cinematic .hero-copy h1.display span{ white-space: nowrap; }
+  html.hx-app .hero--cinematic .hero-copy .lede{ font-size: 15px; max-width: 46ch; }
+}
+@media (max-width: 760px){
+  html.hx-app .hero-copy h1.display{ font-size: 22px; }
+  html.hx-app .hero-copy .lede{ font-size: 12.5px; }
+}
+/* the sound button, by the language button */
+.hxa-sound{ display: none; }
+html.hx-app .hxa-sound{ display: inline-grid; place-items: center; width: 32px; height: 32px; margin-right: 6px; padding: 0; border-radius: 50%; border: 1px solid var(--rule, rgba(46,40,37,0.22)); background: transparent; color: var(--ink, #2E2825); cursor: pointer; }
+html.hx-app .hxa-sound[aria-pressed="true"]{ background: var(--ink, #2E2825); color: var(--cream, #F2E9DF); border-color: var(--ink, #2E2825); }
+html.hx-app .topbar-side.right{ display: inline-flex; align-items: center; }
+/* the panels take more of the screen (owner, Nov 2026: Pricing, FAQ and Register "more of the screen"): full height on
+   phones (under the top bar, as Location), a little wider on desktop with the 3D still beside them */
+.hxa-panel{ width: min(840px, 58vw); }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ top: calc(env(safe-area-inset-top, 0px) + 58px); border-radius: 16px 16px 0 0; width: auto; }
+}
+/* the bottom bar: words on wider screens; on phones a tab bar, an icon over a small word (owner: icons on the bar) */
+.hxa-m-ic{ display: none; }
+@media (max-width: 760px){
+  html.hx-app .hxa-menu .hxa-m{ display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex: 1 1 0; min-width: 0; padding: 6px 2px 5px; border-radius: 12px; font-size: 8.5px; letter-spacing: 0.06em; line-height: 1; }
+  html.hx-app .hxa-menu .hxa-m-ic{ display: block; line-height: 0; }
+  html.hx-app .hxa-menu .hxa-m-ic svg{ width: 20px; height: 20px; }
+  html.hx-app .hxa-menu .hxa-m-l{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  html.hx-app .hxa-menu .hxa-m.hxa-m-cta{ background: var(--cream, #F2E9DF); color: var(--ink, #2E2825); }
+  html.hx-app .hxa-menu{ align-items: stretch; }
+  html.hx-app .hxa-menu .hxa-wa{ align-self: center; flex: none; }
+}
+/* phones: a long label (BM "Daftar Minat") may take two short lines */
+@media (max-width: 760px){
+  html.hx-app .hxa-menu .hxa-m-l{ white-space: normal; text-align: center; line-height: 1.12; overflow: visible; }
+}
+/* the 3D's icons pulse softly (a ring every few seconds, staggered) until the visitor taps one, so they read as
+   tappable (owner: "the icons on 3d can pulsate so people know that can click") */
+@keyframes hx-ic-pulse{ 0%{ transform: scale(1); opacity: 0.75; } 70%{ transform: scale(1.75); opacity: 0; } 100%{ transform: scale(1.75); opacity: 0; } }
+html.hx-app .hx-feat .hx-feat-ic{ position: relative; }
+html.hx-app .hx-feat .hx-feat-ic::after{ content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 2px solid rgba(242,233,223,0.9); opacity: 0; pointer-events: none; animation: hx-ic-pulse 2.8s ease-out infinite; }
+html.hx-app .hx-feat:nth-child(2n) .hx-feat-ic::after{ animation-delay: .9s; }
+html.hx-app .hx-feat:nth-child(3n) .hx-feat-ic::after{ animation-delay: 1.8s; }
+html.hx-app.hxa-felt .hx-feat .hx-feat-ic::after, html.hx-app .hx-feat.sel .hx-feat-ic::after{ animation: none; opacity: 0; }
+@media (prefers-reduced-motion: reduce){ html.hx-app .hx-feat .hx-feat-ic::after{ animation: none; } }
+/* the bottom bar and the walk pill lighter, so the 3D shows through (owner: "can be more transparent abit"); a blur
+   behind keeps the words readable */
+html.hx-app .hxa-menu{ background: rgba(28,23,20,0.58); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); box-shadow: 0 10px 30px rgba(28,23,20,0.2); }
+html.hx-app .h3d-ui .hx-homes.hx-two{ background: rgba(22,15,10,0.34); -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); }
+@media (max-width: 760px){ html.hx-app .hxa-menu{ background: rgba(28,23,20,0.66); } }
+/* the bottom bar, refined (owner: "can design it nicely"): Register is the one terracotta call to action; the others
+   are a soft cream, the current one full cream with a small terracotta dot under it instead of a grey block */
+html.hx-app .hxa-menu .hxa-m{ color: rgba(242,233,223,0.72); background: transparent; position: relative; transition: color .2s ease, background .2s ease; }
+html.hx-app .hxa-menu .hxa-m:hover{ color: var(--cream, #F2E9DF); background: rgba(242,233,223,0.08); }
+html.hx-app .hxa-menu .hxa-m.on{ color: var(--cream, #F2E9DF); background: transparent; }
+html.hx-app .hxa-menu .hxa-m.on::after{ content: ""; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--terra, #B17664); }
+html.hx-app .hxa-menu .hxa-m.hxa-m-cta, html.hx-app .hxa-menu .hxa-m.hxa-m-cta.on{ background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }
+html.hx-app .hxa-menu .hxa-m.hxa-m-cta:hover{ background: var(--terra, #B17664); }
+html.hx-app .hxa-menu .hxa-m.hxa-m-cta.on::after{ background: var(--cream, #F2E9DF); }
+@media (max-width: 760px){
+  html.hx-app .hxa-menu{ gap: 4px; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  html.hx-app .hxa-menu .hxa-m{ flex: 1 1 0; border-radius: 14px; padding: 7px 2px 9px; }
+  html.hx-app .hxa-menu .hxa-m.on::after{ bottom: 2px; }
+  html.hx-app .hxa-menu .hxa-m .hxa-m-ic svg{ stroke-width: 1.5; }
+}
+/* the pulse, clearer (owner: "these icons to pulsate too"): every 3D icon breathes and sends out a ring with a terracotta
+   edge, and keeps doing so after a tap (only the open one rests) */
+@keyframes hx-ic-breathe{ 0%, 100%{ transform: scale(1); } 50%{ transform: scale(1.09); } }
+@keyframes hx-ic-ring{ 0%{ transform: scale(1); opacity: 0.95; } 75%{ transform: scale(1.9); opacity: 0; } 100%{ transform: scale(1.9); opacity: 0; } }
+html.hx-app .hx-feat .hx-feat-ic{ animation: hx-ic-breathe 2.4s ease-in-out infinite; }
+html.hx-app .hx-feat .hx-feat-ic::after{ border: 2px solid rgba(242,233,223,0.95); box-shadow: 0 0 0 1px rgba(177,118,100,0.7); animation: hx-ic-ring 2.4s ease-out infinite; }
+html.hx-app .hx-feat:nth-child(2n) .hx-feat-ic, html.hx-app .hx-feat:nth-child(2n) .hx-feat-ic::after{ animation-delay: .8s; }
+html.hx-app .hx-feat:nth-child(3n) .hx-feat-ic, html.hx-app .hx-feat:nth-child(3n) .hx-feat-ic::after{ animation-delay: 1.6s; }
+html.hx-app.hxa-felt .hx-feat .hx-feat-ic::after{ animation: hx-ic-ring 2.4s ease-out infinite; opacity: 0; }
+html.hx-app .hx-feat.sel .hx-feat-ic, html.hx-app .hx-feat:hover .hx-feat-ic{ animation: none; }
+html.hx-app .hx-feat.sel .hx-feat-ic::after{ animation: none; opacity: 0; }
+@media (prefers-reduced-motion: reduce){ html.hx-app .hx-feat .hx-feat-ic, html.hx-app .hx-feat .hx-feat-ic::after{ animation: none !important; } }
+/* the pulses rest while nobody can see them (a panel open, the tour under way, an icon not on screen), so the
+   compositor is not re-blurring the icons' glass every frame for nothing; they pick up again when shown */
+html.hx-app.hxa-open .hx-feat .hx-feat-ic, html.hx-app.hxa-open .hx-feat .hx-feat-ic::after,
+html.hx-app.pbw-going .hx-feat .hx-feat-ic, html.hx-app.pbw-going .hx-feat .hx-feat-ic::after,
+html.hx-app .hx-leave .hx-feat .hx-feat-ic, html.hx-app .hx-leave .hx-feat .hx-feat-ic::after,
+html.hx-app .hx-pin.hx-feat:not(.on) .hx-feat-ic, html.hx-app .hx-pin.hx-feat:not(.on) .hx-feat-ic::after,
+html.hxa-open .hx-homes.hx-two::after, html.pbw-going .hx-homes.hx-two::after{ animation-play-state: paused; }
+/* app mode: the page's own backdrop drift (hidden behind the 3D, see below) does not run either; a section lent to a
+   panel is no longer a child of body, so its contour float keeps going there */
+html.hx-app body > .ambient{ display: none; }
+html.hx-app body > .section::before{ animation-play-state: paused; }
+/* the old aerial render as a banner at the top of the Register panel (owner, Nov 2026); the scrolling page keeps its
+   own layout without it */
+.reg-hero{ display: none; }
+html.hx-app .hxa-body .reg-hero{ display: block; margin: 0 0 26px; border-radius: 14px; overflow: hidden; aspect-ratio: 16 / 9; box-shadow: 0 14px 36px -18px rgba(22,15,10,0.55); }
+html.hx-app .hxa-body .reg-hero img{ display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 760px){ html.hx-app .hxa-body .reg-hero{ margin-bottom: 18px; border-radius: 12px; } }
+/* the whole photo, uncropped (owner: "dunt crop ya") */
+html.hx-app .hxa-body .reg-hero{ aspect-ratio: auto; }
+html.hx-app .hxa-body .reg-hero img{ height: auto; object-fit: contain; }
+/* app mode at every width: none of the scrolling page's hero extras (sales line, buttons, figures row, floating
+   WhatsApp, page dock); a resize across a breakpoint must never bring them back (owner: "seeing old things") */
+html.hx-app .hero--cinematic .hero-specs, html.hx-app .hero--cinematic .hero-cta, html.hx-app .topbar-side.left, html.hx-app .fab-wa, html.hx-app .dock{ display: none !important; }
+/* no light strip under the bar: the page behind the app is dark */
+html.hx-app, html.hx-app body{ background: #1C1714; }
+/* the headline and lede on the captions' left margin, not in the page's centred column (owner: "append these more to
+   left, just like the captions") */
+@media (min-width: 761px){
+  html.hx-app .hero--cinematic .hero-inner.wrap{ max-width: none; margin-left: 0; margin-right: 0; padding-left: var(--gutter, 40px); padding-right: var(--gutter, 40px); }
+}
+/* the loan calculator in the Pricing panel: one column below about 900 px of panel; the monthly figure on one line,
+   sized to the panel, not the window; the WhatsApp card stacks its button under its words (owner: "abit too not format
+   nicely") */
+@container (max-width: 900px){
+  .calc-grid{ grid-template-columns: 1fr !important; gap: 28px !important; }
+}
+html.hx-app .hxa-body .calc-result .big{ font-size: clamp(40px, 8.5cqw, 76px) !important; white-space: nowrap; line-height: 1; }
+html.hx-app .hxa-body .calc-result .big small{ white-space: normal; font-size: 13px; letter-spacing: 0.12em; }
+@container (max-width: 720px){
+  .calc-preapprove{ flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
+  .calc-preapprove-text{ max-width: none !important; }
+  .calc-breakdown > div{ min-width: 0; }
+}
+/* every panel starts just under the top bar, whatever its height at this width (hero.js sets --hx-tb from the bar) */
+html.hx-app .hxa-panel{ top: calc(var(--hx-tb, 72px) + 12px); }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){
+  html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ top: calc(var(--hx-tb, 58px) + 4px); }
+}
+/* desktop and tablet: the bar's icons too, small and before each word (owner: "can have the icons too on desktop and
+   tablet view") */
+@media (min-width: 761px){
+  html.hx-app .hxa-menu .hxa-m{ display: inline-flex; align-items: center; gap: 7px; }
+  html.hx-app .hxa-menu .hxa-m-ic{ display: inline-block; line-height: 0; }
+  html.hx-app .hxa-menu .hxa-m-ic svg{ width: 15px; height: 15px; stroke-width: 1.7; }
+  html.hx-app .hxa-menu .hxa-m.on::after{ bottom: 2px; }
+}
+/* the panels' type sized to the panel, not the window, on desktop and tablet too (owner: "font seem too big") */
+@media (min-width: 761px){
+  html.hx-app .hxa-body .section .title{ font-size: clamp(26px, 3.6cqw, 36px); line-height: 1.12; }
+  html.hx-app .hxa-body .section .eyebrow{ font-size: 10.5px; }
+  html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ font-size: 14.5px; line-height: 1.6; }
+  html.hx-app .hxa-body .section h3{ font-size: clamp(22px, 3cqw, 30px); }
+  html.hx-app .hxa-body .price-ranges h3, html.hx-app .hxa-body .product-body h3{ font-size: clamp(26px, 3.6cqw, 36px) !important; }
+  html.hx-app .hxa-body .section .val{ font-size: clamp(20px, 2.6cqw, 26px); }
+  html.hx-app .hxa-body .calc-result .big small{ font-size: 12px; }
+  html.hx-app .hxa-body .calc-preapprove-title{ font-size: 19px; }
+  html.hx-app .hxa-body .faq-aside .h{ font-size: 22px; }
+  html.hx-app .hxa-body details.faq summary span:not(.ix):not(.tog){ font-size: 16.5px; line-height: 1.35; }
+  html.hx-app .hxa-body details.faq p{ font-size: 14.5px; }
+  html.hx-app .hxa-title{ font-size: 19px; }
+}
+/* app mode: the top bar spans the whole width, logo hard left, sound and language hard right */
+html.hx-app .topbar-inner{ max-width: none; width: 100%; padding-left: var(--gutter, 40px); padding-right: var(--gutter, 40px); }
+/* app mode: one tighter edge margin for the bar, the copy and the captions (the page's grows to 8vw = 160 px on wide
+   screens); the page's Semi-D | Bungalow switch is not needed up there (the 3D's icons and pill pick a home) */
+html.hx-app{ --gutter: clamp(20px, 3.2vw, 64px); }
+html.hx-app .topbar .home-pill{ display: none !important; }
+html.hx-app .topbar-side.right{ width: auto; gap: 8px; }
+/* app mode: no cream fade at the foot of the hero (on the page it led into the section below; here it read as a pale
+   line under the bar) and no other stray rules or borders round the bar (owner: "no line unecessary") */
+html.hx-app .hero--cinematic::after{ display: none !important; }
+html.hx-app .hxa-menu{ border: 0; outline: 0; }
+html.hx-app .topbar{ border-bottom: 0; }
+/* ===== layout audit, Nov 2026 (26 sizes: phones, tablets, desktops; EN/BM/中) ===== */
+/* F1: the desktop/tablet bottom bar holds all its items (it was capped at 50vw by its centring) */
+@media (min-width: 761px){ html.hx-app .hxa-menu{ width: max-content; max-width: calc(100vw - 32px); } }
+@media (min-width: 761px) and (max-width: 860px){ html.hx-app .hxa-menu .hxa-m{ padding: 10px 11px; gap: 6px; letter-spacing: 0.1em; } }
+/* F2: captions on a glass card, readable over white walls; the copy leaves first, then the caption rises in */
+html.hx-app .hxa-cap{ padding: 20px 22px 18px; border-radius: 18px; background: rgba(22,15,10,0.58); border: 1px solid rgba(242,233,223,0.12); -webkit-backdrop-filter: blur(14px) saturate(130%); backdrop-filter: blur(14px) saturate(130%); box-shadow: 0 18px 40px -14px rgba(18,12,8,0.55); }
+html.hx-app .hxa-cap{ width: min(480px, 40vw); } html.hx-app .hxa-cap.house{ width: min(520px, 44vw); }
+@media (min-width: 761px) and (min-aspect-ratio: 9/10){ html.hx-app .hxa-cap{ left: max(12px, calc(var(--gutter, 40px) - 22px)); } }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){ html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ padding: 14px 14px 12px; border-radius: 16px; } }
+html.hx-app.hxa-cap-on .hero-inner{ transition: opacity .15s ease, visibility 0s linear .15s; }
+@keyframes hxa-cap-in{ from{ opacity: 0; transform: translateY(8px); } }
+html.hx-app .hxa-cap:not([hidden]){ animation: hxa-cap-in .32s cubic-bezier(.2,.75,.2,1) .12s both; }
+@media (prefers-reduced-motion: reduce){ html.hx-app .hxa-cap:not([hidden]){ animation: none; } }
+/* F5: the walk pill steps aside for any caption at every size; captions fit short desktops */
+html.hxa-cap-on .h3d-ui .hx-homes.hx-two{ opacity: 0; visibility: hidden; }
+@media (min-width: 761px) and (min-aspect-ratio: 9/10){
+  html.hx-app .hxa-cap{ bottom: clamp(92px, 12vh, 170px); max-height: calc(100dvh - var(--hx-tb, 74px) - 16px - clamp(92px, 12vh, 170px)); overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (min-width: 761px) and (max-height: 760px){ html.hx-app .hxa-cap-ic{ display: none; } html.hx-app .hxa-cap-t{ font-size: 26px; } }
+/* F6: the lede clear of the walk pill on short desktops */
+@media (min-width: 761px) and (min-aspect-ratio: 9/10){ html.hx-app .hero--cinematic .hero-inner{ padding-bottom: max(clamp(120px, 16vh, 205px), 166px); } }
+/* F7: tap targets at least 40 px; the sound and language buttons one size */
+html.hx-app .hxa-sound{ width: 40px; height: 40px; margin-right: 0; }
+html.hx-app .topbar .lang{ padding: 0; border: 0; }
+html.hx-app .topbar .lang button{ width: 40px; height: 40px; min-height: 40px; min-width: 40px; padding: 0; justify-content: center; border-radius: 50%; }
+html.hx-app .hxa-x{ width: 40px; height: 40px; }
+html.hx-app .hx-feat .hx-feat-ic::before{ content: ""; position: absolute; inset: -5px; border-radius: 50%; }
+html.hx-app .h3d-ui .hx-homes.hx-two .hx-walk{ min-height: 40px; }
+html.hx-app .hxa-menu .hxa-wa{ width: 40px; height: 40px; }
+@media (max-width: 760px), (max-aspect-ratio: 9/10){ html.hx-app .hxa-cap-nav button, html.hx-app .hxa-cap-home button{ height: 40px; min-width: 40px; } }
+@media (pointer: coarse) and (min-width: 761px){ html.hx-app .hxa-menu .hxa-m{ min-height: 42px; } html.hx-app .h3d-ui .hx-homes.hx-two{ bottom: 84px; } }
+/* F8: phone tab labels larger, every tab the same two-line height in every language */
+@media (max-width: 760px){ html.hx-app .hxa-menu .hxa-m{ font-size: 9.5px; letter-spacing: 0.03em; min-height: 60px; } html.hx-app .hxa-menu .hxa-m-l{ line-height: 1.1; } }
+@media (max-width: 360px){ html.hx-app .hxa-menu .hxa-m{ font-size: 9px; letter-spacing: 0.02em; } }
+/* F9: very narrow phones show the wordmark alone */
+@media (max-width: 340px){ html.hx-app .topbar .brand-mark .sub{ display: none; } }
+html.hx-app .topbar .brand-mark{ min-width: 0; }
+/* F11: captions on short phones */
+@media (max-width: 760px){ html.hx-app .hxa-cap{ max-height: calc(100dvh - var(--hx-tb, 52px) - 12px - 76px - env(safe-area-inset-bottom, 0px)); overflow-y: auto; overscroll-behavior: contain; } }
+@media (max-width: 760px) and (max-height: 700px){ html.hx-app .hxa-cap-ic{ display: none; } html.hx-app .hxa-cap-b{ font-size: 12.5px; } }
+/* F12: the register form follows the panel's width */
+@container (max-width: 760px){ .reg-grid{ grid-template-columns: minmax(0, 1fr) !important; } }
+@container (max-width: 600px){ .field-row{ grid-template-columns: minmax(0, 1fr) !important; gap: 16px !important; } }
+.hxa-body .reg-form, .hxa-body .reg-form > *{ min-width: 0; }
+.hxa-body .reg-form input, .hxa-body .reg-form select, .hxa-body .reg-form textarea{ min-width: 0; max-width: 100%; }
+/* F10: portrait tablets: a caption card on the margin and a floating sheet instead of a stretched phone layout */
+@media (min-width: 761px) and (max-aspect-ratio: 9/10){
+  html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ left: var(--gutter, 32px); right: auto; width: min(560px, calc(100vw - 2 * var(--gutter, 32px))); }
+  html.hx-app .hxa-cap-t{ font-size: 28px; }
+  html.hx-app .hx-feat .hx-feat-ic{ width: 40px; height: 40px; } html.hx-app .hx-feat .hx-feat-ic svg{ width: 22px; height: 22px; }
+  html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ left: 16px; right: 16px; width: auto; bottom: 84px; border-radius: 18px; }
+  html.hx-app .hxa-panel:not(.open){ transform: translateY(calc(100% + 110px)); }
+  html.hx-app .hxa-body{ padding-bottom: 24px; }
+  html.hx-app .hxa-body > *{ max-width: 760px; margin-inline: auto; }
+}
+/* F13: small text up to a readable size */
+html.hx-app .hxa-cap-specs dt{ font-size: 10px; }
+@media (min-width: 761px){ html.hx-app .hxa-cap-specs dt{ font-size: 10.5px; } }
+@media (max-width: 720px){ html.hx-app .hxa-cap-h{ font-size: 10px; } }
+html.hx-app .hxa-body .reg-form label{ font-size: 11px; }
+html.hx-app .hxa-body .ring-label, html.hx-app .hxa-body .pin-site-label{ font-size: 10.5px; }
+@media (max-width: 760px){ html.hx-app .hxa-body .map-filters button{ font-size: 10.5px !important; } }
+html.hx-app .hxa-body .leaflet-control-attribution{ font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 8px); }
+@media (min-width: 421px) and (max-width: 760px){ .hx-homes.hx-two .hx-walk-k{ font-size: 9.5px; } }
+/* F14: Chinese labels at a readable size */
+html[lang^="zh"].hx-app .hxa-menu .hxa-m-l{ font-size: 12.5px; letter-spacing: 0.04em; }
+@media (max-width: 760px){ html[lang^="zh"].hx-app .hxa-menu .hxa-m-l{ font-size: 11px; letter-spacing: 0; } }
+html[lang^="zh"].hx-app .hx-homes .hx-walk-k{ font-size: 11.5px; letter-spacing: 0.06em; }
+/* F17: a steadier top bar so the wordmark reads */
+@media (min-width: 721px){ html.hx-app .topbar{ background: rgba(242,233,223,0.72); box-shadow: none; } }
+/* F18: FAQ rows inside their box */
+.hxa-body .faq summary{ grid-template-columns: 36px minmax(0, 1fr) 24px; }
+@container (max-width: 600px){ .hxa-body .faq summary{ grid-template-columns: 28px minmax(0, 1fr) 22px; gap: 10px; } }
+/* F19: the map filter row hints that it scrolls sideways */
+html.hx-app .hxa-body .map-filters{ -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); scroll-padding-inline: 16px; }
+/* F21: 721 to 760 px wide gets the full-width phone tab bar its tab styling expects */
+@media (min-width: 721px) and (max-width: 760px){ html.hx-app .hxa-menu{ left: 0; right: 0; bottom: 0; transform: none; translate: none; width: auto; max-width: none; border-radius: 0; } }
+/* F3 + F4 (last): phone landscape (short screens) gets a compact layout, captions and panels that fit */
+@media (min-width: 761px) and (max-height: 520px){
+  html.hx-app .topbar{ background: rgba(242,233,223,0.72); }
+  html.hx-app .topbar-inner{ padding: 5px max(16px, env(safe-area-inset-right, 0px)) 5px max(16px, env(safe-area-inset-left, 0px)); }
+  html.hx-app .hero--cinematic .hero-inner.wrap{ padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-bottom: 72px !important; }
+  html.hx-app .hero--cinematic .hero-copy h1.display{ font-size: 22px; line-height: 1.08; margin: 0 0 6px; }
+  html.hx-app .hero--cinematic .hero-copy .lede{ font-size: 12.5px; line-height: 1.45; max-width: min(46ch, 48vw); }
+  html.hx-app .hxa-menu{ bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+  html.hx-app .h3d-ui .hx-homes.hx-two{ left: auto; right: max(16px, env(safe-area-inset-right, 0px)); translate: none; top: auto; bottom: 72px; gap: 4px; padding: 4px; }
+  html.hx-app .h3d-ui .hx-homes.hx-two .hx-walk{ padding: 8px 12px; font-size: 15px; min-height: 40px; }
+  html.hx-app .hx-homes.hx-two .hx-walk-ic{ width: 32px; height: 32px; }
+  html.hx-app .hx-homes.hx-two .hx-walk-k{ display: none; }
+  html.hx-app .hx-homes.hx-two .hx-walk-l{ font-size: 14px; }
+  html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ left: max(12px, env(safe-area-inset-left, 0px)); bottom: 70px; width: min(440px, 52vw); max-height: calc(100dvh - var(--hx-tb, 50px) - 8px - 70px); overflow-y: auto; overscroll-behavior: contain; padding: 12px 14px; }
+  html.hx-app .hxa-cap-ic, html.hx-app .hxa-cap.house .hxa-cap-b{ display: none; }
+  html.hx-app .hxa-cap-h{ font-size: 10px; margin-bottom: 4px; }
+  html.hx-app .hxa-cap-t{ font-size: 20px; margin-bottom: 4px; }
+  html.hx-app .hxa-cap-b{ font-size: 13px; }
+  html.hx-app .hxa-cap-specs{ gap: 6px 14px; margin-top: 8px; padding-top: 8px; }
+  html.hx-app .hxa-cap-specs dd{ font-size: 14px; }
+  html.hx-app .hxa-cap-home, html.hx-app .hxa-cap-nav{ margin-top: 8px; }
+  html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ top: calc(var(--hx-tb, 50px) + 4px); right: 0; bottom: 0; width: min(560px, 66vw); border-radius: 16px 0 0 0; }
+  html.hx-app .hxa-body{ padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  html.hx-app .hxa-head{ padding: 8px 12px 8px 20px; }
+  html.hx-app .hxa-title{ font-size: 18px; }
+}
+/* app mode: the hero is exactly the screen, never taller (the page's min-height of 580 px put the copy and the walk pill
+   below a 375 px landscape phone) */
+html.hx-app .hero--cinematic{ min-height: 0 !important; height: 100vh; height: 100dvh; }
+/* phone landscape: the copy in the left half, above the bottom bar; the headline may wrap there */
+@media (min-width: 761px) and (max-height: 520px){
+  html.hx-app .hero--cinematic .hero-inner, html.hx-app .hero--cinematic .hero-inner.wrap{ padding-bottom: 76px !important; }
+  html.hx-app .hero--cinematic .hero-copy{ max-width: 52vw; }
+  html.hx-app .hero--cinematic .hero-copy h1.display span{ white-space: normal; }
+  html.hx-app .hero--cinematic .hero-copy h1.display{ max-width: 52vw; }
+}
+@media (min-width: 761px) and (max-height: 520px){ html.hx-app .hero--cinematic .hero-inner, html.hx-app .hero--cinematic .hero-inner.wrap{ padding-top: 12px !important; } }
+@media (min-width: 761px) and (max-height: 520px){ html.hx-app .hero--cinematic .hero-copy .lede{ display: none; } }   /* landscape phones: the headline alone above the bar */
+/* captions back to words on the 3D, no card (owner, Nov 2026: "no card, just the words", "no blackish background");
+   a soft text shadow keeps them readable over white walls. Phones: the full width between the gutters again. */
+html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ padding: 0; border: 0; border-radius: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; }
+html.hx-app .hxa-cap-h, html.hx-app .hxa-cap-t, html.hx-app .hxa-cap-b, html.hx-app .hxa-cap-specs, html.hx-app .hxa-cap-price{ text-shadow: 0 1px 2px rgba(18,12,8,0.75), 0 2px 14px rgba(18,12,8,0.6), 0 0 28px rgba(18,12,8,0.45); }
+html.hx-app .hxa-cap-h{ color: rgba(242,233,223,0.92); } html.hx-app .hxa-cap-b{ color: rgba(242,233,223,0.95); }
+html.hx-app .hxa-cap-specs{ border-top: 0; padding-top: 0; }
+html.hx-app .hxa-cap-specs dt{ color: rgba(242,233,223,0.85); }
+@media (min-width: 761px) and (min-aspect-ratio: 9/10){ html.hx-app .hxa-cap{ left: var(--gutter, 40px); } }
+@media (max-width: 760px){
+  html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ left: 16px; right: 16px; width: auto; }
+  html.hx-app .hxa-cap-home{ flex-wrap: wrap; }
+  html.hx-app .hxa-cap-home button{ white-space: nowrap; }
+}
+/* the top bar lighter, more of the 3D through it (owner, Nov 2026: "more transparent abit") */
+html.hx-app .topbar, html.hx-app.scrolled .topbar{ background: rgba(242,233,223,0.42) !important; -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: none; }
+/* the bottom menu lighter too (owner, Nov 2026: "transparent abit more"); labels keep a soft shadow to stay readable */
+html.hx-app .hxa-menu{ background: rgba(28,23,20,0.36); -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: none; }
+@media (max-width: 760px){ html.hx-app .hxa-menu{ background: rgba(28,23,20,0.44); } }
+html.hx-app .hxa-menu .hxa-m:not(.hxa-m-cta){ color: rgba(242,233,223,0.9); text-shadow: 0 1px 6px rgba(18,12,8,0.55); }
+html.hx-app .hxa-menu .hxa-m.on{ color: var(--cream, #F2E9DF); }
+/* very wide screens: the logo, the headline and the captions stay inside a 1600 px frame, centred, rather than
+   running out to the far edges (owner, Nov 2026) */
+html.hx-app{ --gutter: max(clamp(20px, 3.2vw, 64px), calc((100vw - 1600px) / 2)); }
+/* app mode: nothing of the scrolling page behind the 3D, so a window being resized (the canvas redrawn a frame
+   late) never shows the old sections through it (owner, Nov 2026: "how come i see this when i resize").
+   A section lent to a panel lives inside the panel, so it is not hidden. */
+html.hx-app body > section.section, html.hx-app body > footer, html.hx-app #topo-canvas, html.hx-app body > .ambient, html.hx-app body > .sheet-frame, html.hx-app body > header.nav, html.hx-app body > .scroll-progress{ visibility: hidden !important; }
+html.hx-app .hero--cinematic{ background-color: #2A231E; }
+/* tour bar, one row (owner, Nov 2026: the sound button sat on the back arrow, the gallery on the intro card):
+   desktop: back on the left, the home switch in the middle, gallery and sound on the right;
+   phones: back, sound and gallery (icon only) on the left, the switch on the right, all above the intro card */
+.pbw .pbw-bar .pbw-snd{ position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: clamp(16px,3vw,36px); margin: 0; width: 40px; height: 40px; pointer-events: auto; box-shadow: 0 12px 28px -20px rgba(28,23,20,0.5); }
+.pbw .pbw-bar .pbw-back, .pbw .pbw-bar .pbw-gal, .pbw .pbw-bar .pbw-pill{ height: 40px; box-sizing: border-box; }
+.pbw .pbw-bar .pbw-pill{ align-items: center; }
+.pbw .pbw-bar .pbw-pill button{ min-height: 0; }
+.pbw .pbw-bar .pbw-gal{ top: max(14px, env(safe-area-inset-top, 0px)); right: calc(clamp(16px,3vw,36px) + 48px); }
+@media (max-width: 780px){
+  .pbw .pbw-bar .pbw-back{ left: 16px; width: 40px; padding: 0; justify-content: center; }
+  .pbw .pbw-bar .pbw-snd{ right: auto; left: 64px; }
+  .pbw .pbw-bar .pbw-gal{ top: max(14px, env(safe-area-inset-top, 0px)); right: auto; left: 112px; width: 40px; padding: 0; justify-content: center; }
+  .pbw .pbw-bar .pbw-gal span{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }   /* the name stays for screen readers */
+  .pbw .pbw-bar .pbw-pill{ right: 16px; }
+}
+@media (max-width: 370px){
+  .pbw .pbw-bar .pbw-pill{ letter-spacing: 0.08em; }
+  .pbw .pbw-bar .pbw-pill button{ padding: 6px 9px; }
+}
+/* OpenStreetMap credit for the neighbourhood (ODbL): small and quiet, in the corner of the 3D, above the menu on phones */
+.h3d-ui .hx-osm{ position: absolute; right: 10px; bottom: 6px; z-index: 3; pointer-events: auto; font-family: var(--sans, system-ui, sans-serif); font-size: 9.5px; line-height: 1;
+  color: rgba(242,233,223,0.72); text-decoration: none; text-shadow: 0 1px 3px rgba(18,12,8,0.6); }
+.h3d-ui .hx-osm:hover{ color: var(--cream, #F2E9DF); text-decoration: underline; }
+html.hxa-open .h3d-ui .hx-osm{ visibility: hidden; }
+@media (max-width: 760px){ .h3d-ui .hx-osm{ bottom: calc(env(safe-area-inset-bottom, 0px) + 80px); right: 8px; font-size: 9px; } }

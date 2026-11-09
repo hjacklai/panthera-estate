@@ -13,10 +13,12 @@ const I18N = {
     "nav.cta": "Register Interest",
 
     "hero.eyebrow": "Pre-launch · Bertam · wake up to your own green",
-    "hero.h1.a": "Every home",
-    "hero.h1.b": "opens to the green.",
-    "hero.lede": "Nineteen freehold homes around a shared green of over 700 m². Wide sliding glass doors open the living and dining area onto your own patio. A quiet, private corner of Bertam.",
+    "hero.h1.a": "19 exclusive freehold,",
+    "hero.h1.b": "park-facing homes.",
+    "hero.lede": "16 semi-Ds and 3 bungalows in Bertam, Penang. Every home faces a shared green of over 700 m², and Penang Technology Park is five minutes away.",
     "hero.f1.v": "RM 726k",  "hero.f1.k": "from",
+    "hero.f1b.v": "Price", "hero.f1b.k": "on request",
+    "home.pill.label": "Choose a home type", "home.pill.semid": "Semi-D", "home.pill.bungalow": "Bungalow",
     "hero.f2.v": "Freehold", "hero.f2.k": "tenure",
     "hero.f3.v": "19",       "hero.f3.k": "homes",
     "hero.f4.v": "5 min",    "hero.f4.k": "to Tech Park",
@@ -83,7 +85,6 @@ const I18N = {
     "h.semid.pitch": "A big open-plan kitchen, living and dining, with high ceilings and floor-to-ceiling glass to the garden. Three bedrooms upstairs, one on the ground floor.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 726,000 onwards",
-    "h.semid.price.s": "Bumi lot · standard from RM 632,917",
     "h.semid.s1.k": "Built-up", "h.semid.s1.v": "2,006", "h.semid.s1.u": "sq ft",
     "h.semid.s2.k": "Land Size", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 ft²",
     "h.semid.s3.k": "Bedrooms", "h.semid.s3.v": "4",
@@ -95,9 +96,7 @@ const I18N = {
     "h.bungalow.tag": "3 units · Bungalow",
     "h.bungalow.name": "The Bungalow",
     "h.bungalow.pitch": "The estate's biggest homes, with room for three generations. A ground-floor bedroom and bathroom mean parents or guests skip the stairs, with the rest upstairs.",
-    "h.bungalow.price.l": "From",
     "h.bungalow.price.v": "Price on request",
-    "h.bungalow.price.s": "Non-Bumi · Bumi from RM 920,263",
     "h.bungalow.s1.k": "Built-up", "h.bungalow.s1.v": "2,642", "h.bungalow.s1.u": "sq ft",
     "h.bungalow.s2.k": "Land Size", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 ft²",
     "h.bungalow.s3.k": "Bedrooms", "h.bungalow.s3.v": "5",
@@ -107,8 +106,11 @@ const I18N = {
     "h.bungalow.ph": "Render · Bungalow Exterior",
 
     "pricing.eyebrow": "Pricing",
-    "pricing.title": "Range pricing. Plainly told.",
+    "pricing.title": "Honest pricing.",
     "pricing.lede": "Two freehold house types, both facing the central green.",
+    "pricing.lede.sd": "The Semi-D: 16 freehold homes facing the central green.",
+    "pricing.lede.bg": "The bungalow: 3 freehold homes facing the central green. Price on request.",
+    "pricing.frame.bg": "These are pre-launch terms. Bungalow pricing is shared on request while the list is still open before public launch.",
     "pricing.frame": "These are pre-launch prices. From RM 726k for a freehold home that faces its own green, while the list is still open before public launch.",
     "pricing.cta.title": "Want the full lot-by-lot list?",
     "pricing.cta.body": "Reach our sales team on WhatsApp, we'll send the live list with availability and Bumi-lot status the same day.",
@@ -198,37 +200,37 @@ const I18N = {
     "step5.b": "24-month build, CCC issued, defect liability period begins. Move in.",
     "step5.when": "Q4 2028 · estimated",
     "bertam.eyebrow": "Why Bertam, now",
-    "bertam.title": "The mainland's quiet moment.",
-    "bertam.lede": "Bertam sits at the heart of the north's tech corridor: minutes from Penang Technology Park, a short drive from Kulim Hi-Tech Park and Sungai Petani. With RM 13 billion of industry landing around it, the growth here isn't a bet, it's already underway.",
-    "bertam.thesis": "You're buying <span class=\"accent\">land</span> in a township<br>that the country, briefly,<br>has decided to power.",
-    "bertam.s1u": "Lithium-battery plant, Phase 1 live 2025, 5 min away",
-    "bertam.s2u": "Semiconductor & precision manufacturing, next door",
-    "bertam.s3u": "World's largest 200mm SiC fab, Phase 1 live",
-    "bertam.s4k": "Capital growth, 5-yr",
-    "bertam.s4u": "Bertam landed-home median · NAPIC public data",
-    "bertam.s5u": "State manufacturing investment, up 29% on 2024",
-    "bertam.s6u": "From Penang's 2024 approved projects",
-    "bertam.close": "Owning here now means a freehold address at a pre-launch mainland price, locked in before the public launch, in the township all of this is being built around.",
-    "cat0.l": "Township",
-    "cat0.h": "Bertam builds the everyday town.",
-    "cat0.b": "Three decades of steady growth: mall, hospital, university and a dozen schools. The mainland's quiet, complete neighbourhood came first.",
-    "cat1.l": "Established",
-    "cat1.h": "Penang Technology Park lands in Bertam.",
-    "cat1.b": "700 acres of state-led industrial land beside mature Bertam Indah. The quiet phase.",
-    "cat2.l": "Catalyst",
-    "cat2.h": "INV New Energy commits RM 6.4 billion.",
-    "cat2.b": "One of ASEAN's largest lithium-battery investments. Groundbreaking done, operations from 2027.",
+    "bertam.title": "Bertam is growing up.",
+    "bertam.lede": "Penang Technology Park is about five minutes away. Kulim Hi-Tech Park and Sungai Petani are a short drive. New factories are already running here, and the people who work in them need homes close by.",
+    "bertam.thesis": "A freehold home,<br>five minutes from<br>the <span class=\"accent\">new jobs</span>.",
+    "bertam.s1u": "Battery-separator plant, open since June 2025, about 6 min away",
+    "bertam.s2u": "Electronics, battery and precision manufacturing, launched 2023",
+    "bertam.s3u": "Expansion set to be the world's largest 200mm SiC chip fab, phase 1 open since 2024",
+    "bertam.s4k": "Setia Fontaines",
+    "bertam.s4u": "New industrial park in Bertam, ground broken June 2026",
+    "bertam.s5u": "Approved manufacturing investment, up 29% on 2024",
+    "bertam.s6u": "Expected from Penang's 2025 approved projects",
+    "bertam.close": "Register now and you lock in pre-launch pricing on a freehold home.",
+    "cat0.l": "Town",
+    "cat0.h": "Bertam becomes a proper town.",
+    "cat0.b": "Malls, two hospitals, USM and UiTM campuses and more than a dozen schools. Daily life here is already sorted.",
+    "cat1.l": "Tech park",
+    "cat1.h": "Penang Technology Park opens in Bertam.",
+    "cat1.b": "880 acres of industrial land next to Bertam Indah. The same year, INV commits RM 6.4 billion to a battery-separator plant inside it.",
+    "cat2.l": "Running",
+    "cat2.h": "INV's first plant opens.",
+    "cat2.b": "Phase 1 started in June 2025. Full operation is planned for 2027.",
     "cat2.tag": "Confirmed",
     "cat3.l": "Now",
-    "cat3.h": "Bertam reaches its inflection.",
-    "cat3.b": "Billions in industry landing while land is still mainland-priced. Panthera opens for registration.",
+    "cat3.h": "Panthera opens for registration.",
+    "cat3.b": "Setia Fontaines breaks ground on a 509-acre industrial park, and land here still costs far less than on the island.",
     "cat3.tag": "Pre-launch",
-    "cat4.l": "Anchor",
-    "cat4.h": "INV at full capacity. Tech Park fills up.",
-    "cat4.b": "Phase 1 has run since 2025; full output follows. Rental demand from engineers and professionals builds.",
-    "cat5.l": "Handover",
-    "cat5.h": "The township keeps growing.",
-    "cat5.b": "You move in as Bertam matures, with Setia Fontaines' township rising next door and more roads, jobs and amenities still to come.",
+    "cat4.l": "Next",
+    "cat4.h": "INV aims for full operation.",
+    "cat4.b": "More people working minutes away, and more of them looking for a home nearby.",
+    "cat5.l": "Your keys",
+    "cat5.h": "You move in.",
+    "cat5.b": "Bertam keeps filling in around you.",
     "reg.eyebrow": "Register your interest",
     "reg.title": "Be first in line.",
     "reg.lede": "Register and we'll WhatsApp you the full price list, floor plans and brochure, plus first pick of lots before public launch. Claim the home that opens to the green while all nineteen are still on the table. No deposit, no obligation.",
@@ -257,7 +259,7 @@ const I18N = {
     "reg.contact.fin.n": "Any major bank",
     "reg.contact.fin.b": "Freehold title, so it's financeable like any home. We help with the application, terms depend on your profile.",
 
-    "footer.tag": "A small, considered development in Bertam, Penang.",
+    "footer.tag": "A boutique, thoughtful development in Bertam, Penang.",
     "footer.h.explore": "Explore",
     "footer.h.legal": "Legal",
     "footer.h.contact": "Contact",
@@ -322,7 +324,52 @@ const I18N = {
     "specs.c3.b": "Steep rooflines that shed heavy rain, shaded openings with cross-ventilation, and engineered drainage around every lot.",
     "specs.c4.h": "The full schedule",
     "specs.c4.t": "Published with the SPA.",
-    "specs.c4.b": "Materials, brands and finishes are being confirmed. Registered buyers receive the complete schedule first, and the signed Sale & Purchase Agreement is the binding version."
+    "specs.c4.b": "Materials, brands and finishes are being confirmed. Registered buyers receive the complete schedule first, and the signed Sale & Purchase Agreement is the binding version.",
+    // Keys added Nov 2026 (all-languages pass). nav.* and hx.prev: the 3D app menu and caption
+    // (hero-boot.js merges the rest of the EN hx.* set; BM and ZH carry the full set below)
+    "nav.pricing": "Pricing",
+    "nav.faq": "FAQ",
+    "nav.menu": "Site menu",
+    "hx.prev": "Previous",
+    "hx.next": "Next",
+    "hx.close": "Close",
+    "hx.stage.role": "3D estate view",
+    // pricing cards and mortgage calculator
+    "prc.sd.tag": "Semi-Detached", "prc.sd.units": "16 units", "prc.sd.h": "Semi-D",
+    "prc.sd.foot": "2,006 ft² built-up · 210–318 m² land · 4 bed · 4 bath",
+    "prc.bg.tag": "Bungalow", "prc.bg.units": "3 units", "prc.bg.h": "Bungalow",
+    "prc.bg.foot": "2,642 ft² built-up · 356–493 m² land · 5 bed · 5 bath",
+    "calc.preset.sd": "Semi-D · RM 726k",
+    "calc.price": "Property price", "calc.down": "Downpayment", "calc.down.aria": "Downpayment percent",
+    "calc.years": "Loan tenure", "calc.years.u": "years", "calc.years.aria": "Loan tenure years",
+    "calc.rate": "Interest rate", "calc.rate.u": "% p.a.",
+    "calc.monthly": "Estimated monthly", "calc.per": "per month · principal + interest",
+    "calc.principal": "Principal", "calc.interest": "Interest",
+    "calc.loan": "Loan amount", "calc.totint": "Total interest", "calc.tottot": "Total repayment",
+    "calc.note": "Indicative · MRTA + legal not included · subject to bank assessment",
+    "calc.pre.eyebrow": "Take the next step", "calc.pre.title": "Get pre-approved on WhatsApp",
+    "calc.pre.sub": "We'll relay your figures to any major bank and come back with an indicative approval within the day.",
+    // location map controls and notes
+    "map.t.streets": "Map", "map.t.satellite": "Satellite", "map.t.terrain": "Terrain",
+    "map.f.all": "All", "map.f.daily": "Daily", "map.f.schools": "Schools", "map.f.lifestyle": "Play & Lifestyle", "map.f.connect": "Connect", "map.f.future": "Jobs & Industry",
+    "map.note": "Pinned at the exact site. Drag, zoom or two-finger zoom on mobile. Tap any numbered pin for details. Use the filter chips to show only what matters to you, or hit a row in the list below to fly the map to that amenity.",
+    "loc.em.walk": "walkable", "loc.em.across": "across the road", "loc.em.gp": "(GP clinic)", "loc.em.amdi": "(medical / dental institute)",
+    "u.min": "min", "pop.drive": "drive", "pop.walk": "walk",
+    // aria-label (data-i18n-aria) and alt text (data-i18n-alt); the alt values are the current alts
+    "aria.lang": "Language", "aria.primary": "Primary", "aria.glance": "At a glance", "aria.hometype": "Home type", "aria.why": "Why register now", "aria.wa": "WhatsApp sales", "aria.filter": "Filter amenities",
+    "alt.hero": "Aerial view of Panthera Bertam at golden hour: 19 homes around the shared central green, with the neighbourhood around it. 3D render, artist's impression",
+    "alt.sd.hero": "Semi-Detached homes at Panthera Bertam at golden hour, artist's impression",
+    "alt.sd.wc.front": "Semi-Detached watercolour, front pair, artist's impression",
+    "alt.sd.wc.left": "Semi-Detached watercolour, left perspective", "alt.sd.wc.right": "Semi-Detached watercolour, right perspective",
+    "alt.sd.gf": "Semi-Detached Ground Floor plan", "alt.sd.ff": "Semi-Detached First Floor plan",
+    "alt.bg.hero": "A Panthera Bertam bungalow, front elevation and driveway, artist's impression",
+    "alt.bg.wc.front": "Bungalow watercolour, front facade, artist's impression",
+    "alt.bg.wc.left": "Bungalow watercolour, left perspective", "alt.bg.wc.right": "Bungalow watercolour, right perspective",
+    "alt.bg.gf": "Bungalow Ground Floor plan", "alt.bg.ff": "Bungalow First Floor plan",
+    // dock, skip link, top-bar sales label, Bertam stat labels
+    "a11y.skip": "Skip to content", "topbar.sales": "Sales · +60 17-598 1858",
+    "dock.estate": "Estate", "dock.homes": "Homes", "dock.site": "Site", "dock.location": "Location", "dock.register": "Register ↗",
+    "bertam.s1k": "INV New Material", "bertam.s2k": "Penang Tech Park", "bertam.s3k": "Infineon · Kulim", "bertam.s5k": "Penang, 2025", "bertam.s6k": "New jobs"
   },
 
   bm: {
@@ -330,14 +377,18 @@ const I18N = {
     "nav.homes":  "Rumah",
     "nav.site":   "Pelan Tapak",
     "nav.location": "Lokasi",
+    "nav.pricing": "Harga",
+    "nav.faq": "FAQ",
     "nav.register": "Daftar Minat",
     "nav.cta": "Daftar Minat",
 
     "hero.eyebrow": "Pra-Pelancaran · Bertam · bangun menghadap taman hijau sendiri",
-    "hero.h1.a": "Setiap rumah",
-    "hero.h1.b": "menghadap kehijauan.",
-    "hero.lede": "Sembilan belas rumah pegangan bebas mengelilingi taman hijau dikongsi seluas lebih 700 m². Pintu gelongsor kaca yang lebar membuka ruang tamu dan ruang makan terus ke patio anda sendiri. Sudut Bertam yang tenang dan persendirian.",
+    "hero.h1.a": "19 rumah eksklusif pegangan bebas,",
+    "hero.h1.b": "semuanya menghadap taman.",
+    "hero.lede": "16 rumah berkembar dan 3 banglo di Bertam, Pulau Pinang. Setiap rumah menghadap taman bersama seluas lebih 700 m², dan Penang Technology Park hanya lima minit dari sini.",
     "hero.f1.v": "RM 726k",       "hero.f1.k": "bermula",
+    "hero.f1b.v": "Harga", "hero.f1b.k": "atas permintaan",
+    "home.pill.label": "Pilih jenis rumah", "home.pill.semid": "Berkembar", "home.pill.bungalow": "Banglo",
     "hero.f2.v": "Pegangan bebas", "hero.f2.k": "milikan",
     "hero.f3.v": "19",            "hero.f3.k": "rumah",
     "hero.f4.v": "5 minit",       "hero.f4.k": "ke Tech Park",
@@ -404,7 +455,6 @@ const I18N = {
     "h.semid.pitch": "Dapur, ruang tamu dan ruang makan konsep terbuka yang luas, dengan siling tinggi dan kaca dari lantai ke siling ke taman. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 726,000",
-    "h.semid.price.s": "Lot Bumi · standard dari RM 632,917",
     "h.semid.s1.k": "Keluasan binaan", "h.semid.s1.v": "2,006", "h.semid.s1.u": "kp",
     "h.semid.s2.k": "Saiz tanah", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 kp",
     "h.semid.s3.k": "Bilik tidur", "h.semid.s3.v": "4",
@@ -416,9 +466,7 @@ const I18N = {
     "h.bungalow.tag": "3 unit · Banglo",
     "h.bungalow.name": "Banglo",
     "h.bungalow.pitch": "Rumah terbesar di taman ini, cukup ruang untuk tiga generasi. Bilik tidur dan bilik air di tingkat bawah bermakna ibu bapa atau tetamu tidak perlu naik tangga, selebihnya di tingkat atas.",
-    "h.bungalow.price.l": "Bermula",
     "h.bungalow.price.v": "Harga atas permintaan",
-    "h.bungalow.price.s": "Bukan-Bumi · Bumi dari RM 920,263",
     "h.bungalow.s1.k": "Keluasan binaan", "h.bungalow.s1.v": "2,642", "h.bungalow.s1.u": "kp",
     "h.bungalow.s2.k": "Saiz tanah", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 kp",
     "h.bungalow.s3.k": "Bilik tidur", "h.bungalow.s3.v": "5",
@@ -428,8 +476,11 @@ const I18N = {
     "h.bungalow.ph": "Render · Banglo Luaran",
 
     "pricing.eyebrow": "Harga",
-    "pricing.title": "Julat harga. Diceritakan dengan jelas.",
+    "pricing.title": "Harga yang jujur.",
     "pricing.lede": "Dua jenis rumah pegangan bebas, kedua-duanya menghadap taman pusat.",
+    "pricing.lede.sd": "Berkembar: 16 rumah pegangan bebas menghadap taman pusat.",
+    "pricing.lede.bg": "Banglo: 3 rumah pegangan bebas menghadap taman pusat. Harga atas permintaan.",
+    "pricing.frame.bg": "Ini terma pra-pelancaran. Harga banglo diberikan atas permintaan, selagi senarai masih terbuka sebelum pelancaran umum.",
     "pricing.frame": "Ini harga pra-pelancaran. Dari RM 726k untuk rumah pegangan bebas yang menghadap kehijauannya sendiri, selagi senarai masih terbuka sebelum pelancaran umum.",
     "pricing.cta.title": "Mahukan senarai harga lot-demi-lot?",
     "pricing.cta.body": "Hubungi pasukan jualan kami di WhatsApp, kami hantar senarai terkini dengan status ketersediaan & lot Bumi pada hari yang sama.",
@@ -519,37 +570,37 @@ const I18N = {
     "step5.b": "Pembinaan 24 bulan, CCC dikeluarkan, tempoh liabiliti kecacatan bermula. Pindah masuk.",
     "step5.when": "S4 2028 · anggaran",
     "bertam.eyebrow": "Mengapa Bertam, sekarang",
-    "bertam.title": "Detik tenang tanah besar.",
-    "bertam.lede": "Bertam terletak di tengah koridor teknologi utara: beberapa minit dari Penang Technology Park, jarak pemanduan singkat ke Kulim Hi-Tech Park dan Sungai Petani. Dengan RM 13 bilion industri mendarat di sekelilingnya, pertumbuhan di sini bukan pertaruhan, ia sudah bermula.",
-    "bertam.thesis": "Anda membeli <span class=\"accent\">tanah</span> dalam sebuah bandar<br>yang negara, buat seketika,<br>telah memilih untuk memacu.",
-    "bertam.s1u": "Kilang bateri litium, Fasa 1 beroperasi 2025, 5 minit dari sini",
-    "bertam.s2u": "Pembuatan separa konduktor & jitu, di sebelah",
-    "bertam.s3u": "Kilang SiC 200mm terbesar dunia, Fasa 1 beroperasi",
-    "bertam.s4k": "Pertumbuhan modal, 5 tahun",
-    "bertam.s4u": "Median rumah berkembar/banglo Bertam · data awam NAPIC",
-    "bertam.s5u": "Pelaburan pembuatan negeri, naik 29% berbanding 2024",
-    "bertam.s6u": "Daripada projek diluluskan Pulau Pinang 2024",
-    "bertam.close": "Memiliki di sini sekarang bermakna alamat pegangan bebas pada harga tanah besar pra-pelancaran, dikunci sebelum pelancaran umum, dalam bandar yang segalanya ini sedang dibina mengelilinginya.",
+    "bertam.title": "Bertam sedang membesar.",
+    "bertam.lede": "Penang Technology Park kira-kira lima minit dari sini. Kulim Hi-Tech Park dan Sungai Petani pun dekat sahaja. Kilang-kilang baharu sudah beroperasi, dan pekerjanya perlukan rumah berdekatan.",
+    "bertam.thesis": "Rumah pegangan bebas,<br>lima minit dari<br><span class=\"accent\">peluang kerja baharu</span>.",
+    "bertam.s1u": "Kilang pemisah bateri, beroperasi sejak Jun 2025, kira-kira 6 minit dari sini",
+    "bertam.s2u": "Pembuatan elektronik, bateri dan kejuruteraan jitu, dilancarkan 2023",
+    "bertam.s3u": "Pembesaran bakal menjadi kilang cip SiC 200mm terbesar dunia, fasa 1 dibuka sejak 2024",
+    "bertam.s4k": "Setia Fontaines",
+    "bertam.s4u": "Taman perindustrian baharu di Bertam, pecah tanah Jun 2026",
+    "bertam.s5u": "Pelaburan pembuatan diluluskan, naik 29% berbanding 2024",
+    "bertam.s6u": "Dijangka daripada projek diluluskan Pulau Pinang 2025",
+    "bertam.close": "Daftar sekarang untuk mengunci harga pra-pelancaran rumah pegangan bebas.",
     "cat0.l": "Bandar",
-    "cat0.h": "Bertam membina bandar hariannya.",
-    "cat0.b": "Tiga dekad pertumbuhan mantap: mal, hospital, universiti dan belasan sekolah. Kejiranan lengkap yang tenang di tanah besar terbina dahulu.",
-    "cat1.l": "Bermula",
-    "cat1.h": "Penang Technology Park mendarat di Bertam.",
-    "cat1.b": "700 ekar tanah industri teraju kerajaan bersebelahan Bertam Indah yang matang. Fasa tenang.",
-    "cat2.l": "Pemangkin",
-    "cat2.h": "INV New Energy melabur RM 6.4 bilion.",
-    "cat2.b": "Antara pelaburan bateri litium terbesar ASEAN. Pecah tanah selesai, beroperasi dari 2027.",
+    "cat0.h": "Bertam menjadi bandar yang lengkap.",
+    "cat0.b": "Pusat beli-belah, dua hospital, kampus USM dan UiTM serta lebih sedozen sekolah. Keperluan harian sudah tersedia.",
+    "cat1.l": "Taman teknologi",
+    "cat1.h": "Penang Technology Park dibuka di Bertam.",
+    "cat1.b": "880 ekar tanah industri bersebelahan Bertam Indah. Pada tahun yang sama, INV melabur RM 6.4 bilion untuk kilang pemisah bateri di dalamnya.",
+    "cat2.l": "Beroperasi",
+    "cat2.h": "Kilang pertama INV dibuka.",
+    "cat2.b": "Fasa 1 bermula Jun 2025. Operasi penuh disasarkan pada 2027.",
     "cat2.tag": "Disahkan",
     "cat3.l": "Sekarang",
-    "cat3.h": "Bertam mencapai titik perubahannya.",
-    "cat3.b": "Industri bernilai berbilion mendarat sementara harga tanah masih harga tanah besar. Panthera dibuka untuk pendaftaran.",
+    "cat3.h": "Panthera dibuka untuk pendaftaran.",
+    "cat3.b": "Setia Fontaines memulakan taman perindustrian 509 ekar, dan harga tanah di sini masih jauh lebih rendah daripada di pulau.",
     "cat3.tag": "Pra-pelancaran",
-    "cat4.l": "Penambat",
-    "cat4.h": "Kilang INV pada kapasiti penuh. Tech Park dipenuhi penyewa.",
-    "cat4.b": "Fasa 1 beroperasi sejak 2025; output penuh menyusul. Permintaan sewa daripada jurutera dan profesional meningkat.",
-    "cat5.l": "Penyerahan",
-    "cat5.h": "Bandar terus berkembang.",
-    "cat5.b": "Anda pindah masuk ketika Bertam matang, dengan township Setia Fontaines bangkit di sebelah dan lebih banyak jalan, pekerjaan serta kemudahan bakal menyusul.",
+    "cat4.l": "Seterusnya",
+    "cat4.h": "INV menyasarkan operasi penuh.",
+    "cat4.b": "Lebih ramai bekerja beberapa minit dari sini, dan lebih ramai mencari rumah berdekatan.",
+    "cat5.l": "Kunci rumah",
+    "cat5.h": "Anda berpindah masuk.",
+    "cat5.b": "Bertam terus berkembang di sekeliling anda.",
     "reg.eyebrow": "Daftar minat anda",
     "reg.title": "Jadilah yang pertama.",
     "reg.lede": "Daftar dan kami akan WhatsApp anda senarai harga penuh, pelan lantai dan brosur, serta pilihan lot terdahulu sebelum pelancaran umum. Pilih rumah yang menghadap kehijauan selagi kesemua sembilan belas masih ada. Tiada deposit, tiada obligasi.",
@@ -578,7 +629,7 @@ const I18N = {
     "reg.contact.fin.n": "Mana-mana bank utama",
     "reg.contact.fin.b": "Hak milik pegangan bebas, jadi boleh dibiayai seperti rumah biasa. Kami bantu permohonan, terma bergantung pada profil anda.",
 
-    "footer.tag": "Pembangunan kecil yang teliti di Bertam, Pulau Pinang.",
+    "footer.tag": "Pembangunan butik yang dirancang dengan teliti di Bertam, Pulau Pinang.",
     "footer.h.explore": "Layari",
     "footer.h.legal": "Undang-undang",
     "footer.h.contact": "Hubungi",
@@ -643,7 +694,75 @@ const I18N = {
     "specs.c3.b": "Bumbung curam yang mengalirkan hujan lebat, bukaan terlindung dengan pengudaraan silang, dan saliran kejuruteraan di sekeliling setiap lot.",
     "specs.c4.h": "Jadual penuh",
     "specs.c4.t": "Diterbitkan bersama SPA.",
-    "specs.c4.b": "Bahan, jenama dan kemasan sedang dimuktamadkan. Pembeli berdaftar menerima jadual lengkap terlebih dahulu, dan Perjanjian Jual Beli yang dimeterai ialah versi yang mengikat."
+    "specs.c4.b": "Bahan, jenama dan kemasan sedang dimuktamadkan. Pembeli berdaftar menerima jadual lengkap terlebih dahulu, dan Perjanjian Jual Beli yang dimeterai ialah versi yang mengikat.",
+    // Keys added Nov 2026 (all-languages pass): the 3D app (hx.*), pricing cards, calculator,
+    // map controls, aria-label / alt text, dock and stat labels
+    "nav.menu": "Menu laman",
+    "hx.optin": "Lihat kediaman dalam 3D",
+    "hx.optin.note": "kira-kira 1.6 MB",
+    "hx.loading": "Memuatkan kediaman",
+    "hx.stage": "Paparan 3D kediaman",
+    "hx.stage.role": "Paparan 3D kediaman",
+    "hx.l1": "16 rumah berkembar dan 3 banglo.",
+    "hx.l2": "Taman permainan kanak-kanak di taman pusat.",
+    "hx.l3": "Tatal ke bawah, kemudian jelajah dalam mana-mana rumah.",
+    "hx.l3app": "Seret untuk melihat sekeliling, kemudian jelajah dalam mana-mana rumah.",
+    "hx.pins": "Tempat dalam kediaman",
+    "hx.pin.semid": "Berkembar",
+    "hx.pin.bungalow": "Banglo",
+    "hx.pin.features": "Ciri-ciri tapak",
+    "hx.pin.location": "Lokasi",
+    "hx.next": "Seterusnya",
+    "hx.prev": "Sebelumnya",
+    "hx.sound": "Bunyi suasana desa",
+    "hx.walk": "Jelajah dalam rumah",
+    "hx.walk.sd": "Jelajah dalam rumah Berkembar →",
+    "hx.walk.bg": "Jelajah dalam Banglo →",
+    "hx.close": "Tutup",
+    "hx.tod": "Waktu",
+    "hx.tod.day": "Siang",
+    "hx.tod.golden": "Senja",
+    "hx.tod.night": "Malam",
+    "hx.choose": "Pilih rumah",
+    "hx.tour": "Lawatan maya 3D",
+    "hx.back": "Kembali ke kediaman",
+    "hx.prep": "Menyediakan bilik",
+    "hx.other.semid": "Jelajah rumah Berkembar",
+    "hx.other.bungalow": "Jelajah Banglo",
+    "hx.loc.back": "Kembali ke kediaman 3D",
+    "hx.gallery": "Galeri",
+    "prc.sd.tag": "Berkembar", "prc.sd.units": "16 unit", "prc.sd.h": "Berkembar",
+    "prc.sd.foot": "Binaan 2,006 ft² · tanah 210–318 m² · 4 bilik tidur · 4 bilik air",
+    "prc.bg.tag": "Banglo", "prc.bg.units": "3 unit", "prc.bg.h": "Banglo",
+    "prc.bg.foot": "Binaan 2,642 ft² · tanah 356–493 m² · 5 bilik tidur · 5 bilik air",
+    "calc.preset.sd": "Berkembar · RM 726k",
+    "calc.price": "Harga hartanah", "calc.down": "Wang pendahuluan", "calc.down.aria": "Peratus wang pendahuluan",
+    "calc.years": "Tempoh pinjaman", "calc.years.u": "tahun", "calc.years.aria": "Tempoh pinjaman dalam tahun",
+    "calc.rate": "Kadar faedah", "calc.rate.u": "% setahun",
+    "calc.monthly": "Anggaran ansuran bulanan", "calc.per": "sebulan · prinsipal + faedah",
+    "calc.principal": "Prinsipal", "calc.interest": "Faedah",
+    "calc.loan": "Jumlah pinjaman", "calc.totint": "Jumlah faedah", "calc.tottot": "Jumlah bayaran balik",
+    "calc.note": "Anggaran sahaja · tidak termasuk MRTA dan kos guaman · tertakluk kepada penilaian bank",
+    "calc.pre.eyebrow": "Langkah seterusnya", "calc.pre.title": "Dapatkan pra-kelulusan pinjaman melalui WhatsApp",
+    "calc.pre.sub": "Kami akan hantar angka anda kepada mana-mana bank utama dan maklumkan anggaran kelulusan pada hari yang sama.",
+    "map.t.streets": "Peta", "map.t.satellite": "Satelit", "map.t.terrain": "Rupa bumi",
+    "map.f.all": "Semua", "map.f.daily": "Harian", "map.f.schools": "Sekolah", "map.f.lifestyle": "Riadah & Gaya Hidup", "map.f.connect": "Perhubungan", "map.f.future": "Pekerjaan & Industri",
+    "map.note": "Ditanda di lokasi tapak sebenar. Seret, zum, atau zum dengan dua jari di telefon. Ketik mana-mana pin bernombor untuk butiran. Guna cip penapis untuk memaparkan perkara yang penting bagi anda, atau ketik satu baris dalam senarai di bawah untuk terus ke kemudahan itu di peta.",
+    "loc.em.walk": "boleh berjalan kaki", "loc.em.across": "di seberang jalan", "loc.em.gp": "(klinik am)", "loc.em.amdi": "(institut perubatan / pergigian)",
+    "u.min": "minit", "pop.drive": "memandu", "pop.walk": "berjalan kaki",
+    "aria.lang": "Bahasa", "aria.primary": "Navigasi utama", "aria.glance": "Sekilas pandang", "aria.hometype": "Jenis rumah", "aria.why": "Kenapa daftar sekarang", "aria.wa": "WhatsApp jualan", "aria.filter": "Tapis kemudahan",
+    "alt.hero": "Pandangan udara Panthera Bertam pada waktu senja: 19 rumah mengelilingi taman pusat yang dikongsi, bersama kejiranan di sekitarnya. Paparan 3D, gambaran artis",
+    "alt.sd.hero": "Rumah berkembar di Panthera Bertam pada waktu senja, gambaran artis",
+    "alt.sd.wc.front": "Lukisan cat air rumah berkembar, pasangan hadapan, gambaran artis",
+    "alt.sd.wc.left": "Lukisan cat air rumah berkembar, perspektif kiri", "alt.sd.wc.right": "Lukisan cat air rumah berkembar, perspektif kanan",
+    "alt.sd.gf": "Pelan tingkat bawah rumah berkembar", "alt.sd.ff": "Pelan tingkat atas rumah berkembar",
+    "alt.bg.hero": "Banglo Panthera Bertam, pandangan hadapan dan laluan masuk kereta, gambaran artis",
+    "alt.bg.wc.front": "Lukisan cat air banglo, fasad hadapan, gambaran artis",
+    "alt.bg.wc.left": "Lukisan cat air banglo, perspektif kiri", "alt.bg.wc.right": "Lukisan cat air banglo, perspektif kanan",
+    "alt.bg.gf": "Pelan tingkat bawah banglo", "alt.bg.ff": "Pelan tingkat atas banglo",
+    "a11y.skip": "Langkau ke kandungan", "topbar.sales": "Jualan · +60 17-598 1858",
+    "dock.estate": "Kediaman", "dock.homes": "Rumah", "dock.site": "Tapak", "dock.location": "Lokasi", "dock.register": "Daftar ↗",
+    "bertam.s1k": "INV New Material", "bertam.s2k": "Penang Tech Park", "bertam.s3k": "Infineon · Kulim", "bertam.s5k": "Pulau Pinang, 2025", "bertam.s6k": "Pekerjaan baharu"
   },
 
   zh: {
@@ -651,14 +770,18 @@ const I18N = {
     "nav.homes":  "房屋",
     "nav.site":   "总平面",
     "nav.location": "位置",
+    "nav.pricing": "价格",
+    "nav.faq": "常见问题",
     "nav.register": "登记意向",
     "nav.cta": "登记意向",
 
-    "hero.eyebrow": "预发布 · 北赖 Bertam · 推窗即见自家绿地",
-    "hero.h1.a": "每一户",
-    "hero.h1.b": "都向绿意敞开。",
-    "hero.lede": "十九户永久地契住宅,围绕一片逾 700 平方米的共享绿地。宽大的玻璃推拉门,让客厅和饭厅直通自家露台。Bertam 一个安静、私密的角落。",
+    "hero.eyebrow": "预发布 · 槟城 Bertam · 推窗即见自家绿地",
+    "hero.h1.a": "仅此 19 间永久地契住宅，",
+    "hero.h1.b": "全部面向公园。",
+    "hero.lede": "位于槟城 Bertam 的 16 间半独立式与 3 间独立式洋房。每间都面向逾 700 平方米的共享绿地，距槟城科技园仅五分钟车程。",
     "hero.f1.v": "RM 726k",  "hero.f1.k": "起",
+    "hero.f1b.v": "价格", "hero.f1b.k": "面议",
+    "home.pill.label": "选择房型", "home.pill.semid": "半独立式", "home.pill.bungalow": "独立式",
     "hero.f2.v": "永久地契",  "hero.f2.k": "产权",
     "hero.f3.v": "19",       "hero.f3.k": "户",
     "hero.f4.v": "5 分钟",    "hero.f4.k": "至科技园",
@@ -669,91 +792,91 @@ const I18N = {
     "hero.siteplan.toggle": "总平面图概览",
     "hero.cta.primary": "登记您的意向",
     "hero.cta.wa": "WhatsApp 销售",
-    "hero.legend": "俯视示意图, 实际平面图见下方",
+    "hero.legend": "俯视示意图，实际平面图见下方",
 
     "idea.eyebrow": "理念",
     "idea.title": "项目概览",
-    "idea.quote.a": "房屋,",
+    "idea.quote.a": "房屋，",
     "idea.quote.b": "面向公园。",
     "idea.quote.tail": " 用心设计的社区。",
     "idea.p1.h": "01 · 庭院式布局",
     "idea.p1.t": "每户均面向中央绿地。",
-    "idea.p1.b": "十九户围绕逾 700 平方米的共享绿地,每家出门走几步就到。",
+    "idea.p1.b": "十九户围绕逾 700 平方米的共享绿地，每家出门走几步就到。",
     "idea.p2.h": "02 · 合适的尺度",
-    "idea.p2.t": "宽敞而不浪费:2,006 至 2,642 平方英尺。",
-    "idea.p2.b": "半独立式 2,006 平方英尺,独立式 2,642。为生活而设,不为炫耀。",
+    "idea.p2.t": "宽敞而不浪费：2,006 至 2,642 平方英尺。",
+    "idea.p2.b": "半独立式 2,006 平方英尺，独立式 2,642。为生活而设，不为炫耀。",
     "idea.p3.h": "03 · 熟悉的好地段",
-    "idea.p3.t": "科技工作 5 分钟,市镇 15 分钟内。",
-    "idea.p3.b": "半导体与电池产业,五分钟车程即达。学校、商场、医院,十五分钟内到达。",
+    "idea.p3.t": "科技工作 5 分钟，市镇 15 分钟内。",
+    "idea.p3.b": "半导体与电池产业，五分钟车程即达。学校、商场、医院，十五分钟内到达。",
 
     "glance.eyebrow": "一目了然",
     "glance.title": "您所购买的一切。",
-    "glance.lede": "不只是一栋房子。这是一个永久地契的门牌, 落在一座正静静崛起的市镇, 而您在它仍然宁静、仍能称之为家的时候入手。",
+    "glance.lede": "不只是一栋房子。这是一个永久地契的门牌，落在一座正静静崛起的市镇，而您在它仍然宁静、仍能称之为家的时候入手。",
     "g1.k": "面向绿地", "g1.v": "100%",  "g1.u": "每户都向共享公园敞开",
     "g2.k": "私密社区",        "g2.v": "仅 19 户",     "g2.u": "3 独立 · 16 半独立",
     "g3.k": "起价",        "g3.v": "RM 726k","g3.u": "2026 预发布 · 提早登记",
-    "g5.k": "中央绿地",     "g5.v": "700+",    "g5.u": "m²", "g5.s": "永久共享开放空间, 永不建房",
+    "g5.k": "中央绿地",     "g5.v": "700+",    "g5.u": "m²", "g5.s": "永久共享开放空间，永不建房",
 
     "site.eyebrow": "总平面",
     "site.title": "地段。",
-    "site.lede": "2 英亩永久地契土地,坐落北赖,房屋以静谧的内环方式围绕中央开放空间布置, 这种尺度的布局,在威省鲜有所见。",
-    "site.cap.l": "图纸, 拟议发展计划",
+    "site.lede": "2 英亩永久地契土地，坐落 Bertam，房屋以静谧的内环方式围绕中央开放空间布置，这种尺度的布局，在威省鲜有所见。",
+    "site.cap.l": "图纸，拟议发展计划",
     "site.cap.r": "Lot 24480 · 7,939.59 m² · 1.962 英亩",
     "site.aerial.l": "艺术家示意图 · 由北面俯瞰",
     "site.aerial.r": "19 户住宅 · 逾 700 m² 中央绿地 · 298 m² 蓄水池",
     "site.note1.h": "中央绿地",
     "site.note1.t": "逾 700 m² 的共享开放空间。",
-    "site.note1.b": "地段中央的永久公共绿地,永不开发。",
+    "site.note1.b": "地段中央的永久公共绿地，永不开发。",
     "site.note2.h": "内部环道",
-    "site.note2.t": "40 英尺宽的进出道路,双入口通往园区。",
-    "site.note2.b": "每户都面向公园,无过境车辆。",
+    "site.note2.t": "40 英尺宽的进出道路，双入口通往园区。",
+    "site.note2.b": "每户都面向公园，无过境车辆。",
     "site.note3.h": "永久地契",
     "site.note3.t": "个别地契。",
-    "site.note3.b": "没有 99 年租约。土地完全属于您,每户一份地契。",
+    "site.note3.b": "没有 99 年租约。土地完全属于您，每户一份地契。",
     "site.note4.h": "无水患区",
-    "site.note4.t": "工程排水,保持干爽。",
-    "site.note4.b": "蓄水池与四周排水沟,大雨时道路照样可用。",
+    "site.note4.t": "工程排水，保持干爽。",
+    "site.note4.b": "蓄水池与四周排水沟，大雨时道路照样可用。",
 
     "homes.eyebrow": "房屋",
-    "homes.title": "两种家,一片绿。",
-    "homes.lede": "皆为双层,永久地契,现代热带风格。选择最适合您家庭的一款。",
+    "homes.title": "两种家，一片绿。",
+    "homes.lede": "皆为双层，永久地契，现代热带风格。选择最适合您家庭的一款。",
     "homes.street.cap": "街景立面 · 全部 19 间 · 右滑 →",
     "homes.street.note": "街景实物渲染图即将推出",
 
     "h.semid.tag": "16 单位 · 半独立式",
     "h.semid.name": "半独立式",
-    "h.semid.pitch": "开放式厨房、客厅与餐厅连成一片,楼底挑高,落地玻璃直通花园。楼上三间睡房,楼下一间。",
+    "h.semid.pitch": "开放式厨房、客厅与餐厅连成一片，楼底挑高，落地玻璃直通花园。楼上三间睡房，楼下一间。",
     "h.semid.price.l": "起价",
     "h.semid.price.v": "RM 726,000",
-    "h.semid.price.s": "土著保留地 · 一般起价 RM 632,917",
     "h.semid.s1.k": "建筑面积", "h.semid.s1.v": "2,006", "h.semid.s1.u": "平方英尺",
     "h.semid.s2.k": "土地面积", "h.semid.s2.v": "210–318 m²", "h.semid.s2.u": "2,260–3,423 平方英尺",
     "h.semid.s3.k": "卧室", "h.semid.s3.v": "4",
     "h.semid.s4.k": "浴室", "h.semid.s4.v": "4",
     "h.semid.s5.k": "净高", "h.semid.s5.v": "2.85–3.5 米",
     "h.semid.s6.k": "地契", "h.semid.s6.v": "永久",
-    "h.semid.ph": "效果图, 半独立式街景",
+    "h.semid.ph": "效果图，半独立式街景",
 
     "h.bungalow.tag": "3 单位 · 独立式洋房",
     "h.bungalow.name": "独立式",
-    "h.bungalow.pitch": "本项目最大的住宅,足以容纳三代同堂。楼下设有睡房和浴室,长辈或访客无需上下楼梯,其余在楼上。",
-    "h.bungalow.price.l": "起价",
+    "h.bungalow.pitch": "本项目最大的住宅，足以容纳三代同堂。楼下设有睡房和浴室，长辈或访客无需上下楼梯，其余在楼上。",
     "h.bungalow.price.v": "价格面议",
-    "h.bungalow.price.s": "非土著 · 土著保留 RM 920,263 起",
     "h.bungalow.s1.k": "建筑面积", "h.bungalow.s1.v": "2,642", "h.bungalow.s1.u": "平方英尺",
     "h.bungalow.s2.k": "土地面积", "h.bungalow.s2.v": "356–493 m²", "h.bungalow.s2.u": "3,832–5,308 平方英尺",
     "h.bungalow.s3.k": "卧室", "h.bungalow.s3.v": "5",
     "h.bungalow.s4.k": "浴室", "h.bungalow.s4.v": "5",
     "h.bungalow.s5.k": "净高", "h.bungalow.s5.v": "2.85–3.5 米",
     "h.bungalow.s6.k": "地契", "h.bungalow.s6.v": "永久",
-    "h.bungalow.ph": "效果图, 独立式外观",
+    "h.bungalow.ph": "效果图，独立式外观",
 
     "pricing.eyebrow": "价格",
-    "pricing.title": "区间定价,坦诚相告。",
-    "pricing.lede": "两种永久地契户型,皆面向中央花园。",
-    "pricing.frame": "这是预发布价格。永久地契、面向自家绿地的家,RM 726k 起,趁名单在公开发布前仍然开放。",
+    "pricing.title": "坦诚定价。",
+    "pricing.lede": "两种永久地契户型，皆面向中央花园。",
+    "pricing.lede.sd": "半独立式：16 间永久地契住宅，面向中央花园。",
+    "pricing.lede.bg": "独立式：3 间永久地契住宅，面向中央花园。价格面议。",
+    "pricing.frame.bg": "这是预发布条款。独立式价格面议，趁名单在公开发布前仍然开放。",
+    "pricing.frame": "这是预发布价格。永久地契、面向自家绿地的家，RM 726k 起，趁名单在公开发布前仍然开放。",
     "pricing.cta.title": "需要完整逐栋价目表?",
-    "pricing.cta.body": "WhatsApp 联系销售,我们当天发送实时价目表、库存与土著保留地信息。",
+    "pricing.cta.body": "WhatsApp 联系销售，我们当天发送实时价目表、库存与土著保留地信息。",
     "pricing.cta.btn": "WhatsApp 销售 →",
     "pricing.h.lot": "地号",
     "pricing.h.type": "类型",
@@ -761,16 +884,16 @@ const I18N = {
     "pricing.h.build": "建筑",
     "pricing.h.status": "类别",
     "pricing.h.price": "净价",
-    "pricing.leg.bumi": "土著保留地, 已计入 5% 折扣",
+    "pricing.leg.bumi": "土著保留地，已计入 5% 折扣",
     "pricing.leg.note": "所有价格以 SPA 为准 · E. & O.E.",
     "calc.eyebrow": "负担能力",
-    "calc.title": "拥有一间,需要多少。",
-    "calc.lede": "拖动滑块,每月数字即时更新。仅供参考,最终批核由银行决定。",
+    "calc.title": "拥有一间，需要多少。",
+    "calc.lede": "拖动滑块，每月数字即时更新。仅供参考，最终批核由银行决定。",
 
     "loc.eyebrow": "位置",
     "loc.title": "您身处何方。",
-    "loc.human": "学校就在马路对面,surau 步行几分钟即达,上班的科技园距家门仅六分钟车程。",
-    "loc.lede": "就在北赖路旁,距大道交汇口十分钟。学校、商场、医院、清真寺,皆在一刻钟车程内。",
+    "loc.human": "学校就在马路对面，surau 步行几分钟即达，上班的科技园距家门仅六分钟车程。",
+    "loc.lede": "就在 Bertam 路旁，距大道交汇口十分钟。学校、商场、医院、清真寺，皆在一刻钟车程内。",
     "loc.open": "在 Google Maps 中打开 ↗",
     "loc.g1.h": "日常生活",
     "loc.g2.h": "学校与教育",
@@ -781,20 +904,20 @@ const I18N = {
 
     "phil.eyebrow": "设计理念",
     "phil.title": "我们懂得什么适合这里。",
-    "phil.lede": "四个决定,源自为这片土地而设计,而非为宣传册而设计。",
-    "phil.q1": "如果您住过槟城,就知道一般的住宅区,前门往往对着邻居的后门。",
-    "phil.a1": "我们不是。十九栋家全部面向中央共享绿地。任何一间厨房的窗户,都看得见草坪上的孩子。",
-    "phil.q2": "经历过季候风的人都知道, 这里的雨不是落下, 是砸下。",
-    "phil.a2": "这就是为何屋顶采用斜面陶瓦。水在不到一分钟内顺着坡面流尽,五年之后也不必担心漏水。",
-    "phil.q3": "两百单位的发展案卖的是单位, 不是邻里。一走进去, 您就能感受到差别。",
+    "phil.lede": "四个决定，源自为这片土地而设计，而非为宣传册而设计。",
+    "phil.q1": "如果您住过槟城，就知道一般的住宅区，前门往往对着邻居的后门。",
+    "phil.a1": "我们不是。十九栋家全部面向中央共享绿地。任何一间厨房的窗户，都看得见草坪上的孩子。",
+    "phil.q2": "经历过季候风的人都知道，这里的雨不是落下，是砸下。",
+    "phil.a2": "这就是为何屋顶采用斜面陶瓦。水在不到一分钟内顺着坡面流尽，五年之后也不必担心漏水。",
+    "phil.q3": "两百单位的发展案卖的是单位，不是邻里。一走进去，您就能感受到差别。",
     "phil.a3": "十九栋是刻意做小。小到您能凭车认出邻居。",
-    "phil.q4": "这里适合的设计, 是过去一百年来一直适合的设计。",
-    "phil.a4": "白墙、陶瓦、斜屋顶。能扛得住雨和阳光的形式,不是为了像杂志封面。",
+    "phil.q4": "这里适合的设计，是过去一百年来一直适合的设计。",
+    "phil.a4": "白墙、陶瓦、斜屋顶。能扛得住雨和阳光的形式，不是为了像杂志封面。",
 
     "faq.eyebrow": "直接解答",
     "faq.title": "买家常问。",
     "faq.aside.h": "没找到答案?",
-    "faq.aside.b": "销售团队周一至周六 9am–6pm 在 WhatsApp,多数问题一小时内回复。",
+    "faq.aside.b": "销售团队周一至周六 9am–6pm 在 WhatsApp，多数问题一小时内回复。",
     "faq.aside.cta": "WhatsApp 提问 →",
     "faq.q1": "地契是永久还是租赁?",
     "faq.q2": "外国人可以购买吗?",
@@ -806,22 +929,22 @@ const I18N = {
     "faq.q8": "日后可以扩建或改装吗?",
     "faq.q9": "你们协助银行贷款吗?",
     "faq.q10": "如果我还没准备好购买呢?",
-    "faq.a1": "永久地契。土地为 Lot 24480,交屋时发出个别地契。没有 99 年期限。",
-    "faq.a2": "对岸门槛为每单位 RM 180 万,因此仅独立式单位可能符合(须州政府批准)。半独立式不符合。详情请询销售。",
-    "faq.a3": "六个单位为土著保留,享 5% 折扣,只能转让予土著业主。其余十三个不受限制。",
-    "faq.a4": "预计 2028 年第四季,自签署 SPA 起 24 个月。日期载于 SPA 并附 LAD 条款,逾期将获赔偿。",
-    "faq.a5": "价格所含项目的完整清单正在敲定中,将随买卖合约一并公布。已登记买家将率先收到。",
-    "faq.a6": "可以,按价目表先到先得。角头单位(04 与 19)有溢价;独立式单位(01–03)按地段面积定价。",
-    "faq.a7": "业主委员会自交屋起维护绿地、道路、排水与水池,每户每月约 RM 180。非封闭式;布局本身阻挡过境车辆。",
-    "faq.a8": "可以,在批准范围内。车廊封闭与后厨扩建已预先批准;影响外观的改动须经业委会与 MPSP 批准。交屋时提供指南。",
-    "faq.a9": "可以。这是永久地契住宅,任何大型银行皆可融资,我们的团队会协助办理申请。批准与条款视您的个人状况而定。",
-    "faq.a10": "也请先登记。完全免费,无需订金、绝无义务,并为您锁定今天的预发布价格,以及您心仪地段的优先选择权,待您准备好时再决定。",
+    "faq.a1": "永久地契。土地为 Lot 24480，交屋时发出个别地契。没有 99 年期限。",
+    "faq.a2": "威省 (槟城本土) 有地住宅的外国人门槛为每单位 RM 180 万，因此仅独立式单位可能符合 (须州政府批准)。半独立式不符合。详情请询销售。",
+    "faq.a3": "六个单位为土著保留，享 5% 折扣，只能转让予土著业主。其余十三个不受限制。",
+    "faq.a4": "预计 2028 年第四季，自签署 SPA 起 24 个月。日期载于 SPA 并附 LAD 条款，逾期将获赔偿。",
+    "faq.a5": "价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到。",
+    "faq.a6": "可以，按价目表先到先得。角头单位(04 与 19)有溢价；独立式单位(01–03)按地段面积定价。",
+    "faq.a7": "业主委员会自交屋起维护绿地、道路、排水与水池，每户每月约 RM 180。非封闭式；布局本身阻挡过境车辆。",
+    "faq.a8": "可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MPSP 批准。交屋时提供指南。",
+    "faq.a9": "可以。这是永久地契住宅，任何大型银行皆可融资，我们的团队会协助办理申请。批准与条款视您的个人状况而定。",
+    "faq.a10": "也请先登记。完全免费，无需订金、绝无义务，并为您锁定今天的预发布价格，以及您心仪地段的优先选择权，待您准备好时再决定。",
     "journey.eyebrow": "购买流程",
-    "journey.title": "从登记到收钥,五个步骤。",
-    "journey.lede": "没有压力,没有意外。每一步都有清楚的费用与时间。",
+    "journey.title": "从登记到收钥，五个步骤。",
+    "journey.lede": "没有压力，没有意外。每一步都有清楚的费用与时间。",
     "step1.h": "登记",
     "step1.t": "留下您的资料。",
-    "step1.b": "宣传册、完整价目表与平面图,24 小时内发送。",
+    "step1.b": "宣传册、完整价目表与平面图，24 小时内发送。",
     "step1.when": "免费 · 当天",
     "step2.h": "实地预览",
     "step2.t": "走访现场。",
@@ -833,47 +956,47 @@ const I18N = {
     "step3.when": "RM 5,000 · 可退还",
     "step4.h": "SPA 与贷款",
     "step4.t": "签署文件。",
-    "step4.b": "签署买卖合约,支付 10% 首期。我们协助您申请贷款。",
+    "step4.b": "签署买卖合约，支付 10% 首期。我们协助您申请贷款。",
     "step4.when": "订后 14 天",
     "step5.h": "交屋",
     "step5.t": "领取钥匙。",
-    "step5.b": "24 个月建造,签发 CCC,缺陷保固期开始。入住。",
+    "step5.b": "24 个月建造，签发 CCC，缺陷保固期开始。入住。",
     "step5.when": "2028 第四季 · 预计",
-    "bertam.eyebrow": "为何选北赖,趁现在",
-    "bertam.title": "对岸的宁静时刻。",
-    "bertam.lede": "北赖正处于北马科技走廊的中心:距槟城科技园数分钟,到居林高科技园与双溪大年皆是短程车距。RM 130 亿产业正落户周边,这里的增长不是赌注,而是已然展开。",
-    "bertam.thesis": "您买下的是一座市镇里的<span class=\"accent\">土地</span>,<br>而国家此刻<br>选择倾力发展它。",
-    "bertam.s1u": "锂电池厂,第一期 2025 已投产,距此 5 分钟",
-    "bertam.s2u": "半导体与精密制造,近在咫尺",
-    "bertam.s3u": "全球最大 200mm 碳化硅晶圆厂,第一期已投产",
-    "bertam.s4k": "五年资本增长",
-    "bertam.s4u": "北赖有地住宅中位数 · NAPIC 公开数据",
-    "bertam.s5u": "全州制造业投资,按年增长 29%",
-    "bertam.s6u": "来自槟城 2024 年获批项目",
-    "bertam.close": "现在置业,即在公开发布之前,以预发布的对岸价格锁定一个永久地契地址,就在这一切拔地而起的市镇之中。",
+    "bertam.eyebrow": "为何选 Bertam，趁现在",
+    "bertam.title": "Bertam 正在成长。",
+    "bertam.lede": "槟城科技园约五分钟车程，居林高科技园与双溪大年也不远。新工厂已经投产，在那里工作的人需要住在附近。",
+    "bertam.thesis": "一间永久地契的家，<br>离<span class=\"accent\">新的工作机会</span><br>只有五分钟。",
+    "bertam.s1u": "电池隔膜厂，2025 年 6 月起投产，距此约 6 分钟",
+    "bertam.s2u": "电子、电池与精密制造，2023 年启动",
+    "bertam.s3u": "扩建后将成为全球最大的 200mm 碳化硅晶圆厂，第一期 2024 年启用",
+    "bertam.s4k": "Setia Fontaines",
+    "bertam.s4u": "Bertam 新工业园，2026 年 6 月动土",
+    "bertam.s5u": "获批制造业投资，较 2024 年增长 29%",
+    "bertam.s6u": "槟城 2025 年获批项目预计创造的职位",
+    "bertam.close": "现在登记，就能锁定永久地契住宅的预发布价格。",
     "cat0.l": "成镇",
-    "cat0.h": "Bertam 先建起了生活小镇。",
-    "cat0.b": "三十年稳步生长:商场、医院、大学与十余所学校。对岸这片宁静而完整的社区,早已成形。",
-    "cat1.l": "起步",
-    "cat1.h": "槟城科技园落户北赖。",
-    "cat1.b": "700 英亩政府主导的工业用地,毗邻成熟的 Bertam Indah。宁静期。",
-    "cat2.l": "催化",
-    "cat2.h": "INV New Energy 承诺投资 RM 64 亿。",
-    "cat2.b": "东盟最大的锂电池投资之一。已动土,2027 投产。",
+    "cat0.h": "Bertam 已是一个完整的小镇。",
+    "cat0.b": "商场、两间医院、USM 与 UiTM 校区，还有十多所学校。日常所需一应俱全。",
+    "cat1.l": "科技园",
+    "cat1.h": "槟城科技园在 Bertam 启动。",
+    "cat1.b": "880 英亩工业用地，毗邻 Bertam Indah。同年，INV 承诺在园内投资 RM 64 亿兴建电池隔膜厂。",
+    "cat2.l": "投产",
+    "cat2.h": "INV 第一座工厂启用。",
+    "cat2.b": "第一期于 2025 年 6 月投产，计划 2027 年全面运营。",
     "cat2.tag": "已确认",
     "cat3.l": "现在",
-    "cat3.h": "Bertam 迎来转折点。",
-    "cat3.b": "数十亿产业陆续落地,而地价仍是对岸水平。Panthera 开放登记。",
+    "cat3.h": "Panthera 开放登记。",
+    "cat3.b": "Setia Fontaines 动土兴建 509 英亩工业园，而这里的地价仍远低于槟岛。",
     "cat3.tag": "预发布",
-    "cat4.l": "落定",
-    "cat4.h": "INV 满产。科技园租户填满。",
-    "cat4.b": "第一期自 2025 年已运转,满产随后到来。工程师与专业人士的租赁需求持续上升。",
+    "cat4.l": "下一步",
+    "cat4.h": "INV 目标全面运营。",
+    "cat4.b": "更多人在几分钟车程外上班，也有更多人在附近找房子。",
     "cat5.l": "交屋",
-    "cat5.h": "市镇持续生长。",
-    "cat5.b": "您在 Bertam 走向成熟之际入住,毗邻的 Setia Fontaines 新镇崛起,更多道路、就业与配套仍在路上。",
+    "cat5.h": "您搬进新家。",
+    "cat5.b": "Bertam 在您身边继续发展。",
     "reg.eyebrow": "登记您的意向",
     "reg.title": "抢占先机。",
-    "reg.lede": "登记后,我们会通过 WhatsApp 发送完整价目表、平面图与宣传册,并让您在公开发布前优先选购地段。趁十九户尚在,选下那间推窗见绿的家。无需订金,绝无义务。",
+    "reg.lede": "登记后，我们会通过 WhatsApp 发送完整价目表、平面图与宣传册，并让您在公开发布前优先选购地段。趁十九户尚在，选下那间推窗见绿的家。无需订金，绝无义务。",
     "trust.1": "仅 19 户",
     "trust.2": "永久地契",
     "trust.3": "6 个土著保留单位 · 减 5%",
@@ -884,22 +1007,22 @@ const I18N = {
     "reg.f.email": "电邮",
     "reg.f.interest": "感兴趣的户型",
     "reg.f.message": "给销售团队的备注(可选)",
-    "reg.opt.both": "两者皆可, 请告知可选单位",
+    "reg.opt.both": "两者皆可，请告知可选单位",
     "reg.opt.semid": "半独立式(16 单位)",
     "reg.opt.bungalow": "独立式洋房(3 单位)",
     "reg.submit": "通过 WhatsApp 发送",
     "reg.submit.alt": "或发送电邮",
-    "reg.contact.wa.h": "更快捷, 立即对话",
+    "reg.contact.wa.h": "更快捷，立即对话",
     "reg.contact.wa.n": "+60 17-598 1858",
     "reg.contact.wa.cta": "打开 WhatsApp ↗",
     "reg.contact.dev.h": "发展商",
     "reg.contact.dev.n": "Panthera Development Sdn. Bhd.",
-    "reg.contact.dev.b": "销售咨询 周一至周六,上午 9 时至下午 6 时。",
+    "reg.contact.dev.b": "销售咨询 周一至周六，上午 9 时至下午 6 时。",
     "reg.contact.fin.h": "贷款协助",
     "reg.contact.fin.n": "任何大型银行",
-    "reg.contact.fin.b": "永久地契,如一般住宅般可融资。我们协助办理申请,条款视个人状况而定。",
+    "reg.contact.fin.b": "永久地契，如一般住宅般可融资。我们协助办理申请，条款视个人状况而定。",
 
-    "footer.tag": "位于槟城北赖的一个精心规划的小型住宅项目。",
+    "footer.tag": "位于槟城 Bertam 的一个精品、用心规划的住宅项目。",
     "footer.h.explore": "浏览",
     "footer.h.legal": "法律",
     "footer.h.contact": "联系",
@@ -910,20 +1033,20 @@ const I18N = {
 
     "arch.eyebrow": "设计手记",
     "arch.title": "为气候而设计。",
-    "arch.lede": "现代热带,而非进口。一切只为槟城真实的生活方式。",
+    "arch.lede": "现代热带，而非进口。一切只为槟城真实的生活方式。",
     "arch.feature.cap": "为雨季而建",
     "arch.n1.t": "陶土瓦人字屋顶。",
-    "arch.n1.b": "雨水迅速排走。高挑通风的二楼,比平顶凉爽得多。",
+    "arch.n1.b": "雨水迅速排走。高挑通风的二楼，比平顶凉爽得多。",
     "arch.n2.t": "贯穿二楼的阳台。",
-    "arch.n2.b": "真正的阳台,放得下两把椅子和一杯咖啡,也为楼下车廊遮雨。",
-    "arch.n3.t": "深车廊,宽阔雨棚。",
-    "arch.n3.b": "两车有盖。地台延伸出车廊,卸货也不会淋雨。",
+    "arch.n2.b": "真正的阳台，放得下两把椅子和一杯咖啡，也为楼下车廊遮雨。",
+    "arch.n3.t": "深车廊，宽阔雨棚。",
+    "arch.n3.b": "两车有盖。地台延伸出车廊，卸货也不会淋雨。",
     "arch.n4.t": "一层高窗。",
-    "arch.n4.b": "后侧落地玻璃。客厅是一整间明亮空间,空气自然穿堂而过。",
+    "arch.n4.b": "后侧落地玻璃。客厅是一整间明亮空间，空气自然穿堂而过。",
     "arch.n5.t": "远离边界。",
-    "arch.n5.b": "真正的花园,不是围墙贴围墙。种鸡蛋花、种青柠,让孩子奔跑。",
+    "arch.n5.b": "真正的花园，不是围墙贴围墙。种鸡蛋花、种青柠，让孩子奔跑。",
     "arch.n6.t": "白墙红瓦，槟城调色。",
-    "arch.n6.b": "石灰白墙,红陶屋顶。耐看、清凉,静静的槟城。",
+    "arch.n6.b": "石灰白墙，红陶屋顶。耐看、清凉，静静的槟城。",
 
     "sketches.eyebrow": "水彩写生",
     "sketches.title": "屋宇真正的<br>感觉。",
@@ -940,7 +1063,7 @@ const I18N = {
 
     "plans.eyebrow": "平面图",
     "plans.title": "走进家内。",
-    "plans.lede": "完整家具布置的平面图,两种户型上下两层,按比例绘制。下方翻阅,或下载完整 PDF。",
+    "plans.lede": "完整家具布置的平面图，两种户型上下两层，按比例绘制。下方翻阅，或下载完整 PDF。",
     "plans.open": "打开平面图 (PDF)",
     "plans.download": "下载 PDF",
     "plans.note": "4 页 · 含家具 · 独立 + 半独立 · 一楼 + 二楼",
@@ -954,46 +1077,131 @@ const I18N = {
     "specs.title": "设计方向。",
     "specs.lede": "装修规格表正与顾问团队敲定中。以下是我们的设计方向。已登记的买家将率先收到完整规格表。",
     "specs.c1.h": "设计语言",
-    "specs.c1.t": "现代热带,沉静而筑。",
-    "specs.c1.b": "斜面陶瓦屋顶、明亮的墙面与木质点缀。效果图中所见的语言,就是我们施工的语言。",
+    "specs.c1.t": "现代热带，沉静而筑。",
+    "specs.c1.b": "斜面陶瓦屋顶、明亮的墙面与木质点缀。效果图中所见的语言，就是我们施工的语言。",
     "specs.c2.h": "采光与通透",
     "specs.c2.t": "玻璃面向绿地。",
-    "specs.c2.b": "落地玻璃与全幅推拉门面向中央公园,把日光与绿意引入起居空间。",
+    "specs.c2.b": "落地玻璃与全幅推拉门面向中央公园，把日光与绿意引入起居空间。",
     "specs.c3.h": "为气候而建",
     "specs.c3.t": "以雨季为先。",
-    "specs.c3.b": "陡峭的屋顶迅速排走豪雨,遮阳开口配合对流通风,每个地段四周均设工程排水。",
+    "specs.c3.b": "陡峭的屋顶迅速排走豪雨，遮阳开口配合对流通风，每个地段四周均设工程排水。",
     "specs.c4.h": "完整规格表",
     "specs.c4.t": "随买卖合约公布。",
-    "specs.c4.b": "材料、品牌与装修正与顾问团队敲定中。已登记买家将率先收到完整规格表,最终以签署的买卖合约为准。"
+    "specs.c4.b": "材料、品牌与装修正与顾问团队敲定中。已登记买家将率先收到完整规格表，最终以签署的买卖合约为准。",
+    // Keys added Nov 2026 (all-languages pass): the 3D app (hx.*), pricing cards, calculator,
+    // map controls, aria-label / alt text, dock and stat labels
+    "nav.menu": "网站菜单",
+    "hx.optin": "以 3D 浏览整个项目",
+    "hx.optin.note": "约 1.6 MB",
+    "hx.loading": "正在载入项目",
+    "hx.stage": "项目 3D 视图",
+    "hx.stage.role": "项目 3D 视图",
+    "hx.l1": "16 间半独立式与 3 间独立式洋房。",
+    "hx.l2": "中央绿地设有儿童游乐场。",
+    "hx.l3": "继续向下滚动，然后走进任一户型参观。",
+    "hx.l3app": "拖动即可环视四周，然后走进任一户型参观。",
+    "hx.pins": "项目内地点",
+    "hx.pin.semid": "半独立式",
+    "hx.pin.bungalow": "独立式",
+    "hx.pin.features": "园区特色",
+    "hx.pin.location": "位置",
+    "hx.next": "下一个",
+    "hx.prev": "上一个",
+    "hx.sound": "乡间环境音",
+    "hx.walk": "入内参观",
+    "hx.walk.sd": "入内参观半独立式 →",
+    "hx.walk.bg": "入内参观独立式 →",
+    "hx.close": "关闭",
+    "hx.tod": "时段",
+    "hx.tod.day": "白天",
+    "hx.tod.golden": "黄昏",
+    "hx.tod.night": "夜晚",
+    "hx.choose": "选择户型",
+    "hx.tour": "3D 实景漫游",
+    "hx.back": "返回项目",
+    "hx.prep": "正在准备房间",
+    "hx.other.semid": "参观半独立式",
+    "hx.other.bungalow": "参观独立式",
+    "hx.loc.back": "返回 3D 项目",
+    "hx.gallery": "图库",
+    "prc.sd.tag": "半独立式", "prc.sd.units": "16 间", "prc.sd.h": "半独立式",
+    "prc.sd.foot": "建筑面积 2,006 ft² · 土地 210–318 m² · 4 卧 · 4 浴",
+    "prc.bg.tag": "独立式洋房", "prc.bg.units": "3 间", "prc.bg.h": "独立式",
+    "prc.bg.foot": "建筑面积 2,642 ft² · 土地 356–493 m² · 5 卧 · 5 浴",
+    "calc.preset.sd": "半独立式 · RM 726k",
+    "calc.price": "房产价格", "calc.down": "首付", "calc.down.aria": "首付比例",
+    "calc.years": "贷款年限", "calc.years.u": "年", "calc.years.aria": "贷款年限（年）",
+    "calc.rate": "利率", "calc.rate.u": "% 年利率",
+    "calc.monthly": "预估月供", "calc.per": "每月 · 本金 + 利息",
+    "calc.principal": "本金", "calc.interest": "利息",
+    "calc.loan": "贷款额", "calc.totint": "总利息", "calc.tottot": "总还款额",
+    "calc.note": "仅供参考 · 不含 MRTA 与律师费 · 以银行审核为准",
+    "calc.pre.eyebrow": "下一步", "calc.pre.title": "通过 WhatsApp 申请贷款预批",
+    "calc.pre.sub": "我们会把您的数据转交任何一家主要银行，并在当天回复初步批核结果。",
+    "map.t.streets": "地图", "map.t.satellite": "卫星", "map.t.terrain": "地形",
+    "map.f.all": "全部", "map.f.daily": "日常", "map.f.schools": "学校", "map.f.lifestyle": "休闲与生活", "map.f.connect": "交通", "map.f.future": "就业与产业",
+    "map.note": "已标注于项目确切位置。可拖动、缩放，手机上可用双指缩放。点击任一编号标记查看详情。使用筛选标签只显示您关心的类别，或点击下方列表中的任一行，地图即飞至该设施。",
+    "loc.em.walk": "步行可达", "loc.em.across": "就在马路对面", "loc.em.gp": "（普通科诊所）", "loc.em.amdi": "（医学 / 牙科研究院）",
+    "u.min": "分钟", "pop.drive": "车程", "pop.walk": "步行",
+    "aria.lang": "语言", "aria.primary": "主导航", "aria.glance": "概览", "aria.hometype": "房型", "aria.why": "为何现在登记", "aria.wa": "WhatsApp 销售", "aria.filter": "筛选周边设施",
+    "alt.hero": "黄昏时分的 Panthera Bertam 鸟瞰图：19 户围绕共享中央绿地，周边社区一并呈现。3D 渲染图，艺术家构想",
+    "alt.sd.hero": "黄昏时分的 Panthera Bertam 半独立式住宅，艺术家构想",
+    "alt.sd.wc.front": "半独立式水彩画，正面双拼，艺术家构想",
+    "alt.sd.wc.left": "半独立式水彩画，左侧透视", "alt.sd.wc.right": "半独立式水彩画，右侧透视",
+    "alt.sd.gf": "半独立式一楼平面图", "alt.sd.ff": "半独立式二楼平面图",
+    "alt.bg.hero": "Panthera Bertam 独立式洋房，正立面与车道，艺术家构想",
+    "alt.bg.wc.front": "独立式水彩画，正立面，艺术家构想",
+    "alt.bg.wc.left": "独立式水彩画，左侧透视", "alt.bg.wc.right": "独立式水彩画，右侧透视",
+    "alt.bg.gf": "独立式一楼平面图", "alt.bg.ff": "独立式二楼平面图",
+    "a11y.skip": "跳至主要内容", "topbar.sales": "销售 · +60 17-598 1858",
+    "dock.estate": "项目", "dock.homes": "房屋", "dock.site": "总平面", "dock.location": "位置", "dock.register": "登记 ↗",
+    "bertam.s1k": "INV New Material", "bertam.s2k": "槟城科技园", "bertam.s3k": "英飞凌 · 居林", "bertam.s5k": "槟城，2025", "bertam.s6k": "新增就业"
   }
 };
 
 /* ── i18n engine ─────────────────────────────── */
 const LS_KEY = "panthera.lang";
-let currentLang = localStorage.getItem(LS_KEY) || "en";
+// Storage can throw (blocked site data, some in-app or sandboxed browsers): fall back to EN
+// instead of stopping the whole script (translations, form, map, calculator).
+let currentLang = "en";
+try { currentLang = localStorage.getItem(LS_KEY) || "en"; } catch (e) {}
 
 function applyI18n(lang){
   const dict = I18N[lang] || I18N.en;
   document.documentElement.lang = lang === "zh" ? "zh-CN" : (lang === "bm" ? "ms" : "en");
   // Toggle a body class so .zh-only elements only render in Mandarin
   document.body.classList.toggle("lang-zh", lang === "zh");
+  // Only write when the text differs: on an EN load the HTML already holds it, and each
+  // write would dirty style and layout right as the hero renders.
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
-    if (dict[key] != null) el.textContent = dict[key];
+    if (dict[key] != null && el.textContent !== dict[key]) el.textContent = dict[key];
   });
   document.querySelectorAll("[data-i18n-html]").forEach(el => {
     const key = el.getAttribute("data-i18n-html");
-    if (dict[key] != null) el.innerHTML = dict[key];
+    if (dict[key] != null && el.innerHTML !== dict[key]) el.innerHTML = dict[key];
   });
   document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
     const key = el.getAttribute("data-i18n-placeholder");
     if (dict[key] != null) el.setAttribute("placeholder", dict[key]);
   });
+  // aria-label and alt text follow the language too (screen readers, image search)
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => {
+    const key = el.getAttribute("data-i18n-aria");
+    if (dict[key] != null) el.setAttribute("aria-label", dict[key]);
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach(el => {
+    const key = el.getAttribute("data-i18n-alt");
+    if (dict[key] != null) el.setAttribute("alt", dict[key]);
+  });
   document.querySelectorAll(".lang button").forEach(b => {
     b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
   });
   currentLang = lang;
-  localStorage.setItem(LS_KEY, lang);
+  try { localStorage.setItem(LS_KEY, lang); } catch (e) {}
+  // The <head> hides the hero copy (html.i18n-wait) for a saved BM / ZH visitor until
+  // the text is in their language, so it never flashes English first.
+  document.documentElement.classList.remove("i18n-wait");
   // Refresh any Leaflet popups so cached HTML picks up new language strings
   if (typeof leafletMarkers === "object" && leafletMarkers){
     Object.entries(leafletMarkers).forEach(([id, marker]) => {
@@ -1047,10 +1255,11 @@ function initPlanLightbox(){
 
   function show(n){
     current = ((n - 1 + max) % max) + 1;
-    lbImg.src = `assets/floor-plan-p${current}.jpg?v=${current===1?6:4}`;
-    lbImg.alt = `Floor Plan ${current}`;
+    // Same URL as the plan cards' WebP, so the open is served from cache (the JPEG was 311-361 KB more)
+    lbImg.src = `assets/floor-plan-p${current}.webp?v=7`;
     lbNum.textContent = String(current).padStart(2, '0');
     lbLbl.textContent = (PLAN_LABELS[currentLang] || PLAN_LABELS.en)[current];
+    lbImg.alt = lbLbl.textContent + ' · Panthera Bertam';
   }
   function open(n){
     show(n);
@@ -1083,7 +1292,14 @@ document.addEventListener("DOMContentLoaded", () => {
   applyI18n(currentLang);
 
   document.querySelectorAll(".lang button").forEach(b => {
-    b.addEventListener("click", () => applyI18n(b.dataset.lang));
+    // one button (owner, Nov 2026): it shows the current language, and a tap moves on to the next (EN, BM, 中)
+    b.addEventListener("click", () => {
+      const all = [...b.parentNode.querySelectorAll("button[data-lang]")];
+      const next = b.getAttribute("aria-pressed") === "true" ? all[(all.indexOf(b) + 1) % all.length] : b;
+      applyI18n(next.dataset.lang);
+      const shown = b.parentNode.querySelector('button[aria-pressed="true"]');
+      if (shown && document.activeElement === b) shown.focus();
+    });
   });
 
   const form = document.getElementById("reg-form");
@@ -1137,27 +1353,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initPrelaunchBar();
   initLoadCascade();
   initScrollProgress();
-  initTopoParallax();
+  // initTopoParallax() removed (Nov 2026): it wrote --scroll-parallax on <html> every scroll
+  // event and nothing reads that property, so each scroll re-styled the page for nothing.
 });
-
-/* ── Topo contour parallax ──────────────────────
-   Fed by the body::before background-position-y
-   binding. As the user scrolls, the contour lines
-   shift very slowly (12% of the scroll distance,
-   in the opposite direction) so they feel like a
-   deeper, slower layer behind the prose. Honors
-   prefers-reduced-motion via a CSS media query. */
-function initTopoParallax(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const root = document.documentElement;
-  function apply(){
-    // Negative direction creates the "deeper layer" feel: as the page scrolls
-    // down, contours slowly rise, a subtle ~12% counter-parallax.
-    root.style.setProperty('--scroll-parallax', `${(-window.scrollY * 0.12).toFixed(1)}px`);
-  }
-  window.addEventListener('scroll', apply, { passive: true });
-  apply();
-}
 
 /* ── First-load cascade ────────────────────────
    Flip `loaded` once fonts + hero image have settled,
@@ -1186,7 +1384,7 @@ function initLoadCascade(){
 }
 
 /* ── Scroll progress indicator ──────────────────
-   Drives --sp on .scroll-progress reflecting how
+   Drives --spk on .scroll-progress reflecting how
    far down the page the reader is. */
 function initScrollProgress(){
   const el = document.querySelector('.scroll-progress');
@@ -1196,7 +1394,8 @@ function initScrollProgress(){
     raf = 0;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
-    el.style.setProperty('--sp', pct.toFixed(2) + '%');
+    // --spk is a 0-1 scale factor: the bar grows with transform: scaleX (compositor only)
+    el.style.setProperty('--spk', (pct / 100).toFixed(4));
   }
   function onScroll(){ if (!raf) raf = requestAnimationFrame(update); }
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -1210,8 +1409,10 @@ function initScrollProgress(){
 function initPrelaunchBar(){
   const bar = document.getElementById('prelaunch-bar');
   if (!bar) return;
-  // Honor dismissal stored for the current session.
-  if (sessionStorage.getItem('panthera.prelaunch.dismissed') === '1') return;
+  // Honor dismissal stored for the current session (storage may be blocked: then just show it).
+  let wasDismissed = false;
+  try { wasDismissed = sessionStorage.getItem('panthera.prelaunch.dismissed') === '1'; } catch (e) {}
+  if (wasDismissed) return;
 
   // Unhide so the slide-in transition can play.
   bar.hidden = false;
@@ -1223,6 +1424,12 @@ function initPrelaunchBar(){
   // `has-prelaunch-bar` (which would push the topbar down 42px and leave a
   // transparent gap above it while the bar itself stays hidden).
   let dismissed = false;
+  // The bar's height is measured once when it first shows and again after a resize or the
+  // load event (text wrap), not on every scroll event: reading offsetHeight there forced a
+  // synchronous layout per event. The class toggles stay per event on purpose, because
+  // hero-boot.js (3D runway) removes them while the runway is on screen.
+  const rootStyle = document.documentElement.style;
+  let barH = 0;
   function update(){
     if (dismissed) return;
     const past = window.scrollY > heroBottom;
@@ -1230,17 +1437,27 @@ function initPrelaunchBar(){
     document.body.classList.toggle('has-prelaunch-bar', past);
     // The topbar offset must match the bar's real height (it varies with
     // viewport width); a hard-coded offset leaves the two bars overlapping.
-    document.documentElement.style.setProperty('--prelaunch-h', past ? bar.offsetHeight + 'px' : '0px');
+    if (past && !barH) barH = bar.offsetHeight;
+    const h = past ? barH + 'px' : '0px';
+    if (rootStyle.getPropertyValue('--prelaunch-h') !== h) rootStyle.setProperty('--prelaunch-h', h);
   }
   update();
   window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
+  window.addEventListener('resize', () => { barH = 0; update(); });
+  // After load (fonts in), re-measure a bar that is showing; a hidden one (display:none)
+  // is measured the next time it shows. No class toggles here, so hero-boot's hold stands.
+  window.addEventListener('load', () => {
+    barH = 0;
+    if (dismissed || !bar.classList.contains('is-visible')) return;
+    barH = bar.offsetHeight;
+    rootStyle.setProperty('--prelaunch-h', barH + 'px');
+  });
 
   bar.querySelector('.prelaunch-close')?.addEventListener('click', () => {
     dismissed = true;
     bar.classList.remove('is-visible');
     document.body.classList.remove('has-prelaunch-bar');
-    sessionStorage.setItem('panthera.prelaunch.dismissed', '1');
+    try { sessionStorage.setItem('panthera.prelaunch.dismissed', '1'); } catch (e) {}
     // After the slide-out, hide entirely so it doesn't intercept clicks.
     setTimeout(() => { bar.hidden = true; }, 400);
   });
@@ -1334,10 +1551,11 @@ function initCalculator(){
 const SITE_COORD = [5.530658873884109, 100.46554921250969];
 
 const TILE_LAYERS = {
+  // Esri World Topo (Nov 2026): CARTO's free basemaps now answer every request with an "API KEY REQUIRED" tile
   streets: {
-    url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 19
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+    attribution: "Tiles &copy; Esri, sources: Esri, HERE, Garmin, USGS, OpenStreetMap contributors and the GIS user community",
+    maxZoom: 19
   },
   satellite: {
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -1375,6 +1593,8 @@ function loadLeaflet(cb){
   js.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
   js.crossOrigin = "";
   js.onload = () => { document.dispatchEvent(new Event("leaflet:ready")); cb(); };
+  // blocked or offline: say so (the 3D hero's Location move gives up instead of waiting), and let a later call try again
+  js.onerror = () => { leafletLoading = false; css.remove(); js.remove(); document.dispatchEvent(new Event("leaflet:error")); };
   document.head.appendChild(js);
 }
 
@@ -1439,7 +1659,7 @@ function initLocationMap(){
     className: "pin-site-wrap",
     html:
       '<div class="pin-site">' +
-        '<img src="assets/e-mark-square.png?v=5" alt="" aria-hidden="true" class="pin-site-img">' +
+        '<img src="assets/e-mark-square.png?v=4" alt="" aria-hidden="true" class="pin-site-img">' +
       '</div>' +
       '<div class="pin-site-label">PANTHERA <span>· BERTAM</span></div>',
     iconSize: [44, 44],
@@ -1605,8 +1825,8 @@ function setTileLayer(key){
   if (leafletTileLayer) leafletMap.removeLayer(leafletTileLayer);
   const opts = { attribution: cfg.attribution, maxZoom: cfg.maxZoom };
   if (cfg.subdomains) opts.subdomains = cfg.subdomains;
-  // detectRetina only on Carto (Esri/OpenTopo return 404 at +1 zoom).
-  if (key === 'streets') opts.detectRetina = true;
+  // detectRetina only on tiles with a retina variant ({r}); Esri/OpenTopo return 404 at +1 zoom.
+  if (cfg.url.indexOf('{r}') >= 0) opts.detectRetina = true;
   leafletTileLayer = L.tileLayer(cfg.url, opts).addTo(leafletMap);
 }
 
@@ -1752,7 +1972,7 @@ const PIN_DATA = {
   "16": { name: "Penang International Airport",    cat: "connect", catLabel: "Connectivity",   time: "45 min", dist: "30 km SW",   gmaps: "5.2971,100.2769" },
   /* Future jobs */
   "17": { name: "Penang Technology Park @ Bertam", cat: "future",  catLabel: "Jobs & Industry",    time: "6 min",  dist: "2.9 km E",   gmaps: "5.5339619,100.4924177" },
-  "18": { name: "INV Lithium Battery Plant (under construction)", cat: "future", catLabel: "Jobs & Industry", time: "6 min", dist: "≈3 km E", gmaps: "5.5360,100.4920" },
+  "18": { name: "INV Battery-Separator Plant", cat: "future", catLabel: "Jobs & Industry", time: "6 min", dist: "≈3 km E", gmaps: "5.5360,100.4920" },
   "19": { name: "Setia Fontaines Township",        cat: "future",  catLabel: "Jobs & Industry",    time: "6 min",  dist: "2.6 km SE",  gmaps: "5.5151210,100.4837305" },
   /* Walk-to amenities, right across the street */
   "20": { name: "SK Bertam Perdana (primary school)",      cat: "schools", catLabel: "Schools",    time: "2 min walk",  dist: "200 m E",   gmaps: "5.5306414,100.4681606" },
@@ -1805,11 +2025,18 @@ function initDockSpy(){
     // map lists its sections in (the groups are not in strict DOM order).
     let activeKey = null, best = -Infinity;
     sections.forEach(({key, el}) => {
+      // A home section switched off by the Semi-D / Bungalow toggle is
+      // display:none (offsetTop 0), so it must not count as "above the line".
+      if (el.hidden || !el.offsetParent) return;
       const top = el.offsetTop;
       if (top <= y && top > best) { best = top; activeKey = key; }
     });
     items.forEach(a => a.classList.toggle("active", a.dataset.dock === activeKey));
   };
-  window.addEventListener("scroll", onScroll, { passive: true });
+  // At most one layout read per frame (offsetTop of every section), not one per scroll event
+  let raf = 0;
+  window.addEventListener("scroll", () => {
+    if (!raf) raf = requestAnimationFrame(() => { raf = 0; onScroll(); });
+  }, { passive: true });
   onScroll();
 }

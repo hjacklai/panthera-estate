@@ -1,0 +1,169 @@
+{
+  "generated": "2026-11-08",
+  "source_api": "https://api.polyhaven.com",
+  "licence": "CC0 1.0 (all assets)",
+  "azimuth_convention": "three.js equirect (RGBELoader, EquirectangularReflectionMapping, no rotation): u = atan2(dir.z, dir.x)/(2*pi) + 0.5, so azimuth_deg_threejs = (u-0.5)*360 measured from +X toward +Z; dir_threejs is the unit vector to the sun/glow. If scene.backgroundRotation/environmentRotation rotates the sky by yaw r about Y, rotate dir_threejs by the same r.",
+  "sizes": {
+    "1k": "1024x512, phones",
+    "2k": "2048x1024, desktop"
+  },
+  "skies": [
+    {
+      "role": "day",
+      "name": "kloofendal_48d_partly_cloudy_puresky",
+      "title": "Kloofendal 48d Partly Cloudy (Pure Sky)",
+      "asset_id": "kloofendal_48d_partly_cloudy_puresky",
+      "source": "Poly Haven",
+      "url": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky",
+      "licence": "CC0",
+      "authors": {
+        "Greg Zaal": "Original",
+        "Jarod Guest": "Sky edits"
+      },
+      "files": {
+        "1k": "kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+        "2k": "kloofendal_48d_partly_cloudy_puresky_2k.hdr",
+        "preview": "kloofendal_48d_partly_cloudy_puresky_preview.jpg"
+      },
+      "bytes": {
+        "1k": 1435119,
+        "2k": 5451493,
+        "preview": 32674
+      },
+      "sun": {
+        "method": "brightest pixel in upper hemisphere of 2k HDR",
+        "u": 0.595,
+        "v_from_top": 0.2339,
+        "elevation_deg": 47.9,
+        "azimuth_deg_threejs": 34.2,
+        "dir_threejs": [
+          0.5546,
+          0.742,
+          0.3767
+        ],
+        "peak_luminance": 72558.8,
+        "has_sun_disc": true
+      },
+      "upper_hemisphere_mean_rgb_linear": [
+        1.084,
+        1.15,
+        1.285
+      ],
+      "whitebalance_K": 5400,
+      "evs_cap": 21,
+      "max_resolution": [
+        16384,
+        8192
+      ],
+      "notes": "Bright midday, puffy cumulus over clear blue, hard sun at ~48 deg; reads like a tropical fair-weather afternoon."
+    },
+    {
+      "role": "golden",
+      "name": "qwantani_sunset_puresky",
+      "title": "Qwantani Sunset (Pure Sky)",
+      "asset_id": "qwantani_sunset_puresky",
+      "source": "Poly Haven",
+      "url": "https://polyhaven.com/a/qwantani_sunset_puresky",
+      "licence": "CC0",
+      "authors": {
+        "Greg Zaal": "Photography",
+        "Jarod Guest": "Processing"
+      },
+      "files": {
+        "1k": "qwantani_sunset_puresky_1k.hdr",
+        "2k": "qwantani_sunset_puresky_2k.hdr",
+        "preview": "qwantani_sunset_puresky_preview.jpg"
+      },
+      "bytes": {
+        "1k": 1061624,
+        "2k": 4171959,
+        "preview": 18063
+      },
+      "sun": {
+        "method": "brightest pixel in upper hemisphere of 2k HDR",
+        "u": 0.5999,
+        "v_from_top": 0.4663,
+        "elevation_deg": 6.1,
+        "azimuth_deg_threejs": 35.9,
+        "dir_threejs": [
+          0.805,
+          0.1056,
+          0.5838
+        ],
+        "peak_luminance": 58785.18,
+        "has_sun_disc": true
+      },
+      "upper_hemisphere_mean_rgb_linear": [
+        1.48,
+        1.108,
+        1.106
+      ],
+      "whitebalance_K": 5303,
+      "evs_cap": 22,
+      "max_resolution": [
+        24576,
+        12288
+      ],
+      "notes": "Low warm sun (visible disc, ~6 deg) with warm haze band along the horizon; long golden shadows."
+    },
+    {
+      "role": "dusk",
+      "name": "qwantani_dusk_1_puresky",
+      "title": "Qwantani Dusk 1 (Pure Sky)",
+      "asset_id": "qwantani_dusk_1_puresky",
+      "source": "Poly Haven",
+      "url": "https://polyhaven.com/a/qwantani_dusk_1_puresky",
+      "licence": "CC0",
+      "authors": {
+        "Greg Zaal": "Photography",
+        "Jarod Guest": "Processing"
+      },
+      "files": {
+        "1k": "qwantani_dusk_1_puresky_1k.hdr",
+        "2k": "qwantani_dusk_1_puresky_2k.hdr",
+        "preview": "qwantani_dusk_1_puresky_preview.jpg"
+      },
+      "bytes": {
+        "1k": 952192,
+        "2k": 3858804,
+        "preview": 17288
+      },
+      "sun": {
+        "method": "brightest pixel in upper hemisphere of 2k HDR (no sun disc: this is the diffuse glow, sun is below horizon)",
+        "u": 0.5945,
+        "v_from_top": 0.3862,
+        "elevation_deg": 20.5,
+        "azimuth_deg_threejs": 34.0,
+        "dir_threejs": [
+          0.7765,
+          0.3499,
+          0.524
+        ],
+        "peak_luminance": 4.02,
+        "has_sun_disc": false
+      },
+      "upper_hemisphere_mean_rgb_linear": [
+        0.912,
+        1.113,
+        1.532
+      ],
+      "whitebalance_K": 5303,
+      "evs_cap": 12,
+      "max_resolution": [
+        24576,
+        12288
+      ],
+      "notes": "Blue hour: sun just below horizon, cool blue sky with soft glow on one side, no hard sun. Lower exposure in code for night; pair with warm interior/porch lights."
+    }
+  ],
+  "alternatives_considered": {
+    "golden": [
+      "kloppenheim_06_puresky (cumulus + warm horizon, but no hard sun disc, sun ~4.7 deg)"
+    ],
+    "dusk": [
+      "qwantani_dusk_2_puresky (warmer pink-lavender dusk, sun below horizon)",
+      "kiara_9_dusk (deep blue hour, but rocky ground and mountains in lower half)",
+      "kloppenheim_07_puresky (overcast night, grey)"
+    ]
+  }
+}

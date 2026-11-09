@@ -291,6 +291,17 @@ section{ position: relative; }
 .hero-copy.in > h1{ animation-delay: .22s; }
 .hero-copy.in > .lede{ animation-delay: .42s; }
 .hero-copy.in > .hero-cta{ animation-delay: .60s; }
+/* The same cascade starts at first paint, so the hero copy no longer shows, blinks
+   out and rises again once app.js adds .in. Adding .in later does not restart it,
+   since the animation name and delays are unchanged. */
+@media (prefers-reduced-motion: no-preference){
+  .hero-copy[data-reveal] > *{ animation: heroRise 1s cubic-bezier(.16,1,.3,1) both; }
+  .hero-copy[data-reveal] > .eyebrow{ animation-delay: .05s; }
+  .hero-copy[data-reveal] > h1{ animation-delay: .22s; }
+  .hero-copy[data-reveal] > .lede{ animation-delay: .42s; }
+  .hero-copy[data-reveal] > .hero-cta{ animation-delay: .60s; }
+  .hero--cinematic .hero-copy[data-reveal] > .hero-specs{ animation-delay: .74s; }
+}
 @keyframes heroRise {
   from { opacity: 0; transform: translateY(58px) scale(.955); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -738,7 +749,7 @@ footer{ padding-bottom: 60px; }
   display: flex; align-items: flex-end;
 }
 .hero--cinematic .hero-bg{ position: absolute; inset: 0; margin: 0; z-index: 0; }
-/* Single static establishing render — the estate aerial at golden hour. */
+/* Single static establishing render, the estate aerial at golden hour. */
 .hero--cinematic .hero-slide{
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
   opacity: 1; border-radius: 0; box-shadow: none;
@@ -795,7 +806,7 @@ footer{ padding-bottom: 60px; }
   .hero--cinematic .hero-copy{ max-width: none; }
   .hero--cinematic .hero-cap{ display: none; }
 }
-/* Full-width cinematic render band that leads a home section — shown whole, never cropped. */
+/* Full-width cinematic render band that leads a home section, shown whole, never cropped. */
 .render-band{
   margin: clamp(24px, 3.5vw, 44px) 0;
   border-radius: 14px;
@@ -806,7 +817,7 @@ footer{ padding-bottom: 60px; }
 .render-band img{
   display: block;
   width: 100%;
-  height: auto;   /* natural aspect — the whole render, no crop */
+  height: auto;   /* natural aspect: the whole render, no crop */
 }
 
 /* Home-section render: shown clean and whole (never cropped, no overlay), with
@@ -2171,7 +2182,7 @@ footer .baseline{
   padding: 7px 12px; border-radius: 999px;
   border: 1px solid var(--rule); color: var(--ink-soft);
   background: transparent; cursor: pointer;
-  transition: all .15s ease;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
 }
 .calc-preset:hover{ border-color: var(--ink); color: var(--ink); }
 .calc-preset.active{ background: var(--ink); color: var(--cream); border-color: var(--ink); }
@@ -2404,7 +2415,7 @@ footer .baseline{
   border: 1px solid var(--rule); border-radius: 999px;
   background: transparent; color: var(--ink-soft);
   cursor: pointer;
-  transition: all .15s ease;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
   display: inline-flex; align-items: center; gap: 8px;
 }
 .map-filters button .sw{
@@ -2929,8 +2940,9 @@ footer .baseline{
   position: relative;
   z-index: 1;
   white-space: nowrap;
-  font-size: 15px;
-  padding: 16px 26px;
+  font-size: 12px;            /* a normal-size button (owner, Nov 2026: "button no need so big") */
+  padding: 13px 22px;
+  justify-self: start;
   background: var(--terra-2);
   color: var(--cream);
   border: none;
@@ -2947,7 +2959,7 @@ footer .baseline{
     padding: 26px 24px;
     text-align: left;
   }
-  .prc-cta-btn{ justify-self: stretch; text-align: center; }
+  .prc-cta-btn{ justify-self: start; text-align: center; }   /* its own width, not the card's */
 }
 
 /* ─────────────────────────────────────────────
@@ -3444,9 +3456,13 @@ html.first-paint.loaded .hero-art--photo .hero-siteplan{ animation: pant-fade-up
   content: '';
   display: block;
   height: 100%;
-  width: var(--sp, 0%);
+  /* full width, scaled from the left by --spk (0-1, set in app.js): a transform runs on
+     the compositor, where animating width meant layout + paint on every scroll frame */
+  width: 100%;
+  transform: scaleX(var(--spk, 0));
+  transform-origin: 0 50%;
   background: linear-gradient(90deg, var(--terra-2) 0%, var(--terra) 50%, var(--clay) 100%);
-  transition: width .12s ease-out;
+  transition: transform .12s ease-out;
 }
 body.has-prelaunch-bar .scroll-progress{ top: 42px; }
 
@@ -3549,10 +3565,11 @@ a:focus-visible,
 .loc-livemap-meta .dot-live{
   display: inline-block; width: 7px; height: 7px; border-radius: 50%;
   background: #4ADE80; margin-right: 8px;
-  animation: livePulse 1.8s ease-in-out infinite;
+  animation: livePulseMap 1.8s ease-in-out infinite;
   vertical-align: middle;
 }
-@keyframes livePulse{
+/* Own name: as a second "livePulse" it overrode the first one for every dot on the page */
+@keyframes livePulseMap{
   0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,.6); }
   50%      { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
 }
@@ -4205,3 +4222,125 @@ body:not(.lang-zh) .zh-only-inline{ display: none; }
   /* Keep the inner-row footer columns readable on phone */
   footer .row{ gap: 28px; }
 }
+
+/* ─────────────────────────────────────────────
+   HOME TOGGLE · Semi-D | Bungalow (home-toggle.js)
+   A sticky pill in the top bar picks which house the page shows.
+   Wide screens: inline, left of the language switch.
+   Narrower: floats centred just under the top bar (moves with it,
+   including when the pre-launch bar pushes the top bar down).
+   ───────────────────────────────────────────── */
+.topbar .topbar-side.right{ gap: 12px; }
+.home-pill{
+  position: relative;
+  display: inline-flex; align-items: center;
+  padding: 3px;
+  border: 1px solid var(--rule); border-radius: 999px;
+  background: rgba(242,233,223,0.55);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+}
+.home-pill button{
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 38px; padding: 0 14px;   /* matches the language switch */
+  border-radius: 999px;
+  font: inherit; letter-spacing: inherit; text-transform: inherit;
+  color: var(--ink-soft);
+  transition: color .22s ease, background-color .22s ease;
+}
+.home-pill button:hover{ color: var(--text); }
+.home-pill button[aria-checked="true"]{ background: var(--terra-2); color: var(--cream); }
+.home-pill button:focus-visible{ outline: 2px solid var(--terra-2); outline-offset: 2px; }
+/* Sliding thumb (JS measures the active button); falls back to the
+   button background above if it never gets measured. */
+.home-pill-thumb{
+  position: absolute; top: 3px; bottom: 3px; left: 0;
+  width: var(--thumb-w, 0px);
+  transform: translateX(var(--thumb-x, 0px));
+  border-radius: 999px;
+  background: var(--terra-2);
+  box-shadow: 0 2px 8px -3px rgba(138,70,56,0.55);
+  opacity: 0;
+  transition: transform .34s cubic-bezier(.2,.8,.2,1), width .34s cubic-bezier(.2,.8,.2,1);
+}
+.home-pill.has-thumb .home-pill-thumb{ opacity: 1; }
+.home-pill.thumb-init .home-pill-thumb{ transition: none; }
+.home-pill.has-thumb button[aria-checked="true"]{ background: transparent; }
+.home-pill-sr{
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* Not enough room beside the logo and language switch: float the pill
+   centred under the top bar instead of squeezing the row. */
+@media (max-width: 1180px){
+  .topbar .home-pill{
+    position: absolute; top: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: rgba(242,233,223,0.9);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+            backdrop-filter: saturate(140%) blur(10px);
+    box-shadow: 0 8px 22px -10px rgba(28,23,20,0.38), 0 1px 2px rgba(28,23,20,0.06);
+  }
+  .home-pill button{ min-height: 32px; }
+}
+@media (max-width: 720px){
+  .topbar .home-pill{ top: calc(100% + 6px); font-size: 10px; letter-spacing: 0.1em; }
+  .home-pill button{ min-height: 30px; padding: 0 12px; }
+  /* Bungalow price chip: let a long key ("atas permintaan") wrap inside
+     the chip instead of pushing the chip row onto a third line. */
+  html[data-home="bungalow"] .hero-specs li:first-child .k{ max-width: 9em; }
+}
+
+/* The switched-off home: hidden attribute, guarded against display rules */
+[data-home-block][hidden]{ display: none !important; }
+/* One pricing card at a time: let it take the full row */
+.price-ranges.is-single{ grid-template-columns: minmax(0, 1fr); }
+
+/* Short in-place fade when switching */
+.home-fade-out{ opacity: 0 !important; transition: opacity .14s ease !important; }
+.home-fade-in{ animation: home-fade-in .24s ease both; }
+@keyframes home-fade-in{ from{ opacity: 0; } to{ opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce){
+  .home-pill-thumb, .home-pill button{ transition: none; }
+  .home-fade-out{ transition: none !important; }
+  .home-fade-in{ animation: none; }
+}
+@media print{ .home-pill{ display: none !important; } }
+/* Tucked while the hero fills the screen (home-toggle.js); translate, not transform, so the centring stays */
+.home-pill{ transition: opacity .3s ease, translate .3s ease, visibility 0s linear 0s; }
+.home-pill.is-tucked{ opacity: 0; translate: 0 -6px; visibility: hidden; pointer-events: none; transition: opacity .25s ease, translate .25s ease, visibility 0s linear .25s; }
+@media (prefers-reduced-motion: reduce){ .home-pill, .home-pill.is-tucked{ transition: none; } }
+
+/* The hero's two calls to action, a size smaller (owner, Nov 2026: "this button make smaller la") */
+.hero--cinematic .hero-cta .btn{ padding: 9px 16px; font-size: 10.5px; letter-spacing: 0.14em; gap: 8px; }
+/* Phones: a compact hero (owner, Nov 2026: "on mobile mode all buttons so big"). The two calls to action sit side
+   by side and slimmer, and the four figures share one line. */
+@media (max-width: 720px){
+  .hero-cta{ display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hero-cta .btn{ min-width: 0; padding: 10px 6px; gap: 6px; font-size: 10px; letter-spacing: 0.06em; white-space: nowrap; }
+  .hero-cta .btn .arrow{ display: none; }
+  .hero-specs{ flex-wrap: nowrap; justify-content: space-between; gap: 8px; padding-top: 14px; }
+  .hero-specs li{ padding-right: 0; margin-right: 0; border-right: 0; min-width: 0; }
+  .hero-specs .v{ font-size: 21px; white-space: nowrap; }
+  .hero-specs .k{ font-size: 8.5px; letter-spacing: 0.1em; }
+}
+/* the language switch as one button: the current language shows, a tap moves on to the next (owner, Nov 2026) */
+.lang button[aria-pressed="false"]{ display: none; }
+.lang button[aria-pressed="true"]{ min-width: 40px; justify-content: center; }
+
+/* Reduced motion: the endless status pulses stop too (the live dots, the pre-launch dot
+   and the map's site pin; several animate box-shadow, a repaint every frame) */
+@media (prefers-reduced-motion: reduce){
+  .topbar-side .dot, .hero-stamp--launch .dot, .loc-realmap-meta .dot-live,
+  .prelaunch-pulse, .loc-livemap-meta .dot-live, .pin-site{ animation: none; }
+}
+/* 3D app mode (html.hx-app): the page behind the fixed 3D screen is hidden (hero.css), so its
+   ambient wash and the contour drift of the hidden sections stop working in the background.
+   Sections borrowed into a panel (.hxa-body) keep their drift. */
+html.hx-app .ambient{ display: none; }
+html.hx-app body > .section::before{ animation-play-state: paused; }
+html.hx-app .hxa-body .section::before{ animation-play-state: running; }

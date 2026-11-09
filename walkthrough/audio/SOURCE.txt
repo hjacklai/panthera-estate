@@ -1,0 +1,7 @@
+songbirds-loop.mp3
+From "Birds" by LilMati on Freesound (small birds tweeting), https://freesound.org/people/LilMati/sounds/519120/
+Licence: Creative Commons 0 (public domain dedication). Free for commercial use, no attribution required.
+Edit: the recording is near silent between calls, so the loop layers it three times (offset 12.3 s and 29.7 s, the second
+mirrored left to right, at 0.55 and 0.35 level) for a continuous chorus with no hiss or insects; 3 s equal-power blend
+from the end into the start so it loops without a seam; high-pass 250 Hz; gentle 9 kHz low-pass; MP3 64 kbps stereo.
+(Owner, Nov 2026: more songbirds, quieter, clean, no insects.)

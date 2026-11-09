@@ -106,7 +106,10 @@ export function createApp(ctx) {
 
   // ---------- views ----------
   const goalFor = id => (id === 'homes' ? HOME_GOAL[homeNow()] : VIEWS[id]);
-  function aimHome(h) { const g = HOME_GOAL[h]; rig.setGoal(g.goal, g.lim); }
+  function aimHome(h) {   // phones: from twice as far, as the house icons do
+    const g = HOME_GOAL[h], k = tall() ? 2 : 1, goal = k > 1 ? { ...g.goal, dist: g.goal.dist * k } : g.goal;
+    rig.setGoal(goal, k > 1 ? { ...g.lim, dmax: Math.max(g.lim.dmax, goal.dist * 1.35) } : g.lim);
+  }
   // a tall phone screen shows little across: the estate view opens further back there and may pull back further still
   // (owner, Nov 2026: "in mobile view ... zoom out further")
   const tall = () => innerWidth < innerHeight * 0.9;
@@ -205,7 +208,8 @@ export function createApp(ctx) {
     green: { h: 'site.note1.h', t: 'idea.p1.t', b: 'idea.p1.b', goal: { tgt: [-26, 0, 47], az: 0.85, el: 0.72, dist: 62, fov: 40 }, lim: { cx: -26, cz: 47, R: 10, dmin: 30, dmax: 140, emin: 0.15, emax: 1.35, arc: null } },
     road: { h: 'site.note2.h', t: 'site.note2.t', goal: { tgt: [-32, 0, 30], az: 0.42, el: 0.36, dist: 52, fov: 40 }, lim: { cx: -32, cz: 30, R: 12, dmin: 25, dmax: 140, emin: 0.1, emax: 1.3, arc: null } },
     pond: { h: 'site.note4.h', t: 'site.note4.t', goal: { tgt: [-11, 0, 42], az: 0.25, el: 0.62, dist: 48, fov: 40 }, lim: { cx: -11, cz: 42, R: 8, dmin: 25, dmax: 130, emin: 0.15, emax: 1.35, arc: null } },
-    title: { h: 'site.note3.h', t: 'site.note3.t', goal: { tgt: [-44, 3, 84], az: 1.6, el: 0.5, dist: 60, fov: 40 }, lim: { cx: -44, cz: 84, R: 10, dmin: 28, dmax: 140, emin: 0.12, emax: 1.3, arc: null } },
+    // every plot on its own title: the whole estate from a helicopter (owner, Nov 2026: "should do bird eye view ... helicopter view")
+    title: { h: 'site.note3.h', t: 'site.note3.t', goal: { tgt: [-44.5, 0, 48.5], az: 0.75, el: 0.95, dist: 190, fov: 40 }, lim: { cx: -44.5, cz: 48.5, R: 20, dmin: 90, dmax: 330, emin: 0.4, emax: 1.45, arc: null } },
     // the two houses: their name, the page's one-line description and figures (read from #homes / #bungalow)
     semid: { home: 'semid', h: 'hx.pin.semid', goal: HOME_GOAL.semid.goal, lim: HOME_GOAL.semid.lim },
     bungalow: { home: 'bungalow', h: 'hx.pin.bungalow', goal: HOME_GOAL.bungalow.goal, lim: HOME_GOAL.bungalow.lim },
@@ -264,7 +268,7 @@ export function createApp(ctx) {
     cap.hidden = false; html.classList.add('hxa-cap-on');
     // phones: each feature from further back (owner, Nov 2026: "in the mobile view ... less zoomed in when going through the
     // features"): the caption takes the lower part of a tall screen, so the same distance read as a close-up
-    if (move) { const far = tall() ? 1.5 : 1, g = far > 1 ? { ...f.goal, dist: f.goal.dist * far } : f.goal;
+    if (move) { const far = tall() ? (f.home ? 2 : 1.5) : 1, g = far > 1 ? { ...f.goal, dist: f.goal.dist * far } : f.goal;   // a house further back again (owner: "too close, mobile view")
       const l = far > 1 && f.lim ? { ...f.lim, dmax: Math.max(f.lim.dmax || 0, g.dist * 1.35) } : f.lim; rig.setGoal(g, l); }
     html.classList.add('hxa-felt');   // the visitor has found the icons: they stop pulsing
     const SITE = ['green', 'road', 'pond', 'title'];   // the phones' one site-features icon stands for these four

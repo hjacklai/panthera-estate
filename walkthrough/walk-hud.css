@@ -131,3 +131,5 @@
   .pbw .intro .pbw-price{ font-size: 16px; margin-top: 8px; }
   .pbw .intro p:not(.pbw-price){ margin-top: 8px; }
 }
+/* the tour intro card lets a swipe through to the tour, like the captions on the estate (owner, Nov 2026: "same for all description") */
+.pbw .intro{ pointer-events: none; }

@@ -202,3 +202,5 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
 /* intro card without its visible heading (owner, Nov 2026: "no need this"); the h1 stays for screen readers and search */
 .intro h1{ position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .intro p{ margin-top: 10px; }
+/* the intro card lets a swipe through to the walk (owner, Nov 2026: "same for all description") */
+.intro{ pointer-events: none; }

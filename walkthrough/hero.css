@@ -919,3 +919,10 @@ html.hx-app .hero--cinematic{ background-color: #2A231E; }
 .h3d-ui .hx-osm:hover{ color: var(--cream, #F2E9DF); text-decoration: underline; }
 html.hxa-open .h3d-ui .hx-osm{ visibility: hidden; }
 @media (max-width: 760px){ .h3d-ui .hx-osm{ bottom: calc(env(safe-area-inset-bottom, 0px) + 80px); right: 8px; font-size: 9px; } }
+/* the 3D pans under its words (owner, Nov 2026: "pan touchscreen over the description wording"): a drag on a caption's
+   text and figures, or on the headline, goes to the 3D; only the buttons and links take the tap. Very short landscape
+   screens keep a scrollable caption instead. */
+html.hx-app .hxa-cap{ pointer-events: none; }
+html.hx-app .hxa-cap button, html.hx-app .hxa-cap a{ pointer-events: auto; }
+html.hx-app .hx-live .hero-inner h1, html.hx-app .hx-live .hero-inner .lede{ pointer-events: none; }
+@media (max-height: 500px){ html.hx-app .hxa-cap{ pointer-events: auto; } }

@@ -253,8 +253,8 @@ export function createApp(ctx) {
     feat = id;
     const src = document.querySelector('.hx-pin[data-id="' + id + '"] .hx-feat-ic svg');
     capIc.replaceChildren(...(src ? [src.cloneNode(true)] : []));
-    say(capH, f.h);
     const info = f.home ? houseInfo(f.home) : null;
+    say(capH, info ? null : f.h);   // a house: its name says it (owner, Nov 2026: "no need repeat twice")
     if (info) {   // the house: its name and line, its figures, Gallery and Walk inside
       capT.removeAttribute('data-i18n'); capT.textContent = info.name; capT.hidden = false;
       capB.removeAttribute('data-i18n'); capB.textContent = info.pitch; capB.hidden = !info.pitch;

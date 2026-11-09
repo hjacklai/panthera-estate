@@ -23,7 +23,7 @@
   // keep in step with versions.js THREE_URL
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '115';   // bump with any hero file change
+  var V = '116';   // bump with any hero file change
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
   // a key missing there falls back to this English.

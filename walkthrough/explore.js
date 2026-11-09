@@ -128,13 +128,13 @@ export function createTour(ctx) {
     const specs = [...sec.querySelectorAll('.specs > div')].map(d => [txt(d.querySelector('.k')), txt(d.querySelector('.v > span')) + (d.querySelector('.v > small') ? ' ' + txt(d.querySelector('.v > small')) : '')]).filter(([k, v]) => k && v);
     const pr = sec.querySelector('.product-foot .price'), price = pr ? [txt(pr.querySelector('.lbl')), txt(pr.querySelector('strong'))].filter(Boolean).join(' ') : '';
     const name = txt(sec.querySelector('.home-cover-copy .title'));
-    const eb = box.querySelector('.eyebrow'); if (eb) eb.textContent = T('hx.pin.' + home);
+    const eb = box.querySelector('.eyebrow'); if (eb) { eb.textContent = ''; eb.hidden = true; }   // the name below says it (owner: "no need repeat twice")
     box.querySelectorAll('.pbw-intro-t, .pbw-specs, .pbw-price').forEach(n => n.remove());
     const add = [];
     if (name) { const t = el('div', 'pbw-intro-t'); t.textContent = name; add.push(t); }
     if (specs.length) { const dl = el('dl', 'pbw-specs'); for (const [k, v] of specs) { const d = el('div'), dt = el('dt', 'wt-mono'), dd = el('dd'); dt.textContent = k; dd.textContent = v; d.append(dt, dd); dl.append(d); } add.push(dl); }
     if (price) { const q = el('p', 'pbw-price'); q.textContent = price; add.push(q); }
-    (eb || box.firstChild).after(...add);
+    if (eb) eb.after(...add); else box.prepend(...add);
   }
   function drop(home) {
     const w = walks[home]; if (!w) return;

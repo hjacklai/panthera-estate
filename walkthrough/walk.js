@@ -17,7 +17,7 @@ import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { buildEstate } from './estate.js?v=32';
+import { buildEstate } from './estate.js?v=33';
 import { createHD, SKIES } from './hd.js?v=7';
 import { BAKE_VER, ENTRY_P } from './versions.js?v=1';
 

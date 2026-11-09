@@ -200,7 +200,8 @@ const I18N = {
     "step5.b": "24-month build, CCC issued, defect liability period begins. Move in.",
     "step5.when": "Q4 2028 · estimated",
     "bertam.eyebrow": "Why Bertam, now",
-    "bertam.title": "Bertam is growing up.",
+    "bertam.title": "Bertam is developing.",
+    "map.twofinger": "Use two fingers to move the map",
     "bertam.lede": "Penang Technology Park is about five minutes away. Kulim Hi-Tech Park and Sungai Petani are a short drive. New factories are already running here, and the people who work in them need homes close by.",
     "bertam.thesis": "A freehold home,<br>five minutes from<br>the <span class=\"accent\">new jobs</span>.",
     "bertam.s1u": "Battery-separator plant, open since June 2025, about 6 min away",
@@ -570,7 +571,8 @@ const I18N = {
     "step5.b": "Pembinaan 24 bulan, CCC dikeluarkan, tempoh liabiliti kecacatan bermula. Pindah masuk.",
     "step5.when": "S4 2028 · anggaran",
     "bertam.eyebrow": "Mengapa Bertam, sekarang",
-    "bertam.title": "Bertam sedang membesar.",
+    "bertam.title": "Bertam sedang membangun.",
+    "map.twofinger": "Guna dua jari untuk menggerakkan peta",
     "bertam.lede": "Penang Technology Park kira-kira lima minit dari sini. Kulim Hi-Tech Park dan Sungai Petani pun dekat sahaja. Kilang-kilang baharu sudah beroperasi, dan pekerjanya perlukan rumah berdekatan.",
     "bertam.thesis": "Rumah pegangan bebas,<br>lima minit dari<br><span class=\"accent\">peluang kerja baharu</span>.",
     "bertam.s1u": "Kilang pemisah bateri, beroperasi sejak Jun 2025, kira-kira 6 minit dari sini",
@@ -963,7 +965,8 @@ const I18N = {
     "step5.b": "24 个月建造，签发 CCC，缺陷保固期开始。入住。",
     "step5.when": "2028 第四季 · 预计",
     "bertam.eyebrow": "为何选 Bertam，趁现在",
-    "bertam.title": "Bertam 正在成长。",
+    "bertam.title": "Bertam 正在发展。",
+    "map.twofinger": "请用两指移动地图",
     "bertam.lede": "槟城科技园约五分钟车程，居林高科技园与双溪大年也不远。新工厂已经投产，在那里工作的人需要住在附近。",
     "bertam.thesis": "一间永久地契的家，<br>离<span class=\"accent\">新的工作机会</span><br>只有五分钟。",
     "bertam.s1u": "电池隔膜厂，2025 年 6 月起投产，距此约 6 分钟",
@@ -1640,16 +1643,30 @@ function initLocationMap(){
     return;
   }
 
+  // Touch screens: one finger scrolls the page past the map, two fingers move and pinch it (Leaflet's pinch also pans),
+  // as embedded maps do (owner, Nov 2026: "if i scroll till the map, my finger will be scrolling in the map")
+  const touchMap = !!(window.matchMedia && matchMedia("(pointer: coarse)").matches);
   leafletMap = L.map(el, {
     center: SITE_COORD,
     zoom: 14,
     scrollWheelZoom: false,        // Ctrl+scroll to zoom, friendly on long pages
     zoomControl: true,
     attributionControl: true,
+    dragging: !touchMap,
     tap: true                      // touch support
   });
   leafletMap.on("focus", () => leafletMap.scrollWheelZoom.enable());
   leafletMap.on("blur",  () => leafletMap.scrollWheelZoom.disable());
+  if (touchMap) {   // a one-finger swipe on the map: a short hint, the page scrolls on
+    const hint = document.createElement("div"); hint.className = "map-2f-hint"; hint.setAttribute("aria-hidden", "true");
+    hint.setAttribute("data-i18n", "map.twofinger"); hint.textContent = (I18N[currentLang] || I18N.en)["map.twofinger"] || I18N.en["map.twofinger"];
+    el.appendChild(hint);
+    let hideT = 0;
+    el.addEventListener("touchmove", e => {
+      if (e.touches.length !== 1) { hint.classList.remove("on"); return; }
+      hint.classList.add("on"); clearTimeout(hideT); hideT = setTimeout(() => hint.classList.remove("on"), 1300);
+    }, { passive: true });
+  }
 
   // Initial tiles
   setTileLayer("streets");

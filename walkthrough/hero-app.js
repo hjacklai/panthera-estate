@@ -178,9 +178,8 @@ export function createApp(ctx) {
       panel.classList.add('open', 'instant'); panel.setAttribute('aria-hidden', 'false'); html.classList.add('hxa-open');
       setPanel(true, true);
       void panel.offsetWidth; panel.classList.remove('instant');
-      // the map box in view inside the panel (the section's intro comes first), so the map lands in full
-      const mb = document.getElementById('loc-leaflet');
-      if (mb) { const br = body.getBoundingClientRect(), r = mb.getBoundingClientRect(); body.scrollTop += r.top - br.top - 12; }
+      // the panel opens at its top, the section's heading and intro first (owner, Nov 2026: "it should show this first when
+      // people click location"); the map lift lands on the map box wherever it sits below them (hero-location measures it)
       history.replaceState(history.state, '', location.pathname + location.search + '#location');
     };
     if (!loc) { busy = false; show(); return; }
@@ -263,7 +262,10 @@ export function createApp(ctx) {
     cap.classList.toggle('house', !!info);
     capMore.hidden = !f.more; if (f.more) { capMore.setAttribute('data-i18n', VIEWS[f.more].title); capMore.textContent = T(VIEWS[f.more].title) + ' →'; }
     cap.hidden = false; html.classList.add('hxa-cap-on');
-    if (move) rig.setGoal(f.goal, f.lim);
+    // phones: each feature from further back (owner, Nov 2026: "in the mobile view ... less zoomed in when going through the
+    // features"): the caption takes the lower part of a tall screen, so the same distance read as a close-up
+    if (move) { const far = tall() ? 1.5 : 1, g = far > 1 ? { ...f.goal, dist: f.goal.dist * far } : f.goal;
+      const l = far > 1 && f.lim ? { ...f.lim, dmax: Math.max(f.lim.dmax || 0, g.dist * 1.35) } : f.lim; rig.setGoal(g, l); }
     html.classList.add('hxa-felt');   // the visitor has found the icons: they stop pulsing
     const SITE = ['green', 'road', 'pond', 'title'];   // the phones' one site-features icon stands for these four
     document.querySelectorAll('.hx-pin.hx-feat').forEach(b => b.classList.toggle('sel', b.dataset.id === id || (b.dataset.id === 'features' && SITE.includes(id))));

@@ -274,21 +274,32 @@ export function buildEstate(ctx) {
   put(mVerge, fill(E.road.reserve, -0.304));
   put(mAsphalt, fill(E.road.carriageway, -0.299));
   for (const b of E.road.bellmouths) put(mAsphalt, fill(b, -0.2985));
-  // the two entrance crossings over the monsoon drain: paved in the road's asphalt, with a kerb along each side so the
-  // estate road's kerb line runs through to the Persiaran (owner, Nov 2026: "make this also road color, and match it
-  // with the road kerb"); the slab's 200 mm edge still shows over the drain
-  const mCrossKerb = M({ color: 0xD9D5CC, roughness: 0.85 });
-  for (const s of E.slabs) {
-    put(mAsphalt, fill(s, -0.297)); const ring = [...s, s[0]]; put(mDrainWall, wallAt(ring, 0, -0.5, -0.297));
-    const cx = s.reduce((a, q) => a + q[0], 0) / s.length, cz = s.reduce((a, q) => a + q[1], 0) / s.length;
-    for (let i = 0; i < s.length; i++) {
-      const [ax, az] = s[i], [bx, bz] = s[(i + 1) % s.length], L = Math.hypot(bx - ax, bz - az);
-      if (L > 8) continue;   // the short sides only: the edges a car drives along, across the drain
-      const mx = (ax + bx) / 2, mz = (az + bz) / 2, d = Math.hypot(cx - mx, cz - mz) || 1, ix = (cx - mx) / d * 0.08, iz = (cz - mz) / d * 0.08;
-      // a flush kerb: a flat concrete edging level with the asphalt (owner: "can make the curb flush?")
-      const k = new THREE.BoxGeometry(L, 0.012, 0.22); k.rotateY(-Math.atan2(bz - az, bx - ax)); k.translate(mx + ix, -0.297 + 0.006, mz + iz); put(mCrossKerb, k);
+  // the two entrance crossings over the monsoon drain, in the road's asphalt (owner, Nov 2026: "make this also road color,
+  // and match it with the road kerb"), cut to the entrance's own curve (owner: "did u fix these road kurbs, to match? a nice
+  // curve"): the drawn slab is wider than the bellmouth where it crosses the drain, so its square corners stood out past the
+  // curved kerb. The crossing is now the bellmouth inside the slab, and the road kerb runs on round the curve over the drain
+  // (see the kerbs below); the slab's 200 mm edge still shows into the drain
+  const clipConvex = (subj, clip) => {   // Sutherland-Hodgman: any polygon cut by a convex one
+    const ar = clip.reduce((t, q, i) => { const r = clip[(i + 1) % clip.length]; return t + q[0] * r[1] - r[0] * q[1]; }, 0), sg = Math.sign(ar) || 1;
+    let out = subj.slice();
+    for (let i = 0; i < clip.length && out.length; i++) {
+      const A = clip[i], B = clip[(i + 1) % clip.length];
+      const inside = q => sg * ((B[0] - A[0]) * (q[1] - A[1]) - (B[1] - A[1]) * (q[0] - A[0])) >= 0;
+      const cut = (P, Q) => { const a1 = B[1] - A[1], b1 = A[0] - B[0], c1 = a1 * A[0] + b1 * A[1], a2 = Q[1] - P[1], b2 = P[0] - Q[0], c2 = a2 * P[0] + b2 * P[1], d = a1 * b2 - a2 * b1 || 1e-9;
+        return [(b2 * c1 - b1 * c2) / d, (a1 * c2 - a2 * c1) / d]; };
+      const inp = out; out = [];
+      for (let j = 0; j < inp.length; j++) { const P = inp[j], Q = inp[(j + 1) % inp.length], pi = inside(P), qi = inside(Q);
+        if (qi) { if (!pi) out.push(cut(P, Q)); out.push(Q); } else if (pi) out.push(cut(P, Q)); }
     }
-  }
+    return out;
+  };
+  const areaOf = q => Math.abs(q.reduce((t, a, i) => { const b = q[(i + 1) % q.length]; return t + a[0] * b[1] - b[0] * a[1]; }, 0)) / 2;
+  const CROSSINGS = E.slabs.map(sl => {
+    let best = null;
+    for (const bm of E.road.bellmouths || []) { const c = clipConvex(bm, sl); if (c.length > 2 && (!best || areaOf(c) > areaOf(best))) best = c; }
+    return best && areaOf(best) > 1 ? best : sl;
+  });
+  for (const c of CROSSINGS) { put(mAsphalt, fill(c, -0.297)); put(mDrainWall, wallAt([...c, c[0]], 0, -0.5, -0.297)); }
   for (const g of dashes(E.road.centre, 2.5, 1.25, 0.12, -0.292)) put(mLine, g);
   for (const d of [...E.drains, ...(E.pond ? [E.pond.inlet] : [])]) {   // precast U-drain (and the pond inlet): kerbs just proud of the verge, a shaded bed, a trickle
     put(mConc, band(d.c, -d.W / 2, -d.w / 2, -0.286)); put(mConc, band(d.c, d.w / 2, d.W / 2, -0.286));
@@ -348,7 +359,7 @@ export function buildEstate(ctx) {
   // a 1.2 m footway of grey concrete pavers, 200 x 100 in stretcher bond, stopping at the aprons and clear of the drains.
   {
     const roadPolys = [E.road.carriageway, ...(E.road.bellmouths || [])].filter(q => Array.isArray(q) && q.length > 2);
-    const others = [...roadPolys, E.persiaran.carriageway, ...E.slabs].filter(q => Array.isArray(q) && q.length > 2);
+    const others = [...roadPolys, E.persiaran.carriageway, ...CROSSINGS].filter(q => Array.isArray(q) && q.length > 2);   // the crossings now sit inside the curve: the kerb runs round it
     const canvasT = (w, h, draw, rx, ry) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'));
       const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 4; return t; };
     const kr = rng(57);   // repeatable

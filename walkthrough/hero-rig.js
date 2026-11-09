@@ -8,7 +8,7 @@
 // Orbit about a target: azimuth (any turn, or a limited arc), elevation and distance in limits, the target free to
 // move only inside a circle round the area's centre (owner, Nov 2026: "allow user to freely pan around, but of course
 // fix a centerpoint area"). Mouse: drag turns, right-drag or shift-drag moves, the wheel zooms. Touch: one finger
-// turns, two fingers move and pinch to zoom. Keys on the stage: arrows turn, + and - zoom.
+// turns, two fingers move, pinch to zoom and twist to turn. Keys on the stage: arrows turn, + and - zoom.
 // Scripted moves (setGoal) glide slowly; the visitor's own moves follow the hand closely.
 // reduced (prefers-reduced-motion): scripted moves and offsets jump straight to their goal; the visitor's own drags,
 // pinches and keys still follow the hand as usual.
@@ -90,9 +90,15 @@ export function createRig(THREE, el, { onChange = () => {}, onUser = () => {}, r
     const p = pts.get(e.pointerId); if (!p || !mode) return;
     const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY;
     if (mode === 'two' && pts.size >= 2) {
-      const [a, b] = [...pts.values()], mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, span = Math.hypot(a.x - b.x, a.y - b.y);
-      if (last) { move(mid.x - last.mid.x, mid.y - last.mid.y); if (last.span > 10 && span > 10) zoom(last.span / span); }
-      last = { mid, span };
+      const [a, b] = [...pts.values()], mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, span = Math.hypot(a.x - b.x, a.y - b.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
+      if (last) {
+        move(mid.x - last.mid.x, mid.y - last.mid.y); if (last.span > 10 && span > 10) zoom(last.span / span);
+        // two-finger twist turns the estate with the fingers, as a map does (owner, Nov 2026: "can it facilitate 2 finger
+        // rotate?"); a twist under 0.2 deg is the shake of a pinch and is ignored
+        let da = ang - last.ang; da = Math.atan2(Math.sin(da), Math.cos(da));
+        if (span > 40 && Math.abs(da) > 0.0035 && Math.abs(da) < 0.5) { goal.az += da; keep(); touched(); }
+      }
+      last = { mid, span, ang };
     } else if (mode === 'turn') turn(dx, dy);
     else if (mode === 'move') move(dx, dy);
   });

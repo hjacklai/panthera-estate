@@ -23,7 +23,7 @@
   // keep in step with versions.js THREE_URL
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '107';   // bump with any hero file change
+  var V = '110';   // bump with any hero file change
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
   // a key missing there falls back to this English.
@@ -146,7 +146,7 @@
     addLink('preconnect', 'https://cdn.jsdelivr.net', { crossorigin: '' });
     addLink('modulepreload', THREE_URL, { crossorigin: '' });
     // as hero.js imports them (keep in step with its import lines: a stale ?v= here is a second, wasted download)
-    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '9', 'hero-orbit.js': '2', 'hero-rig.js': '3', 'pack.js': '3', 'hd.js': '7', 'versions.js': '1' };
+    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '9', 'hero-orbit.js': '2', 'hero-rig.js': '4', 'pack.js': '3', 'hd.js': '7', 'versions.js': '1' };
     Object.keys(VER).forEach(function (f) { addLink('modulepreload', base + f + '?v=' + VER[f]); });
     addLink('modulepreload', ADDONS + 'utils/BufferGeometryUtils.js', { crossorigin: '' });
     addLink('stylesheet', base + 'hero.css?v=' + V);

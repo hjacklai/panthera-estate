@@ -4350,3 +4350,25 @@ body:not(.lang-zh) .zh-only-inline{ display: none; }
 html.hx-app .ambient{ display: none; }
 html.hx-app body > .section::before{ animation-play-state: paused; }
 html.hx-app .hxa-body .section::before{ animation-play-state: running; }
+
+/* map popups on phones: a size smaller all round (owner, Nov 2026: "on mobile view font can be smaller?") */
+@media (max-width: 600px){
+  .leaflet-popup-content{ margin: 10px 12px; }
+  .pop-card .cat-row{ font-size: 9px; gap: 7px; margin-bottom: 4px; letter-spacing: 0.16em; }
+  .pop-card .cat-num{ width: 18px; height: 18px; font-size: 10px; }
+  .leaflet-popup-content .pop-card .pop-h{ font-size: 15px; margin: 1px 0 6px; }
+  .pop-card .pop-meta{ font-size: 9px; gap: 10px; margin-bottom: 8px; letter-spacing: 0.12em; }
+  .pop-card .pop-go{ padding: 6px 11px; font-size: 9px; letter-spacing: 0.14em; }
+  .map-popup{ padding: 14px 16px 12px; gap: 7px; }
+  .map-popup .pop-row{ font-size: 9px; }
+  .map-popup .pop-num{ width: 19px; height: 19px; font-size: 9.5px; }
+  .map-popup .pop-name{ font-size: 17px; }
+  .map-popup .pop-meta{ font-size: 9.5px; gap: 10px; }
+  .map-popup .pop-go{ font-size: 9.5px; }
+}
+
+/* touch screens: the map moves with two fingers; a one-finger swipe shows this hint and scrolls the page on */
+.map-2f-hint{ position: absolute; inset: 0; z-index: 900; display: grid; place-items: center; padding: 16px; pointer-events: none;
+  background: rgba(28,23,20,0.42); color: var(--cream, #F2E9DF); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center;
+  opacity: 0; transition: opacity .25s ease; }
+.map-2f-hint.on{ opacity: 1; }

@@ -17,7 +17,7 @@ import { BAKE_VER } from './versions.js?v=1';
 import { buildHeroEstate } from './hero-lod.js?v=4';
 import { createTod } from './hero-tod.js?v=9';
 import { createOrbit } from './hero-orbit.js?v=2';
-import { createRig } from './hero-rig.js?v=3';
+import { createRig } from './hero-rig.js?v=4';
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -812,7 +812,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=24').then(mod => {
+      import(base + 'hero-app.js?v=26').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

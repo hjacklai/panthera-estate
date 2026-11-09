@@ -12,7 +12,7 @@ const SHEET = {   // walk.js rig(0): the plan sheet's centre (model frame) and t
 };
 const PLAN_FOV = 2.2, NEAR_FOV = 35;
 const LENIS_URL = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
-const WALK_V = '145', CSS_V = '10';
+const WALK_V = '145', CSS_V = '11';
 
 export function createTour(ctx) {
   const { THREE, renderer, canvas, camera, base, T, reduced } = ctx;
@@ -82,7 +82,7 @@ export function createTour(ctx) {
 <section class="intro" id="intro">
   <div class="eyebrow">Semi-D · 2,006 sq ft · 4 bed · 4 bath</div>
   <p>The Semi-D in 3D. Scroll to walk through every room.</p>
-  <div class="scrollcue wt-mono">Scroll</div>
+  <div class="scrollcue wt-mono"><span>Scroll</span><span class="sc-arrow" aria-hidden="true">↓</span></div>
 </section>
 <div class="caption" id="caption" aria-live="polite"><span class="num wt-mono" id="cap-num"></span><p id="cap-text"></p></div>
 <aside class="titleblock wt-mono" id="titleblock" aria-label="Drawing details">

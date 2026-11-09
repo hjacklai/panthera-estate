@@ -204,3 +204,10 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
 .intro p{ margin-top: 10px; }
 /* the intro card lets a swipe through to the walk (owner, Nov 2026: "same for all description") */
 .intro{ pointer-events: none; }
+/* the scroll cue as a terracotta pill with a bobbing arrow, easy to see (owner, Nov 2026: "show the scroll more obvious, like arrow") */
+.scrollcue{ display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 9px 16px 9px 18px; border: 0; border-radius: 999px;
+  background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; box-shadow: 0 10px 22px -12px rgba(28,23,20,0.5); }
+.scrollcue .sc-arrow{ display: inline-block; font-size: 15px; line-height: 1; letter-spacing: 0; animation: sc-bob 1.4s ease-in-out infinite; }
+@keyframes sc-bob{ 0%, 100%{ transform: translateY(-2px); } 50%{ transform: translateY(3px); } }
+@media (max-width: 760px){ .scrollcue{ margin-top: 10px; padding: 8px 14px 8px 16px; font-size: 10.5px; } }
+@media (prefers-reduced-motion: reduce){ .scrollcue .sc-arrow{ animation: none; } }

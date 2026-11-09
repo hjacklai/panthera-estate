@@ -17,7 +17,7 @@ import { BAKE_VER } from './versions.js?v=1';
 import { buildHeroEstate } from './hero-lod.js?v=4';
 import { createTod } from './hero-tod.js?v=9';
 import { createOrbit } from './hero-orbit.js?v=2';
-import { createRig } from './hero-rig.js?v=4';
+import { createRig } from './hero-rig.js?v=5';
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;

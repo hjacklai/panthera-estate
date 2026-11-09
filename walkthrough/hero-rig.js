@@ -96,7 +96,7 @@ export function createRig(THREE, el, { onChange = () => {}, onUser = () => {}, r
         // two-finger twist turns the estate with the fingers, as a map does (owner, Nov 2026: "can it facilitate 2 finger
         // rotate?"); a twist under 0.2 deg is the shake of a pinch and is ignored
         let da = ang - last.ang; da = Math.atan2(Math.sin(da), Math.cos(da));
-        if (span > 40 && Math.abs(da) > 0.0035 && Math.abs(da) < 0.5) { goal.az += da; keep(); touched(); }
+        if (span > 40 && Math.abs(da) > 0.0035 && Math.abs(da) < 0.5) { goal.az -= da; keep(); touched(); }   // minus: the estate follows the fingers (owner: it turned the other way)
       }
       last = { mid, span, ang };
     } else if (mode === 'turn') turn(dx, dy);

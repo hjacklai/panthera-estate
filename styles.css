@@ -1112,6 +1112,12 @@ footer{ padding-bottom: 60px; }
 .site-notes .note .t{ font-family: var(--serif); font-size: 22px; line-height: 1.18; }
 .site-notes .note .b{ font-size: 15px; line-height: 1.5; color: var(--ink-soft); margin-top: 6px; }
 
+/* Line icons for the idea points and site notes: thin terracotta strokes, like the drawings */
+.idea-points .p .ico{ display: block; width: 34px; height: 34px; color: var(--terra-2); margin-bottom: 14px; }
+.site-notes .note{ display: grid; grid-template-columns: 30px 1fr; column-gap: 16px; align-items: start; }
+.site-notes .note > *:not(.ico){ grid-column: 2; }
+.site-notes .note .ico{ grid-row: 1 / span 3; width: 30px; height: 30px; color: var(--terra-2); margin-top: 1px; }
+
 /* ── Streetscape band ────────────────────── */
 .streetscape{
   margin: 0 0 clamp(36px, 4vw, 56px);

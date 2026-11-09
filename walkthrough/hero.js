@@ -180,7 +180,7 @@ export async function start(o) {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, powerPreference: 'high-performance', alpha: false });
   } catch (e) { fail(e); return; }
   if (!renderer.capabilities.isWebGL2) { renderer.dispose(); fail(new Error('no WebGL2')); return; }
-  const DPR_MAX = Math.min(window.devicePixelRatio || 1, lite ? 1.25 : 2);
+  const DPR_MAX = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2);   // phones sharper (was 1.25); the slow-frame step below brings it back down when a phone can't keep up
   let dpr = DPR_MAX;
   renderer.setPixelRatio(dpr);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -223,7 +223,7 @@ export async function start(o) {
   const hemi = new THREE.HemisphereLight(0xfff4e4, 0xcbb8a2, 0.55); scene.add(hemi);
   const sun = new THREE.DirectionalLight(0xffe2bf, 2.3);
   sun.target.position.copy(CENTRE); sun.castShadow = true;
-  sun.shadow.mapSize.set(lite ? 1024 : 2048, lite ? 1024 : 2048);
+  sun.shadow.mapSize.set(2048, 2048);   // phones too (owner, Nov 2026: "in mobile got show nice shadow hd?"): drawn only when the scene changes, so crisper costs no frame time
   Object.assign(sun.shadow.camera, { left: -100, right: 100, top: 100, bottom: -100, near: 20, far: 520 });
   sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.06;
   scene.add(sun, sun.target);

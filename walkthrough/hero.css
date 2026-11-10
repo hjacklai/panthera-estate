@@ -704,7 +704,7 @@ html.hx-app, html.hx-app body{ background: #1C1714; }
 @container (max-width: 900px){
   .calc-grid{ grid-template-columns: 1fr !important; gap: 28px !important; }
 }
-html.hx-app .hxa-body .calc-result .big{ font-size: clamp(40px, 8.5cqw, 76px) !important; white-space: nowrap; line-height: 1; }
+html.hx-app .hxa-body .calc-result .big{ font-size: clamp(36px, 5.6cqw, 52px) !important; white-space: nowrap; line-height: 1; }   /* was up to 76 px (owner: "font too big") */
 html.hx-app .hxa-body .calc-result .big small{ white-space: normal; font-size: 13px; letter-spacing: 0.12em; }
 @container (max-width: 720px){
   .calc-preapprove{ flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
@@ -724,14 +724,16 @@ html.hx-app .hxa-panel{ top: calc(var(--hx-tb, 72px) + 12px); }
   html.hx-app .hxa-menu .hxa-m-ic svg{ width: 15px; height: 15px; stroke-width: 1.7; }
   html.hx-app .hxa-menu .hxa-m.on::after{ bottom: 2px; }
 }
-/* the panels' type sized to the panel, not the window, on desktop and tablet too (owner: "font seem too big") */
+/* the panels' type sized to the panel, not the window, on desktop and tablet too (owner: "font seem too big", and again
+   Nov 2026 "font too big": a step smaller, the calculator's figure most) */
 @media (min-width: 761px){
-  html.hx-app .hxa-body .section .title{ font-size: clamp(26px, 3.6cqw, 36px); line-height: 1.12; }
+  html.hx-app .hxa-body .section .title{ font-size: clamp(24px, 3.2cqw, 31px); line-height: 1.14; }
   html.hx-app .hxa-body .section .eyebrow{ font-size: 10.5px; }
   html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ font-size: 14.5px; line-height: 1.6; }
-  html.hx-app .hxa-body .section h3{ font-size: clamp(22px, 3cqw, 30px); }
-  html.hx-app .hxa-body .price-ranges h3, html.hx-app .hxa-body .product-body h3{ font-size: clamp(26px, 3.6cqw, 36px) !important; }
-  html.hx-app .hxa-body .section .val{ font-size: clamp(20px, 2.6cqw, 26px); }
+  html.hx-app .hxa-body .section h3{ font-size: clamp(20px, 2.6cqw, 25px); }
+  html.hx-app .hxa-body .price-ranges h3, html.hx-app .hxa-body .product-body h3{ font-size: clamp(24px, 3.2cqw, 31px) !important; }
+  html.hx-app .hxa-body .section .val{ font-size: clamp(18px, 2.3cqw, 22px); }
+  html.hx-app .hxa-body .calc-breakdown .v{ font-size: clamp(18px, 2.4cqw, 21px); }
   html.hx-app .hxa-body .calc-result .big small{ font-size: 12px; }
   html.hx-app .hxa-body .calc-preapprove-title{ font-size: 19px; }
   html.hx-app .hxa-body .faq-aside .h{ font-size: 22px; }

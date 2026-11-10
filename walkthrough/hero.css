@@ -930,3 +930,10 @@ html.hx-app .hx-live .hero-inner h1, html.hx-app .hx-live .hero-inner .lede{ poi
 @media (max-height: 500px){ html.hx-app .hxa-cap{ pointer-events: auto; } }
 /* Chinese: the small figure labels a size up, CJK at 9-10 px is hard to read (owner, Nov 2026) */
 html:lang(zh) .hxa-cap-specs dt, html:lang(zh) .pbw .intro .pbw-specs dt{ font-size: 11.5px; letter-spacing: 0.06em; }
+/* touch screens: a bigger tap area, nothing moves (viewport audit, Nov 2026: "Ask on WhatsApp" 22 px tall, the map's
+   Map / Satellite / Terrain / Google Maps 27-29 px); a clear layer reaches past each one */
+@media (pointer: coarse){
+  html.hx-app .hxa-body .faq-aside .cta, html.hx-app .hxa-body .loc-livemap-actions button, html.hx-app .hxa-body .loc-livemap-actions a{ position: relative; }
+  html.hx-app .hxa-body .faq-aside .cta::after{ content: ""; position: absolute; inset: -12px -6px; }
+  html.hx-app .hxa-body .loc-livemap-actions button::after, html.hx-app .hxa-body .loc-livemap-actions a::after{ content: ""; position: absolute; inset: -7px -3px; }
+}

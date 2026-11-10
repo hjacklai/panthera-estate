@@ -30,6 +30,11 @@ const LAYER = 7;   // the G-buffer camera sees only this layer (nothing else in 
 const AO = { radius: 2.4, distanceExponent: 1.8, thickness: 2.0, distanceFallOff: 0.8, scale: 1.0, screenSpaceRadius: false };
 const PD = { lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2 };
 const BLEND = 0.6;
+// phones (lite): the AO is worked out at half size and stretched up, where a 2.4 m reach at 0.6 read as dark smudges
+// across lawns, roads and walls (owner, Nov 2026: "the shadows ... look staining"). Tighter and lighter there: the
+// dark line in corners, under eaves and round kerbs stays, the wide blotches go. Desktop unchanged.
+const AO_LITE = { ...AO, radius: 1.0 };
+const BLEND_LITE = 0.4;
 // the lot (x -89..0, z 0..98) plus a margin; y from below the dry pond to above the roofs. East it stops short of the
 // Persiaran, so the through traffic there never needs the AO worked out again
 const BOX = { min: [-100, -3, -12], max: [10, 18, 110] };
@@ -46,7 +51,7 @@ export async function createAO({ THREE, renderer, scene, camera, lite = false, r
 
   const LADDER = lite ? [[8, 0.5]] : [[12, 1], [8, 1], [8, 0.7], [8, 0.5]];   // [samples, AO size in CSS pixels]
   const LIMIT = lite ? 2.5 : 3.5;   // ms of extra frame cost allowed
-  let rung = 0, state = 'probe', forced = null, blendK = BLEND, view = null, disposed = false;
+  let rung = 0, state = 'probe', forced = null, blendK = lite ? BLEND_LITE : BLEND, view = null, disposed = false;
 
   // ---------- targets and the pass ----------
   const depthTex = new THREE.DepthTexture(1, 1);
@@ -58,7 +63,8 @@ export async function createAO({ THREE, renderer, scene, camera, lite = false, r
   // keeps the thin board-and-batten ribs from printing a dotted pattern on the walls and ignores flipped normals on
   // some tree trunks (both seen with a normal buffer)
   gtao.setGBuffer(depthTex, undefined);
-  gtao.updateGtaoMaterial({ ...AO, samples: LADDER[0][0] });
+  const AOP = lite ? AO_LITE : AO;
+  gtao.updateGtaoMaterial({ ...AOP, samples: LADDER[0][0] });
   gtao.updatePdMaterial({ ...PD, samples: lite ? 8 : 12 });
   gtao.output = GTAOPass.OUTPUT.Off;
   gtao.setSceneClipBox(new THREE.Box3(new THREE.Vector3(...BOX.min), new THREE.Vector3(...BOX.max)));
@@ -149,7 +155,7 @@ export async function createAO({ THREE, renderer, scene, camera, lite = false, r
   const same = (a, b, n = a.length) => { for (let i = 0; i < n; i++) if (a[i] !== b[i]) return false; return true; };
   // a car whose middle is this near the box can print on it (the AO fades out over AO.radius past the box, and a car
   // is about 1.8 m wide): the visitor turning in at the gates counts, the Persiaran's through traffic does not
-  const R = AO.radius - 0.9;
+  const R = Math.max(0, AOP.radius - 0.9);
   function carKey() {   // the cars inside the box, where they are (0 when none)
     if (!cars.length) return 0;
     const im = cars[0], a = im.instanceMatrix.array; let h = 0;

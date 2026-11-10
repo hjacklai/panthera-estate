@@ -664,7 +664,7 @@ export async function start(o) {
   }, { timeout: 2000 }), 1200));
   // contact shadows (hero-ao.js, screen-space AO): loaded when idle after the first frame, phones too (not on data
   // saver); it measures its own cost and steps down, or off, by itself. ?hero=noao leaves it out
-  if (!o.careful && o.flag !== 'noao') idle(() => import(base + 'hero-ao.js?v=1')
+  if (!o.careful && o.flag !== 'noao') idle(() => import(base + 'hero-ao.js?v=2')
     .then(mod => mod.createAO({ THREE, renderer, scene, camera, lite, reduced }))
     .then(a => { ao = a; dirty = true; need(); })
     .catch(e => console.warn('hero 3D: no contact shadows', e)), { timeout: 1500 });

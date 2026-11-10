@@ -12,7 +12,7 @@ const SHEET = {   // walk.js rig(0): the plan sheet's centre (model frame) and t
 };
 const PLAN_FOV = 2.2, NEAR_FOV = 35;
 const LENIS_URL = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
-const WALK_V = '146', CSS_V = '12';
+const WALK_V = '147', CSS_V = '12';
 
 export function createTour(ctx) {
   const { THREE, renderer, canvas, camera, base, T, reduced } = ctx;
@@ -114,9 +114,13 @@ export function createTour(ctx) {
     requestAnimationFrame(() => { msg().then(go); }); setTimeout(go, 50);   // just after the frame is painted (50 ms where rAF is held back)
   }));
   let idleMs = 0;
-  const inIdle = () => (window.requestIdleCallback && !document.hidden
+  // and only while the estate camera is still (ctx.quiet: no intro glide, drag or caption glide for a moment), so a
+  // background build never lands on the intro or a drag (owner, Nov 2026: "if i load on like some laptop or mobile, its
+  // like lagging in the transition screen and animation on 3d")
+  const calm = () => (ctx.quiet ? ctx.quiet(300) : Promise.resolve());
+  const inIdle = () => calm().then(() => (window.requestIdleCallback && !document.hidden
     ? new Promise(r => requestIdleCallback(d => { idleMs = d.didTimeout ? 0 : d.timeRemaining(); r(); }, { timeout: 250 }))   // never idle: a 4 ms step now and then
-    : afterFrame());
+    : afterFrame()));
   function prefetch(home, urgent = false) {
     if (!SHEET[home]) return null;
     const have = walks[home];
@@ -131,6 +135,7 @@ export function createTour(ctx) {
       .then(([m, Lenis]) => m.mountWalk({ lib: true, home, renderer, canvas, pack: ctx.pack, ui: root, scroller: w.scroller, Lenis, cooperative: true, T,   // T: room names in the visitor's language
         pace: () => (w.urgent ? afterFrame() : inIdle()),
         budget: () => (!w.urgent ? Math.max(4, idleMs - 1) : waitingFor === home ? 20 : 7),
+        warmBatch: () => (w.urgent ? 600 : 150),   // background warm-up draws in smaller batches (each one is a frame's stall)
         // the build's warm-up draws on the shared canvas: the frame the visitor sees goes straight back over it
         cover: () => { if (active && active.api && active !== w) { active.api.redraw(); active.api.tick(performance.now()); } else ctx.renderHero(); },
         context: ctx.context,   // the estate's neighbourhood, already built: copied, not built again

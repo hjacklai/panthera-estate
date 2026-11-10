@@ -4,7 +4,8 @@
 // shipped): the terrace site behind the lot, the SK and SMK Bertam Perdana schools across the Persiaran, the terraces
 // to the north-east, the shophouses and the housing south of the main road.
 //
-//   const ctx = await addContext({ THREE, scene, url })  ->  { group, floor(x, z), dispose() }
+//   const ctx = await addContext({ THREE, scene, url | data })  ->  { group, floor(x, z), dispose() }
+//   (data: the JSON already fetched; the estate hero fetches it beside the pack and builds this before its first frame)
 //
 // Massing only (no windows, no textures), muted and fading into the haze with distance, so the estate stays the
 // picture. Built at run time from a ~30 KB JSON (not in the pack, so the walkthrough never draws it), loaded after the
@@ -31,10 +32,9 @@ function tone(rgb, x, z) {
 }
 const inBox = (x, z, b) => x > b[0] && x < b[1] && z > b[2] && z < b[3];
 
-export async function addContext({ THREE, scene, url, lite = false }) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('context ' + res.status);
-  const data = await res.json();
+export async function addContext({ THREE, scene, url, data: given = null, lite = false }) {
+  let data = given;
+  if (!data) { const res = await fetch(url); if (!res.ok) throw new Error('context ' + res.status); data = await res.json(); }
   const col = new THREE.Color();
   const lin = rgb => { col.setRGB(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255, THREE.SRGBColorSpace); return [col.r, col.g, col.b]; };
 
@@ -50,7 +50,7 @@ export async function addContext({ THREE, scene, url, lite = false }) {
           const dot = up === 'up' ? n[1] : n[0] * (a[0] - up[0]) + n[1] * (a[1] - up[1]) + n[2] * (a[2] - up[2]);
           if (dot < 0) { const t = b; b = c; c = t; }
         }
-        P.push(...a, ...b, ...c); const l = lin(rgb); C.push(...l, ...l, ...l);
+        P.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]); const l = lin(rgb); C.push(l[0], l[1], l[2], l[0], l[1], l[2], l[0], l[1], l[2]);
       },
       geo() {
         const g = new THREE.BufferGeometry();
@@ -198,8 +198,29 @@ export async function addContext({ THREE, scene, url, lite = false }) {
   scene.add(group);
 
   // ---------- trees standing where the real buildings are (the old plantation rows behind the lot): taken out ----------
+  // Speed (owner, Nov 2026: "if i load on like some laptop or mobile, its like lagging in the transition screen"): this
+  // part was most of a 0.6 s freeze. Each polygon's box is worked out once (it was redone on every test), and the
+  // footprints and road pieces are filed in a 20 m grid, so a point is tested only against those whose box (grown by
+  // the test's margin) reaches its cell. The same answers as testing them all, so the same palms and the same trees out.
+  const BOX = new WeakMap();
+  const boxOf = poly => {
+    let b = BOX.get(poly);
+    if (!b) { let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9; for (const [px, pz] of poly) { x0 = Math.min(x0, px); x1 = Math.max(x1, px); z0 = Math.min(z0, pz); z1 = Math.max(z1, pz); } BOX.set(poly, b = [x0, x1, z0, z1]); }
+    return b;
+  };
+  const NONE = [], GC = 20;
+  const gridOf = (items, box, pad) => {   // cell -> the items whose box, grown by pad, reaches it
+    const g = new Map();
+    for (const it of items) {
+      const [x0, x1, z0, z1] = box(it), p = typeof pad === 'function' ? pad(it) : pad;
+      for (let i = Math.floor((x0 - p) / GC); i <= Math.floor((x1 + p) / GC); i++) for (let k = Math.floor((z0 - p) / GC); k <= Math.floor((z1 + p) / GC); k++) {
+        const key = i * 4096 + k, l = g.get(key); if (l) l.push(it); else g.set(key, [it]);
+      }
+    }
+    return (x, z) => g.get(Math.floor(x / GC) * 4096 + Math.floor(z / GC)) || NONE;
+  };
   const inside = (x, z, poly, m) => {   // point in polygon, grown by m metres (bounding test first)
-    let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9; for (const [px, pz] of poly) { x0 = Math.min(x0, px); x1 = Math.max(x1, px); z0 = Math.min(z0, pz); z1 = Math.max(z1, pz); }
+    const [x0, x1, z0, z1] = boxOf(poly);
     if (x < x0 - m || x > x1 + m || z < z0 - m || z > z1 + m) return false;
     let inn = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, zi] = poly[i], [xj, zj] = poly[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) inn = !inn; }
     if (inn) return true;
@@ -209,7 +230,7 @@ export async function addContext({ THREE, scene, url, lite = false }) {
     }
     return false;
   };
-  const near = footprints.filter(p => p.some(([x, z]) => dist(x, z) < 260));
+  const near = footprints.filter(p => p.some(([x, z]) => dist(x, z) < 260)), nearAt = gridOf(near, boxOf, 2.5);
   const M4 = new THREE.Matrix4(), Z = new THREE.Matrix4().makeScale(0, 0, 0), v = new THREE.Vector3();
   let hidden = 0;
   // also handed out (hideIn): the house tour lays a copy of this neighbourhood round its own estate and clears its trees
@@ -224,7 +245,7 @@ export async function addContext({ THREE, scene, url, lite = false }) {
     for (let i = 0; i < o.count; i++) {
       o.getMatrixAt(i, M4); v.setFromMatrixPosition(M4).applyMatrix4(o.matrixWorld).applyMatrix4(toRoot);
       if (inLot(v.x, v.z)) continue;
-      if (near.some(p => inside(v.x, v.z, p, 2.5))) { o.setMatrixAt(i, Z); touched = true; hidden++; }
+      if (nearAt(v.x, v.z).some(p => inside(v.x, v.z, p, 2.5))) { o.setMatrixAt(i, Z); touched = true; hidden++; }
     }
     if (touched) { o.instanceMatrix.needsUpdate = true; o.computeBoundingSphere(); }
   }); };
@@ -235,7 +256,9 @@ export async function addContext({ THREE, scene, url, lite = false }) {
     const OWN = [[-140, -90, -25, 155], [-95, 5, 100, 155]];   // the estate's own palm rows (baked) stay as they are
     const segs = [];
     for (const r of data.roads || []) for (let i = 0; i < (r.pts || []).length - 1; i++) segs.push([...r.pts[i], ...r.pts[i + 1], (r.width_m || 6) / 2 + 2.5]);
-    const offRoad = (x, z) => segs.every(([ax, az, bx, bz, w]) => {
+    const segAt = gridOf(segs, ([ax, az, bx, bz]) => [Math.min(ax, bx), Math.max(ax, bx), Math.min(az, bz), Math.max(az, bz)], sg => sg[4]);
+    const footAt = gridOf(footprints, boxOf, 3);
+    const offRoad = (x, z) => segAt(x, z).every(([ax, az, bx, bz, w]) => {
       if (x < Math.min(ax, bx) - w || x > Math.max(ax, bx) + w || z < Math.min(az, bz) - w || z > Math.max(az, bz) + w) return true;
       const dx = bx - ax, dz = bz - az, L2 = dx * dx + dz * dz || 1, t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / L2));
       return Math.hypot(x - ax - dx * t, z - az - dz * t) > w;
@@ -243,13 +266,13 @@ export async function addContext({ THREE, scene, url, lite = false }) {
     const spots = [], STEP = 9;
     for (const a of data.areas || []) {
       if (a.kind !== 'plantation' || !a.poly) continue;
-      let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9; for (const [x, z] of a.poly) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+      const [x0, x1, z0, z1] = boxOf(a.poly);
       for (let z = Math.ceil(z0 / STEP) * STEP; z < z1; z += STEP) for (let x = Math.ceil(x0 / STEP) * STEP + ((z / STEP) % 2 ? STEP / 2 : 0); x < x1; x += STEP) {
         const h = Math.sin(x * 12.9898 + z * 78.233) * 43758.5453, j = h - Math.floor(h);   // a steady jitter
         const px = x + (j - 0.5) * 2.4, pz = z + ((j * 7) % 1 - 0.5) * 2.4;
         if (dist(px, pz) > 430 || inLot(px, pz) || OWN.some(b => inBox(px, pz, b)) || !inside(px, pz, a.poly, 0)) continue;
         if (px > -12 && px < 31 && pz > -650 && pz < 310) continue;   // the Persiaran's reserve, its modelled stretch and the run on north and south
-        if (!offRoad(px, pz) || footprints.some(p => inside(px, pz, p, 3))) continue;
+        if (!offRoad(px, pz) || footAt(px, pz).some(p => inside(px, pz, p, 3))) continue;
         if ((j * 53.1) % 1 < 0.05) continue;   // the odd palm missing, as in a real plantation (a perfect grid read as carpet)
         spots.push([px, pz, j]);
       }

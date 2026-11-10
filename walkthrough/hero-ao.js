@@ -279,9 +279,13 @@ export async function createAO({ THREE, renderer, scene, camera, lite = false, r
 
   // ---------- per frame ----------
   let kAO = 0, gate = 0, lastT = 0, lastCars = 0;
+  // held (api.hold): no AO pass and no probing, so the hero draws the scene once a frame. The estate hero holds it
+  // through its intro glide on phones and slow GPUs (owner, Nov 2026: "if i load on like some laptop or mobile, its like
+  // lagging in the transition screen and animation on 3d"); it fades in from the settle glide on, as it does on a drag
+  let held = false;
   function render() {
     kind = null;
-    if (disposed || state === 'off' || state === 'lost') return;
+    if (disposed || held || state === 'off' || state === 'lost') return;
     const now = performance.now(), dt = lastT && now - lastT < 100 ? (now - lastT) / 1000 : 1 / 60; lastT = now;
     if (rebuild || scene.children.length !== builtN) { rebuild = false; build(); }
     qPoll();
@@ -308,6 +312,7 @@ export async function createAO({ THREE, renderer, scene, camera, lite = false, r
   // passive frame-time sampling: the interval after a frame belongs to that frame's work
   function tick(now, moving) {
     if (state === 'off' || state === 'lost' || disposed) return false;
+    if (held) { lastTick = 0; prevKind = null; return false; }
     if (!moving) { lastTick = 0; prevKind = null; return false; }
     if (lastTick && prevKind && now - lastTick < 100) {
       const d = now - lastTick;
@@ -339,6 +344,7 @@ export async function createAO({ THREE, renderer, scene, camera, lite = false, r
       state = 'probe'; kAO = 0; warm = 4; costs.length = dC.length = dS.length = 0; aoW = aoH = 0; stale = true; rebuild = true;
     },
     invalidate() { stale = true; },
+    hold(on) { held = !!on; lastT = 0; if (!on) stale = true; },
     bytes() { return state === 'off' ? 0 : aoW * aoH * (4 + 4 + 8 + 8); },   // normal, depth, AO, denoise
     report() {
       return { on: state === 'on', state, level: rung, samples: gtao.gtaoMaterial.defines.SAMPLES, res: LADDER[Math.min(rung, LADDER.length - 1)][1], size: [aoW, aoH],

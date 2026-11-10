@@ -1,6 +1,6 @@
 // hd.js · photo textures (CC0, hd/tex) and HDRI skies (hd/sky) for the walkthrough.
 //
-//   const hd = createHD({ THREE, renderer, res: '2k' | '1k' | null, lite, onChange });
+//   const hd = createHD({ THREE, renderer, res: '2k' | '1k' | null, lite, onChange, pace });   // pace: () => Promise, awaited before each upload
 //   hd.use(material, 'spc_oak', { su, sv, ou, ov });   // register: the photo maps replace the drawn ones once loaded
 //   hd.start();                                        // swaps may run from now on (call once the page is built)
 //   hd.dispose();                                      // frees its photo maps and skies (an embedded walk closing)
@@ -79,7 +79,7 @@ float hdNoise( vec2 p ) {
 	diffuseColor.rgb *= mix( 0.84, 1.12, 0.6 * hdNoise( vHdW * 0.09 ) + 0.4 * hdNoise( vHdW * 0.027 + 5.3 ) );`);
 };
 
-export function createHD({ THREE, renderer, res = null, lite = false, base = './hd/', onChange = () => {} }) {
+export function createHD({ THREE, renderer, res = null, lite = false, base = './hd/', onChange = () => {}, pace = null }) {
   const aniso = lite ? 4 : Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const sets = new Map(), recs = new WeakMap(), clones = new Map(), AVG = new WeakMap();
   let live = false, warned = false, dead = false;
@@ -94,6 +94,15 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     img.onerror = () => no(new Error(url));
     img.src = url;
   });
+  // Chrome, Edge and Firefox 98+: each photo decoded off the main thread, already flipped and with no colour or alpha
+  // conversion (as three's ImageBitmapLoader), so its upload is a plain copy. An <img> was decoded once more on the main
+  // thread at upload time, 0.1-0.4 s for a 2k map (owner, Nov 2026: "if i load on like some laptop or mobile, its like
+  // lagging in the transition screen and animation on 3d"). Safari keeps the <img> (its options are not reliable there).
+  const UA = navigator.userAgent, ffv = /Firefox\/(\d+)/.exec(UA);
+  const BITMAP = typeof createImageBitmap === 'function' && !/^((?!chrome|android).)*safari/i.test(UA) && !(ffv && +ffv[1] < 98);
+  const isBmp = src => typeof ImageBitmap !== 'undefined' && src instanceof ImageBitmap;
+  const loadBmp = url => fetch(url, { priority: 'low' }).then(r => { if (!r.ok) throw new Error(url); return r.blob(); })
+    .then(b => createImageBitmap(b, { imageOrientation: 'flipY', premultiplyAlpha: 'none', colorSpaceConversion: 'none' }));
   // Mean of an image (0..1 per channel, as stored), from a 32 px copy. Cached per image.
   function avg(src) {
     if (!src || !(src.naturalWidth || src.width)) return null;
@@ -107,6 +116,18 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
       if (n) a = [r / n / 255, gg / n / 255, b / n / 255];
     } catch (e) { a = null; }
     AVG.set(src, a); return a;
+  }
+  // the same, with the 32 px copy of a photo made off the main thread where the browser can (drawing a 2k <img> down to
+  // 32 px here held a frame up); the mean of the copy is the same either way. A drawn (canvas) map is read here as before:
+  // copying a canvas off the main thread measured slower
+  async function avgA(src) {
+    if (!src || AVG.has(src) || typeof createImageBitmap !== 'function' || !((src.naturalWidth || src.width) > 64) || src instanceof HTMLCanvasElement) return avg(src);
+    try {
+      const b = await createImageBitmap(src, { resizeWidth: 32, resizeHeight: 32, resizeQuality: 'high' });
+      const a = avg(b); AVG.delete(b); if (b.close) b.close();
+      if (a) { AVG.set(src, a); return a; }
+    } catch (e) { /* the 32 px copy drawn here instead */ }
+    return avg(src);
   }
   const lin = a => new THREE.Color().setRGB(a[0], a[1], a[2], THREE.SRGBColorSpace);   // sRGB average -> linear
   // The porcelain slab as 600 mm tiles: each quarter of the 1.2 m image turned differently (so the veining breaks at
@@ -127,6 +148,7 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     const t = src instanceof HTMLCanvasElement ? new THREE.CanvasTexture(src) : new THREE.Texture(src);
     t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
     t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; t.needsUpdate = true;
+    if (isBmp(src)) t.flipY = false;   // flipped when decoded
     return t;
   }
   function load(name) {
@@ -137,15 +159,19 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     if (!res) return S;
     const size = def.size === '1k' ? '1k' : res, maps = def.maps.filter(m => !lite || m === 'color' || m === 'normal');
     const url = m => `${base}tex/${name}/${name}_${m === 'rough' || m === 'ao' ? '1k' : size}_${m}.webp`;
-    S.p = Promise.all(maps.map(m => loadImg(url(m)).then(img => [m, img]))).then(list => {
+    // (the porcelain's grout is drawn over an <img>: its quarters are turned as the image stands)
+    const get = BITMAP && !def.grout ? u => loadBmp(u).catch(() => loadImg(u)) : loadImg;
+    S.p = Promise.all(maps.map(m => get(url(m)).then(img => [m, img]))).then(async list => {
       if (dead) return;   // disposed while loading: upload nothing
-      const img = Object.fromEntries(list), tex = {};
+      const img = Object.fromEntries(list), tex = {}, drop = () => { for (const t of Object.values(tex)) t.dispose(); };
       if (def.grout) { img.color = grout(img.color, false); if (img.rough) img.rough = grout(img.rough, true); }
-      for (const m of maps) { tex[m] = texOf(img[m], m === 'color'); renderer.initTexture(tex[m]); }   // upload now, not mid-scroll
-      if (img.color) S.avg = lin(avg(img.color) || [1, 1, 1]);
-      if (img.rough) S.rough = Math.max(0.05, (avg(img.rough) || [0.5])[0]);
+      // upload now, not mid-scroll; one map per break the caller gives (pace), so no frame carries several
+      for (const m of maps) { if (pace) { await pace(); if (dead) return drop(); } tex[m] = texOf(img[m], m === 'color'); renderer.initTexture(tex[m]); }
+      if (img.color) S.avg = lin((await avgA(img.color)) || [1, 1, 1]);
+      if (img.rough) S.rough = Math.max(0.05, ((await avgA(img.rough)) || [0.5])[0]);
+      if (dead) return drop();
       S.tex = tex;
-      if (live) flush(S);
+      if (live) await flush(S);
     }).catch(() => warn(name));
     return S;
   }
@@ -190,8 +216,11 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     m.userData.hd = S.name; m.needsUpdate = true;
     if (o.dispose !== false) for (const x of old) if (!x.userData.hd && x !== m.map) x.dispose();   // the drawn texture it replaced
   }
-  function flush(S) {
+  async function flush(S) {
     const list = S.wait; S.wait = [];
+    // the drawn maps' means first, off the main thread (apply's colour match reads them)
+    for (const r of list) { const im = S.tex.color && r.o.color !== 'keep' && r.mat.map && r.mat.map.image; if (im && !AVG.has(im)) await avgA(im); }
+    if (dead) return;
     for (const r of list) apply(r, S);
     if (list.length) onChange(S.name);
   }

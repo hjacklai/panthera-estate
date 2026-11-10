@@ -18,7 +18,7 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=33';
-import { createHD, SKIES } from './hd.js?v=7';
+import { createHD, SKIES } from './hd.js?v=8';
 import { BAKE_VER, ENTRY_P } from './versions.js?v=1';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
@@ -192,7 +192,8 @@ const HD_RES = BAKE || HDQ === '0' ? null : HDQ === '1k' || HDQ === '2k' ? HDQ :
 // runs after every flush). Keep in step with hd.js if its lift changes.
 // Then (owner, Nov 2026: "can the spc flooring be darker tone?", then "lighter abit") a warm honey oak: [1.66, 1.50, 1.28].
 const LIFT_FIX = { spc_oak: [1.66 / 1.86, 1.50 / 1.77, 1.28 / 1.61] }, LIFT_MATS = [];
-const hd = createHD({ THREE, renderer, res: HD_RES, lite: !HIFI, base: BASE + './hd/', onChange: name => {
+// pace: embedded, each photo map is uploaded at the build's own breaks (explore.js), not all in one task
+const hd = createHD({ THREE, renderer, res: HD_RES, lite: !HIFI, base: BASE + './hd/', pace: LIB && opts.pace ? opts.pace : null, onChange: name => {
   const k = LIFT_FIX[name];
   if (k) for (const m of LIFT_MATS) if (m.userData.hd === name && !m.userData.lifted) { m.color.setRGB(m.color.r * k[0], m.color.g * k[1], m.color.b * k[2]); m.userData.lifted = true; }
   needRender = true; shadowDirty = true;   // a new map can change a cut-out (leaves) in the shadow
@@ -2987,7 +2988,7 @@ async function buildEstateNow() {
         host.add(g); hc.hideIn(host, g);
         for (const m of own.values()) { m.userData.t0 = m.transparent; m.userData.o0 = m.opacity; CTX_MATS.push(m); }
       } else { const host = estate.root;
-        ctxP = import('./hero-context.js?v=12').then(m => m.addContext({ THREE, scene: host, url: BASE + './context.e1.json?v=1', lite: !HIFI }))
+        ctxP = import('./hero-context.js?v=14').then(m => m.addContext({ THREE, scene: host, url: BASE + './context.e1.json?v=1', lite: !HIFI }))
           .then(c => { if (disposed || !estate || estate.root !== host) { c.dispose && c.dispose(); return; }
             c.group.traverse(o => { for (const m of [].concat(o.material || [])) if (m && !CTX_MATS.includes(m)) { m.userData.t0 = m.transparent; m.userData.o0 = m.opacity; CTX_MATS.push(m); } });
             // the page: its shaders now, in their opaque (photograph) state, not when they first show mid-scroll
@@ -3894,7 +3895,8 @@ async function warmDraw() {
   const sh0 = renderer.shadowMap.needsUpdate, prev = renderer.getRenderTarget();
   const tops = scene.children.filter(o => !o.isLight && o !== sun.target), batches = [];
   { let cur = [], n = 0;
-    for (const o of tops) { let c = 0; o.traverse(q => { if (q.isMesh) c++; }); cur.push(o); n += c; if (n > 600) { batches.push(cur); cur = []; n = 0; } }
+    const CAP = opts.warmBatch ? opts.warmBatch() : 600;   // embedded and built ahead: smaller batches (explore.js)
+    for (const o of tops) { let c = 0; o.traverse(q => { if (q.isMesh) c++; }); cur.push(o); n += c; if (n > CAP) { batches.push(cur); cur = []; n = 0; } }
     if (cur.length) batches.push(cur); }
   const vis = new Map(), cull = [];   // the state as it is, taken again for each batch (the page may scroll meanwhile)
   const take = () => { vis.clear(); cull.length = 0; scene.traverse(o => { vis.set(o, o.visible); if (o.frustumCulled && (o.isMesh || o.isLine || o.isPoints)) cull.push(o); }); };

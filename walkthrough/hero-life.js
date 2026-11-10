@@ -2,7 +2,8 @@
 // a few cars driving the Persiaran both ways (on the left, as in Malaysia), white egrets crossing now and then, and
 // the palm fronds stirring in the breeze.
 //
-//   const life = addLife({ THREE, scene, lite })  ->  { tick(now) -> true when it moved, nextIn(now), dispose() } | null
+//   const wind = patchSway(THREE, scene)          // before the first frame: the breeze's shaders, at rest
+//   const life = addLife({ THREE, scene, lite, wind })  ->  { group, birds, tick(now) -> true when it moved, nextIn(now), dispose() }
 //
 // Cheap on purpose: it steps at 30 fps on desktop and 24 on phones (the hero renders only then, not every frame), the
 // cars reuse the estate's own light car (one instanced mesh per part), the birds are two triangles each, the sway is a
@@ -18,7 +19,7 @@ const VISIT_ROUTE = [[-3.2, 300], [5.2, 178], [8.71, 127], [10.98, 95], [12.1, 8
   [17.72, -49], [14.5, -340]];
 const SPEED = 8.5;   // m/s, about 30 km/h: calm, residential
 
-export function addLife({ THREE, scene, lite = false }) {
+export function addLife({ THREE, scene, lite = false, wind: given = null }) {
   const group = new THREE.Group(); group.name = 'hx-life'; scene.add(group);
   const STEP = 1000 / (lite ? 24 : 30);
   let last = 0, t = 0;
@@ -136,49 +137,12 @@ export function addLife({ THREE, scene, lite = false }) {
     birds.instanceMatrix.needsUpdate = true;
   };
 
-  // ---------- the breeze: palm fronds, and the estate's own trees and plants (owner: "the trees are suppose to sway
-  // ... within the development"); each leafy part moves more toward its top, so trunks and roots stay put ----------
-  const wind = { value: 0 }, swayed = new Set();
-  scene.traverse(o => {
-    const m = o.isInstancedMesh && o.material;
-    if (!m || swayed.has(m) || !(m.alphaTest > 0) || !m.map || o.parent === group) return;   // leaf cards: alpha-tested maps
-    if (m.color && m.color.getHexString() === '6f8048') return;   // the oil palm fronds: their own sway below
-    o.geometry.computeBoundingBox();
-    const bb = o.geometry.boundingBox, y0 = bb.min.y.toFixed(2), h = Math.max(0.3, bb.max.y - bb.min.y).toFixed(2);
-    const amp = Math.min(0.28, 0.05 + 0.035 * (bb.max.y - bb.min.y)).toFixed(3);   // a breeze you can see (owner: "do the trees sway by wind?")
-    swayed.add(m);
-    m.onBeforeCompile = sh => {
-      sh.uniforms.uWind = wind;
-      sh.vertexShader = 'uniform float uWind;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
-        float hx_ph = instanceMatrix[3].x * 0.31 + instanceMatrix[3].z * 0.17;
-        float hx_k = clamp((position.y - ${y0}) / ${h}, 0.0, 1.0);
-        float hx_g = 0.7 + 0.45 * sin(uWind * 0.21 + hx_ph * 0.15);   // gusts that come and go across the estate
-        transformed.x += (sin(uWind * 0.8 + hx_ph) + 0.4 * sin(uWind * 2.1 + hx_ph * 2.0)) * ${amp} * hx_k * hx_g;
-        transformed.z += cos(uWind * 0.7 + hx_ph * 1.4) * ${amp} * 0.7 * hx_k * hx_g;`);
-    };
-    m.customProgramCacheKey = () => 'hx-leaf-' + y0 + '-' + h;
-    m.needsUpdate = true;
-  });
-  scene.traverse(o => {
-    const m = o.isInstancedMesh && o.material;
-    if (!m || swayed.has(m) || !m.color || m.color.getHexString() !== '6f8048') return;   // the oil palm fronds (estate and neighbours)
-    swayed.add(m);
-    m.onBeforeCompile = sh => {
-      sh.uniforms.uWind = wind;
-      sh.vertexShader = 'uniform float uWind;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
-        float hx_ph = instanceMatrix[3].x * 0.37 + instanceMatrix[3].z * 0.23;
-        float hx_k = clamp((position.y - 4.6) / 2.2, 0.0, 1.0);
-        float hx_g = 0.7 + 0.45 * sin(uWind * 0.21 + hx_ph * 0.15);
-        transformed.x += (sin(uWind * 1.1 + hx_ph) + 0.35 * sin(uWind * 2.6 + hx_ph * 1.7)) * 0.17 * hx_k * hx_g;
-        transformed.z += cos(uWind * 0.9 + hx_ph * 1.3) * 0.13 * hx_k * hx_g;`);
-    };
-    m.customProgramCacheKey = () => 'hx-sway';
-    m.needsUpdate = true;
-  });
+  // the breeze: patched now if the hero did not do it before its first frame (patchSway, below)
+  const wind = given || patchSway(THREE, scene, group);
 
   placeCars(0); birds.visible = false;
   return {
-    group,
+    group, birds,
     tick(now) {
       if (now - last < STEP) return false;
       const dt = last ? Math.min(0.1, (now - last) / 1000) : 0; last = now; t += dt;
@@ -189,4 +153,53 @@ export function addLife({ THREE, scene, lite = false }) {
     pause() { last = 0; },
     dispose() { scene.remove(group); birds.geometry.dispose(); birdMat.dispose(); for (const im of ims) im.dispose(); },
   };
+}
+// ---------- the breeze: palm fronds, and the estate's own trees and plants (owner: "the trees are suppose to sway
+// ... within the development"); each leafy part moves more toward its top, so trunks and roots stay put ----------
+// Put in by the estate hero before its first frame, with the wind at rest (it starts from 0 when addLife drives it, so
+// nothing moves until then): the shaders are then built with the rest of the estate, not on the frame the intro ends
+// (owner, Nov 2026: "if i load on like some laptop or mobile, its like lagging in the transition screen and animation
+// on 3d"). Every leafy part shares one program; its own height and swing are uniforms (they were baked into the code,
+// one program each).
+export function patchSway(THREE, scene, skip = null) {
+  const wind = { value: 0 }, swayed = new Set();
+  scene.traverse(o => {
+    const m = o.isInstancedMesh && o.material;
+    if (!m || swayed.has(m) || m.userData.hxSway || !(m.alphaTest > 0) || !m.map || (skip && o.parent === skip)) return;   // leaf cards: alpha-tested maps
+    if (m.color && m.color.getHexString() === '6f8048') return;   // the oil palm fronds: their own sway below
+    o.geometry.computeBoundingBox();
+    const bb = o.geometry.boundingBox;
+    const amp = Math.min(0.28, 0.05 + 0.035 * (bb.max.y - bb.min.y));   // a breeze you can see (owner: "do the trees sway by wind?")
+    swayed.add(m);
+    const u = m.userData.hxSway = { uWind: wind, uY0: { value: bb.min.y }, uH: { value: Math.max(0.3, bb.max.y - bb.min.y) }, uAmp: { value: amp } };
+    m.onBeforeCompile = sh => {
+      Object.assign(sh.uniforms, u);
+      sh.vertexShader = 'uniform float uWind, uY0, uH, uAmp;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+        float hx_ph = instanceMatrix[3].x * 0.31 + instanceMatrix[3].z * 0.17;
+        float hx_k = clamp((position.y - uY0) / uH, 0.0, 1.0);
+        float hx_g = 0.7 + 0.45 * sin(uWind * 0.21 + hx_ph * 0.15);   // gusts that come and go across the estate
+        transformed.x += (sin(uWind * 0.8 + hx_ph) + 0.4 * sin(uWind * 2.1 + hx_ph * 2.0)) * uAmp * hx_k * hx_g;
+        transformed.z += cos(uWind * 0.7 + hx_ph * 1.4) * uAmp * 0.7 * hx_k * hx_g;`);
+    };
+    m.customProgramCacheKey = () => 'hx-leaf';
+    m.needsUpdate = true;
+  });
+  scene.traverse(o => {
+    const m = o.isInstancedMesh && o.material;
+    if (!m || swayed.has(m) || m.userData.hxSway || !m.color || m.color.getHexString() !== '6f8048') return;   // the oil palm fronds (estate and neighbours)
+    swayed.add(m);
+    const u = m.userData.hxSway = { uWind: wind };
+    m.onBeforeCompile = sh => {
+      Object.assign(sh.uniforms, u);
+      sh.vertexShader = 'uniform float uWind;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+        float hx_ph = instanceMatrix[3].x * 0.37 + instanceMatrix[3].z * 0.23;
+        float hx_k = clamp((position.y - 4.6) / 2.2, 0.0, 1.0);
+        float hx_g = 0.7 + 0.45 * sin(uWind * 0.21 + hx_ph * 0.15);
+        transformed.x += (sin(uWind * 1.1 + hx_ph) + 0.35 * sin(uWind * 2.6 + hx_ph * 1.7)) * 0.17 * hx_k * hx_g;
+        transformed.z += cos(uWind * 0.9 + hx_ph * 1.3) * 0.13 * hx_k * hx_g;`);
+    };
+    m.customProgramCacheKey = () => 'hx-sway';
+    m.needsUpdate = true;
+  });
+  return wind;
 }

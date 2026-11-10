@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { fetchPack } from './pack.js?v=3';
-import { createHD } from './hd.js?v=7';
+import { createHD } from './hd.js?v=8';
 import { BAKE_VER } from './versions.js?v=1';
 import { buildHeroEstate } from './hero-lod.js?v=4';
 import { createTod } from './hero-tod.js?v=9';
@@ -97,6 +97,9 @@ export async function start(o) {
   const bg = SEL('.hero-bg');
   // loop state (frames run only once everything below is built)
   let snapT = 0, s = 0, raf = 0, last = 0, dirty = true, visible = true, scrolledAt = 0, still = -1, slow = 0, okF = 0, frames = 0, live = false, held = false;
+  // movingAt: the last frame the camera, the dissolve or the intro moved (quiet() waits for it to be a while ago).
+  // introMs, lineMs: the intro's and its lines' own clocks, advanced per frame (see frame()); frameMs: the usual frame
+  let movingAt = 0, introMs = 0, lineMs = 0, frameMs = 1000 / 60;
   let expo = 1;   // this scene's exposure (the walkthrough sets its own on the shared renderer)
   let ao = null;   // contact shadows (hero-ao.js), once loaded
   function need() { if (live && !held && !raf && visible && !document.hidden) raf = nextFrame(frame); }
@@ -106,6 +109,13 @@ export async function start(o) {
     const go = t => { if (done) return; done = true; cancelAnimationFrame(id); clearTimeout(to); f(t); };
     const id = requestAnimationFrame(go), to = setTimeout(() => go(performance.now()), 100);
     return 1;
+  }
+  const idle = window.requestIdleCallback ? (f, o2) => window.requestIdleCallback(f, o2) : (f => setTimeout(f, 300));
+  // resolves once the hero camera has been still for ms (no intro glide, drag, caption glide or dissolve; the cars and
+  // birds do not count), or at once while the tour or the Location move has the canvas. One-off jobs (textures, the
+  // tours built ahead, the sky) wait for it, so they never land on a moving frame
+  function quiet(ms = 600) {
+    return new Promise(r => { const chk = () => (held || (live && performance.now() - movingAt >= ms) ? r() : setTimeout(chk, 120)); chk(); });
   }
 
   // ---------- DOM ----------
@@ -184,19 +194,25 @@ export async function start(o) {
   } catch (e) { fail(e); return; }
   if (!renderer.capabilities.isWebGL2) { renderer.dispose(); fail(new Error('no WebGL2')); return; }
   const DPR_MAX = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2);   // phones sharper (was 1.25); the slow-frame step below brings it back down when a phone can't keep up
-  let dpr = DPR_MAX;
+  let dpr = DPR_MAX, dprLock = false;   // dprLock: the frame times stepped it down, so it no longer steps back up
+  const BUDGET = 22;   // ms for one opening frame, drawn and waited for (see the measure before the first frame)
   renderer.setPixelRatio(dpr);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
 
-  const hd = createHD({ THREE, renderer, res: '1k', lite: true, base: base + 'hd/', onChange: () => { renderer.compileAsync(scene, camera).catch(() => {}).then(() => { dirty = true; need(); }); } });
+  // pace: each photo map uploaded on its own, when the camera is still and the browser idle (see quiet)
+  const hd = createHD({ THREE, renderer, res: '1k', lite: true, base: base + 'hd/', pace: () => quiet(300).then(() => new Promise(r => idle(r, { timeout: 1000 }))), onChange: () => { renderer.compileAsync(scene, camera).catch(() => {}).then(() => { dirty = true; need(); }); } });
   // the pack and (desktop) the golden sky, in parallel
   const packP = fetchPack({ base: base + 'bake/', ver: BAKE_VER, tier: lite ? 512 : 1024, priority: 'high' });
   // the aerial copy's visibility result, saved ahead (saves the 2-3 s id render on phones); optional
   const masksP = o.flag === 'lodlive' ? Promise.resolve(null) : fetch(base + `bake/hero-lod.${BAKE_VER}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
   const goldenP = lite ? null : hd.sky('golden');
+  // the neighbourhood (hero-context.js and its data) and the breeze's shaders (hero-life.js), fetched beside the pack:
+  // both go in before the first frame now (see there)
+  const ctxP = Promise.all([import(base + 'hero-context.js?v=14'), fetch(base + 'context.e1.json?v=1').then(r => (r.ok ? r.json() : null))]).catch(e => { console.warn('hero 3D: no neighbourhood', e); return null; });
+  const lifeP = reduced ? null : import(base + 'hero-life.js?v=9').catch(e => { console.warn('hero 3D: no life', e); return null; });
   let pack;
   try { pack = await packP; } catch (e) { renderer.dispose(); fail(e); return; }
   performance.mark('hx-data');
@@ -272,12 +288,16 @@ export async function start(o) {
     else camera.clearViewOffset();
   };
   let resizeMissed = false;   // a resize while held (the tour or the Location move has the camera): done on release
+  const v2 = new THREE.Vector2();
   const resize = () => {
     if (held) { resizeMissed = true; return; }   // the tour overlay has the canvas: it sizes it (see giveBack)
     resizeMissed = false;
     W = Math.max(1, stage.clientWidth); H = Math.max(1, stage.clientHeight); portrait = W / H < 0.9;
-    renderer.setSize(W, H, false);
-    snap.width = Math.round(W * dpr); snap.height = Math.round(H * dpr);
+    // only when the size really changes: each call reallocates the drawing buffers (setPixelRatio has already resized)
+    const pr = renderer.getPixelRatio(), sz = renderer.getSize(v2);
+    if (sz.x !== W || sz.y !== H || canvas.width !== Math.floor(W * pr) || canvas.height !== Math.floor(H * pr)) renderer.setSize(W, H, false);
+    const sw = Math.round(W * dpr), sh = Math.round(H * dpr);
+    if (snap.width !== sw || snap.height !== sh) { snap.width = sw; snap.height = sh; }
     camera.aspect = W / H;
     // the estate sits right of the copy on wide screens, above it on portrait ones (not while it is still the photo)
     // app mode: the estate in the middle of every screen (owner, Nov 2026: "ensure the 3d in middle of all viewport");
@@ -306,7 +326,7 @@ export async function start(o) {
   const mixFor = p => { const u = seg(p * travel / H, DISSOLVE[0], DISSOLVE[1]); return u * u * (3 - 2 * u); };
 
   // ---------- camera ----------
-  const pos = V(0, 0, 0), tgt = V(0, 0, 0), v1 = V(0, 0, 0);
+  const pos = V(0, 0, 0), tgt = V(0, 0, 0), v1 = V(0, 0, 0), camWas = V(0, 0, 0), tgtWas = V(0, 0, 0);
   let fov = 36;
   // the path's own clock: still at the photo's pose up to holdP, eased in, then the runway progress itself from joinP
   const pathAt = p => {
@@ -366,6 +386,8 @@ export async function start(o) {
   function layoutPins(show) {
     const sr = stage.getBoundingClientRect(), cr = copyEl && copyEl.getBoundingClientRect();
     if (cr) copyRect = { l: cr.left - sr.left - 8, t: cr.top - sr.top - 8, r: cr.right - sr.left + 8, b: cr.bottom - sr.top + 8 };
+    // nothing to place or take down (the intro, before the pins show): skip the measuring below, a forced layout a frame
+    if (!show && !openId && !pins.some(p => p.on)) return;
     const placed = [], top = Math.max(8, topInset + 8);
     for (const e of lineEls) if (+e.style.opacity > 0.3 && !openId) { const t = e.getBoundingClientRect(); placed.push({ l: t.left - sr.left - 6, r: t.right - sr.left + 6, t: t.top - sr.top - 6, b: t.bottom - sr.top + 6 }); }
     for (const c of [tod, homes]) if (c.isConnected && getComputedStyle(c).visibility !== 'hidden') { const t = c.getBoundingClientRect(); placed.push({ l: t.left - sr.left - 6, r: t.right - sr.left + 6, t: t.top - sr.top - 6, b: t.bottom - sr.top + 6 }); }
@@ -524,7 +546,7 @@ export async function start(o) {
     const narrow = W < 760, room = !narrow || !copyRect || copyRect.t - (topInset + 12) > 56;   // phones: lines only if the band has room
     lineEls.forEach((e, i) => {
       if (APP) {   // its own clock, from the start of the intro
-        const w = LINES_APP[i], t = lineT0 == null ? -1 : performance.now() - lineT0;
+        const w = LINES_APP[i], t = lineT0 == null ? -1 : lineMs;
         let q = !w || t < 0 ? 0 : Math.min(1, (t - w[0]) / LINE_FADE, (w[1] - t) / LINE_FADE);
         q = room ? Math.max(0, q) : 0;
         lineStyle(e, i, q);
@@ -571,8 +593,15 @@ export async function start(o) {
   function frame(now) {
     raf = 0;
     if (held) return;
-    const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+    const rawMs = last ? now - last : 1000 / 60, dt = Math.min(0.05, rawMs / 1000);
     last = now;
+    // the intro's own clock: a frame that came late (a one-off stall) moves it on by at most about two usual frames, so
+    // the glide pauses for a moment instead of jumping ahead (owner, Nov 2026: "its like lagging in the transition screen
+    // and animation on 3d"); a device that is steadily slower still plays it in the same time
+    const stepMs = Math.min(rawMs, Math.max(34, frameMs * 2));
+    frameMs += (Math.min(rawMs, 120) - frameMs) * 0.1;
+    if (introT0 != null) introMs += stepMs;
+    if (lineT0 != null) lineMs += stepMs;
     const target = progressNow();
     pRaw = target;
     let moving = false;
@@ -597,11 +626,11 @@ export async function start(o) {
     const scrolling = now - scrolledAt < 160;
     if (orbit.tick(dt, scrolling)) moving = true;
     if (introT0 != null) {   // app mode: the intro glide plays by itself, then the visitor has the camera
-      const u = INTRO_MS ? clamp((now - introT0) / INTRO_MS) : 1; autoP = u * u * (3 - 2 * u); moving = true;
+      const u = INTRO_MS ? clamp(introMs / INTRO_MS) : 1; autoP = u * u * (3 - 2 * u); moving = true;
       if (u >= 1) finishIntro();
     }
     if (rigOn && rig.tick(dt)) moving = true;
-    if (lineT0 != null && now - lineT0 < LINES_APP[2][1] + 100) moving = true;   // the intro lines are still showing
+    if (lineT0 != null && lineMs < LINES_APP[2][1] + 100) moving = true;   // the intro lines are still showing
     if (todCtl.tick(dt)) { moving = true; expo = renderer.toneMappingExposure; }
     if (mixTick(dt)) moving = true;
     if (aimOff.distanceToSquared(aimGoal) > 1e-4) { aimOff.lerp(aimGoal, 1 - Math.exp(-dt / 0.45)); moving = true; }
@@ -614,9 +643,13 @@ export async function start(o) {
     }
     else if (reduced) overlay();   // lines follow the scroll between stills
     if (ao) ao.tick(now, moving);   // the contact shadows time themselves (passive)
+    // still enough for one-off jobs (quiet): no intro, dissolve or intro lines, and the camera stopped or only creeping
+    // through the last centimetres of a glide (the rig's tail runs on for seconds at well under a pixel a frame)
+    const shift = camera.position.distanceTo(camWas) + tgt.distanceTo(tgtWas); camWas.copy(camera.position); tgtWas.copy(tgt);
+    if (introT0 != null || (m > 0 && m < 0.999) || (lineT0 != null && lineMs < LINES_APP[2][1]) || (moving && shift > 0.03)) movingAt = now;
     if (moving) {   // adaptive resolution, as walk.js adapt()
       if (dt > 0.026 && dt < 0.09) slow++; else if (dt < 0.02) okF++;
-      if (slow > 20 && slow > okF * 0.5) { if (dpr > 1.01) { dpr = Math.max(1, dpr - 0.25); renderer.setPixelRatio(dpr); resize(); } slow = okF = 0; }
+      if (slow > 20 && slow > okF * 0.5) { if (dpr > 1.01) { dpr = Math.max(1, dpr - 0.25); dprLock = true; renderer.setPixelRatio(dpr); resize(); } slow = okF = 0; }
       if (okF > 400) slow = okF = 0;
       need();
     } else {
@@ -631,6 +664,27 @@ export async function start(o) {
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; m = 0; mixTick(0); hero.classList.remove('hx-live'); if (ao) ao.lost(); });
   canvas.addEventListener('webglcontextrestored', () => { renderer.shadowMap.needsUpdate = true; lost = false; if (ao) ao.restored(); dirty = true; hero.classList.add('hx-live'); need(); });
 
+  // ---------- the neighbourhood and the breeze, before the first frame ----------
+  // Owner, Nov 2026: "if i load on like some laptop or mobile, its like lagging in the transition screen and animation on
+  // 3d". The neighbourhood was built 0.4 s after the first frame, in one 0.6 s block (several seconds on a phone) right
+  // where the photo dissolves, and its shaders, and the breeze's, compiled on the frames after. Now it is built while
+  // the photo still shows (its slow drift runs on the compositor, so it never stutters), much faster (hero-context.js),
+  // and every shader is compiled with the estate's below. The 3D is the same from its first frame, neighbours and all.
+  let wind = null;
+  try {
+    const cm = await ctxP;
+    if (cm && cm[1]) {
+      const c = await cm[0].addContext({ THREE, scene, lite, data: cm[1] });
+      neighbours = c; if (rig) rig.setFloor(c.floor);
+      // the streets and areas round the estate are OpenStreetMap data (ODbL): its credit, small, in a corner of the 3D
+      if (!ui.querySelector('.hx-osm')) { const a = document.createElement('a'); a.className = 'hx-osm'; a.href = 'https://www.openstreetmap.org/copyright'; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = '© OpenStreetMap contributors'; ui.append(a); }
+    }
+  } catch (e) { console.warn('hero 3D: no neighbourhood', e); }
+  // the leaves' and palms' sway at rest (the wind starts when hero-life.js does, after the intro)
+  const lifeMod = lifeP && await lifeP;
+  if (lifeMod && lifeMod.patchSway) { try { wind = lifeMod.patchSway(THREE, scene); } catch (e) { wind = null; } }
+
   // ---------- first frame (drawn hidden: the photo stays until the visitor scrolls) ----------
   resize();
   aimHome = homeNow() === 'bungalow' ? 'bungalow' : null;   // a page opened on the Bungalow ends looking its way
@@ -641,6 +695,24 @@ export async function start(o) {
   renderer.shadowMap.needsUpdate = true;
   try { await renderer.compileAsync(scene, camera); } catch (e) { /* compiles on first draw instead */ }
   render(); overlay();
+  // Sharpness for this device, measured before anything shows (owner, Nov 2026: "if i load on like some laptop or mobile,
+  // its like lagging in the transition screen and animation on 3d"): the opening view drawn twice more, each waited for
+  // (a 1 px read), at the full pixel ratio. A GPU that cannot draw it in BUDGET ms plays the dissolve and the intro a step
+  // softer; once the camera rests it goes back up as far as it holds (stepUp, below). Others are unchanged.
+  const benchGl = renderer.getContext(), benchPx = new Uint8Array(4);
+  const timed = () => { const t = performance.now(); renderer.render(scene, camera); benchGl.readPixels(0, 0, 1, 1, benchGl.RGBA, benchGl.UNSIGNED_BYTE, benchPx); return performance.now() - t; };
+  let benchMs = 0;
+  try {
+    timed();   // pays for what the first draw left queued (uploads, links)
+    benchMs = Math.min(timed(), timed());
+    if (benchMs > BUDGET && dpr > 1) {
+      dpr = Math.max(1, Math.floor(dpr * Math.sqrt(BUDGET / benchMs) * 4) / 4);
+      renderer.setPixelRatio(dpr); resize(); benchMs = Math.min(benchMs, timed());
+    }
+    render();
+  } catch (e) { /* drawn as it is */ }
+  // phones and slower GPUs: the contact shadows wait for the end of the intro (below)
+  const weak = lite || benchMs > BUDGET * 0.8;
   live = true;
   if (APP) startApp();
   if (pendingWalk) { const [h, f] = pendingWalk; pendingWalk = null; setTimeout(() => walkInto(h, f), 0); }
@@ -649,40 +721,59 @@ export async function start(o) {
   performance.mark('hx-interactive');
   dirty = true; need();
 
-  // the neighbourhood in low detail (hero-context.js, ~30 KB), after the first frame so it never holds the 3D up
-  setTimeout(() => import(base + 'hero-context.js?v=13')
-    .then(m => m.addContext({ THREE, scene, lite, url: base + 'context.e1.json?v=1' }))
-    .then(c => { neighbours = c; if (rig) rig.setFloor(c.floor); renderer.shadowMap.needsUpdate = true; dirty = true; need();
-      // the streets and areas round the estate are OpenStreetMap data (ODbL): its credit, small, in a corner of the 3D
-      if (!ui.querySelector('.hx-osm')) { const a = document.createElement('a'); a.className = 'hx-osm'; a.href = 'https://www.openstreetmap.org/copyright'; a.target = '_blank'; a.rel = 'noopener';
-        a.textContent = '© OpenStreetMap contributors'; ui.append(a); } })
-    .then(() => reduced ? null : introDone.then(() => import(base + 'hero-life.js?v=8')).then(m => { life = m.addLife({ THREE, scene, lite }); dirty = true; need(); }))
-    .catch(e => console.warn('hero 3D: no neighbourhood', e)), 400);
+  // a little life (hero-life.js: cars, egrets, the breeze) once the intro has ended; its shaders are compiled before it
+  // shows (the egrets' too, though they first fly a few seconds later), so no frame waits on one
+  if (lifeMod) introDone.then(() => {
+    try {
+      const L = lifeMod.addLife({ THREE, scene, lite, wind });
+      L.birds.visible = true;
+      const p = renderer.compileAsync(L.group, camera, scene);
+      L.birds.visible = false; L.group.visible = false;
+      p.catch(() => {}).then(() => { L.group.visible = true; life = L; dirty = true; need(); });
+    } catch (e) { console.warn('hero 3D: no life', e); }
+  });
 
-  // later, when idle (and, in app mode, once the intro glide has ended): the golden sky on phones, photo maps on desktop
-  const idle = window.requestIdleCallback || (f => setTimeout(f, 300));
-  introDone.then(() => setTimeout(() => idle(() => {
+  // later, when idle (and, in app mode, once the intro glide has ended and the camera has come to rest): the golden sky
+  // on phones, photo maps on desktop
+  introDone.then(() => quiet(800)).then(() => idle(() => {
     if (lite && !o.careful && todName === 'golden') todCtl.set('golden', true);   // data saver: no extra sky download
     if (!lite) { for (const u of est.hdUses) hd.use(u.mat, u.set, u.o); hd.start(); }
-  }, { timeout: 2000 }), 1200));
+  }, { timeout: 2000 }));
+  // sharpness back up once the camera rests, if the opening measure took it down and the GPU has room for the next step
+  const stepUp = () => {
+    if (dprLock || dpr >= DPR_MAX - 0.01 || held || !live || lost) return;
+    let ms = 1e9; try { ms = Math.min(timed(), timed()); render(); } catch (e) { return; }
+    const next = Math.min(DPR_MAX, dpr + 0.25);
+    if (ms * (next / dpr) ** 2 < BUDGET * 0.8) { dpr = next; renderer.setPixelRatio(dpr); resize(); quiet(1500).then(stepUp); }
+  };
+  if (!reduced) introDone.then(() => quiet(1500)).then(stepUp);
   // contact shadows (hero-ao.js, screen-space AO): loaded when idle after the first frame, phones too (not on data
   // saver); it measures its own cost and steps down, or off, by itself. ?hero=noao leaves it out
-  if (!o.careful && o.flag !== 'noao') idle(() => import(base + 'hero-ao.js?v=2')
+  if (!o.careful && o.flag !== 'noao') idle(() => import(base + 'hero-ao.js?v=3')
     .then(mod => mod.createAO({ THREE, renderer, scene, camera, lite, reduced }))
-    .then(a => { ao = a; dirty = true; need(); })
+    .then(a => {
+      // phones and slower GPUs: built and compiled now, but drawn from the end of the intro (owner, Nov 2026: "if i load
+      // on like some laptop or mobile, its like lagging in the transition screen and animation on 3d"); it fades in over
+      // the settle glide instead. Strong GPUs are unchanged
+      if (a && APP && weak && a.hold) { a.hold(true); introDone.then(() => a.hold(false)); }
+      ao = a; dirty = true; need();
+    })
     .catch(e => console.warn('hero 3D: no contact shadows', e)), { timeout: 1500 });
   // the house tours built ahead, in the background, once the estate has loaded and settled (owner, Nov 2026: "shall we
   // preload the semi d and bungalow house tour? after landing hero 3d fully loaded"): the home the page shows first; on
   // desktop the other follows; phones build one home at a time (the other when it is picked: memory). Not on data saver.
-  if (APP && !o.careful) setTimeout(() => idle(() => {
+  // After the intro has ended and the camera has rested 1.5 s (it started 3 s after the first frame, in the middle of the
+  // glide: owner, Nov 2026: "if i load on like some laptop or mobile, its like lagging in the transition screen and
+  // animation on 3d"); its steps also wait while the camera moves (explore.js, ctx.quiet)
+  if (APP && !o.careful) introDone.then(() => quiet(1500)).then(() => idle(() => {
     const h = homeNow(); intent(h);
-    if (!lite) setTimeout(() => intent(h === 'semid' ? 'bungalow' : 'semid'), 8000);
-  }, { timeout: 4000 }), 3000);
+    if (!lite) setTimeout(() => quiet().then(() => intent(h === 'semid' ? 'bungalow' : 'semid')), 8000);
+  }, { timeout: 4000 }));
 
   // ---------- the tour: Walk inside, the pill, deep links (explore.js, loaded on the first sign of interest) ----------
   const slotOf = h => pack.manifest.slots.find(q => q.id === pack.manifest.walked[h]);
   const ctx = {
-    THREE, renderer, canvas, camera, scene, base, T, lite, reduced, pack, nextFrame, focusHome: stage,
+    THREE, renderer, canvas, camera, scene, base, T, lite, reduced, pack, nextFrame, focusHome: stage, quiet,
     slotM: h => new THREE.Matrix4().fromArray(slotOf(h).M),
     plotCentre: h => V(0, 0, -6).applyMatrix4(new THREE.Matrix4().fromArray(slotOf(h).M)),
     hold(on) { held = on; if (on) { raf = 0; kbCss = ''; canvas.style.transform = ''; } else { last = 0; if (resizeMissed) resize(); dirty = true; need(); } },
@@ -708,7 +799,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=28').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=29').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   const moving = () => hero.classList.contains('hx-leave');   // the tour or the Location move is under way
   function walkInto(h, from) { if (moving()) return; if (!live) { pendingWalk = [h, from]; return; } tour().then(t => t.open(h, from)).catch(e => { console.warn('tour', e); location.href = base + 'index.html?home=' + h; }); }
@@ -762,7 +853,7 @@ export async function start(o) {
     const jump = () => { const el = document.getElementById('location'); if (el) el.scrollIntoView(); };
     location3d().then(l => (l ? l.go() : jump())).catch(e => { console.warn('location', e); jump(); });
   }
-  if (hasLoc) setTimeout(() => idle(() => location3d().catch(() => {}), { timeout: 3000 }), 2500);   // its Back to estate button on the map
+  if (hasLoc) introDone.then(() => quiet(1000)).then(() => idle(() => location3d().catch(() => {}), { timeout: 3000 }));   // its Back to estate button on the map (after the intro)
   { const m = /^#walk-(semid|bungalow)$/.exec(location.hash);   // a shared link straight into a home's tour
     if (m) { history.replaceState(history.state, '', location.pathname + location.search); setTimeout(() => walkInto(m[1], null), 400); } }
 
@@ -821,7 +912,7 @@ export async function start(o) {
       if (appOn) return; appOn = true;
       html.classList.add('hx-app'); window.scrollTo({ top: 0, behavior: 'instant' });
       held = false; resize();
-      introT0 = lineT0 = performance.now(); dirty = true; need();
+      introT0 = lineT0 = performance.now(); introMs = lineMs = 0; dirty = true; need();
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
@@ -885,6 +976,7 @@ export async function start(o) {
     renderer, scene, camera, est, tod: todCtl, KEYS, hd, pack,
     get s() { return s; },
     get ao() { return ao; },   // contact shadows: __hero.ao.report(), .set({...}), .bench()
+    get sharp() { return { dpr, max: DPR_MAX, benchMs: +benchMs.toFixed(1), budget: BUDGET, weak, locked: dprLock, stillMs: Math.round(performance.now() - movingAt) }; },   // the opening measure and since when the camera has been still
     get mix() { return { m, want: mWant, kb, aim: aimOff.toArray().map(v => +v.toFixed(2)), home: aimHome, hold: holdP, join: joinP }; },
     settle() { s = progressNow(); dirty = true; need(); },
     pick: pickTod,

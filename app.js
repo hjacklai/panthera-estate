@@ -1668,8 +1668,10 @@ let leafletPopupOpen = null;
 // scrolls near the viewport, so the initial page load stays light. The map is
 // well below the fold, so most visitors trigger this only after engaging.
 let leafletLoading = false;
+// Leaflet lives at window.L, but so does Lenis's class (its build leaks a global "L"), so check it is really Leaflet
+function leafletReady(){ return typeof L !== "undefined" && !!L && typeof L.map === "function"; }
 function loadLeaflet(cb){
-  if (typeof L !== "undefined"){ cb(); return; }
+  if (leafletReady()){ cb(); return; }
   if (leafletLoading){ document.addEventListener("leaflet:ready", cb, { once: true }); return; }
   leafletLoading = true;
   const css = document.createElement("link");
@@ -1724,7 +1726,7 @@ function initLocationMapWhenVisible(){
 function initLocationMap(){
   const el = document.getElementById("loc-leaflet");
   if (!el) return;
-  if (typeof L === "undefined"){
+  if (!leafletReady()){
     // Leaflet script still downloading, wait for our loader to finish.
     setTimeout(initLocationMap, 120);
     return;

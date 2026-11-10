@@ -23,7 +23,7 @@
   // keep in step with versions.js THREE_URL
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '118';   // bump with any hero file change
+  var V = '119';   // bump with any hero file change
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
   // a key missing there falls back to this English.
@@ -149,6 +149,12 @@
     var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '9', 'hero-orbit.js': '2', 'hero-rig.js': '5', 'pack.js': '3', 'hd.js': '7', 'versions.js': '1' };
     Object.keys(VER).forEach(function (f) { addLink('modulepreload', base + f + '?v=' + VER[f]); });
     addLink('modulepreload', ADDONS + 'utils/BufferGeometryUtils.js', { crossorigin: '' });
+    // the estate's data (about 1.7 MB) and, on desktop, the golden sky: fetched now, alongside three.js, instead of
+    // once hero.js has run. Exactly the URLs and fetch mode pack.js, hero.js and hd.js ask for, so they reuse these
+    // (keep 'e1' in step with versions.js BAKE_VER, the tier with hero.js, the sky file with hd.js 'golden')
+    var pre = function (u) { addLink('preload', base + u, { as: 'fetch', crossorigin: 'anonymous', fetchpriority: 'high' }); };
+    ['bake/estate.e1.json', 'bake/estate.e1.bin.gz', 'bake/estate.e1.tex' + (lite ? 512 : 1024) + '.bin', 'bake/hero-lod.e1.json'].forEach(pre);
+    if (!lite) pre('hd/sky/qwantani_sunset_puresky_1k.hdr');
     addLink('stylesheet', base + 'hero.css?v=' + V);
     hero.classList.add('hx-on');
     import(base + 'hero.js?v=' + V).then(function (m) {

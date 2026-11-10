@@ -85,7 +85,7 @@ export function createLocation(o) {
 
   // ---------- the map layer ----------
   // Leaflet, via app.js's own loader; gives up if the script is blocked or never arrives (no frozen page)
-  const leaflet = () => (window.L ? Promise.resolve(window.L) : new Promise((res, rej) => {
+  const leaflet = () => (window.L && typeof window.L.map === 'function' ? Promise.resolve(window.L) : new Promise((res, rej) => {
     const t = setTimeout(() => rej(new Error('leaflet: timed out')), 10000);
     document.addEventListener('leaflet:error', () => { clearTimeout(t); rej(new Error('leaflet: failed to load')); }, { once: true });
     window.loadLeaflet(() => { clearTimeout(t); res(window.L); });

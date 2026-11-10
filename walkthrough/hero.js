@@ -176,8 +176,11 @@ export async function start(o) {
 
   // ---------- renderer ----------
   let renderer;
+  const AA = !lite || !(navigator.deviceMemory && navigator.deviceMemory <= 2);
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: !lite, powerPreference: 'high-performance', alpha: false });
+    // MSAA on phones too (owner, Nov 2026: jagged roof and road edges): phone GPUs draw in tiles, where 4x MSAA is
+    // nearly free; only very low-memory phones go without. The slow-frame step still lowers the pixel ratio if needed.
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: AA, powerPreference: 'high-performance', alpha: false });
   } catch (e) { fail(e); return; }
   if (!renderer.capabilities.isWebGL2) { renderer.dispose(); fail(new Error('no WebGL2')); return; }
   const DPR_MAX = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2);   // phones sharper (was 1.25); the slow-frame step below brings it back down when a phone can't keep up
@@ -647,7 +650,7 @@ export async function start(o) {
   dirty = true; need();
 
   // the neighbourhood in low detail (hero-context.js, ~30 KB), after the first frame so it never holds the 3D up
-  setTimeout(() => import(base + 'hero-context.js?v=12')
+  setTimeout(() => import(base + 'hero-context.js?v=13')
     .then(m => m.addContext({ THREE, scene, lite, url: base + 'context.e1.json?v=1' }))
     .then(c => { neighbours = c; if (rig) rig.setFloor(c.floor); renderer.shadowMap.needsUpdate = true; dirty = true; need();
       // the streets and areas round the estate are OpenStreetMap data (ODbL): its credit, small, in a corner of the 3D
@@ -786,7 +789,7 @@ export async function start(o) {
   function fitDist(el = 0.7, fov = 40) {
     const b = openBand(), t = Math.tan(fov * Math.PI / 360), fv = (b.bot - b.top) / H, A = W / H;
     const across = 100 / (2 * t * A * 0.86), down = 100 * Math.sin(el) / (2 * t * fv * 0.8);
-    return Math.max(150, Math.min(440, Math.max(across, down) * 1.08));
+    return Math.max(150, Math.min(440, Math.max(across, down) * (portrait ? 1.0 : 1.08)));   // phones: a touch closer (owner: estate small)
   }
   function relayout() { if (!APP) return; offBase = openOff(); if (rigOn) rig.setOff(...offNow()); dirty = true; need(); }
   addEventListener('panthera:lang', relayout);
@@ -913,7 +916,7 @@ export async function start(o) {
     for (const t of texs) { const im = t.data || t.image || {}; const w = im.width || 0, h = im.height || 0; b += w * h * 4 * 1.34; }
     b += 6 * 256 * 256 * 8 * 1.5 * 2;   // two PMREM env maps (half float)
     const sm = sun.shadow.mapSize.x; b += sm * sm * 8;
-    b += canvas.width * canvas.height * (lite ? 8 : 8 + 4 * 8);   // colour + depth, plus 4x MSAA on desktop
+    b += canvas.width * canvas.height * (AA ? 8 + 4 * 8 : 8);   // colour + depth, plus 4x MSAA where it is on
     if (ao) b += ao.bytes();   // the contact shadows' targets
     return Math.round(b / 1048576);
   }

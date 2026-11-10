@@ -939,3 +939,7 @@ html:lang(zh) .hxa-cap-specs dt, html:lang(zh) .pbw .intro .pbw-specs dt{ font-s
   html.hx-app .hxa-body .faq-aside .cta::after{ content: ""; position: absolute; inset: -12px -6px; }
   html.hx-app .hxa-body .loc-livemap-actions button::after, html.hx-app .hxa-body .loc-livemap-actions a::after{ content: ""; position: absolute; inset: -7px -3px; }
 }
+/* the walk pill always 10 px above the menu's measured top (hero-app.js --hxa-mgap), whatever the screen (folding phones) */
+html.hx-app .h3d-ui .hx-homes.hx-two{ bottom: calc(var(--hxa-mgap, 76px) + 10px) !important; }
+/* the OpenStreetMap credit under the top bar, clear of the pill and the menu (it sat on the Bungalow button) */
+html.hx-app .h3d-ui .hx-osm{ top: calc(var(--hxa-tbh, var(--hx-tb, 64px)) + 6px); bottom: auto !important; right: max(10px, env(safe-area-inset-right, 0px)); }

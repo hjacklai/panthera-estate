@@ -63,6 +63,14 @@ export function createApp(ctx) {
     menu.append(b); btns[id] = b;
   }
   document.body.append(menu);
+  // the walk pill keeps clear of the menu at every screen shape (owner, Nov 2026, a folding phone: "the pill overlapping"):
+  // the menu's real top, measured, is handed to the CSS as --hxa-mgap (screen bottom to the menu's top edge)
+  // and the top bar's real bottom as --hxa-tbh (the OpenStreetMap credit sits just under it)
+  { const tb = document.querySelector('.topbar'), st = document.documentElement.style;
+    const gap = () => { const r = menu.getBoundingClientRect(); if (r.height > 0 && r.top > 0) st.setProperty('--hxa-mgap', Math.round(innerHeight - r.top) + 'px');
+      const t = tb && tb.getBoundingClientRect(); if (t && t.height > 0) st.setProperty('--hxa-tbh', Math.round(t.bottom) + 'px'); };
+    gap(); addEventListener('resize', gap); setTimeout(gap, 600);
+    if ('ResizeObserver' in window) { const ro = new ResizeObserver(gap); ro.observe(menu); if (tb) ro.observe(tb); } }
   setTimeout(() => ctx.relayout && ctx.relayout(), 0);   // the menu now exists: the clear band can be measured
   const mark = id => { for (const k in btns) { btns[k].classList.toggle('on', k === id); btns[k].setAttribute('aria-current', k === id ? 'page' : 'false'); } };
   mark('estate');

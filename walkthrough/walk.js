@@ -45,9 +45,11 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 // calls mountWalk({ lib: true, ... }) itself: shared renderer and canvas, its own HUD copy, no own frame loop.
 const AUTO = !new URL(import.meta.url).searchParams.has('lib');
 const MODDIR = new URL('./', import.meta.url).href;
-// one task's break during an embedded build, so the hero keeps drawing (MessageChannel: not throttled when hidden)
+// one task's break during an embedded build, so the hero keeps drawing (MessageChannel: not throttled when hidden).
+// Not scheduler.yield: its continuations jump ahead of the frames and timers the hero draws its flight with, so a build
+// of many short slices still froze the fly-in (owner, Nov 2026: "when i click into the semi d and bungalow walk through
+// tour, the animation like its abit laging"). explore.js passes opts.pace to break at the display's own frames instead.
 const yieldTask = () => new Promise(r => {
-  if (globalThis.scheduler && scheduler.yield) { scheduler.yield().then(r); return; }
   const c = new MessageChannel(); c.port1.onmessage = () => { c.port1.close(); r(); }; c.port2.postMessage(0);
 });
 
@@ -56,8 +58,15 @@ const LIB = !!opts.lib;                          // embedded in the estate hero
 const BASE = LIB ? MODDIR : '';                  // embedded: data and images load relative to walk.js
 const UI = LIB ? opts.ui : null, SCROLLER = LIB ? opts.scroller : null;   // the hero's copy of the HUD, and its scroller
 const ac = new AbortController(), sig = { signal: ac.signal };
-let yields = 0, disposed = false;
-const Y = async () => { yields++; if (opts.onProgress) opts.onProgress(Math.min(1, yields / 26)); if (opts.cooperative) await yieldTask(); };
+let yields = 0, disposed = false, sliceT = performance.now();
+const brk = () => (opts.pace ? opts.pace() : yieldTask());
+const Y = async () => { yields++; if (opts.onProgress) opts.onProgress(Math.min(1, yields / 26)); if (opts.cooperative) { await brk(); sliceT = performance.now(); } };
+// inside the build's long loops (furniture, cars, walls...): a break whenever a slice of work (about 8 ms, opts.budget)
+// has run since the last one, so no single stretch holds a frame of the flight up. Not Y(): that counts build progress.
+const slice = async () => {
+  if (!opts.cooperative || performance.now() - sliceT < (opts.budget ? opts.budget() : 8)) return;
+  await brk(); sliceT = performance.now();
+};
 const QS = LIB ? '' : location.search;           // embedded: no page flags
 
 // Levels (m): ground floor finish = 0, porch + garden 0.30 below,
@@ -186,7 +195,7 @@ const LIFT_FIX = { spc_oak: [1.66 / 1.86, 1.50 / 1.77, 1.28 / 1.61] }, LIFT_MATS
 const hd = createHD({ THREE, renderer, res: HD_RES, lite: !HIFI, base: BASE + './hd/', onChange: name => {
   const k = LIFT_FIX[name];
   if (k) for (const m of LIFT_MATS) if (m.userData.hd === name && !m.userData.lifted) { m.color.setRGB(m.color.r * k[0], m.color.g * k[1], m.color.b * k[2]); m.userData.lifted = true; }
-  needRender = true;
+  needRender = true; shadowDirty = true;   // a new map can change a cut-out (leaves) in the shadow
 } });
 
 const scene = new THREE.Scene();
@@ -336,6 +345,7 @@ function profWall(r, axis, prof, a0, a1, yb, parent, mat = mWall) {
 const STRINGER_DROP = 0.75;   // bungalow stair (owner, Nov 2026): a mild-steel balustrade, so the walls that rose to the handrail line stop 0.75 below it
 const WALL_TOPS = ((!SEMID && D.gf_wall_tops && D.gf_wall_tops.value) || []).map(w => /rail line/.test(w.notes || '') ? { ...w, prof: w.prof.map(([a, y]) => [a, y > 1.1 ? y - STRINGER_DROP : y]) } : w);
 for (const r of D.gf.filter(inZone)) {
+  await slice();   // embedded build: a break between pieces once a slice of work has run
   if (isStringer(r) || (SEMID && ARTEFACTS.includes(rkey(r)))) continue;
   const wt = WALL_TOPS.find(w => rkey(w.r) === rkey(r));
   if (wt) {                                                       // rises with the walls, cut at the plan height like the rest
@@ -615,6 +625,7 @@ if (LIB) await Y();   // embedded build: let the hero draw a frame
 }
 for (const f of X.roof.flats.filter(f => f.y1 < 4)) ffBlock(f.r, f.y0, f.y1 - f.y0, mSlab);
 for (const r of D.ff.filter(inZone)) {
+  await slice();
   if (SEMID && (Math.max(r[1], r[3]) > 0.01 || Math.min(Math.abs(r[0]), Math.abs(r[2])) > 6.73 || Math.max(Math.abs(r[0]), Math.abs(r[2])) > 6.75)) continue;   // balcony + outside bits: from the spec below
   ffBlock(r, FF_BASE, ffTop(r) - FF_BASE);
 }
@@ -2079,6 +2090,7 @@ if (NEWFURN) {
   const MAP = { stool: ['chair', { stool: true }], armchair: ['chair', { armchair: true }], island: ['counter', {}] };
   const planSegs = [];
   for (const f of list) {
+    await slice();
     let [kind, extra] = MAP[f.kind] || [f.kind, {}];
     const spec = { ...f, ...extra };
     if (spec.seat_h != null && spec.seatH == null) spec.seatH = spec.seat_h;
@@ -2161,6 +2173,7 @@ if (NEWFURN) {
   // Bathrooms: a frameless mirror over every basin and vanity, on the wall behind it.
   const mMirror = new THREE.MeshStandardMaterial({ color: 0xE4E8EA, metalness: 1, roughness: 0.03, envMapIntensity: 1.3 }), mMirrorEdge = new THREE.MeshStandardMaterial({ color: 0xBFC6C8, roughness: 0.2, metalness: 0.6 });
   for (const f of list.filter(q => (q.kind === 'basin' || q.kind === 'vanity' || (q.kind === 'desk' && /dressing/i.test(q.notes || ''))) && q.back && q.x0 != null)) {
+    await slice();
     const dress = f.kind === 'desk';   // the master dressing table: a taller mirror over it
     const r = rect(f), fb = f.floor ? FF_BASE : 0, parent = f.floor ? furnFF : furnGF, ax = f.back[1] === 'x' ? 'z' : 'x';
     const wallC = f.back === '-x' ? r[0] : f.back === '+x' ? r[2] : f.back === '-z' ? r[1] : r[3], out = f.back[0] === '-' ? 1 : -1;
@@ -2185,6 +2198,7 @@ if (NEWFURN) {
   const mCab = mKitchenWood, mCabIn = new THREE.MeshStandardMaterial({ color: 0xF2EBDD, roughness: 0.45 });
   const mSteelHood = new THREE.MeshStandardMaterial({ color: 0xD9D8D4, roughness: 0.28, metalness: 0.85 }), mHandle = new THREE.MeshStandardMaterial({ color: 0x1F1E1D, roughness: 0.45, metalness: 0.5 });   // slim satin-black pulls (Japandi)
   for (const f of list.filter(q => q.kind === 'counter' && q.back)) {
+    await slice();
     const r = rect(f), base = f.y0 ?? (f.floor ? FF_BASE : 0), parent = f.floor ? furnFF : furnGF, ceil = base + (f.floor ? 3.3 : GF_TOP);
     const ax = f.back === '-x' || f.back === '+x' ? 'z' : 'x';   // the run's direction
     const wallC = f.back === '-x' ? r[0] : f.back === '+x' ? r[2] : f.back === '-z' ? r[1] : r[3], out = f.back[0] === '-' ? 1 : -1;
@@ -2349,6 +2363,7 @@ if (NEWFURN) {
 }
 const leafHit = c => OPEN_LEAVES.some(r => c.x0 < r[2] && c.x1 > r[0] && c.z0 < r[3] && c.z1 > r[1]);
 for (const c of CARS) {
+  await slice();
   if (leafHit(c)) continue;
   let { x0, x1 } = c;
   // the walked unit parks its one car in the outer bay (clear of the open gate leaf), not in front of the front door
@@ -2360,6 +2375,7 @@ if (!SEMID) {
   const C = { counter: SAGE, sink: STEEL, hob: BLACK, fridge: STEEL, chair: CHARCOAL, table: OAK, tv_console: OAK, tv_stand: BLACK, tv: BLACK, rug: JUTE,
     round: TRAVERTINE, sofa: BOUCLE, bed: OAK, panel: BOUCLE, bedside: WALNUT, lamp: 0xF5EEE3, wc: PORC, basin: PORC, bath: PORC, wardrobe: OAK, tank: 0x8E989C };
   for (const f of FURN) {
+    await slice();
     if (f.kind === 'floor_trap' || f.kind === 'shower') continue;
     const x0 = f.x0 ?? f.cx - f.w / 2, x1 = f.x1 ?? f.cx + f.w / 2, z0 = f.z0 ?? f.cz - f.d / 2, z1 = f.z1 ?? f.cz + f.d / 2;
     const base = f.y0 ?? (f.floor ? FF_BASE : 0), h = Math.max(f.h || 0.02, 0.012), o = { live: true, ff: f.floor === 1, rot: f.rot || 0 };
@@ -2634,6 +2650,7 @@ function artTexture(seed, w, h) {
   const mFrameOak = new THREE.MeshStandardMaterial({ color: 0xDCC9AA, roughness: 0.5 }), mMat = new THREE.MeshStandardMaterial({ color: 0xF6F2EA, roughness: 0.9 });
   let hung = 0;
   for (const a of ART) {
+    await slice();
     const f = wallFace(a.x, a.z, a.fl, a.n); if (!f || f.d > 0.4) continue;
     const ax = f.nx ? 'z' : 'x', along = ax === 'x' ? f.x : f.z, base = a.fl ? FF_BASE : 0;
     const covers = (a.fl ? D.ff_open : D.gf_open).some(o => {   // a window or doorway behind it
@@ -2699,6 +2716,7 @@ const ffLights = [];
 if (SEMID) {
   // Semi-D: every lighting point, fan, wall light and air-con point of drawing E-01 (verified), at its room's ceiling.
   for (const f of SD_LIGHTS) {
+    await slice();
     if (f.k === 'light') { const n = downs.length; ceilingLight(f.x, f.z, f.y, f.out, undefined, f.halo ?? 1.5); if (f.floor) ffLights.push(downs[n]); }
     else if (f.k === 'fan') makeFan(f.x, f.z, f.y, !!f.floor);
     else if (f.k === 'wall_light') wallLight(f.x, f.z, f.y + (f.floor ? FF_BASE : 0), f.floor, f.out, null, /STAIR/i.test(f.room || ''));
@@ -2723,6 +2741,7 @@ if (SEMID) {
   };
   const foyer = (X.double_height || []).find(v => v.id === 'entrance_void');
   for (const f of FIT) {
+    await slice();
     if (f.k === 'light' && foyer && f.y > 5 && inVoid(f.x, f.z) && f.x > foyer.r[0] && f.x < foyer.r[2] && f.z > foyer.r[1] && f.z < foyer.r[3]) { ringChandelier(f.x, f.z, f.y, foyer.r); continue; }
     if (f.k === 'light') { const t = f.y > 7.2 && /BALKONI/i.test(f.room || '') ? tileY(f.x, f.z) : null; ceilingLight(f.x, f.z, t ? t.y - 0.003 - EYE_R * t.slope : f.y, outside(f), undefined, t ? 0.6 : 1.5); }
     else if (f.k === 'fan') makeFan(f.x, f.z, f.y, f.y > 5);
@@ -2937,6 +2956,7 @@ function estateTextures() {
 // Built just after the first frame (it's only seen once the house is real), so the page opens sooner.
 // With the pack: all 19 homes and the grounds come ready-made, nothing else is built or baked here.
 let estateBusy = false, estateFrom = null;
+let ctxP = null;   // the neighbourhood, once it is in (the embedded build waits for it before compiling)
 async function buildEstateNow() {
   if (estate || !ESTATE || estateBusy) return;
   estateBusy = true;
@@ -2954,11 +2974,25 @@ async function buildEstateNow() {
       // and the neighbourhood round it in low detail, as on the landing (owner, Nov 2026: "when i come out of tour, i should
       // still see the surrounding also right? like the neighbour lot"): hero-context.js in the estate's own frame, after the
       // estate is up so it never holds the tour back
-      { const host = estate.root;
-        import('./hero-context.js?v=11').then(m => m.addContext({ THREE, scene: host, url: BASE + './context.e1.json?v=1', lite: !HIFI }))
+      const hc = opts.context && opts.context();
+      if (hc && hc.hideIn && hc.group) {   // embedded: a copy of the estate hero's own (built once; rebuilding it here was the
+        // longest stretch of the tour's opening): the same geometry, its own materials so the tour's fade leaves the hero's be
+        const host = estate.root, g = hc.group.clone(), own = new Map();
+        g.traverse(o => {
+          if (!o.isMesh) return;
+          o.geometry.userData.pk = 1;   // shared: never freed by this walk
+          o.material = [].concat(o.material).map(m => { if (!own.has(m)) { const c = m.clone(); c.userData.keepTex = true; own.set(m, c); } return own.get(m); });
+          if (o.material.length === 1) o.material = o.material[0];
+        });
+        host.add(g); hc.hideIn(host, g);
+        for (const m of own.values()) { m.userData.t0 = m.transparent; m.userData.o0 = m.opacity; CTX_MATS.push(m); }
+      } else { const host = estate.root;
+        ctxP = import('./hero-context.js?v=12').then(m => m.addContext({ THREE, scene: host, url: BASE + './context.e1.json?v=1', lite: !HIFI }))
           .then(c => { if (disposed || !estate || estate.root !== host) { c.dispose && c.dispose(); return; }
             c.group.traverse(o => { for (const m of [].concat(o.material || [])) if (m && !CTX_MATS.includes(m)) { m.userData.t0 = m.transparent; m.userData.o0 = m.opacity; CTX_MATS.push(m); } });
-            if (progress >= 0) apply(progress); needRender = true; })
+            // the page: its shaders now, in their opaque (photograph) state, not when they first show mid-scroll
+            if (!LIB && renderer.compileAsync) { apply(0.65); clipReset(); renderer.compileAsync(c.group, camera, scene).catch(() => {}); }
+            if (progress >= 0) apply(progress); needRender = true; shadowDirty = true; })
           .catch(e => console.warn('walk: no neighbourhood', e)); }
     } catch (e) { console.warn('pack: building the estate here instead', e); estate = null; }
   }
@@ -2985,7 +3019,7 @@ async function buildEstateNow() {
   } catch (e) { console.warn('estate', e); estate = null; }
   estateBusy = false;
   if (estate && progress >= 0) apply(progress);
-  needRender = true;
+  needRender = true; shadowDirty = true;
 }
 
 
@@ -3194,7 +3228,7 @@ function bakeForEstate() {
   if (estate.baked) {   // the pack: the walked home's far copy shares the pack's geometry and materials
     walkedLOD = new THREE.Group(); walkedLOD.visible = false; scene.add(walkedLOD);
     for (const { material, geometry } of estate.parts[HOME]) { const m = new THREE.Mesh(geometry, material); m.castShadow = !material.transparent; m.receiveShadow = true; walkedLOD.add(m); }
-    refreshSkipAO(); needRender = true; performance.mark('walk-estate-full');
+    refreshSkipAO(); needRender = true; shadowDirty = true; performance.mark('walk-estate-full');
     return;
   }
   warming = true;
@@ -3205,7 +3239,7 @@ function bakeForEstate() {
     walkedLOD = new THREE.Group(); walkedLOD.visible = false; scene.add(walkedLOD);
     for (const { material, geometry } of parts) { const m = new THREE.Mesh(geometry, material); m.castShadow = !material.transparent; m.receiveShadow = true; walkedLOD.add(m); }
   } catch (e) { console.warn('bake', e); }
-  apply(progress >= 0 ? progress : 0); warming = false; needRender = true;
+  apply(progress >= 0 ? progress : 0); warming = false; needRender = true; shadowDirty = true;
   const other = SEMID ? 'bungalow' : 'semid';
   const fr = document.createElement('iframe');
   fr.setAttribute('aria-hidden', 'true'); fr.tabIndex = -1;
@@ -3213,11 +3247,85 @@ function bakeForEstate() {
   addEventListener('message', function onMsg(ev) {
     if (ev.source !== fr.contentWindow || !ev.data || ev.data.type !== 'panthera-bake') return;
     removeEventListener('message', onMsg);
-    try { estate.setHouses(other, unpackParts(ev.data.parts)); needRender = true; refreshSkipAO(); performance.mark('walk-estate-full'); } catch (e) { console.warn('bake other', e); }
+    try { estate.setHouses(other, unpackParts(ev.data.parts)); needRender = true; shadowDirty = true; refreshSkipAO(); performance.mark('walk-estate-full'); } catch (e) { console.warn('bake other', e); }
     setTimeout(() => fr.remove(), 0);
   });
   fr.src = `./index.html?home=${other}&bake=1`;
   document.body.appendChild(fr);
+}
+
+// ---------- the standing house, merged ----------
+// From P 0.25 the house stands: its walls, frames, roof, fittings and fence do not move again, about 1,300 meshes in
+// about 100 materials. A merged copy, one mesh per material, is drawn in their place from there on to the fly-over
+// (scrolling back up brings the originals back), so each frame issues several hundred fewer draws and the shadow pass
+// a thousand fewer (owner, Nov 2026: "scrolling through it also laggy, mobile mode especially"). The same geometry and
+// the same materials, so the picture is the same. Only meshes with the same place and the same visibility at four
+// states between P 0.25 and 0.89 are merged: doors, sliders, fans, the gate and anything see-through or fading stay as
+// they are. The originals are put on a layer the cameras do not see, so their ink outlines still draw until they fade.
+const FREEZE_P = 0.25, FREEZE_AT = [0.25, 0.5, 0.75, 0.89], HIDE_LAYER = 5;
+let frozen = null, frozenSrc = [], frozenOn = false;
+async function freezeStatic() {
+  if (frozen || disposed) return;
+  const skip = new Set();
+  for (const r of [...swingDoors, ...slidingPanes, ...fans, gate, ...labels, ...streetLabels, ...furn]) if (r && r.traverse) r.traverse(o => skip.add(o));
+  for (const m of siteWalls) skip.add(m);
+  const plain = THREE.Object3D.prototype.onBeforeRender;
+  const okMat = m => m && !m.transparent && !m.isLineMaterial && !m.isShaderMaterial && m.visible !== false && m.blending === THREE.NormalBlending;
+  const cand = [];
+  for (const r of [house, gfDetail, ffDetail, roof, extDetail, fence, fixGF, fixFF]) r.traverse(o => {
+    if (!o.isMesh || o.isLineSegments2 || o.isInstancedMesh || o.isSkinnedMesh || skip.has(o)) return;
+    if (o.onBeforeRender !== plain || o.customDepthMaterial || o.customDistanceMaterial || o.renderOrder !== 0 || o.layers.mask !== 1) return;
+    if (Object.keys(o.geometry.morphAttributes || {}).length) return;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    if (Array.isArray(o.material) && !o.geometry.groups.length) return;
+    if (!mats.every(okMat)) return;
+    cand.push(o);
+  });
+  // where each one sits, and whether it shows, at four states (each set and put back in this task)
+  const seen = (o) => { for (let q = o; q; q = q.parent) if (!q.visible) return false; return true; };
+  const rec = new Map();
+  for (const P of FREEZE_AT) {
+    apply(P); scene.updateMatrixWorld(true);
+    for (const o of cand) {
+      const v = seen(o), e = o.matrixWorld.elements, r = rec.get(o);
+      if (!r) { rec.set(o, { v, m: o.matrixWorld.clone() }); continue; }
+      if (!r.ok && r.ok !== undefined) continue;
+      let same = r.v === v;
+      for (let i = 0; same && i < 16; i++) if (Math.abs(r.m.elements[i] - e[i]) > 1e-6) same = false;
+      r.ok = same && (r.ok !== false);
+    }
+  }
+  apply(progress >= 0 ? progress : 0);
+  const keep = cand.filter(o => { const r = rec.get(o); return r.ok && r.v && r.m.determinant() > 0; });
+  // merged per material, shadow flags and vertex attributes
+  const groups = new Map();
+  for (const o of keep) {
+    await slice();
+    if (disposed) return;
+    const M = rec.get(o).m, multi = Array.isArray(o.material);
+    const pieces = multi ? o.geometry.groups.map(g => [o.material[g.materialIndex], flatGeo(o.geometry, g)]) : [[o.material, flatGeo(o.geometry)]];
+    for (const [mat, g] of pieces) {
+      if (!g.attributes.position || !g.attributes.position.count) continue;
+      g.applyMatrix4(M);
+      const sig = Object.keys(g.attributes).sort().map(k => k + g.attributes[k].itemSize).join();
+      const key = mat.uuid + '|' + (o.castShadow ? 1 : 0) + (o.receiveShadow ? 1 : 0) + '|' + sig;
+      if (!groups.has(key)) groups.set(key, { mat, cast: o.castShadow, recv: o.receiveShadow, gs: [] });
+      groups.get(key).gs.push(g);
+    }
+  }
+  const out = new THREE.Group(); out.name = 'frozen'; out.visible = false;
+  for (const { mat, cast, recv, gs } of groups.values()) {
+    await slice();
+    const g = gs.length > 1 ? mergeGeometries(gs) : gs[0];
+    for (const x of gs) if (x !== g) x.dispose();
+    if (!g) continue;
+    const m = new THREE.Mesh(g, mat); m.castShadow = cast; m.receiveShadow = recv; m.matrixAutoUpdate = false; out.add(m);
+  }
+  if (disposed) return;
+  scene.add(out); frozen = out; frozenSrc = keep; frozenOn = false;
+  refreshSkipAO();
+  if (progress >= 0) apply(progress);
+  needRender = true; shadowDirty = true;
 }
 
 if (LIB) await Y();   // embedded build: let the hero draw a frame
@@ -3394,11 +3502,19 @@ const SLIDE = (() => {   // the balcony slider opens over the walk up to the doo
 })();
 $('endcard').inert = true;
 let lastCap = -1;
+// room names in the visitor's language (owner, Nov 2026: "shud be in mandarin no?"): the page's dictionary key room.<name>
+const roomName = n => { const T = opts.T, k = 'room.' + n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); const v = T ? T(k) : null; return v && v !== k ? v : n; };
 const ink = new THREE.Color(COL.ink), wallC = new THREE.Color(COL.wall), plaster = new THREE.Color(COL.plaster);
 const paperC = new THREE.Color(COL.paper), skyC = new THREE.Color(0xE9E4DA), floorC = new THREE.Color(0xE3DACB);
 // Every ink line in the scene except the render grooves and the sweep line: hidden once fully faded.
 const inkLines = [];
 scene.traverse(o => { if (o.isLineSegments2 && (o.material === mInk || o.material === mInkSoft)) inkLines.push(o); });
+// The sun's shadow map is redrawn only when the sun, or something that casts a shadow, moved, appeared or went away,
+// never for a camera move alone (owner, Nov 2026: "scrolling through it also laggy, mobile mode especially": inside
+// the rooms the sun stands still, and redrawing its ~2,900 shadow draws on every scroll frame was a third of each frame).
+// apply() builds a key of everything that moves a caster; tick() redraws the map on the next drawn frame when it changed.
+let shadowKey = '', shadowDirty = true;
+const SHADOW_REAL = [0.002, 0.01, 0.02, 0.45, 0.5, 0.98, 0.995];   // the drawing-to-photograph steps that show or hide casters
 const hudLens = $('h-lens'), hudEye = $('h-eye'), hudCut = $('h-cut');
 const chapterBtns = [...DQA('#chapters button')];
 
@@ -3561,7 +3677,6 @@ function apply(P) {
   sky.position.copy(camera.position);
   useFX = !!composer && real > 0.98;
   fanNear = !REDUCED && inside > 0.3 && fans.some(f => f.parent && f.parent.visible && f.getWorldPosition(tmpFanV).distanceToSquared(camera.position) < 64);
-  renderer.shadowMap.needsUpdate = true;
 
   // overlays
   $('intro').classList.toggle('is-hidden', p > 0.05);
@@ -3574,7 +3689,7 @@ function apply(P) {
     // the room name alone (owner, Nov 2026: "just show the room name"); from one room straight into the next, the name
     // settles in again (the class comes off for a frame so its transition replays)
     capEl.classList.remove('show');
-    if (ci >= 0) { capNum.textContent = CAPS[ci][2].replace(/^\d+\s*·\s*/, ''); capText.textContent = ''; void capEl.offsetWidth; capEl.classList.add('show'); }
+    if (ci >= 0) { capNum.textContent = roomName(CAPS[ci][2].replace(/^\d+\s*·\s*/, '')); capText.textContent = ''; void capEl.offsetWidth; capEl.classList.add('show'); }
   }
   hudLens.textContent = c.fov.toFixed(1) + '°';
   const floorY = c.pos.z > 0.05 && c.pos.y < FF_BASE ? GROUND : (c.pos.y > FF_BASE + 0.6 && c.pos.y < 8 ? FF_BASE : 0);
@@ -3586,6 +3701,19 @@ function apply(P) {
     walkedLOD.visible = far; house.visible = !far;
     if (far) for (const g of [gfDetail, ffDetail, roof, extDetail, garden, battenGF, battenFF, fixGF, fixFF, furnGF, furnFF]) g.visible = false;
     for (const m of furn) if (far) m.visible = false; else if (!m.userData.ff) m.visible = true;
+  }
+  if (frozen) {   // the merged standing house (freezeStatic) in place of its ~1,300 parts, from P 0.25 to the fly-over
+    const fz = P >= FREEZE_P && P <= 0.9 && !far;
+    frozen.visible = fz;
+    if (fz !== frozenOn) { frozenOn = fz; for (const o of frozenSrc) o.layers.set(fz ? HIDE_LAYER : 0); }
+  }
+  {   // the shadow key (see shadowKey): sun and its shadow box, everything that rises, lands, swings or slides, what is shown
+    const sp = sun.position, st = sun.target.position;
+    let k = '';
+    for (const v of [sp.x, sp.y, sp.z, st.x, st.y, st.z, half, rise, heads, site, ff, rf, fr, doorOpen, seg(P, SLIDE[0], SLIDE[1]), seg(P, BALC_DOOR[0], BALC_DOOR[1])]) k += v.toFixed(4) + ',';
+    for (const t of SHADOW_REAL) k += real > t ? 1 : 0;
+    k += (far ? 'F' : 'f') + (gfFloor.visible ? 'G' : 'g') + (frozenOn ? 'Z' : 'z');
+    if (k !== shadowKey) { shadowKey = k; shadowDirty = true; }
   }
   hudCut.textContent = p < 0.08 ? '+1.20 m' : 'none';
   const chap = [0, 0.112, 0.248, 0.384, 0.496, 0.63, 0.88].reduce((acc, v, i) => (P >= v ? i : acc), 0);
@@ -3661,8 +3789,14 @@ addEventListener('resize', resize, sig);
 resize();
 
 // Embedded: Lenis drives the overlay's own scroller (wheel anywhere over this home's HUD), not the page.
+// Touch screens with no mouse or trackpad: the browser's own scroll, no Lenis. Lenis never smooths a finger anyway (its
+// glide is for the wheel), but it puts blocking touch listeners on the HUD, so every swipe waited for the walk's frame
+// before the page could scroll (owner, Nov 2026: "scrolling through it also laggy, mobile mode especially").
+const TOUCH = COARSE && !matchMedia('(any-pointer: fine)').matches;
 const LenisC = (LIB && opts.Lenis) || window.Lenis;
-const lenis = SCROLLER ? new LenisC({ wrapper: SCROLLER, content: SCROLLER.firstElementChild, eventsTarget: UI, smoothWheel: !REDUCED, lerp: 0.065 })
+const lenis = TOUCH || !LenisC
+  ? { raf() {}, destroy() {}, scrollTo(y, o = {}) { (SCROLLER || window).scrollTo({ top: y, behavior: o.immediate || REDUCED ? 'auto' : 'smooth' }); } }   // auto: at once (no CSS smooth scroll on either)
+  : SCROLLER ? new LenisC({ wrapper: SCROLLER, content: SCROLLER.firstElementChild, eventsTarget: UI, smoothWheel: !REDUCED, lerp: 0.065 })
   : new LenisC({ smoothWheel: !REDUCED, lerp: 0.065 });   // a slower, dolly-like glide
 const maxScroll = () => SCROLLER ? SCROLLER.scrollHeight - SCROLLER.clientHeight : document.documentElement.scrollHeight - innerHeight;
 const scrollPos = () => SCROLLER ? SCROLLER.scrollTop : window.scrollY;
@@ -3677,11 +3811,13 @@ function tick(t) {
   lenis.raf(t);
   const p = StoP(clamp(scrollPos() / Math.max(1, maxScroll())));
   if (Math.abs(p - progress) > 1e-5) { progress = p; apply(p); needRender = true; }
-  const dirty = needRender;
-  if (dirty) renderer.shadowMap.needsUpdate = true;
   const spin = progress > 0.44 && progress < 0.9 && fanNear;   // fans turn slowly once one is near
-  if (spin) { for (const f of fans) f.userData.rotor.rotation.y += 0.035; needRender = true; if (!dirty && (spinTick++ & 3) === 0) renderer.shadowMap.needsUpdate = true; }
+  // Desktop: every frame, the rotor's shadow refreshed every 4th. Phones: the same speed in steps of two frames, so a
+  // visitor standing under a fan does not keep the phone drawing (and heating) at full rate; its shadow is left as is.
+  if (spin && (HIFI || (spinTick & 1) === 0)) { for (const f of fans) f.userData.rotor.rotation.y += HIFI ? 0.035 : 0.07; needRender = true; if (HIFI && (spinTick & 3) === 0) shadowDirty = true; }
+  if (spin) spinTick++;
   if (needRender && !document.hidden && !warming) {   // draw only when something moved
+    if (shadowDirty) { renderer.shadowMap.needsUpdate = true; shadowDirty = false; }   // the sun's shadows, only when they changed
     if (grade) grade.uniforms.seed.value = (grade.uniforms.seed.value + 0.137) % 10;
     if (useFX) composer.render(); else renderer.render(scene, camera); needRender = false;
     adapt(t);
@@ -3707,15 +3843,91 @@ function adapt(t) {
   }
   lastDraw = t;
 }
-// Compile every material once, in the background, so nothing hitches when it first appears mid-scroll.
+// Compile every material once, in the background, so nothing hitches when it first appears mid-scroll: at the opening
+// drawing, as the photograph arrives (P 0.385: the desktop finish is on, the estate still fading) and at the photograph
+// (P 0.65), where the estate and the neighbourhood are opaque (other shaders each time).
+// compile() takes every mesh, shown or not. The embedded build compiles a part of the scene at a time with a break
+// between (no long stretch of shader set-up on the main thread); the page does it all at once, so it never shows a state.
 let warming = false;
-async function prewarm() {
+// compile() builds each shader for the clipping state the last draw left behind (a clipped wall: one plane), so most of
+// the warm-up was for shaders nothing used; an empty draw first puts that state back to none (no shadows, no pixels)
+const EMPTY = new THREE.Scene();
+let emptyRT = null;
+function clipReset() {
+  const prev = renderer.getRenderTarget(), sh = renderer.shadowMap.needsUpdate;
+  emptyRT = emptyRT || new THREE.WebGLRenderTarget(1, 1);
+  renderer.shadowMap.needsUpdate = false; renderer.setRenderTarget(emptyRT); renderer.render(EMPTY, camera);
+  renderer.setRenderTarget(prev); renderer.shadowMap.needsUpdate = sh;
+}
+async function prewarm(states = [0, 0.385, 0.65]) {
   if (!renderer.compileAsync) return;
-  const hidden = []; scene.traverse(o => { if (!o.visible) { hidden.push(o); o.visible = true; } });
+  const jobs = [];
   warming = true;
-  try { await renderer.compileAsync(scene, camera); } catch (e) { /* compile on first use instead */ }
-  hidden.forEach(o => { o.visible = false; }); warming = false; needRender = true;
-  if (progress >= 0) apply(progress);
+  try {
+    for (const P of states) {
+      apply(P);
+      // desktop, once the drawing is a photograph: the scene is drawn into the finish's own target (AO, bloom, grade),
+      // which takes its own shaders (no tone mapping there): those too, or the first photograph frame stalled seconds
+      const tgts = composer && P > 0.38 ? [null, composer.renderTarget1] : [null];
+      for (const tg of tgts) for (const part of scene.children) {
+        if (disposed) break;
+        if (!part.isMesh && !part.children.length) continue;
+        await slice();
+        clipReset();
+        const prev = renderer.getRenderTarget(); renderer.setRenderTarget(tg);
+        jobs.push(renderer.compileAsync(part, camera, scene).catch(() => {}));   // the shaders are created now, the wait is below
+        renderer.setRenderTarget(prev);
+      }
+    }
+  } catch (e) { /* compile on first use instead */ }
+  if (!disposed) apply(progress >= 0 ? progress : 0);
+  await Promise.all(jobs);
+  warming = false; needRender = true; shadowDirty = true;
+}
+// Draw everything once, a few groups at a time with a break between, so every mesh and map is on the GPU and the
+// shaders the compile above cannot know (the clipped materials such as the walls, the shadow pass) are built before the
+// walk is on screen: without it the first frame of the plan froze for a quarter of a second, and the merged house
+// (freezeStatic) would upload in the middle of the scroll. Drawn to the screen (a render target would build other
+// shaders), and at once covered by the frame the visitor sees (opts.cover: the hero's own frame; the page: the walk's),
+// so the screen never shows it.
+async function warmDraw() {
+  const sh0 = renderer.shadowMap.needsUpdate, prev = renderer.getRenderTarget();
+  const tops = scene.children.filter(o => !o.isLight && o !== sun.target), batches = [];
+  { let cur = [], n = 0;
+    for (const o of tops) { let c = 0; o.traverse(q => { if (q.isMesh) c++; }); cur.push(o); n += c; if (n > 600) { batches.push(cur); cur = []; n = 0; } }
+    if (cur.length) batches.push(cur); }
+  const vis = new Map(), cull = [];   // the state as it is, taken again for each batch (the page may scroll meanwhile)
+  const take = () => { vis.clear(); cull.length = 0; scene.traverse(o => { vis.set(o, o.visible); if (o.frustumCulled && (o.isMesh || o.isLine || o.isPoints)) cull.push(o); }); };
+  const restore = () => { for (const [o, v] of vis) o.visible = v; for (const o of cull) o.frustumCulled = true; };
+  const cover = () => {
+    if (opts.cover) { opts.cover(); return; }
+    renderer.shadowMap.needsUpdate = true; if (useFX) composer.render(); else renderer.render(scene, camera);
+  };
+  warming = true;
+  try {
+    for (const b of batches) {
+      if (disposed) break;
+      take();
+      for (const o of tops) o.visible = false;
+      for (const o of b) o.traverse(q => { q.visible = true; });
+      for (const o of cull) o.frustumCulled = false;
+      renderer.setRenderTarget(null); renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera);
+      restore(); renderer.shadowMap.needsUpdate = sh0; renderer.setRenderTarget(prev);
+      cover();
+      await brk();
+    }
+    if (composer && !disposed) {   // desktop: the photograph's finish (contact shadows, bloom, grade), first used at P 0.4,
+      apply(0.65); take();         // at the photograph's state, everything once (set, drawn and put back in this task)
+      scene.traverse(o => { o.visible = true; }); for (const o of cull) o.frustumCulled = false;
+      renderer.setRenderTarget(null); renderer.shadowMap.needsUpdate = true; composer.render(); restore();
+      renderer.shadowMap.needsUpdate = sh0; renderer.setRenderTarget(prev);
+      apply(progress >= 0 ? progress : 0);
+      cover();
+    }
+  } catch (e) { /* drawn on first use instead */ }
+  finally { restore(); renderer.shadowMap.needsUpdate = sh0; renderer.setRenderTarget(prev); }
+  if (!disposed && progress >= 0) apply(progress);
+  warming = false; needRender = true; shadowDirty = true;
 }
 
 // ---------- light and sky: the HDRI and the time of day ----------
@@ -3763,7 +3975,7 @@ async function setTimeOfDay(name = 'golden') {
   } else { scene.environment = roomEnv; scene.environmentRotation.set(0, 0, 0); LIGHT.out = 1; }   // out only makes up for the HDRI
   retargetEnv(scene, old);
   if (progress >= 0) apply(progress);
-  needRender = true;
+  needRender = true; shadowDirty = true;
   return true;
 }
 
@@ -3783,14 +3995,18 @@ if (PACKBAKE) {   // tools/bake.html: this home's exterior, and on the Semi-D pa
   parent.postMessage({ type: 'panthera-bake', home: HOME, parts: out }, location.origin, transfer);
 } else if (!LIB) {
   apply(0); progress = 0;
+  renderer.shadowMap.needsUpdate = true; shadowDirty = false;   // the first frame draws the sun's shadows too
   renderer.render(scene, camera);
   performance.mark('walk-ready');
   loader.classList.add('done');
   requestAnimationFrame(frame);
   hd.start();                                  // photo maps swap in from here as they arrive (needRender is live now)
-  if (HD_RES) setTimeOfDay('golden');          // the HDRI sky replaces RoomEnvironment when it arrives
-  (window.requestIdleCallback || ((f) => setTimeout(f, 60)))(() => { buildEstateNow().then(() => setTimeout(() => {
-    bakeForEstate(); prewarm();
+  const todP = HD_RES ? setTimeOfDay('golden') : null;   // the HDRI sky replaces RoomEnvironment when it arrives
+  (window.requestIdleCallback || ((f) => setTimeout(f, 60)))(() => { buildEstateNow().then(() => setTimeout(async () => {
+    bakeForEstate(); await freezeStatic();
+    // the golden sky first (as embedded, 2.5 s at most): its light takes other shaders, which otherwise compiled mid-scroll
+    await Promise.race([Promise.all([todP, ctxP]), new Promise(r => setTimeout(r, 2500))]);
+    await prewarm(); warmDraw();
     hd.settled().then(() => { if (progress < 0.45 && !warming) prewarm(); });   // compile the new map variants while still on the plan
   }, 50)); }, { timeout: 1200 });
 }
@@ -3798,11 +4014,17 @@ if (LIB && !PACKBAKE && !BAKE) {   // embedded: the estate and every shader read
   apply(0); progress = 0;
   performance.mark('walk-ready');
   hd.start();
-  if (HD_RES) setTimeOfDay('golden');
+  const todP = HD_RES ? setTimeOfDay('golden') : null;
   await buildEstateNow(); bakeForEstate(); await Y();
-  await prewarm(); await Y();
+  await freezeStatic();
+  // the photo maps, the golden sky and the neighbourhood in before the shaders are built (each one changes them), so
+  // the hand-over and the scroll compile nothing; a slow connection waits 2.5 s at most and its late maps compile on use
+  await Promise.race([Promise.all([hd.settled(), todP, ctxP]), new Promise(r => setTimeout(r, 2500))]);
+  if (!disposed) { await prewarm(); await warmDraw(); }
+  await Y();
 }
 const dbg = { apply, scene, camera, renderer, doors: DOOR_LEAVES, setTimeOfDay, hd, LIGHT, ENTRY_P,
+  tick, prewarm, warmDraw, shadowDirty: () => shadowDirty,   // checking: one frame as the loop draws it, the warm-ups, the shadow flag
   getEstate: () => estate, estateFrom: () => estateFrom, bakeExterior, bakeRoots,
   goto: P => lenis.scrollTo(PtoS(P) * maxScroll(), { immediate: true }),   // jump the real page to walk state P (for checking)
   // preview a camera at walk state P (for authoring the tour)
@@ -3826,8 +4048,9 @@ if (!LIB) return dbg;
 // activate: the shared renderer takes this walk's settings; tick(t): one frame (scroll, apply, draw);
 // setProgress(P): jump; dispose(): frees everything this walk put on the GPU (the pack's geometry stays).
 function activate() {
-  renderer.setPixelRatio(walkDPR); renderer.localClippingEnabled = true; renderer.shadowMap.autoUpdate = false;
-  resize(); progress = -1; needRender = true; lastDraw = 0;
+  if (renderer.getPixelRatio() !== walkDPR) renderer.setPixelRatio(walkDPR);   // only on a change (it reallocates the buffer)
+  renderer.localClippingEnabled = true; renderer.shadowMap.autoUpdate = false;
+  resize(); progress = -1; needRender = true; shadowDirty = true; lastDraw = 0;
 }
 function dispose() {
   if (disposed) return;
@@ -3839,13 +4062,14 @@ function dispose() {
     if (o.isLight && o.dispose) o.dispose();   // shadow maps
   });
   for (const m of mats) {
+    if (m.userData.keepTex) continue;   // a copy of the hero's material: its maps are the hero's
     for (const k in m) { const v = m[k]; if (v && v.isTexture) texs.add(v); }
     if (m.uniforms) for (const u of Object.values(m.uniforms)) if (u && u.value && u.value.isTexture) texs.add(u.value);
   }
   for (const g of geos) g.dispose();
   for (const m of mats) m.dispose();
   for (const t of texs) t.dispose();
-  hd.dispose(); roomRT.dispose(); roomScene.dispose(); pmrem.dispose();
+  hd.dispose(); roomRT.dispose(); roomScene.dispose(); pmrem.dispose(); if (emptyRT) emptyRT.dispose();
   if (composer) { for (const ps of composer.passes) if (ps.dispose) ps.dispose(); composer.dispose(); }
   scene.clear();
 }

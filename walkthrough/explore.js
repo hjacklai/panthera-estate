@@ -12,7 +12,7 @@ const SHEET = {   // walk.js rig(0): the plan sheet's centre (model frame) and t
 };
 const PLAN_FOV = 2.2, NEAR_FOV = 35;
 const LENIS_URL = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
-const WALK_V = '145', CSS_V = '11';
+const WALK_V = '146', CSS_V = '12';
 
 export function createTour(ctx) {
   const { THREE, renderer, canvas, camera, base, T, reduced } = ctx;
@@ -25,6 +25,7 @@ export function createTour(ctx) {
   const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const LOWMEM = ctx.lite || IOS || matchMedia('(pointer: coarse)').matches || (navigator.deviceMemory && navigator.deviceMemory <= 4);
   const OTHER = { semid: 'bungalow', bungalow: 'semid' };
+  const TOUCH = matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches;   // as walk.js: no Lenis
 
   // ---------- loading ----------
   let walkModP = null, lenisP = null, cssP = null;
@@ -82,7 +83,7 @@ export function createTour(ctx) {
 <section class="intro" id="intro">
   <div class="eyebrow">Semi-D · 2,006 sq ft · 4 bed · 4 bath</div>
   <p>The Semi-D in 3D. Scroll to walk through every room.</p>
-  <div class="scrollcue wt-mono"><span>Scroll</span><span class="sc-arrow" aria-hidden="true">↓</span></div>
+  <div class="scrollcue wt-mono"><span data-i18n="hx.scroll">${T('hx.scroll')}</span><span class="sc-arrow" aria-hidden="true">↓</span></div>
 </section>
 <div class="caption" id="caption" aria-live="polite"><span class="num wt-mono" id="cap-num"></span><p id="cap-text"></p></div>
 <aside class="titleblock wt-mono" id="titleblock" aria-label="Drawing details">
@@ -100,17 +101,39 @@ export function createTour(ctx) {
 </section>`;
 
   // ---------- the walks ----------
-  const walks = {};   // home -> { root, scroller, p (promise of the walk API), api, pct, failed }
+  const walks = {};   // home -> { root, scroller, p (promise of the walk API), api, pct, failed, urgent }
   let active = null;  // the walk on screen
-  function prefetch(home) {
+  // How a build breaks between its slices of work (owner, Nov 2026: "when i click into the semi d and bungalow walk
+  // through tour, the animation like its abit laging ... mobile mode especially"). Built ahead in the background (a house
+  // caption or the Homes panel is up): only in the browser's idle time, as long as that idle stretch lasts, so the estate
+  // keeps every frame. Once the visitor taps Walk inside (urgent): one short slice after each painted frame of the flight,
+  // a longer one while the plot hovers and waits, so the flight stays smooth and the build still gets on.
+  const msg = () => new Promise(r => { const c = new MessageChannel(); c.port1.onmessage = () => { c.port1.close(); r(); }; c.port2.postMessage(0); });
+  const afterFrame = () => (document.hidden ? msg() : new Promise(r => {
+    let done = false; const go = () => { if (!done) { done = true; r(); } };
+    requestAnimationFrame(() => { msg().then(go); }); setTimeout(go, 50);   // just after the frame is painted (50 ms where rAF is held back)
+  }));
+  let idleMs = 0;
+  const inIdle = () => (window.requestIdleCallback && !document.hidden
+    ? new Promise(r => requestIdleCallback(d => { idleMs = d.didTimeout ? 0 : d.timeRemaining(); r(); }, { timeout: 250 }))   // never idle: a 4 ms step now and then
+    : afterFrame());
+  function prefetch(home, urgent = false) {
     if (!SHEET[home]) return null;
     const have = walks[home];
-    if (have && !have.failed) return have.p;
+    if (have && !have.failed) { if (urgent) have.urgent = true; return have.p; }
+    // phones: a background build waits while the other home is still being built (two at once can run an iPhone out of
+    // memory); opening a home drops the other as before
+    if (LOWMEM && !urgent && Object.keys(walks).some(h => h !== home && walks[h] && !walks[h].api && !walks[h].failed)) return null;
     if (LOWMEM) for (const h of Object.keys(walks)) if (h !== home && walks[h] !== active) drop(h);   // one home at a time
     const root = el('div', 'pbw-walk', { 'data-home': home }, HUD(home));
-    const w = walks[home] = { home, root, scroller: root.querySelector('.pbw-scroll'), api: null, pct: 0, failed: false };
-    w.p = Promise.all([loadWalk(), loadLenis(), loadCss()])
-      .then(([m, Lenis]) => m.mountWalk({ lib: true, home, renderer, canvas, pack: ctx.pack, ui: root, scroller: w.scroller, Lenis, cooperative: true,
+    const w = walks[home] = { home, root, scroller: root.querySelector('.pbw-scroll'), api: null, pct: 0, failed: false, urgent: !!urgent };
+    w.p = Promise.all([loadWalk(), TOUCH ? null : loadLenis(), loadCss()])   // touch screens scroll natively (walk.js)
+      .then(([m, Lenis]) => m.mountWalk({ lib: true, home, renderer, canvas, pack: ctx.pack, ui: root, scroller: w.scroller, Lenis, cooperative: true, T,   // T: room names in the visitor's language
+        pace: () => (w.urgent ? afterFrame() : inIdle()),
+        budget: () => (!w.urgent ? Math.max(4, idleMs - 1) : waitingFor === home ? 20 : 7),
+        // the build's warm-up draws on the shared canvas: the frame the visitor sees goes straight back over it
+        cover: () => { if (active && active.api && active !== w) { active.api.redraw(); active.api.tick(performance.now()); } else ctx.renderHero(); },
+        context: ctx.context,   // the estate's neighbourhood, already built: copied, not built again
         onProgress: f => { w.pct = f; if (waitingFor === home) waitN.textContent = Math.round(f * 100) + '%'; },
         onError: msg => console.warn('tour:', msg) }))
       .then(api => { w.api = api; if (walks[home] !== w) api.dispose(); else fillIntro(root, home); return api; },
@@ -135,6 +158,8 @@ export function createTour(ctx) {
     if (specs.length) { const dl = el('dl', 'pbw-specs'); for (const [k, v] of specs) { const d = el('div'), dt = el('dt', 'wt-mono'), dd = el('dd'); dt.textContent = k; dd.textContent = v; d.append(dt, dd); dl.append(d); } add.push(dl); }
     if (price) { const q = el('p', 'pbw-price'); q.textContent = price; add.push(q); }
     if (eb) eb.after(...add); else box.prepend(...add);
+    const line = box.querySelector('p:not(.pbw-price)');   // the line under the figures, in the visitor's language (owner: "shud be in mandarin no?")
+    if (line) { line.setAttribute('data-i18n', 'hx.tour.line'); line.textContent = T('hx.tour.line'); }
   }
   function drop(home) {
     const w = walks[home]; if (!w) return;
@@ -254,12 +279,17 @@ export function createTour(ctx) {
       lockPad = document.body.style.paddingRight;
       if (sb > 0) document.body.style.paddingRight = sb + 'px';
       de.classList.add('pbw-lock');
-      inertList = [...document.body.children].filter(e => e !== ov && !e.inert);
-      inertList.forEach(e => { e.inert = true; });
     } else {
       de.classList.remove('pbw-lock'); document.body.style.paddingRight = lockPad;
       inertList.forEach(e => { e.inert = false; }); inertList = [];
     }
+  }
+  // the page under the overlay takes no focus or clicks: once the flight has landed, not mid-flight (marking every
+  // element of the long page inert is a style pass over all of it, which cost a frame of the fly-in on phones)
+  function inertPage() {
+    if (inertList.length || !open) return;
+    inertList = [...document.body.children].filter(e => e !== ov && !e.inert);
+    inertList.forEach(e => { e.inert = true; });
   }
   function attach(w) {   // this home's HUD into the overlay
     for (const x of ov.querySelectorAll('.pbw-walk')) if (x !== w.root) x.remove();
@@ -308,9 +338,10 @@ export function createTour(ctx) {
     else s = exterior(w.home);                        // drawing, rooms or street: dive out over the front of the plot
     ctx.heroDPR(); ctx.sizeTo(stage); setCam(s); ctx.renderHero();
     active = null;
+    // phones keep one home: it is freed now, while the screen is the still last frame, not in the first frames of the
+    // flight back or across (a whole scene's worth of GPU frees, which made the flight start with a stutter)
+    if (LOWMEM) drop(w.home); else w.root.remove();
     const fade = fadeSnap(reduced ? 200 : calm ? 800 : 650, !calm && !plan && P < 0.975);
-    if (LOWMEM) { const h = w.home; setTimeout(() => { if (active !== w) drop(h); }, 0); }
-    else w.root.remove();
     return { s, fade, plan };
   }
 
@@ -320,7 +351,7 @@ export function createTour(ctx) {
     if (open) { if (open !== home) switchHome(home); return; }
     busy = true; open = home; opener = from || document.activeElement;
     try {
-      const w = walks[home] && !walks[home].failed ? walks[home] : (prefetch(home), walks[home]);
+      const w = (prefetch(home, true), walks[home]);   // built ahead, or from now on at the flight's pace
       measure();
       heroPose = heroNow();
       if (ctx.onHome) ctx.onHome(home);   // the landing page follows (before the push, so Back returns to its URL)
@@ -344,6 +375,7 @@ export function createTour(ctx) {
       const moved = () => canvas.parentElement === stage;
       try { await fly([heroPose, approach(home), planPose(home, NEAR_FOV)], 2400, 'fly-in', u => { if (!moved() && (u >= 0.16 || reduced)) moveIn(); }); }   // after about 0.4 s
       finally { if (!moved()) moveIn(); }
+      inertPage();
       const api = await hoverUntil(home, w);
       if (!api) throw new Error('no walk');
       await lens(home, NEAR_FOV, PLAN_FOV, 1100);
@@ -364,7 +396,7 @@ export function createTour(ctx) {
     markPill(home);
     try {
       const { s, fade, plan } = await leave(from);
-      const w = (prefetch(home), walks[home]);
+      const w = (prefetch(home, true), walks[home]);
       if (plan) { await fade; await lens(was, s.fov, NEAR_FOV, 900); await fly([planPose(was, NEAR_FOV), aerial(was, home), approach(home), planPose(home, NEAR_FOV)], 3400, 'fly-across'); }
       else { await fly([s, aerial(was, home), approach(home), planPose(home, NEAR_FOV)], 3600, 'fly-across'); await fade; }
       const api = await hoverUntil(home, w);

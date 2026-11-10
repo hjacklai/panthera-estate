@@ -132,7 +132,7 @@ export async function start(o) {
   const pinsNav = el('nav', 'hx-pins', { 'aria-label': T('hx.pins'), 'data-i18n-aria': 'hx.pins' });
   const hasLoc = !!document.getElementById('loc-leaflet');   // the Location pin only where the page has its map
   // app mode: Location lives in the bottom bar now, so no compass on the 3D (owner, Nov 2026: "no need keep compass icon")
-  const pins = Object.entries(POI).filter(([id, d]) => (id !== 'location' || (hasLoc && !APP)) && (!d.app || APP)).map(([id, d]) => {
+  const pins = Object.entries(POI).filter(([id, d]) => (id !== 'location' || hasLoc) && (!d.app || APP)).map(([id, d]) => {
     const b = el('button', 'hx-pin' + (d.go ? ' hx-pin-go' : '') + (d.feat ? ' hx-feat' : ''), d.go || d.feat ? { type: 'button', 'data-id': id, tabindex: '-1' } : { type: 'button', 'aria-haspopup': 'dialog', 'aria-controls': 'hx-card', 'data-id': id, tabindex: '-1' });
     const lab = i18n(el('span', 'hx-pin-t'), d.label || 'hx.pin.' + id), pl = el('span', 'hx-pin-l');
     if (d.feat) {   // an icon only (its name shows on hover and to screen readers)
@@ -647,7 +647,7 @@ export async function start(o) {
   dirty = true; need();
 
   // the neighbourhood in low detail (hero-context.js, ~30 KB), after the first frame so it never holds the 3D up
-  setTimeout(() => import(base + 'hero-context.js?v=11')
+  setTimeout(() => import(base + 'hero-context.js?v=12')
     .then(m => m.addContext({ THREE, scene, lite, url: base + 'context.e1.json?v=1' }))
     .then(c => { neighbours = c; if (rig) rig.setFloor(c.floor); renderer.shadowMap.needsUpdate = true; dirty = true; need();
       // the streets and areas round the estate are OpenStreetMap data (ODbL): its credit, small, in a corner of the 3D
@@ -668,6 +668,13 @@ export async function start(o) {
     .then(mod => mod.createAO({ THREE, renderer, scene, camera, lite, reduced }))
     .then(a => { ao = a; dirty = true; need(); })
     .catch(e => console.warn('hero 3D: no contact shadows', e)), { timeout: 1500 });
+  // the house tours built ahead, in the background, once the estate has loaded and settled (owner, Nov 2026: "shall we
+  // preload the semi d and bungalow house tour? after landing hero 3d fully loaded"): the home the page shows first; on
+  // desktop the other follows; phones build one home at a time (the other when it is picked: memory). Not on data saver.
+  if (APP && !o.careful) setTimeout(() => idle(() => {
+    const h = homeNow(); intent(h);
+    if (!lite) setTimeout(() => intent(h === 'semid' ? 'bungalow' : 'semid'), 8000);
+  }, { timeout: 4000 }), 3000);
 
   // ---------- the tour: Walk inside, the pill, deep links (explore.js, loaded on the first sign of interest) ----------
   const slotOf = h => pack.manifest.slots.find(q => q.id === pack.manifest.walked[h]);
@@ -677,8 +684,10 @@ export async function start(o) {
     plotCentre: h => V(0, 0, -6).applyMatrix4(new THREE.Matrix4().fromArray(slotOf(h).M)),
     hold(on) { held = on; if (on) { raf = 0; kbCss = ''; canvas.style.transform = ''; } else { last = 0; if (resizeMissed) resize(); dirty = true; need(); } },
     leaving(on) { hero.classList.toggle('hx-leave', on); ui.inert = on; document.documentElement.classList.toggle('pbw-going', on); if (on) closeCard(); },   // inert: the faded pins and buttons take no clicks or focus
-    sizeTo(box) { renderer.setSize(Math.max(1, box.clientWidth), Math.max(1, box.clientHeight), false); },
-    heroDPR() { renderer.setPixelRatio(dpr); },
+    // only when the size or sharpness really changes: each call reallocates the drawing buffer (the tour calls these at
+    // every hand-over, mid-flight on phones)
+    sizeTo(box) { const w = Math.max(1, box.clientWidth), h = Math.max(1, box.clientHeight), sz = renderer.getSize(new THREE.Vector2()); if (sz.x !== w || sz.y !== h) renderer.setSize(w, h, false); },
+    heroDPR() { if (renderer.getPixelRatio() !== dpr) renderer.setPixelRatio(dpr); },
     renderHero: render,
     heroPoseNow() {   // where the hero camera sits for the current scroll position (the pose Back returns to)
       if (rigOn) { const q = rig.pose(); return { pos: q.pos, tgt: q.tgt, up: V(0, 1, 0), fov: q.fov, off: q.off.slice() }; }
@@ -686,6 +695,7 @@ export async function start(o) {
       return { pos: pos.clone(), tgt: tgt.clone(), up: V(0, 1, 0), fov, off: off.slice() };
     },
     onHome: h => announce(h),   // the tour opened on, or switched to, this home
+    context: () => neighbours,   // the neighbourhood (hero-context.js), once built: the tour lays a copy of it
     onClosed: () => syncUrl(),
     giveBack() {   // the canvas back into the stage, drawn at once at the hero's own pose
       stage.prepend(canvas);
@@ -695,7 +705,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=27').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=28').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   const moving = () => hero.classList.contains('hx-leave');   // the tour or the Location move is under way
   function walkInto(h, from) { if (moving()) return; if (!live) { pendingWalk = [h, from]; return; } tour().then(t => t.open(h, from)).catch(e => { console.warn('tour', e); location.href = base + 'index.html?home=' + h; }); }
@@ -812,7 +822,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=28').then(mod => {
+      import(base + 'hero-app.js?v=29').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

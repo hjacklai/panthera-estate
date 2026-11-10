@@ -251,11 +251,19 @@
 
   // One rAF loop re-blits every frame: a gentle continuous drift keeps the
   // survey alive even when still, and scroll changes are picked up for free.
-  var rafId = 0;
+  // Parked while the page is the 3D app (html.hx-app: the canvas is hidden) or a house tour covers it (html.pbw-lock):
+  // a full-screen redraw every frame there only took time from the 3D on phones (owner, Nov 2026: "walk through tour ...
+  // laggy, mobile mode especially"). It picks up again as soon as either class comes off.
+  var rafId = 0, html = document.documentElement;
+  function parked() { return html.classList.contains('hx-app') || html.classList.contains('pbw-lock'); }
   function animate(now) {
+    if (parked()) { rafId = 0; return; }
     blit(now);
     rafId = requestAnimationFrame(animate);
   }
+  if (window.MutationObserver) new MutationObserver(function () {
+    if (!reduce && !rafId && !document.hidden && !parked()) rafId = requestAnimationFrame(animate);
+  }).observe(html, { attributes: true, attributeFilter: ['class'] });
 
   var rT;
   window.addEventListener('resize', function () {
@@ -266,7 +274,7 @@
     // Pause the loop when the tab is hidden to save CPU, resume on return.
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) { cancelAnimationFrame(rafId); rafId = 0; }
-      else if (!rafId) { rafId = requestAnimationFrame(animate); }
+      else if (!rafId && !parked()) { rafId = requestAnimationFrame(animate); }
     });
   }
 

@@ -212,16 +212,23 @@ export async function addContext({ THREE, scene, url, lite = false }) {
   const near = footprints.filter(p => p.some(([x, z]) => dist(x, z) < 260));
   const M4 = new THREE.Matrix4(), Z = new THREE.Matrix4().makeScale(0, 0, 0), v = new THREE.Vector3();
   let hidden = 0;
-  scene.traverse(o => {
-    if (!o.isInstancedMesh || o.parent === group) return;
-    o.updateMatrixWorld(); let touched = false;
+  // also handed out (hideIn): the house tour lays a copy of this neighbourhood round its own estate and clears its trees
+  // the same way, instead of building it all again (owner, Nov 2026: the tour's opening "abit laging")
+  // Positions are taken in root's own frame (the frame this neighbourhood is laid in), not the world: the tour's estate
+  // root is moved so the walked plot lands on the model, and which frame its matrices held depended on whether a frame
+  // had been drawn yet (in the world frame the estate's own homes, cars and hedges were taken out instead of the trees)
+  const toRoot = new THREE.Matrix4();
+  const hideIn = (root, skip = null) => { root.updateMatrixWorld(true); toRoot.copy(root.matrixWorld).invert(); root.traverse(o => {
+    if (!o.isInstancedMesh || o.parent === group || (skip && o.parent === skip)) return;
+    let touched = false;
     for (let i = 0; i < o.count; i++) {
-      o.getMatrixAt(i, M4); v.setFromMatrixPosition(M4).applyMatrix4(o.matrixWorld);
+      o.getMatrixAt(i, M4); v.setFromMatrixPosition(M4).applyMatrix4(o.matrixWorld).applyMatrix4(toRoot);
       if (inLot(v.x, v.z)) continue;
       if (near.some(p => inside(v.x, v.z, p, 2.5))) { o.setMatrixAt(i, Z); touched = true; hidden++; }
     }
     if (touched) { o.instanceMatrix.needsUpdate = true; o.computeBoundingSphere(); }
-  });
+  }); };
+  hideIn(scene);
 
   // ---------- the oil palm land: simple palms (about 20 triangles each), so it reads as plantation, not lawn ----------
   {
@@ -280,7 +287,7 @@ export async function addContext({ THREE, scene, url, lite = false }) {
 
   const floor = (x, z) => floorCells.get(Math.floor(x / CELL) + ',' + Math.floor(z / CELL)) || 0;
   return {
-    group, floor, hidden,
+    group, floor, hidden, hideIn,
     stats: { tris: (plate.P.length + ground.P.length + blds.P.length) / 9, buildings: footprints.length },
     dispose() { scene.remove(group); group.traverse(o => { if (o.isMesh) { o.geometry.dispose(); o.material.dispose(); } }); },
   };

@@ -181,14 +181,17 @@ export function createApp(ctx) {
       panel.classList.add('open', 'instant'); panel.setAttribute('aria-hidden', 'false'); html.classList.add('hxa-open');
       setPanel(true, true);
       void panel.offsetWidth; panel.classList.remove('instant');
-      // the panel opens at its top, the section's heading and intro first (owner, Nov 2026: "it should show this first when
-      // people click location"); the map lift lands on the map box wherever it sits below them (hero-location measures it)
+      // the map box in view first, so the lift lands on the map in full (owner, Nov 2026: "the location animation ... i want
+      // that"); once it has landed the panel glides up to its heading and intro ("it should show this first")
+      const mb = document.getElementById('loc-leaflet');
+      if (mb) { const br = body.getBoundingClientRect(), r = mb.getBoundingClientRect(); body.scrollTop += r.top - br.top - 12; }
       history.replaceState(history.state, '', location.pathname + location.search + '#location');
     };
-    if (!loc) { busy = false; show(); return; }
+    if (!loc) { busy = false; show(); body.scrollTop = 0; return; }
     try {
       locClose = await loc.goApp(show);   // resolves once the map has landed; returns how to fly back
     } finally { busy = false; }
+    if (current === 'location') setTimeout(() => { try { body.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { body.scrollTop = 0; } }, 450);   // up to the heading and intro
     if (!locClose) { if (!shown) show(); return; }   // the map move could not run (Leaflet blocked): a plain panel, closed the usual way
     const back = locClose;
     locClose = async () => {   // closing the Location panel: the panel slides away and the camera comes back down
@@ -245,7 +248,7 @@ export function createApp(ctx) {
   }
   capGal.addEventListener('click', () => { const f = FEATS[feat]; if (f && f.home) import(new URL('./gallery.js?v=3', import.meta.url).href).then(m => m.openGallery(f.home, { T, from: capGal })).catch(() => {}); });
   capWalk.addEventListener('click', () => { const f = FEATS[feat]; if (f && f.home) walkInto(f.home, capWalk); });
-  let feat = null;
+  let feat = null, warmT = 0;
   const say = (elx, key) => { if (key) { elx.setAttribute('data-i18n', key); elx.textContent = T(key); elx.hidden = false; } else { elx.removeAttribute('data-i18n'); elx.textContent = ''; elx.hidden = true; } };
   function feature(id, { move = true } = {}) {
     const f = FEATS[id]; if (!f || (move && busy)) return;
@@ -262,6 +265,10 @@ export function createApp(ctx) {
       capSpecs.hidden = !info.specs.length; capPrice.textContent = info.price; capPrice.hidden = !info.price;
       capGal.textContent = T('hx.gallery'); capWalk.textContent = T('hx.walk') + ' →'; capHome.hidden = false;
       if (move) try { if (window.PantheraHome && window.PantheraHome.get() !== f.home) window.PantheraHome.set(f.home, 'pill'); } catch (e) { /* the page goes on */ }
+      // build this home's tour in the background while its caption is read (in idle time only, see explore.js), so Walk
+      // inside flies straight in (owner, Nov 2026: "when i click into the semi d and bungalow walk through tour, the
+      // animation like its abit laging"); after the camera has settled, and only if the caption is still this house
+      clearTimeout(warmT); warmT = setTimeout(() => { if (feat === id && ctx.prefetchHome) ctx.prefetchHome(f.home); }, 1500);
     } else { say(capT, f.t); say(capB, f.b); capSpecs.hidden = capPrice.hidden = capHome.hidden = true; }
     cap.classList.toggle('house', !!info);
     capMore.hidden = !f.more; if (f.more) { capMore.setAttribute('data-i18n', VIEWS[f.more].title); capMore.textContent = T(VIEWS[f.more].title) + ' →'; }

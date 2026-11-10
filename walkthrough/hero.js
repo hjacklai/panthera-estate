@@ -789,7 +789,7 @@ export async function start(o) {
   function fitDist(el = 0.7, fov = 40) {
     const b = openBand(), t = Math.tan(fov * Math.PI / 360), fv = (b.bot - b.top) / H, A = W / H;
     const across = 100 / (2 * t * A * 0.86), down = 100 * Math.sin(el) / (2 * t * fv * 0.8);
-    return Math.max(150, Math.min(440, Math.max(across, down) * (portrait ? 1.0 : 1.08)));   // phones: a touch closer (owner: estate small)
+    return Math.max(150, Math.min(440, Math.max(across, down) * (portrait ? 1.04 : 1.08)));   // phones: a touch closer (owner: estate small); 1.0 clipped a corner house as the view turns
   }
   function relayout() { if (!APP) return; offBase = openOff(); if (rigOn) rig.setOff(...offNow()); dirty = true; need(); }
   addEventListener('panthera:lang', relayout);

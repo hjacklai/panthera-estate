@@ -721,7 +721,7 @@ export async function start(o) {
 
   // ---------- out to the Location map and back (hero-location.js) ----------
   let locP = null;
-  const location3d = () => locP || (locP = hasLoc ? import(base + 'hero-location.js?v=5').then(m => m.createLocation({
+  const location3d = () => locP || (locP = hasLoc ? import(base + 'hero-location.js?v=6').then(m => m.createLocation({
     THREE, camera, scene, renderer, stage, reduced, T, nextFrame, render,
     hold: ctx.hold, leaving: ctx.leaving, poseNow: ctx.heroPoseNow,
     size: () => [W, H],

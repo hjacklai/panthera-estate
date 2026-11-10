@@ -472,7 +472,9 @@ html.hxa-cap-on .hx-pins{ opacity: 1; visibility: visible; }
   html.hx-app .hero--cinematic .hero-cta{ margin-top: 12px; }
   html.hx-app .hero--cinematic .hero-specs{ display: none; }
   html.hx-app .hero--cinematic .hero-inner{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }   /* low, just clear of the walk pill and the menu */
-  html.hx-app .hero--cinematic .hx-veil{ background: linear-gradient(0deg, rgba(22,15,10,0.86) 0%, rgba(22,15,10,0.66) 24%, rgba(22,15,10,0.22) 40%, rgba(22,15,10,0) 50%, rgba(22,15,10,0) 88%, rgba(22,15,10,0.22) 100%); }
+  /* the shade only behind the copy, the walk pill and the menu (about 340 px), not half the screen: the front row of
+     homes no longer sits in it (owner, Nov 2026: colours muddy on phones); the copy keeps its text shadow */
+  html.hx-app .hero--cinematic .hx-veil{ background: linear-gradient(0deg, rgba(22,15,10,0.86) 0, rgba(22,15,10,0.66) 150px, rgba(22,15,10,0.3) 270px, rgba(22,15,10,0) 340px), linear-gradient(180deg, rgba(22,15,10,0.22) 0, rgba(22,15,10,0) 12%); }
   html.hx-app .hxa-cap-ic{ width: 34px; height: 34px; margin-bottom: 8px; }
   html.hx-app .hxa-cap-ic svg{ width: 20px; height: 20px; }
   html.hx-app .hxa-cap-h{ font-size: 9.5px; margin-bottom: 6px; }

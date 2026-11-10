@@ -250,18 +250,29 @@ export async function addContext({ THREE, scene, url, lite = false }) {
         if (dist(px, pz) > 430 || inLot(px, pz) || OWN.some(b => inBox(px, pz, b)) || !inside(px, pz, a.poly, 0)) continue;
         if (px > -12 && px < 31 && pz > -650 && pz < 310) continue;   // the Persiaran's reserve, its modelled stretch and the run on north and south
         if (!offRoad(px, pz) || footprints.some(p => inside(px, pz, p, 3))) continue;
+        if ((j * 53.1) % 1 < 0.05) continue;   // the odd palm missing, as in a real plantation (a perfect grid read as carpet)
         spots.push([px, pz, j]);
       }
     }
+    // each palm a little different (owner, Nov 2026: from above the plantation read as a printed pattern): size, a slight
+    // lean and the green of its fronds vary, steadily (from its own jitter), so nothing shimmers between visits
+    const fr = v => v - Math.floor(v), tint = new THREE.Color(), lean = new THREE.Quaternion(), X = new THREE.Vector3(1, 0, 0);
+    const vary = (im, list, sc0, sc1) => list.forEach(([x, z, j], i) => {
+      const a = fr(j * 13.7), b = fr(j * 91.3), c = fr(j * 7.31);
+      const sc = sc0 + a * (sc1 - sc0);
+      q.setFromAxisAngle(Y, j * 6.283); lean.setFromAxisAngle(X, (b - 0.5) * 0.12); q.multiply(lean);
+      M4.compose(new THREE.Vector3(x, 0, z), q, new THREE.Vector3(sc, sc, sc)); im.setMatrixAt(i, M4);
+      const l = 0.84 + c * 0.3; tint.setRGB(l * (0.97 + b * 0.08), l, l * (0.94 + a * 0.08)); im.setColorAt(i, tint);
+    });
+    const q = new THREE.Quaternion(), Y = new THREE.Vector3(0, 1, 0);
     // near the lot the estate's own palm (the baked one, textured fronds); further out the 20-triangle one
     const NEAR = lite ? 110 : 175, nearSpots = spots.filter(([x, z]) => dist(x, z) < NEAR), farSpots = spots.filter(([x, z]) => dist(x, z) >= NEAR);
     const own = [];
     scene.traverse(o => { if (o.isInstancedMesh && o.parent !== group && o.material && o.material.color && /^(5e5040|6f8048)$/.test(o.material.color.getHexString())) own.push(o); });
     if (own.length === 2 && nearSpots.length) {
-      const q = new THREE.Quaternion(), Y = new THREE.Vector3(0, 1, 0);
       for (const o of own) {
         const im = new THREE.InstancedMesh(o.geometry, o.material, nearSpots.length);
-        nearSpots.forEach(([x, z, j], i) => { const sc = 0.85 + j * 0.3; q.setFromAxisAngle(Y, j * 6.283); M4.compose(new THREE.Vector3(x, 0, z), q, new THREE.Vector3(sc, sc, sc)); im.setMatrixAt(i, M4); });
+        vary(im, nearSpots, 0.8, 1.18);
         im.castShadow = false; im.computeBoundingSphere(); im.matrixAutoUpdate = false; im.updateMatrix(); group.add(im);
       }
     } else farSpots.push(...nearSpots);
@@ -279,8 +290,8 @@ export async function addContext({ THREE, scene, url, lite = false }) {
         const base = [0, top, 0], mid = [c * L * 0.55 - sn * wd, top + 0.6, sn * L * 0.55 + c * wd], mid2 = [c * L * 0.55 + sn * wd, top + 0.6, sn * L * 0.55 - c * wd], tip = [c * L, top - 1.1, sn * L];
         s.tri(base, mid, tip, frond, 'up'); s.tri(base, tip, mid2, frond, 'up');
       }
-      const geo = s.geo(), im = new THREE.InstancedMesh(geo, mat({ side: THREE.DoubleSide }), spots.length), q = new THREE.Quaternion(), Y = new THREE.Vector3(0, 1, 0);
-      spots.forEach(([x, z, j], i) => { const sc = 0.85 + j * 0.35; q.setFromAxisAngle(Y, j * 6.283); M4.compose(new THREE.Vector3(x, 0, z), q, new THREE.Vector3(sc, sc, sc)); im.setMatrixAt(i, M4); });
+      const geo = s.geo(), im = new THREE.InstancedMesh(geo, mat({ side: THREE.DoubleSide }), spots.length);
+      vary(im, spots, 0.78, 1.22);
       im.computeBoundingSphere(); im.matrixAutoUpdate = false; im.updateMatrix(); group.add(im);
     }
   }

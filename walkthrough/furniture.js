@@ -1083,8 +1083,12 @@ function buildChair(F, s, M) {
     kit.add(fab, cushion(2 * sr, 0.07, 2 * sr, 0.03, 0.01, 0.005, 4).translate(0, sh - 0.035, 0.01), uv);
     kit.add(wd, rbox(-lr, sh - 0.1, -lr + 0.01, lr, sh - 0.07, lr + 0.01, 0.006, 2), 0.5);   // seat frame
     for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) kit.add(wd, rod([sx * (W / 2 - 0.02), 0.0035, sz * (D / 2 - 0.02)], [sx * lr * 0.85, sh - 0.08, sz * lr * 0.85 + 0.01], 0.011, 12, 0.016), { s: 0.5, vert: true });
-    const fy = 0.24, k = (sh - 0.08 - fy) / (sh - 0.08), fr = (W / 2 - 0.02) * (1 - k) + lr * 0.85 * k;
-    for (const [a, b] of [[[-1, 1], [1, 1]], [[-1, -1], [1, -1]], [[-1, -1], [-1, 1]], [[1, -1], [1, 1]]]) kit.add(M.pull(), rod([a[0] * fr, fy, a[1] * fr], [b[0] * fr, fy, b[1] * fr], 0.008, 8));   // slim black footrest
+    // slim black footrest, joined to the legs where they pass 24 cm up (each leg runs from the floor corner to under the seat;
+    // the old blend ran the wrong way, so the frame floated off the legs: owner, Nov 2026 "this looks broken")
+    const fy = 0.24, t = (fy - 0.0035) / (sh - 0.08 - 0.0035);
+    const fx = (W / 2 - 0.02) * (1 - t) + lr * 0.85 * t, fz = (D / 2 - 0.02) * (1 - t) + lr * 0.85 * t, zo = 0.01 * t;
+    const at = ([sx, sz]) => [sx * fx, fy, sz * fz + zo];
+    for (const [a, b] of [[[-1, 1], [1, 1]], [[-1, -1], [1, -1]], [[-1, -1], [-1, 1]], [[1, -1], [1, 1]]]) kit.add(M.pull(), rod(at(a), at(b), 0.008, 8));
     if (H > sh + 0.12) {   // low curved back
       const bh = Math.min(0.17, H - sh - 0.1);
       back(2 * sr - 0.02, bh, H - bh / 2 - 0.01, z0 + 0.05, 0.12, 0.3);

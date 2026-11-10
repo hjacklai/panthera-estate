@@ -17,7 +17,7 @@ import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { buildEstate } from './estate.js?v=33';
+import { buildEstate } from './estate.js?v=38';
 import { createHD, SKIES } from './hd.js?v=8';
 import { BAKE_VER, ENTRY_P } from './versions.js?v=1';
 
@@ -135,7 +135,7 @@ const PACK_P = LIB ? Promise.resolve(opts.pack || null)   // embedded: the hero'
       BAKE ? null : opt(J(`./tour_${HOME}.json?v=11${/[?&]tourdev/.test(QS) ? '&t=' + Date.now() : ''}`), null),   // the room-by-room tour
       opt(J('./parapets.json?v=1'), null),                                         // balcony half-wall grooves
       SEMID ? opt(J('./semid_lights.json?v=5'), []) : [],                          // E-01 lights, fans, wall lights, air-con
-      import('./furniture.js?v=12').catch(() => null),                              // realistic furniture and sanitary ware
+      import('./furniture.js?v=13').catch(() => null),                              // realistic furniture and sanitary ware
       SEMID ? opt(J('./semid_furniture.json?v=15'), []) : [],                       // Semi-D furniture, 8 Apr 2026 layout (audited)
     ]);
   } catch (e) { fail('Could not load the drawings.'); throw e; }
@@ -1528,6 +1528,7 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
       const [[za, ya], [zb, yb]] = segs[0], zt = (za + zb) / 2;
       // which face is outside: where the tiles stop after a short overhang (inside, the roof carries on over the house)
       const rP = reach(G.x1, zt, 1), rN = reach(G.x0, zt, -1);
+      if (rP >= 1.19 && rN >= 1.19) continue;   // roof on both sides (a gable inside the roofscape): no open verge to finish
       const out = rP < rN ? 1 : rP > rN ? -1 : (inTiles(G.x1 + 0.25, zt) ? -1 : 1), xw = out > 0 ? G.x1 : G.x0, R = out > 0 ? rP : rN;
       if (R < 0.2) {   // the tiles stop at the wall: they run 300 mm out over it
         const xo = xw + out * OV, [lo, hi] = out > 0 ? [xw, xo] : [xo, xw];
@@ -1550,7 +1551,8 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
       const [lo, hi] = out > 0 ? [xw, xo - T] : [xo + T, xw];
       const edges = [];
       for (const P of X.roof.tiles) P.forEach((a, i) => { const b = P[(i + 1) % P.length];
-        if (Math.abs(a[0] - xo) < 0.01 && Math.abs(b[0] - xo) < 0.01 && Math.abs(a[2] - b[2]) > 0.05 && Math.abs(a[1] - b[1]) > 0.05) edges.push([[a[2], a[1]], [b[2], b[1]]]); });
+        if (Math.abs(a[0] - xo) < 0.01 && Math.abs(b[0] - xo) < 0.01 && Math.abs(a[2] - b[2]) > 0.05 && Math.abs(a[1] - b[1]) > 0.05
+          && !inTiles(xo + out * 0.04, (a[2] + b[2]) / 2)) edges.push([[a[2], a[1]], [b[2], b[1]]]); });   // only a real verge, open air beyond: never a seam between two roof planes (owner, Nov 2026: a white line across the bungalow roof)
       for (const [[z0, y0], [z1, y1]] of edges) {
         band(z0, y0, z1, y1, 0.03, 0.03 - BB, xb0, xb1, mFascia);                                                        // barge board, eave to ridge
         for (const [g0, g1] of gz) {                                                                                       // soffit, over the gable wall's own length
@@ -2325,6 +2327,14 @@ if (SEMID) {
       }
     }
   }
+}
+// Semi-D: the pocket behind the quarter landing and the second flight boxed up in plaster (owner, Nov 2026: "can box this
+// up by the staircase"): the stair ends 650 mm short of the back wall (z -7.992 against -8.642), which left a dark recess
+// under the first-floor slab (3.50); filled from the landing's underside (2.666) to the slab, both units
+if (SEMID) for (const sg of [1, -1]) {
+  const x0 = Math.min(sg * -2.135, sg * -0.115), x1 = Math.max(sg * -2.135, sg * -0.115), z0 = -8.642, z1 = -7.992, y0 = 2.666, y1 = 3.5;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, y1 - y0, z1 - z0), mWall); m.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+  m.castShadow = m.receiveShadow = true; gfDetail.add(m);
 }
 // Built-in light-oak cabinetry in the recess beside the stair, under the top flight (owner, Nov 2026; Japandi oak): floor to the beam
 // or stair soffit, a dark plinth, a shadow gap under the plastered head, flush doors with slim black pulls.

@@ -274,6 +274,19 @@ export function buildEstate(ctx) {
   put(mVerge, fill(E.road.reserve, -0.304));
   put(mAsphalt, fill(E.road.carriageway, -0.299));
   for (const b of E.road.bellmouths) put(mAsphalt, fill(b, -0.2985));
+  // the junctions with the Persiaran: each bellmouth's mouth runs on to the Persiaran's own edge, so no green crescent shows
+  // between the curved kerb and the main road (owner, Nov 2026: "i said to fix this?")
+  for (const bm of E.road.bellmouths || []) {
+    const P = E.persiaran.carriageway, near = (v) => { let best = null, bd = Infinity;
+      for (let i = 0; i < P.length; i++) { const a = P[i], c = P[(i + 1) % P.length], dx = c[0] - a[0], dz = c[1] - a[1], L2 = dx * dx + dz * dz || 1, t = Math.max(0, Math.min(1, ((v[0] - a[0]) * dx + (v[1] - a[1]) * dz) / L2)), px = a[0] + t * dx, pz = a[1] + t * dz, d = Math.hypot(v[0] - px, v[1] - pz); if (d < bd) { bd = d; best = [px, pz]; } }
+      return { p: best, d: bd }; };
+    const idx = bm.map((v, i) => i).filter(i => near(bm[i]).d < 4);
+    if (idx.length < 2) continue;
+    let k0 = 0; for (let j = 1; j < idx.length; j++) if (idx[j] - idx[j - 1] > 1) { k0 = j; break; }   // one run, even across the polygon's start
+    const run = [...idx.slice(k0), ...idx.slice(0, k0)].map(i => bm[i]);
+    const out = run.map(v => { const n = near(v), ux = (n.p[0] - v[0]) / (n.d || 1), uz = (n.p[1] - v[1]) / (n.d || 1); return [n.p[0] + ux * 0.6, n.p[1] + uz * 0.6]; });
+    put(mAsphalt, fill([...run, ...out.reverse()], -0.2985));
+  }
   // the two entrance crossings over the monsoon drain, in the road's asphalt (owner, Nov 2026: "make this also road color,
   // and match it with the road kerb"), cut to the entrance's own curve (owner: "did u fix these road kurbs, to match? a nice
   // curve"): the drawn slab is wider than the bellmouth where it crosses the drain, so its square corners stood out past the
@@ -351,6 +364,35 @@ export function buildEstate(ctx) {
         } else pc = rect(W / 2 + 0.05, reach);
         put(mConc, fill(pc, -0.292));
       }
+    }
+    // Grass slivers (owner, Nov 2026: "just straight up cover up the green here", "i said to fix this?"): where a strip of verge
+    // under about 1.2 m wide is pinched between paving (the road, a crossing, an apron or a drive) and a fence, the green's
+    // edge, the pond or the substation, it is paved over: road asphalt next to the road (the road meets the kerb), apron
+    // concrete next to a drive. Found on a 150 mm grid in a 1 m band round every paved edge; each cell is paved as it stands.
+    {
+      const C = 0.15, drivesL = Object.values(E.drives || {});
+      const roadP = [...roads, ...CROSSINGS], driveP = [...aprons, ...drivesL, ...E.slabs];
+      const hard = [...E.plots.map(q => q.poly), E.island.edge, E.island.tnb_lot, ...(E.pond ? [E.pond.lot] : []), E.persiaran.carriageway].filter(q => Array.isArray(q) && q.length > 2);
+      const minD = (q, list) => { let d = Infinity; for (const P of list) d = Math.min(d, distPoly(q, P)); return d; };
+      const inside = (q, list) => list.some(P => pipE(q, P));
+      const nearDrain = q => E.drains.some(dr => segs(dr.c).some(([ax, az, bx, bz]) => { const dx = bx - ax, dz = bz - az, L2 = dx * dx + dz * dz || 1, t = Math.max(0, Math.min(1, ((q[0] - ax) * dx + (q[1] - az) * dz) / L2)); return Math.hypot(q[0] - ax - t * dx, q[1] - az - t * dz) < dr.W / 2 + 0.05; }));
+      const seen = new Set(), asph = [], conc = [];
+      for (const P of [...roadP, ...driveP]) for (let i = 0; i < P.length; i++) {
+        const [ax, az] = P[i], [bx, bz] = P[(i + 1) % P.length], L = Math.hypot(bx - ax, bz - az); if (L < 0.05) continue;
+        const ux = (bx - ax) / L, uz = (bz - az) / L;
+        for (let t = 0; t <= L; t += C) for (const sgn of [1, -1]) for (let o = C / 2; o < 1.0; o += C) {
+          const x = ax + ux * t - uz * o * sgn, z = az + uz * t + ux * o * sgn, kx = Math.round(x / C), kz = Math.round(z / C), k = kx + ',' + kz;
+          if (seen.has(k)) continue; seen.add(k);
+          const q = [kx * C, kz * C];
+          if (!(pipE(q, E.road.reserve) || pipE(q, E.lot)) || inside(q, roadP) || inside(q, driveP) || inside(q, hard) || nearDrain(q)) continue;   // the estate's own leftover land too
+          const dr = minD(q, roadP), dd = minD(q, driveP), dh = minD(q, hard), dp = Math.min(dr, dd);
+          if (dp + dh > 1.2) continue;   // a proper verge: wider than a sliver
+          const sq = [[q[0] - C / 2 - 0.01, q[1] - C / 2 - 0.01], [q[0] + C / 2 + 0.01, q[1] - C / 2 - 0.01], [q[0] + C / 2 + 0.01, q[1] + C / 2 + 0.01], [q[0] - C / 2 - 0.01, q[1] + C / 2 + 0.01]];
+          (dr <= dd ? asph : conc).push(sq);
+        }
+      }
+      for (const sq of asph) put(mAsphalt, fill(sq, -0.2994));
+      for (const sq of conc) put(mConc, fill(sq, -0.2925));
     }
   }
   // Kerbs and footway (owner, Nov 2026: "detail a bit the road curb pavement"). Round every estate road edge: a 300 mm
@@ -431,6 +473,37 @@ export function buildEstate(ctx) {
         if (nearDrain(q1) || nearDrain(q2) || aprons.some(a => inPoly(q1, a) || inPoly(q2, a))) return null;
         return 'foot';
       })) { const [f0, f1] = lo(r.sg, 0.15, 1.35); put(mFoot, bandUV(r.pl, f0, f1, -0.2925)); }
+    }
+    // left-over pockets of verge on the house side (owner, Nov 2026: "just straight up cover up the green here"): where a
+    // plot meets the road at an angle, the road, the fence, a drive or apron and the footway box in a small patch of grass.
+    // Every patch of verge beyond the footway, between the road and a plot fence, is found on a 200 mm grid; a patch under
+    // 12 m2 (a pocket, not a verge strip along the fences) is paved in the footway's pavers. The green's own verge is left.
+    {
+      const C = 0.2, plotsP = E.plots.map(q => q.poly), drivesL = Object.values(E.drives || {});
+      const solid = [...roadPolys, ...CROSSINGS, ...aprons, ...drivesL, ...E.slabs, ...plotsP, E.island.edge, E.island.tnb_lot, ...(E.pond ? [E.pond.lot] : [])].filter(q => Array.isArray(q) && q.length > 2);
+      const otherHard = [E.island.edge, E.island.tnb_lot, ...(E.pond ? [E.pond.lot] : [])].filter(q => Array.isArray(q) && q.length > 2);
+      const minD = (q, list) => { let d = Infinity; for (const P of list) d = Math.min(d, distPoly(q, P)); return d; };
+      const R = E.road.reserve; let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+      for (const [x, z] of R) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+      const nx = Math.ceil((x1 - x0) / C), nz = Math.ceil((z1 - z0) / C), cand = new Uint8Array(nx * nz);
+      for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
+        const q = [x0 + (i + 0.5) * C, z0 + (j + 0.5) * C];
+        if (!inPoly(q, R) || solid.some(S => inPoly(q, S)) || nearDrain(q)) continue;
+        const dRoad = minD(q, roadPolys); if (dRoad < 1.35) continue;   // the footway band
+        const dPlot = minD(q, plotsP), dOther = otherHard.length ? minD(q, otherHard) : Infinity;
+        if (dOther <= dPlot) continue;   // the green's side, the pond's, the substation's: left green
+        cand[i * nz + j] = 1;
+      }
+      const seen = new Uint8Array(nx * nz);
+      for (let s0 = 0; s0 < cand.length; s0++) {
+        if (!cand[s0] || seen[s0]) continue;
+        const comp = [s0], st = [s0]; seen[s0] = 1;
+        while (st.length) { const c = st.pop(), i = (c / nz) | 0, j = c % nz;
+          for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const a = i + di, b = j + dj; if (a < 0 || b < 0 || a >= nx || b >= nz) continue; const n = a * nz + b; if (cand[n] && !seen[n]) { seen[n] = 1; comp.push(n); st.push(n); } } }
+        if (comp.length * C * C > 12) continue;   // a verge strip, not a pocket
+        for (const c of comp) { const i = (c / nz) | 0, j = c % nz, x = x0 + i * C, z = z0 + j * C;
+          put(mFoot, fill([[x - 0.01, z - 0.01], [x + C + 0.01, z - 0.01], [x + C + 0.01, z + C + 0.01], [x - 0.01, z + C + 0.01]], -0.2926)); }
+      }
     }
   }
   // the Persiaran in front of the estate
@@ -583,10 +656,11 @@ export function buildEstate(ctx) {
   // ---------- street lights (SL1): 9 m concrete poles, single arm, LED head ----------
   const roadsLamp = [E.road.carriageway, ...(E.road.bellmouths || [])].filter(q => Array.isArray(q) && q.length > 2);
   for (const l of E.lights) {
-    const H = l.t === 'A' || l.t === 'D' ? 9 : 8; let [x, z] = l.xz;
+    const park = l.t === 'D' || (!l.dir[0] && !l.dir[1]);   // the bare posts (no arm, no head on the plan): they read as broken lamps
+    const H = park ? 4.5 : l.t === 'A' ? 9 : 8; let [x, z] = l.xz;
     if (l.dir[0] || l.dir[1]) for (let k = 0; k < 12 && roadsLamp.some(q => inPoly([x, z], q) || distPoly([x, z], q) < 0.45); k++) { x -= l.dir[0] * 0.1; z -= l.dir[1] * 0.1; }   // behind the kerb
+    if (park) continue;   // the bare posts round the green and by the main road: removed (owner, Nov 2026: "these two lamp post here can remove ... same for here")
     const pole = new THREE.CylinderGeometry(0.075, 0.13, H, 10); pole.translate(x, -0.3 + H / 2, z); put(mPole, pole);
-    if (l.t === 'D' || (!l.dir[0] && !l.dir[1])) continue;
     const ex = x + l.dir[0] * 1.6, ez = z + l.dir[1] * 1.6, A = V(x, H - 0.55, z), B = V(ex, H - 0.2, ez);
     const arm = new THREE.CylinderGeometry(0.035, 0.035, A.distanceTo(B), 8); arm.applyMatrix4(new THREE.Matrix4().compose(A.clone().lerp(B, 0.5), new THREE.Quaternion().setFromUnitVectors(V(0, 1, 0), B.clone().sub(A).normalize()), V(1, 1, 1))); put(mPole, arm);
     const head = new THREE.BoxGeometry(0.62, 0.09, 0.26); head.rotateY(-Math.atan2(l.dir[1], l.dir[0])); head.translate(ex + l.dir[0] * 0.2, H - 0.22, ez + l.dir[1] * 0.2); put(mMetal, head);

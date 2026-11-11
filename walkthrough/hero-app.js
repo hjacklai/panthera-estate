@@ -329,7 +329,7 @@ export function createApp(ctx) {
   // deep link (#pricing, ...) once the intro is done
   const start = HASH[(location.hash || '').slice(1)];
   // ---------- sound: quiet songbirds, clean (no hiss, no insects), off until the visitor turns it on
-  // (owner, Nov 2026). One 390 KB loop (audio/SOURCE.txt: CC0), fetched on the first tap only; it fades in and out and
+  // (owner, Nov 2026). One 390 KB loop (audio/SOURCE.txt: CC0), downloaded once (buffered at idle, or at the first tap); it fades in and out and
   // pauses while the tab is hidden. The button sits by the language button.
   {
     const side = document.querySelector('.topbar-side.right');
@@ -338,11 +338,18 @@ export function createApp(ctx) {
     const sb = document.createElement('button'); sb.type = 'button'; sb.className = 'hxa-sound'; sb.setAttribute('aria-pressed', 'false'); sb.setAttribute('aria-label', T('hx.sound')); sb.setAttribute('data-i18n-aria', 'hx.sound'); sb.innerHTML = OFF;
     if (side) side.insertBefore(sb, side.firstChild);
     let ac = null, gain = null, el = null, on = false;
+    // the one <audio> element: made ahead at idle (it buffers the loop then) or at the first tap, and reused by start(),
+    // so the file is downloaded once (a <link rel=prefetch> before it was a second, separate download of 388 KB:
+    // load-time pass, Nov 2026). crossOrigin is set before src, so its one request is the one the Web Audio graph needs.
+    const audioEl = () => {
+      if (!el) { el = new Audio(); el.crossOrigin = 'anonymous'; el.loop = true; el.preload = 'auto'; el.src = new URL('./audio/songbirds-loop.mp3', import.meta.url).href; }
+      return el;
+    };
     const fade = (to, s) => { if (!gain) return; const t0 = ac.currentTime; gain.gain.cancelScheduledValues(t0); gain.gain.setValueAtTime(gain.gain.value, t0); gain.gain.linearRampToValueAtTime(to, t0 + s); };
     const start = () => {
       if (!ac) {
         const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-        ac = new AC(); el = new Audio(new URL('./audio/songbirds-loop.mp3', import.meta.url).href); el.loop = true; el.crossOrigin = 'anonymous'; el.preload = 'auto';
+        ac = new AC(); audioEl();
         gain = ac.createGain(); gain.gain.value = 0; ac.createMediaElementSource(el).connect(gain).connect(ac.destination);
       }
       ac.resume(); el.play().catch(() => {}); fade(0.42, 1.6);
@@ -356,8 +363,8 @@ export function createApp(ctx) {
     sb.addEventListener('click', () => setOn(!on));
     window.PantheraSound = { get on() { return on; }, toggle() { setOn(!on); }, subscribe(f) { subs.add(f); f(on); return () => subs.delete(f); } };
     // on by default (owner, Nov 2026: "load with noise"): browsers allow sound only after the visitor's first touch,
-    // click or key, so it fades in then; a visitor who muted it before stays muted. The loop is fetched quietly once
-    // the 3D is ready, so it starts at once (not on data saver)
+    // click or key, so it fades in then; a visitor who muted it before stays muted. The loop is buffered quietly once
+    // the 3D is ready (the element itself, see audioEl), so it starts at once (not on data saver)
     let armed = false;
     try { on = localStorage.getItem('hx-sound') !== 'off'; } catch (e) { on = true; }
     // data saver, and the careful visitors (slow connection, low memory, reduced data) who opted in to the 3D: no
@@ -374,9 +381,9 @@ export function createApp(ctx) {
         if (on) start();
       };
       for (const t of ['pointerdown', 'keydown', 'touchstart', 'wheel']) addEventListener(t, first, true);
-      (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => { const l = document.createElement('link'); l.rel = 'prefetch'; l.as = 'audio'; l.href = new URL('./audio/songbirds-loop.mp3', import.meta.url).href; document.head.append(l); }, { timeout: 4000 });
+      (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => { if (on) audioEl(); }, { timeout: 4000 });
     }
-    document.addEventListener('visibilitychange', () => { if (!on || !el) return; if (document.hidden) el.pause(); else { ac.resume(); el.play().catch(() => {}); } });
+    document.addEventListener('visibilitychange', () => { if (!on || !ac) return; if (document.hidden) el.pause(); else { ac.resume(); el.play().catch(() => {}); } });
   }
 
   const api = {

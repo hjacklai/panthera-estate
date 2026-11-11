@@ -39,6 +39,31 @@ export const SKIES = {
   night: { file: 'qwantani_dusk_1_puresky', sun: [0.7765, 0.3499, 0.524], cap: 6, sat: 1 },
 };
 const SKY_SIZE = '1k';   // 1k gives a 256 PMREM, the same size as RoomEnvironment, so a swap recompiles no shaders
+// File stamps (owner, Nov 2026: "optimize load time on all devices, without compromising quality"): the photo maps and
+// the skies carry ?v=, so the site's service worker (/sw.js) keeps them between visits. Bump TEX_REV when any
+// hd/tex file is replaced under the same name, SKY_REV when a sky file is (and hero-boot.js's golden-sky preload with it).
+const TEX_REV = '1', SKY_REV = '1';
+
+// Sky files: the .hdr's own RGBE bytes as 4 planes (R, G, B, E), each row delta coded, then gzip -9
+// (walkthrough/tools/sky_pack.py). 45% under the server's gzip of the .hdr (golden 593 -> 328 KB), lossless: this
+// rebuilds a flat .hdr, header plus the same RGBE bytes, which RGBELoader reads as it is, so the pixels are identical.
+async function skyFile(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(url + ' ' + r.status);
+  let ab = await r.arrayBuffer();
+  const g = new Uint8Array(ab, 0, 2);
+  if (g[0] === 0x1f && g[1] === 0x8b) ab = await new Response(new Blob([ab]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+  const dv = new DataView(ab);
+  if (dv.getUint32(0, true) !== 0x31534250) throw new Error(url + ': not PBS1');
+  const hl = dv.getUint32(4, true), W = dv.getUint32(8, true), H = dv.getUint32(12, true), N = W * H;
+  const src = new Uint8Array(ab, 16 + hl, N * 4), out = new Uint8Array(hl + N * 4);
+  out.set(new Uint8Array(ab, 16, hl));
+  for (let c = 0; c < 4; c++) for (let y = 0; y < H; y++) {
+    const s = c * N + y * W, d = hl + y * W * 4 + c; let v = 0;
+    for (let x = 0; x < W; x++) { v = (v + src[s + x]) & 255; out[d + 4 * x] = v; }
+  }
+  return out;
+}
 
 // World-space box projection (metres) for map, normal and roughness maps.
 const WORLD_UV = shader => {
@@ -158,7 +183,7 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     S = { name, def, tex: null, avg: null, rough: 0.5, wait: [], p: Promise.resolve() }; sets.set(name, S);
     if (!res) return S;
     const size = def.size === '1k' ? '1k' : res, maps = def.maps.filter(m => !lite || m === 'color' || m === 'normal');
-    const url = m => `${base}tex/${name}/${name}_${m === 'rough' || m === 'ao' ? '1k' : size}_${m}.webp`;
+    const url = m => `${base}tex/${name}/${name}_${m === 'rough' || m === 'ao' ? '1k' : size}_${m}.webp?v=${TEX_REV}`;
     // (the porcelain's grout is drawn over an <img>: its quarters are turned as the image stands)
     const get = BITMAP && !def.grout ? u => loadBmp(u).catch(() => loadImg(u)) : loadImg;
     S.p = Promise.all(maps.map(m => get(url(m)).then(img => [m, img]))).then(async list => {
@@ -295,8 +320,14 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     const def = SKIES[name];
     if (!def || !res) return Promise.resolve(null);
     if (!skies.has(name)) skies.set(name, (async () => {
+      const stem = `${base}sky/${def.file}_${SKY_SIZE}`;
+      const fileP = skyFile(`${stem}.rgbe.gz?v=${SKY_REV}`); fileP.catch(() => {});   // downloads while the loader's module does
       const { RGBELoader } = await import('three/addons/loaders/RGBELoader.js');
-      const src = await new RGBELoader().loadAsync(`${base}sky/${def.file}_${SKY_SIZE}.hdr`);
+      let src;
+      try {   // the packed file through three's own loader (same texture setup as before), the plain .hdr if it fails
+        const u = URL.createObjectURL(new Blob([await fileP]));
+        try { src = await new RGBELoader().loadAsync(u); } finally { URL.revokeObjectURL(u); }
+      } catch (e) { src = await new RGBELoader().loadAsync(`${stem}.hdr`); }
       if (dead) { src.dispose(); return null; }
       const envRT = prep(src, def.cap, def.sat), env = envRT.texture; src.dispose();
       return { name, env, envRT, level: level(env), sun: new THREE.Vector3(...def.sun).normalize() };

@@ -34,14 +34,14 @@
     var d = document.querySelector('meta[name=description]'); if (d) d.content = 'Scroll through a 3D model of the Panthera Bertam bungalow in Bertam, Penang: every room from the porch to the balcony, built from the floor plans. 2,642 sq ft, 4+1 bedrooms, 4+1 bathrooms, freehold.';
   }
   var u = [h + '.json?v=10', h + '_detail.json?v=5', h + '_fittings.json?v=7', 'bungalow_furniture.json?v=14', 'semid_cars.json?v=1',
-           'estate.json?v=12', 'parapets.json?v=1'];
+           'estate.json?v=25', 'parapets.json?v=1'];
   if (/[?&](live|bake)/.test(location.search)) u.push(o + '.json?v=10', o + '_detail.json?v=5');   // the other home: only without the baked estate pack
   if (!b) u.push('semid_lights.json?v=5', 'semid_furniture.json?v=15');
   if (!/[?&](bake|tourdev)/.test(location.search)) u.push('tour_' + h + '.json?v=11');
   u.forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = x; document.head.appendChild(l); });
   // the baked estate pack (1.2 to 1.7 MB) starts now, not after the whole module graph has run: the same files and tier as
   // walk.js's fetchPack (TEXHI = desk outside ?bake); 'e1' must follow BAKE_VER in versions.js
-  if (!/[?&](bake|live)/.test(location.search)) ['estate.e1.json', 'estate.e1.bin.gz', 'estate.e1.tex' + (desk ? 1024 : 512) + '.bin'].forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = 'bake/' + x; document.head.appendChild(l); });
+  if (!/[?&](bake|live)/.test(location.search)) ['estate.e1.json', 'estate.e1.bin.gz', 'estate.e1.tex' + (desk ? 1024 : 512) + '.bin'].forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = 'bake/' + x + '?v=1'; document.head.appendChild(l); });   // ?v=: versions.js BAKE_REV
   var m = [];
   if (desk) {   // desktop only: the post-processing modules (and the Semi-D's area-light tables)
     ['postprocessing/EffectComposer.js', 'postprocessing/RenderPass.js', 'postprocessing/GTAOPass.js', 'postprocessing/OutputPass.js', 'postprocessing/UnrealBloomPass.js',
@@ -75,13 +75,13 @@
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lines/LineMaterial.js" crossorigin>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/geometries/RoundedBoxGeometry.js" crossorigin>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/utils/BufferGeometryUtils.js" crossorigin>
-<link rel="modulepreload" href="walk.js?v=150">
+<link rel="modulepreload" href="walk.js?v=151">
 <link rel="modulepreload" href="estate.js?v=38">
-<link rel="modulepreload" href="furniture.js?v=12">
+<link rel="modulepreload" href="furniture.js?v=13">
 <link rel="modulepreload" href="car.js?v=4">
-<link rel="modulepreload" href="hd.js?v=8">
-<link rel="modulepreload" href="versions.js?v=1">
-<link rel="modulepreload" href="pack.js?v=3">
+<link rel="modulepreload" href="hd.js?v=9">
+<link rel="modulepreload" href="versions.js?v=2">
+<link rel="modulepreload" href="pack.js?v=4">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -230,6 +230,6 @@
   </ul>
   <p>Furniture, kitchen cabinetry, appliances, art and landscaping in the walkthrough are illustrative. The signed Sale and Purchase Agreement and the stamped drawings are the binding documents.</p>
 </section>
-<script type="module" src="walk.js?v=150"></script>
+<script type="module" src="walk.js?v=151"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // pack.js · the baked estate (bake/estate.<ver>.json, .bin.gz, .tex512.bin / .tex1024.bin, made by tools/bake.html).
 //
-//   const pack = await fetchPack({ base: './bake/', ver: 'e1', tier: 1024 | 512 });
+//   const pack = await fetchPack({ base: './bake/', ver: 'e1', tier: 1024 | 512, rev: '1' });   // rev: versions.js BAKE_REV (?v=)
 //   const estate = pack.forWalk('semid', { THREE, hifi, envMap, hd: hd.use, aniso });   // the buildEstate API
 //
 // Format PBE1-q: the manifest lists images, textures, materials (three's material JSON plus the hd photo sets) and
@@ -19,9 +19,10 @@ const loadImg = url => new Promise((ok, no) => {
   img.onerror = () => no(new Error(url)); img.src = url;
 });
 
-export async function fetchPack({ base = './bake/', ver, tier = 1024, priority = 'low' } = {}) {
+export async function fetchPack({ base = './bake/', ver, tier = 1024, priority = 'low', rev = '' } = {}) {
   if (typeof DecompressionStream === 'undefined') throw new Error('no DecompressionStream');
-  const get = (u, how) => fetch(base + u, { priority }).then(r => { if (!r.ok) throw new Error(u + ' ' + r.status); return r[how](); });
+  const q = rev ? '?v=' + rev : '';   // (hero-boot.js preloads these exact URLs)
+  const get = (u, how) => fetch(base + u + q, { priority }).then(r => { if (!r.ok) throw new Error(u + ' ' + r.status); return r[how](); });
   const T = tier <= 512 ? 512 : 1024;
   const binP = get(`estate.${ver}.bin.gz`, 'arrayBuffer').then(gunzip), texP = get(`estate.${ver}.tex${T}.bin`, 'arrayBuffer');   // all three at once
   binP.catch(() => {}); texP.catch(() => {});

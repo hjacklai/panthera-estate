@@ -11,11 +11,11 @@
 // Semi-D | Bungalow stays in step with the landing page's pill (home-toggle.js: 'panthera:home', PantheraHome).
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { fetchPack } from './pack.js?v=3';
-import { createHD } from './hd.js?v=8';
-import { BAKE_VER } from './versions.js?v=1';
+import { fetchPack } from './pack.js?v=4';
+import { createHD } from './hd.js?v=9';
+import { BAKE_VER, BAKE_REV } from './versions.js?v=2';
 import { buildHeroEstate } from './hero-lod.js?v=4';
-import { createTod } from './hero-tod.js?v=9';
+import { createTod } from './hero-tod.js?v=10';
 import { createOrbit } from './hero-orbit.js?v=2';
 import { createRig } from './hero-rig.js?v=5';
 
@@ -205,9 +205,9 @@ export async function start(o) {
   // pace: each photo map uploaded on its own, when the camera is still and the browser idle (see quiet)
   const hd = createHD({ THREE, renderer, res: '1k', lite: true, base: base + 'hd/', pace: () => quiet(300).then(() => new Promise(r => idle(r, { timeout: 1000 }))), onChange: () => { renderer.compileAsync(scene, camera).catch(() => {}).then(() => { dirty = true; need(); }); } });
   // the pack and (desktop) the golden sky, in parallel
-  const packP = fetchPack({ base: base + 'bake/', ver: BAKE_VER, tier: lite ? 512 : 1024, priority: 'high' });
+  const packP = fetchPack({ base: base + 'bake/', ver: BAKE_VER, tier: lite ? 512 : 1024, priority: 'high', rev: BAKE_REV });
   // the aerial copy's visibility result, saved ahead (saves the 2-3 s id render on phones); optional
-  const masksP = o.flag === 'lodlive' ? Promise.resolve(null) : fetch(base + `bake/hero-lod.${BAKE_VER}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  const masksP = o.flag === 'lodlive' ? Promise.resolve(null) : fetch(base + `bake/hero-lod.${BAKE_VER}.json?v=${BAKE_REV}`).then(r => (r.ok ? r.json() : null)).catch(() => null);
   const goldenP = lite ? null : hd.sky('golden');
   // the neighbourhood (hero-context.js and its data) and the breeze's shaders (hero-life.js), fetched beside the pack:
   // both go in before the first frame now (see there)
@@ -799,7 +799,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=30').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=31').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   const moving = () => hero.classList.contains('hx-leave');   // the tour or the Location move is under way
   function walkInto(h, from) { if (moving()) return; if (!live) { pendingWalk = [h, from]; return; } tour().then(t => t.open(h, from)).catch(e => { console.warn('tour', e); location.href = base + 'index.html?home=' + h; }); }
@@ -916,7 +916,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=31').then(mod => {
+      import(base + 'hero-app.js?v=32').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

@@ -18,8 +18,8 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
-import { createHD, SKIES } from './hd.js?v=8';
-import { BAKE_VER, ENTRY_P } from './versions.js?v=1';
+import { createHD, SKIES } from './hd.js?v=9';
+import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=2';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
 const COL = {
@@ -114,7 +114,7 @@ let D, X, FIT = [], FURN = [], CARS = [], buildCar = null, ESTATE = null, OTHER 
 // The baked estate (bake/estate.<ver>.*, made by tools/bake.html): all 19 homes and the grounds, loaded instead of
 // building the estate here and baking the other home in a hidden page. Missing or broken: the old path runs.
 const PACK_P = LIB ? Promise.resolve(opts.pack || null)   // embedded: the hero's pack, already loaded
-  : (!BAKE && !LIVE) ? import('./pack.js?v=3').then(m => m.fetchPack({ base: './bake/', ver: BAKE_VER, tier: TEXHI ? 1024 : 512 }))
+  : (!BAKE && !LIVE) ? import('./pack.js?v=4').then(m => m.fetchPack({ base: './bake/', ver: BAKE_VER, tier: TEXHI ? 1024 : 512, rev: BAKE_REV }))
   .catch(e => { console.warn('pack: building the estate here instead', e && e.message); return null; }) : null;
 // Everything loads at once (index.html also preloads the data files while three.js downloads).
 {
@@ -128,7 +128,7 @@ const PACK_P = LIB ? Promise.resolve(opts.pack || null)   // embedded: the hero'
       opt(J(`./${HOME}_fittings.json?v=7`), []),                                   // switches and sockets
       opt(J('./bungalow_furniture.json?v=14'), []),                                 // bungalow furniture (8 Apr 2026 layout, audited) and its cars
       opt(J('./semid_cars.json?v=1'), []),                                         // Semi-D: two cars per porch, as drawn
-      opt(J('./estate.json?v=12'), null),                                           // the estate, for the road view and the bird's-eye
+      opt(J('./estate.json?v=25'), null),                                           // the estate, for the road view and the bird's-eye
       PACK_P ? null : opt(J(`./${other}.json?v=10`), null), PACK_P ? null : opt(J(`./${other}_detail.json?v=5`), null),   // the other home (not with the pack)
       import('./car.js?v=4').catch(() => null),                                    // the detailed car (falls back to a simple one)
       Promise.race([document.fonts.load('500 40px "JetBrains Mono"'), new Promise(r => setTimeout(r, 1500))]).catch(() => null),

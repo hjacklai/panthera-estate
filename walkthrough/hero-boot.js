@@ -23,7 +23,8 @@
   // keep in step with versions.js THREE_URL
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '125';   // bump with any hero file change
+  var V = '126';   // bump with any hero file change
+  var BAKE_Q = '?v=1';   // the bake files' stamp: keep in step with versions.js BAKE_REV (bump with every rebake)
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
   // a key missing there falls back to this English.
@@ -134,10 +135,14 @@
     if (extra) for (var k in extra) l.setAttribute(k, extra[k]);
     document.head.appendChild(l); return l;
   }
-  function load() {
-    if (state !== 'idle') return;
-    state = 'loading';
-    performance.mark('hx-boot');
+  // the network half of the load: the import map, the CDN connection, the modules and the estate's data. Nothing here
+  // runs any script, so it starts as soon as the poster is in, not after the frames and the idle moment load() waits for
+  // (owner, Nov 2026: "optimize load time on all devices, without compromising quality": about 0.1 to 0.8 s sooner)
+  var warmed = false;
+  function warm() {
+    if (warmed) return;
+    warmed = true;
+    performance.mark('hx-warm');
     if (!document.querySelector('script[type="importmap"]')) {
       var s = document.createElement('script'); s.type = 'importmap';
       s.textContent = JSON.stringify({ imports: { three: THREE_URL, 'three/addons/': ADDONS } });
@@ -146,15 +151,23 @@
     addLink('preconnect', 'https://cdn.jsdelivr.net', { crossorigin: '' });
     addLink('modulepreload', THREE_URL, { crossorigin: '' });
     // as hero.js imports them (keep in step with its import lines: a stale ?v= here is a second, wasted download)
-    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '9', 'hero-orbit.js': '2', 'hero-rig.js': '5', 'pack.js': '3', 'hd.js': '8', 'versions.js': '1' };
+    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '10', 'hero-orbit.js': '2', 'hero-rig.js': '5', 'pack.js': '4', 'hd.js': '9', 'versions.js': '2' };
     Object.keys(VER).forEach(function (f) { addLink('modulepreload', base + f + '?v=' + VER[f]); });
     addLink('modulepreload', ADDONS + 'utils/BufferGeometryUtils.js', { crossorigin: '' });
+    // hero.js imports it once the pack is in, just before the first frame: fetched now, not as one more round trip then
+    addLink('modulepreload', ADDONS + 'environments/RoomEnvironment.js', { crossorigin: '' });
     // the estate's data (about 1.7 MB) and, on desktop, the golden sky: fetched now, alongside three.js, instead of
     // once hero.js has run. Exactly the URLs and fetch mode pack.js, hero.js and hd.js ask for, so they reuse these
-    // (keep 'e1' in step with versions.js BAKE_VER, the tier with hero.js, the sky file with hd.js 'golden')
+    // (keep 'e1' in step with versions.js BAKE_VER and BAKE_Q with BAKE_REV, the tier with hero.js, the sky file with hd.js 'golden')
     var pre = function (u) { addLink('preload', base + u, { as: 'fetch', crossorigin: 'anonymous', fetchpriority: 'high' }); };
-    ['bake/estate.e1.json', 'bake/estate.e1.bin.gz', 'bake/estate.e1.tex' + (lite ? 512 : 1024) + '.bin', 'bake/hero-lod.e1.json'].forEach(pre);
-    if (!lite) pre('hd/sky/qwantani_sunset_puresky_1k.hdr');
+    ['bake/estate.e1.json', 'bake/estate.e1.bin.gz', 'bake/estate.e1.tex' + (lite ? 512 : 1024) + '.bin', 'bake/hero-lod.e1.json'].forEach(function (u) { pre(u + BAKE_Q); });
+    if (!lite) pre('hd/sky/qwantani_sunset_puresky_1k.rgbe.gz?v=1');   // hd.js skyFile(), SKY_REV
+  }
+  function load() {
+    if (state !== 'idle') return;
+    state = 'loading';
+    performance.mark('hx-boot');
+    warm();
     addLink('stylesheet', base + 'hero.css?v=' + V);
     hero.classList.add('hx-on');
     import(base + 'hero.js?v=' + V).then(function (m) {
@@ -162,14 +175,14 @@
     }).catch(fail);
   }
   // after the poster has painted and the page is idle, and only while the hero is on screen
-  function whenCalm(fn) {
+  function whenCalm(fn, warm0) {   // warm0: the network-only part, run as soon as the poster is in
     var img = hero.querySelector('.hero-slide');
     var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 200); };
     var frame = function (f) {   // rAF, or a timer where rAF is throttled though the page is shown
       var done = false, run = function () { if (!done) { done = true; f(); } };
       requestAnimationFrame(run); setTimeout(run, 120);
     };
-    var go = function () { frame(function () { frame(function () { idle(fn, { timeout: 800 }); }); }); };
+    var go = function () { if (warm0) warm0(); frame(function () { frame(function () { idle(fn, { timeout: 800 }); }); }); };
     if (!img || (img.complete && img.naturalWidth)) go();
     else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', go, { once: true }); }
   }
@@ -219,5 +232,7 @@
   wrap();
   // a deep link into the app (#pricing, ...) loads at once: the browser has scrolled to that section, off the hero
   var deep = app && /^#(estate|site|location|bertam|homes|bungalow|semid|pricing|calculator|faq|register)$/.test(location.hash);
-  whenCalm(function () { if (deep) load(); else whenVisible(load); });
+  // the app is one fixed screen (the hero is always in view), so its downloads can start with the poster; the scrolling
+  // page keeps waiting until the hero is on screen
+  whenCalm(function () { if (deep) load(); else whenVisible(load); }, app ? warm : null);
 })();

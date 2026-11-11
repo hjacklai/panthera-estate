@@ -6,7 +6,7 @@
 //
 // Levels follow walk.js (TODS, LIGHT) at the end of the walk, where the camera is over the estate, so the hero and
 // the tour's bird's-eye match. HDRI skies come from hd.js; until one arrives the RoomEnvironment lights the scene.
-import { SKIES } from './hd.js?v=7';
+import { SKIES } from './hd.js?v=9';
 
 export function createTod({ THREE, renderer, scene, sun, hemi, sky, hd, roomEnv, lamps = [], glass = [], pools = null, reduced = false, onChange = () => {} }) {
   const V = (x, y, z) => new THREE.Vector3(x, y, z);

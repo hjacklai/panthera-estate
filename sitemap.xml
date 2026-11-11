@@ -5,7 +5,7 @@
        the fragment, so they were only duplicates of /. Set lastmod to the push date. -->
   <url>
     <loc>https://www.pantheraestate.com/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <image:image><image:loc>https://www.pantheraestate.com/assets/hero-estate-3d.webp</image:loc></image:image>
     <image:image><image:loc>https://www.pantheraestate.com/assets/perspective-semid-front.webp</image:loc></image:image>
     <image:image><image:loc>https://www.pantheraestate.com/assets/perspective-bungalow-front.webp</image:loc></image:image>
@@ -15,7 +15,7 @@
   <!-- 3D walkthrough of the two home types (one canonical URL; ?home=bungalow is the same page) -->
   <url>
     <loc>https://www.pantheraestate.com/walkthrough/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <image:image><image:loc>https://www.pantheraestate.com/walkthrough/og-3d.jpg</image:loc></image:image>
   </url>
 </urlset>

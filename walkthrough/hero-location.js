@@ -17,7 +17,6 @@ const TOP_FOV = 30;          // a long lens for the top-down shot: flatter, clos
 const FRAME = 0.46;          // the lot's share of the screen height when the map takes over
 const SITE_Z = 14;           // the Location map's own starting zoom (app.js initLocationMap)
 const latLngOf = (x, z) => [LAT0 - z / M_LAT, LON0 + x / M_LON];
-const mppAt = z => 156543.03392 * Math.cos(LAT0 * Math.PI / 180) / Math.pow(2, z);   // web mercator metres per css px
 const zoomFor = mpp => Math.log2(156543.03392 * Math.cos(LAT0 * Math.PI / 180) / mpp);
 const ease = u => (u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2);
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -33,7 +32,7 @@ const APP = {
 const appGet = name => APP[name]();
 
 export function createLocation(o) {
-  const { THREE, camera, scene, renderer, stage, reduced, T } = o;
+  const { THREE, camera, scene, stage, reduced, T } = o;
   const box = document.getElementById('loc-leaflet');
   if (!box || typeof window.loadLeaflet !== 'function') return null;   // no Location map on this page
   const section = document.getElementById('location');

@@ -5,4 +5,3 @@ export const BAKE_VER = 'e1';
 // BAKE_VER, here and in hero-boot.js (BAKE_Q); tools/check_pack.py warns when the bake changed and this did not.
 export const BAKE_REV = '1';
 export const ENTRY_P = 0.41;   // walk state where the estate hands over to the tour (labels gone, real = 1)
-export const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';

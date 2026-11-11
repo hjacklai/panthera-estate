@@ -7,8 +7,8 @@
     "rough": "greyscale roughness (linear), webp q70",
     "ao": "greyscale AO, webp q65 (only where it adds grout/profile detail)"
   },
-  "usage": "UV repeat = surface size in metres / tile_m. Use *_2k_* on desktop, *_1k_* on phones.",
-  "total_bytes": 30154614,
+  "usage": "UV repeat = surface size in metres / tile_m. Only the files hd.js loads are kept: rough and ao maps are 1k only, *_2k_* color and normal only for sets without size '1k' in hd.js SETS (desktop at res 2k), *_1k_* everywhere else.",
+  "total_bytes": 8514496,
   "sets": [
     {
       "name": "spc_oak",
@@ -38,10 +38,9 @@
         "tex/spc_oak/spc_oak_1k_normal.webp",
         "tex/spc_oak/spc_oak_1k_rough.webp",
         "tex/spc_oak/spc_oak_2k_color.webp",
-        "tex/spc_oak/spc_oak_2k_normal.webp",
-        "tex/spc_oak/spc_oak_2k_rough.webp"
+        "tex/spc_oak/spc_oak_2k_normal.webp"
       ],
-      "bytes_2k": 1573234,
+      "bytes_2k": 1207462,
       "bytes_1k": 225620,
       "notes": "Light oak laminate planks, ~21 cm wide planks with staggered end joints; reads as SPC vinyl plank. Separate roughness map (no ARM packing)."
     },
@@ -73,10 +72,9 @@
         "tex/porcelain_beige/porcelain_beige_1k_normal.webp",
         "tex/porcelain_beige/porcelain_beige_1k_rough.webp",
         "tex/porcelain_beige/porcelain_beige_2k_color.webp",
-        "tex/porcelain_beige/porcelain_beige_2k_normal.webp",
-        "tex/porcelain_beige/porcelain_beige_2k_rough.webp"
+        "tex/porcelain_beige/porcelain_beige_2k_normal.webp"
       ],
-      "bytes_2k": 1225244,
+      "bytes_2k": 832612,
       "bytes_1k": 264000,
       "notes": "No CC0 plain beige porcelain tile set found; this is a light cream-beige marble slab with no grout, so the code must add grout lines (e.g. a grout overlay or a second tile-grid texture). ambientCG publishes no physical size for Marble004: tile_m [1.2,1.2] is a suggested repeat (2x2 tiles of 600 mm per repeat), not a measured value. Very low-relief normal/roughness (polished)."
     },
@@ -93,7 +91,6 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
@@ -108,14 +105,9 @@
         "tex/bath_wall_tile/bath_wall_tile_1k_ao.webp",
         "tex/bath_wall_tile/bath_wall_tile_1k_color.webp",
         "tex/bath_wall_tile/bath_wall_tile_1k_normal.webp",
-        "tex/bath_wall_tile/bath_wall_tile_1k_rough.webp",
-        "tex/bath_wall_tile/bath_wall_tile_2k_ao.webp",
-        "tex/bath_wall_tile/bath_wall_tile_2k_color.webp",
-        "tex/bath_wall_tile/bath_wall_tile_2k_normal.webp",
-        "tex/bath_wall_tile/bath_wall_tile_2k_rough.webp"
+        "tex/bath_wall_tile/bath_wall_tile_1k_rough.webp"
       ],
-      "bytes_2k": 89014,
-      "bytes_1k": 28162,
+      "bytes_1k": 27524,
       "notes": "Rebuilt from ambientCG Tiles107 (white glossy 125 mm square grid): cells remapped to a 300x600 stacked grid (4 columns x 2 rows per 1.2 m repeat), grout kept about 3 mm in both directions. Use uniform repeat with tile_m 1.2. Long side runs along V (vertical on walls). Colour map is near-white, multiply by a light warm grey in code (for example 0.86/0.84/0.80). Includes AO for the grout."
     },
     {
@@ -135,22 +127,18 @@
         "1k": 1024
       },
       "maps": [
-        "color",
         "normal",
         "rough"
       ],
       "normal_convention": "OpenGL (+Y up)",
       "packing": "separate roughness (no ARM)",
       "files": [
-        "tex/plaster_wall/plaster_wall_1k_color.webp",
         "tex/plaster_wall/plaster_wall_1k_normal.webp",
         "tex/plaster_wall/plaster_wall_1k_rough.webp",
-        "tex/plaster_wall/plaster_wall_2k_color.webp",
-        "tex/plaster_wall/plaster_wall_2k_normal.webp",
-        "tex/plaster_wall/plaster_wall_2k_rough.webp"
+        "tex/plaster_wall/plaster_wall_2k_normal.webp"
       ],
-      "bytes_2k": 1092978,
-      "bytes_1k": 241750,
+      "bytes_2k": 877240,
+      "bytes_1k": 237446,
       "notes": "Smooth painted wall; use only normal + roughness (and optionally colour as subtle variation); the cream white colour stays from code. Source colour map is beige."
     },
     {
@@ -181,10 +169,9 @@
         "tex/walnut/walnut_1k_normal.webp",
         "tex/walnut/walnut_1k_rough.webp",
         "tex/walnut/walnut_2k_color.webp",
-        "tex/walnut/walnut_2k_normal.webp",
-        "tex/walnut/walnut_2k_rough.webp"
+        "tex/walnut/walnut_2k_normal.webp"
       ],
-      "bytes_2k": 573940,
+      "bytes_2k": 361222,
       "bytes_1k": 138588,
       "notes": "Warm medium-brown walnut veneer, grain runs vertically in texture space. Can be darkened slightly in code for a medium-dark look."
     },
@@ -216,10 +203,9 @@
         "tex/oak_veneer/oak_veneer_1k_normal.webp",
         "tex/oak_veneer/oak_veneer_1k_rough.webp",
         "tex/oak_veneer/oak_veneer_2k_color.webp",
-        "tex/oak_veneer/oak_veneer_2k_normal.webp",
-        "tex/oak_veneer/oak_veneer_2k_rough.webp"
+        "tex/oak_veneer/oak_veneer_2k_normal.webp"
       ],
-      "bytes_2k": 1136820,
+      "bytes_2k": 437748,
       "bytes_1k": 231274,
       "notes": "Pale light oak veneer, fine straight grain running horizontally."
     },
@@ -251,10 +237,9 @@
         "tex/stone_top/stone_top_1k_normal.webp",
         "tex/stone_top/stone_top_1k_rough.webp",
         "tex/stone_top/stone_top_2k_color.webp",
-        "tex/stone_top/stone_top_2k_normal.webp",
-        "tex/stone_top/stone_top_2k_rough.webp"
+        "tex/stone_top/stone_top_2k_normal.webp"
       ],
-      "bytes_2k": 326444,
+      "bytes_2k": 308228,
       "bytes_1k": 88078,
       "notes": "Light beige vein-cut travertine (polished), banding runs horizontally."
     },
@@ -271,7 +256,6 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
@@ -286,13 +270,8 @@
         "tex/roof_tile/roof_tile_1k_ao.webp",
         "tex/roof_tile/roof_tile_1k_color.webp",
         "tex/roof_tile/roof_tile_1k_normal.webp",
-        "tex/roof_tile/roof_tile_1k_rough.webp",
-        "tex/roof_tile/roof_tile_2k_ao.webp",
-        "tex/roof_tile/roof_tile_2k_color.webp",
-        "tex/roof_tile/roof_tile_2k_normal.webp",
-        "tex/roof_tile/roof_tile_2k_rough.webp"
+        "tex/roof_tile/roof_tile_1k_rough.webp"
       ],
-      "bytes_2k": 2093902,
       "bytes_1k": 392414,
       "notes": "Clean modern terracotta profiled roof tiles, about 7 x 7 tiles per 3.2 m repeat (~45 cm courses). Profile comes from the normal map (+AO). Rows run along texture U; orient V down the roof slope."
     },
@@ -309,26 +288,19 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
-        "color",
         "normal",
         "rough"
       ],
       "normal_convention": "OpenGL (+Y up)",
       "packing": "separate roughness (no ARM)",
       "files": [
-        "tex/fabric_boucle/fabric_boucle_1k_color.webp",
         "tex/fabric_boucle/fabric_boucle_1k_normal.webp",
-        "tex/fabric_boucle/fabric_boucle_1k_rough.webp",
-        "tex/fabric_boucle/fabric_boucle_2k_color.webp",
-        "tex/fabric_boucle/fabric_boucle_2k_normal.webp",
-        "tex/fabric_boucle/fabric_boucle_2k_rough.webp"
+        "tex/fabric_boucle/fabric_boucle_1k_rough.webp"
       ],
-      "bytes_2k": 3189986,
-      "bytes_1k": 765648,
+      "bytes_1k": 462802,
       "notes": "Nubby basket weave in light grey/off-white; reads as boucle/textured linen at 0.4 m repeat. Tint in code for sofa/bed colours."
     },
     {
@@ -344,26 +316,19 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
         "color",
-        "normal",
-        "rough"
+        "normal"
       ],
       "normal_convention": "OpenGL (+Y up)",
       "packing": "separate roughness (no ARM)",
       "files": [
         "tex/grass/grass_1k_color.webp",
-        "tex/grass/grass_1k_normal.webp",
-        "tex/grass/grass_1k_rough.webp",
-        "tex/grass/grass_2k_color.webp",
-        "tex/grass/grass_2k_normal.webp",
-        "tex/grass/grass_2k_rough.webp"
+        "tex/grass/grass_1k_normal.webp"
       ],
-      "bytes_2k": 4264718,
-      "bytes_1k": 1117960,
+      "bytes_1k": 861130,
       "notes": "Dense fresh green short lawn. AO dropped to save space (normal carries the relief)."
     },
     {
@@ -379,7 +344,6 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
@@ -392,12 +356,8 @@
       "files": [
         "tex/asphalt/asphalt_1k_color.webp",
         "tex/asphalt/asphalt_1k_normal.webp",
-        "tex/asphalt/asphalt_1k_rough.webp",
-        "tex/asphalt/asphalt_2k_color.webp",
-        "tex/asphalt/asphalt_2k_normal.webp",
-        "tex/asphalt/asphalt_2k_rough.webp"
+        "tex/asphalt/asphalt_1k_rough.webp"
       ],
-      "bytes_2k": 2897906,
       "bytes_1k": 387432,
       "notes": "Clean, fine-grained dark grey asphalt without cracks or markings."
     },
@@ -414,26 +374,19 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
         "color",
-        "normal",
-        "rough"
+        "normal"
       ],
       "normal_convention": "OpenGL (+Y up)",
       "packing": "separate roughness (no ARM)",
       "files": [
         "tex/concrete_paving/concrete_paving_1k_color.webp",
-        "tex/concrete_paving/concrete_paving_1k_normal.webp",
-        "tex/concrete_paving/concrete_paving_1k_rough.webp",
-        "tex/concrete_paving/concrete_paving_2k_color.webp",
-        "tex/concrete_paving/concrete_paving_2k_normal.webp",
-        "tex/concrete_paving/concrete_paving_2k_rough.webp"
+        "tex/concrete_paving/concrete_paving_1k_normal.webp"
       ],
-      "bytes_2k": 4320392,
-      "bytes_1k": 1064668,
+      "bytes_1k": 819888,
       "notes": "Broom-finished cast concrete slab (driveway look); colour is warm grey-brown, tint/desaturate in code if a cooler grey is wanted. No paver joints."
     },
     {
@@ -449,26 +402,17 @@
       ],
       "tile_m_estimated": false,
       "sizes": {
-        "2k": 2048,
         "1k": 1024
       },
       "maps": [
-        "color",
-        "normal",
-        "rough"
+        "normal"
       ],
       "normal_convention": "OpenGL (+Y up)",
       "packing": "separate roughness (no ARM)",
       "files": [
-        "tex/render_ext/render_ext_1k_color.webp",
-        "tex/render_ext/render_ext_1k_normal.webp",
-        "tex/render_ext/render_ext_1k_rough.webp",
-        "tex/render_ext/render_ext_2k_color.webp",
-        "tex/render_ext/render_ext_2k_normal.webp",
-        "tex/render_ext/render_ext_2k_rough.webp"
+        "tex/render_ext/render_ext_1k_normal.webp"
       ],
-      "bytes_2k": 1742004,
-      "bytes_1k": 409626,
+      "bytes_1k": 353788,
       "notes": "Fine white stucco/sand render; colour map is near-white so the code colour can multiply over it."
     }
   ]

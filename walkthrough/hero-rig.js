@@ -59,7 +59,6 @@ export function createRig(THREE, el, { onChange = () => {}, onUser = () => {}, r
     if (!moving) user = false;
     return moving;
   }
-  const P = { pos: null, tgt: null };
   function pose() {
     const c = Math.cos(cur.el);
     const tgt = new THREE.Vector3(cur.x, cur.y, cur.z);

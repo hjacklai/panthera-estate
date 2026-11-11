@@ -20,10 +20,10 @@
   var Q = new URLSearchParams(location.search), flag = Q.get('hero');
   if (flag === 'none') return;
 
-  // keep in step with versions.js THREE_URL
+  // keep in step with the import maps in walkthrough/index.html and tools/bake.html
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '126';   // bump with any hero file change
+  var V = '127';   // bump with any hero file change
   var BAKE_Q = '?v=1';   // the bake files' stamp: keep in step with versions.js BAKE_REV (bump with every rebake)
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
@@ -151,7 +151,7 @@
     addLink('preconnect', 'https://cdn.jsdelivr.net', { crossorigin: '' });
     addLink('modulepreload', THREE_URL, { crossorigin: '' });
     // as hero.js imports them (keep in step with its import lines: a stale ?v= here is a second, wasted download)
-    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '10', 'hero-orbit.js': '2', 'hero-rig.js': '5', 'pack.js': '4', 'hd.js': '9', 'versions.js': '2' };
+    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '10', 'hero-orbit.js': '2', 'hero-rig.js': '6', 'pack.js': '4', 'hd.js': '9', 'versions.js': '3' };
     Object.keys(VER).forEach(function (f) { addLink('modulepreload', base + f + '?v=' + VER[f]); });
     addLink('modulepreload', ADDONS + 'utils/BufferGeometryUtils.js', { crossorigin: '' });
     // hero.js imports it once the pack is in, just before the first frame: fetched now, not as one more round trip then
@@ -194,21 +194,6 @@
     });
     io.observe(runway || hero);
   }
-
-  // app.js shows the pre-launch bar once the page passes the hero's bottom, measured before the runway existed:
-  // keep it hidden until the runway has been scrolled through (this listener runs after app.js's own).
-  function holdBar() {
-    if (!runway) return;
-    var bar = document.getElementById('prelaunch-bar');
-    if (!bar || !bar.classList.contains('is-visible')) return;
-    if (runway.getBoundingClientRect().bottom - 140 > 0) {
-      bar.classList.remove('is-visible'); document.body.classList.remove('has-prelaunch-bar');
-      document.documentElement.style.setProperty('--prelaunch-h', '0px');
-    }
-  }
-  document.addEventListener('DOMContentLoaded', function () {
-    window.addEventListener('scroll', holdBar, { passive: true }); window.addEventListener('resize', holdBar); holdBar();
-  });
 
   window.__hx = { t: t, EN: EN, lite: lite, careful: careful, reduced: reduced, fail: fail, load: load };
 

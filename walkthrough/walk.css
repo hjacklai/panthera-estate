@@ -53,19 +53,15 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
   box-shadow: 0 24px 48px -32px rgba(28,23,20,0.5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   transition: opacity .45s ease; }
 .intro .eyebrow{ margin: 0; }
-.intro h1{ margin: .3em 0 .35em; font-family: var(--serif); font-weight: 400; color: var(--ink-deep);
+.intro h1{ font-family: var(--serif); font-weight: 400; color: var(--ink-deep);
   font-size: clamp(42px, 5vw, 72px); line-height: .97; letter-spacing: -0.01em; }
 .intro h1 em{ color: var(--terra); }
 .intro p{ margin: 0; max-width: 34ch; color: var(--text-mute); font-size: 16px; line-height: 1.6; }
-.scrollcue{ margin-top: 20px; padding-left: 12px; border-left: 1px solid var(--ink); color: var(--ink); }
 
 /* captions */
 .caption{ position: fixed; z-index: 6; left: clamp(16px,3vw,36px); bottom: clamp(32px,5vh,52px); max-width: 450px;
-  background: var(--wt-card); border: 1px solid var(--rule); border-radius: 14px; padding: 15px 20px;
-  box-shadow: 0 20px 40px -28px rgba(28,23,20,0.45);
-  opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; pointer-events: none; }
-.caption.show{ opacity: 1; transform: none; }
-.caption .num{ display: block; margin-bottom: 6px; color: var(--terra-2); }
+  opacity: 0; pointer-events: none; }
+.caption.show{ opacity: 1; }
 .caption p{ margin: 0; font-family: var(--serif); font-size: 22px; line-height: 1.28; color: var(--ink-deep); }
 
 /* title block, like the corner of a real drawing sheet */
@@ -83,7 +79,6 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
   box-shadow: 0 30px 60px -36px rgba(28,23,20,0.5);
   opacity: 0; pointer-events: none; transition: opacity .4s ease, transform .4s ease; }
 .endcard.show{ opacity: 1; transform: translate(-50%,0); pointer-events: auto; }
-.endcard h2{ margin: 0 0 6px; font-family: var(--serif); font-weight: 400; font-size: 34px; color: var(--ink-deep); }
 .endcard p{ margin: 0 0 18px; color: var(--text-mute); font-size: 15px; line-height: 1.55; }
 .actions{ display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -96,12 +91,11 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
   .chapters{ display: none; }
   .hometoggle{ top: 66px; }
   .intro{ top: calc(108px + env(safe-area-inset-top, 0px)); transform: none; left: 16px; right: 16px; max-width: none; padding: 14px 16px 12px; border-radius: 14px; }
-  .intro h1{ font-size: 34px; margin: .2em 0 .25em; }
+  .intro h1{ font-size: 34px; }
   .intro p{ font-size: 13.5px; line-height: 1.5; }
   .intro .eyebrow{ font-size: 10px; letter-spacing: .12em; }
-  .scrollcue{ margin-top: 10px; }
   .titleblock{ display: none; }
-  .caption{ left: 16px; right: 16px; max-width: none; bottom: 30px; padding: 12px 15px; }
+  .caption{ left: 16px; right: 16px; max-width: none; bottom: 30px; }
   .caption p{ font-size: 18px; }
   .endcard{ bottom: 30px; }
 }
@@ -111,7 +105,6 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
   .intro{ padding: 12px 14px 10px; }
   .intro h1{ font-size: 29px; }
   .intro p{ font-size: 12.5px; line-height: 1.45; }
-  .scrollcue{ margin-top: 8px; }
 }
 /* tablets: a little more room for the copy */
 @media (min-width: 600px) and (max-width: 780px){
@@ -123,14 +116,12 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
   .chapters{ display: none; }
   .hometoggle{ top: 60px; }
   .intro{ top: 60px; transform: none; max-width: 360px; padding: 12px 14px; }
-  .intro h1{ font-size: 30px; margin: .2em 0 .25em; }
+  .intro h1{ font-size: 30px; }
   .intro p{ font-size: 13px; }
-  .scrollcue{ margin-top: 10px; }
   .titleblock{ display: none; }
-  .caption{ bottom: 14px; padding: 10px 14px; max-width: 56vw; }
+  .caption{ bottom: 14px; max-width: 56vw; }
   .caption p{ font-size: 16px; }
   .endcard{ bottom: 12px; padding: 14px 18px; }
-  .endcard h2{ font-size: 24px; }
   .endcard p{ font-size: 13px; margin-bottom: 10px; }
 }
 
@@ -170,8 +161,7 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
 .btn:focus-visible{ border-radius: 999px; }
 /* reduced motion: fades only, no slides */
 @media (prefers-reduced-motion: reduce){
-  .caption, .endcard{ transition: opacity .2s linear; }
-  .caption, .caption.show{ transform: none; }
+  .endcard{ transition: opacity .2s linear; }
   .endcard, .endcard.show{ transform: translate(-50%, 0); }
 }
 /* the written summary of the tour, for search engines, AI assistants and screen readers */
@@ -181,7 +171,7 @@ body::before{ content: ''; position: fixed; inset: 0; z-index: 1; pointer-events
 @media (max-width: 780px){ .endcard p:first-child{ font-size: 18px; } }
 /* the camera readout (lens, eye height, section cut) is for authoring, not for buyers: hidden (owner, Nov 2026: it
    overlapped the button beside it) */
-.hud-lens, .hud.pbw-lens, #h-lens, .hud:has(#h-lens){ display: none !important; }
+.hud.pbw-lens, #h-lens, .hud:has(#h-lens){ display: none !important; }
 #hud{ display: none !important; }
 /* room captions: the room name alone, no card (owner, Nov 2026: "just show the room name enough ... no need the card,
    more minimalist"); a soft paper glow keeps it readable over the rooms */

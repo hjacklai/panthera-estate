@@ -4,8 +4,7 @@
   "licence": "CC0 1.0 (all assets)",
   "azimuth_convention": "three.js equirect (RGBELoader, EquirectangularReflectionMapping, no rotation): u = atan2(dir.z, dir.x)/(2*pi) + 0.5, so azimuth_deg_threejs = (u-0.5)*360 measured from +X toward +Z; dir_threejs is the unit vector to the sun/glow. If scene.backgroundRotation/environmentRotation rotates the sky by yaw r about Y, rotate dir_threejs by the same r.",
   "sizes": {
-    "1k": "1024x512, phones",
-    "2k": "2048x1024, desktop"
+    "1k": "1024x512, phones"
   },
   "skies": [
     {
@@ -21,14 +20,10 @@
         "Jarod Guest": "Sky edits"
       },
       "files": {
-        "1k": "kloofendal_48d_partly_cloudy_puresky_1k.hdr",
-        "2k": "kloofendal_48d_partly_cloudy_puresky_2k.hdr",
-        "preview": "kloofendal_48d_partly_cloudy_puresky_preview.jpg"
+        "1k": "kloofendal_48d_partly_cloudy_puresky_1k.hdr"
       },
       "bytes": {
-        "1k": 1435119,
-        "2k": 5451493,
-        "preview": 32674
+        "1k": 1435119
       },
       "sun": {
         "method": "brightest pixel in upper hemisphere of 2k HDR",
@@ -70,14 +65,10 @@
         "Jarod Guest": "Processing"
       },
       "files": {
-        "1k": "qwantani_sunset_puresky_1k.hdr",
-        "2k": "qwantani_sunset_puresky_2k.hdr",
-        "preview": "qwantani_sunset_puresky_preview.jpg"
+        "1k": "qwantani_sunset_puresky_1k.hdr"
       },
       "bytes": {
-        "1k": 1061624,
-        "2k": 4171959,
-        "preview": 18063
+        "1k": 1061624
       },
       "sun": {
         "method": "brightest pixel in upper hemisphere of 2k HDR",
@@ -119,14 +110,10 @@
         "Jarod Guest": "Processing"
       },
       "files": {
-        "1k": "qwantani_dusk_1_puresky_1k.hdr",
-        "2k": "qwantani_dusk_1_puresky_2k.hdr",
-        "preview": "qwantani_dusk_1_puresky_preview.jpg"
+        "1k": "qwantani_dusk_1_puresky_1k.hdr"
       },
       "bytes": {
-        "1k": 952192,
-        "2k": 3858804,
-        "preview": 17288
+        "1k": 952192
       },
       "sun": {
         "method": "brightest pixel in upper hemisphere of 2k HDR (no sun disc: this is the diffuse glow, sun is below horizon)",

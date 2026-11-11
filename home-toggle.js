@@ -55,7 +55,6 @@
     for (var i = 0; i < cards.length; i++) out.push(cards[i]);
     return out;
   }
-  function allBlocks(){ return blocks("semid").concat(blocks("bungalow")); }
   function tagBlocks(){
     HOMES.forEach(function(h){
       blocks(h).forEach(function(el){ el.setAttribute("data-home-block", h); });
@@ -73,7 +72,7 @@
     try {
       var v = new URLSearchParams(location.search).get("home");
       if (v === "bungalow" || v === "semid") return v;
-      if (v === "semi-d" || v === "semi" || v === "semid") return "semid";
+      if (v === "semi-d" || v === "semi") return "semid";
     } catch (e) {}
     return null;
   }

@@ -17,7 +17,6 @@
   var W = 0, H = 0, DPR = 1;
   var CELL = 10;             // grid spacing (CSS px); finer = smoother contours
   var PAN = 900;             // px of extra height the buffer carries for the pan
-  var FACTOR = 0.10;         // (legacy) parallax factor, pan now maps to full scroll progress
   var DRIFT_AMP = 26;        // px of gentle continuous vertical drift
   var DRIFT_MS = 16000;      // duration of one full drift cycle
   var GH = 0;                // buffer height in CSS px (H + PAN)
@@ -48,8 +47,6 @@
     }
   }
 
-  var curCx = [], curCy = [], curSign = [];
-
   // ── Organic terrain noise: value-noise fbm + domain warping ──
   // Seeded per load so each survey is unique but internally consistent.
   var SEED = Math.random() * 1000;
@@ -79,7 +76,6 @@
     var NAMP = 0.22;                // detail amplitude (field units); lower = smoother
 
     var hx = [], hy = [], ha = [], hk = [];
-    curCx = []; curCy = []; curSign = [];
     for (var i = 0; i < hills.length; i++) {
       var hl = hills[i];
       var cx = hl.bx * W;
@@ -88,7 +84,6 @@
       hx.push(cx); hy.push(cy);
       ha.push(hl.amp * hl.sign);
       hk.push(1 / (2 * rad * rad));
-      curCx.push(cx); curCy.push(cy); curSign.push(hl.sign);
     }
     var idx = 0;
     for (var gy = 0; gy < rows; gy++) {
@@ -161,30 +156,6 @@
       }
     }
     d.stroke();
-  }
-
-  function drawMarks() {
-    var GRAPHITE = '40,33,28';
-    for (var i = 0; i < curCx.length; i++) {
-      var x = curCx[i], y = curCy[i];
-      if (curSign[i] > 0) {
-        d.strokeStyle = 'rgba(' + GRAPHITE + ',0.34)';
-        d.lineWidth = 1.1;
-        var r = 5;
-        d.beginPath();
-        d.moveTo(x - r, y - r); d.lineTo(x + r, y + r);
-        d.moveTo(x + r, y - r); d.lineTo(x - r, y + r);
-        d.stroke();
-        d.fillStyle = 'rgba(' + GRAPHITE + ',0.30)';
-        d.beginPath(); d.arc(x, y, 1.1, 0, Math.PI * 2); d.fill();
-      } else {
-        d.strokeStyle = 'rgba(' + GRAPHITE + ',0.26)';
-        d.lineWidth = 1;
-        d.setLineDash([3, 3]);
-        d.beginPath(); d.arc(x, y, 6, 0, Math.PI * 2); d.stroke();
-        d.setLineDash([]);
-      }
-    }
   }
 
   var INK = '28,23,20';

@@ -13,11 +13,11 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { fetchPack } from './pack.js?v=4';
 import { createHD } from './hd.js?v=9';
-import { BAKE_VER, BAKE_REV } from './versions.js?v=2';
+import { BAKE_VER, BAKE_REV } from './versions.js?v=3';
 import { buildHeroEstate } from './hero-lod.js?v=4';
 import { createTod } from './hero-tod.js?v=10';
 import { createOrbit } from './hero-orbit.js?v=2';
-import { createRig } from './hero-rig.js?v=5';
+import { createRig } from './hero-rig.js?v=6';
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -799,7 +799,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=31').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=32').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   const moving = () => hero.classList.contains('hx-leave');   // the tour or the Location move is under way
   function walkInto(h, from) { if (moving()) return; if (!live) { pendingWalk = [h, from]; return; } tour().then(t => t.open(h, from)).catch(e => { console.warn('tour', e); location.href = base + 'index.html?home=' + h; }); }
@@ -815,7 +815,7 @@ export async function start(o) {
 
   // ---------- out to the Location map and back (hero-location.js) ----------
   let locP = null;
-  const location3d = () => locP || (locP = hasLoc ? import(base + 'hero-location.js?v=6').then(m => m.createLocation({
+  const location3d = () => locP || (locP = hasLoc ? import(base + 'hero-location.js?v=7').then(m => m.createLocation({
     THREE, camera, scene, renderer, stage, reduced, T, nextFrame, render,
     hold: ctx.hold, leaving: ctx.leaving, poseNow: ctx.heroPoseNow,
     size: () => [W, H],
@@ -916,7 +916,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=32').then(mod => {
+      import(base + 'hero-app.js?v=33').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

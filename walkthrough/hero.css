@@ -135,8 +135,7 @@
      (the copy's lower padding is set by hero-boot.js before first paint, to avoid a layout shift) */
   .hx-lines{ left: 20px; right: 20px; width: auto; top: calc(var(--hx-top, 74px) + 12px); bottom: auto; text-align: left; }
   .hx-line{ left: 0; right: auto; top: 0; bottom: auto; font-size: 19px; max-width: 24ch; }
-  .hx-tod{ right: 12px; top: calc(var(--hx-top, 74px) + 10px); bottom: auto; opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
-  .hx-end .hx-tod{ opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+  .hx-tod{ right: 12px; top: calc(var(--hx-top, 74px) + 10px); bottom: auto; }
   .hx-tod-b{ padding: 6px 9px; font-size: 9px; letter-spacing: 0.1em; }
   .hx-pin-l{ font-size: 9.5px; padding: 5px 9px; }
   .hero--cinematic .hx-veil{
@@ -284,10 +283,11 @@ html.pbw-lock{ overflow: hidden; scroll-behavior: auto; }
 /* =====================================================================================================================
    App mode (hero-app.js): the site as one 3D screen, tapped through like an app; the page does not scroll
    ===================================================================================================================== */
-html.hx-app, html.hx-app body{ height: 100%; overflow: hidden; overscroll-behavior: none; }
+html.hx-app, html.hx-app body{ height: 100%; overflow: hidden; overscroll-behavior: none; background: #1C1714; }   /* no light strip under the bar: the page behind the app is dark */
 html.hx-app body{ padding-bottom: 0; }
-html.hx-app .hero--cinematic{ position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 1; }
-html.hx-app .dock{ display: none !important; }
+/* the hero is exactly the screen, never taller (the page's min-height of 580 px put the copy and the walk pill
+   below a 375 px landscape phone) */
+html.hx-app .hero--cinematic{ position: fixed; inset: 0; height: 100vh; height: 100dvh; min-height: 0 !important; z-index: 1; }
 html.hx-app .h3d-stage{ touch-action: none; }
 html.hx-app .h3d-stage.hx-rig{ cursor: grab; }
 html.hx-app .h3d-stage.hx-rig.hx-dragging{ cursor: grabbing; }
@@ -318,7 +318,7 @@ html.hx-app .hxa-menu{ opacity: 1; visibility: visible; transition: opacity .4s 
 .hxa-m-cta:hover, .hxa-m-cta.on{ background: #fff; color: var(--ink, #4A413E); }
 .hxa-m:focus-visible{ outline: 2px solid var(--cream, #F2E9DF); outline-offset: 1px; }
 @media (max-width: 720px){
-  .hxa-menu{ left: 0; right: 76px; bottom: 0; transform: none; max-width: none; border-radius: 0 18px 0 0; padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .hxa-menu{ left: 0; right: 0; bottom: 0; transform: none; max-width: none; border-radius: 0; padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)); }
   .hxa-m{ padding: 10px 11px; font-size: 9.5px; letter-spacing: 0.1em; }
   html.hx-app .fab-wa{ right: 10px; bottom: calc(6px + env(safe-area-inset-bottom, 0px)); width: 52px; height: 52px; }
   html.hx-app .hero--cinematic .hero-inner{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 128px); }
@@ -326,7 +326,7 @@ html.hx-app .hxa-menu{ opacity: 1; visibility: visible; transition: opacity .4s 
 
 /* ---------- the panel: the page's own sections, on the right (desktop) or as a bottom sheet (phones) ---------- */
 .hxa-panel{
-  position: fixed; z-index: 1050; top: 86px; right: 16px; bottom: 84px; width: min(720px, 52vw);
+  position: fixed; z-index: 1050; top: 86px; right: 16px; bottom: 84px;
   display: flex; flex-direction: column; overflow: hidden;
   border-radius: 20px; background: var(--cream, #F2E9DF); color: var(--ink, #4A413E);
   box-shadow: 0 24px 60px -18px rgba(28,23,20,0.55), 0 2px 8px rgba(28,23,20,0.12);
@@ -432,10 +432,6 @@ html.hxa-cap-on .hx-pins{ opacity: 1; visibility: visible; }
 .hxa-wa{ display: grid; place-items: center; flex: none; width: 34px; height: 34px; margin: 0 3px; border-radius: 50%; background: #2E7D4F; color: #fff; }
 .hxa-wa:hover{ background: #256B42; }
 .hxa-wa svg{ width: 18px; height: 18px; }
-@media (max-width: 720px){
-  .hxa-menu{ right: 0; border-radius: 0; }
-
-}
 
 /* a house's caption: its figures in a compact grid, then Gallery and Walk inside */
 .hxa-cap.house{ width: min(500px, 42vw); }
@@ -463,41 +459,31 @@ html.hxa-cap-on .hx-pins{ opacity: 1; visibility: visible; }
    a slim header, a smaller headline and intro, no figures row (the house icons carry the figures), a lighter shade
    only behind the text, and a smaller caption */
 @media (max-width: 720px){
-  html.hx-app .topbar{ background: rgba(242,233,223,0.7); }
   html.hx-app .topbar-inner{ padding: 6px 16px; }
-  html.hx-app .topbar .lang{ padding: 2px; font-size: 10px; }
-  html.hx-app .topbar .lang button{ min-height: 30px; padding: 2px 8px; }
-  html.hx-app .hero-copy h1.display{ font-size: 25px; line-height: 1.08; margin: 0 0 8px; }
-  html.hx-app .hero-copy .lede{ font-size: 13px; line-height: 1.45; margin-top: 0; }
+  html.hx-app .topbar .lang{ font-size: 10px; }
+  html.hx-app .hero-copy h1.display{ line-height: 1.08; margin: 0 0 8px; }
+  html.hx-app .hero-copy .lede{ line-height: 1.45; margin-top: 0; }
   html.hx-app .hero--cinematic .hero-cta{ margin-top: 12px; }
-  html.hx-app .hero--cinematic .hero-specs{ display: none; }
   html.hx-app .hero--cinematic .hero-inner{ padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }   /* low, just clear of the walk pill and the menu */
   /* the shade only behind the copy, the walk pill and the menu (about 340 px), not half the screen: the front row of
      homes no longer sits in it (owner, Nov 2026: colours muddy on phones); the copy keeps its text shadow */
   html.hx-app .hero--cinematic .hx-veil{ background: linear-gradient(0deg, rgba(22,15,10,0.86) 0, rgba(22,15,10,0.66) 150px, rgba(22,15,10,0.3) 270px, rgba(22,15,10,0) 340px), linear-gradient(180deg, rgba(22,15,10,0.22) 0, rgba(22,15,10,0) 12%); }
   html.hx-app .hxa-cap-ic{ width: 34px; height: 34px; margin-bottom: 8px; }
   html.hx-app .hxa-cap-ic svg{ width: 20px; height: 20px; }
-  html.hx-app .hxa-cap-h{ font-size: 9.5px; margin-bottom: 6px; }
+  html.hx-app .hxa-cap-h{ margin-bottom: 6px; }
   html.hx-app .hxa-cap-t{ font-size: 20px; margin-bottom: 6px; }
   html.hx-app .hxa-cap-b{ font-size: 13px; }
   html.hx-app .hxa-cap-specs dd{ font-size: 14px; }
-  html.hx-app .hxa-cap-specs dt{ font-size: 8.5px; }
   html.hx-app .hxa-cap-price{ font-size: 16px; }
   html.hx-app .hxa-cap-nav{ margin-top: 10px; }
-  html.hx-app .hxa-cap-nav button, html.hx-app .hxa-cap-home button{ height: 36px; min-width: 36px; }
-  html.hx-app .hxa-cap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 118px); }
 }
 
 /* One set of calls to action, in the bar (owner, Nov 2026): no hero buttons, no floating WhatsApp, no top-bar sales
    line in app mode; the bar shows all its items at once (it never scrolls sideways) */
-html.hx-app .fab-wa, html.hx-app .hero--cinematic .hero-cta, html.hx-app .topbar-side.left{ display: none !important; }
 html.hx-app .hxa-menu{ overflow: visible; max-width: none; }
 @media (max-width: 720px){
-  html.hx-app .hxa-menu{ left: 0; right: 0; justify-content: space-between; gap: 0; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
-  html.hx-app .hxa-m{ padding: 9px 8px; font-size: 9.5px; letter-spacing: 0.08em; }
-  html.hx-app .hxa-m-cta{ padding: 8px 11px; }
+  html.hx-app .hxa-menu{ left: 0; right: 0; justify-content: space-between; }
 }
-@media (max-width: 360px){ html.hx-app .hxa-m{ padding: 9px 6px; font-size: 9px; letter-spacing: 0.05em; } html.hx-app .hxa-wa{ width: 32px; height: 32px; } }
 
 /* app mode: the floor-plan zoom above the panel and the menu (below the gallery) */
 html.hx-app .plan-lightbox{ z-index: 1100; }
@@ -505,7 +491,7 @@ html.hx-app .plan-lightbox{ z-index: 1100; }
 .hxa-body{ container-type: inline-size; }
 .hxa-body > *{ min-width: 0; }
 @container (max-width: 760px){
-  .calc-grid, .product, .site-grid, .arch-grid, .loc-grid, .reg-grid, .faq-grid, .price-ranges, .bertam-grid, .homes-grid{ grid-template-columns: 1fr !important; gap: 24px !important; }
+  .calc-grid, .product, .site-grid, .reg-grid, .faq-grid, .price-ranges, .bertam-grid{ grid-template-columns: 1fr !important; gap: 24px !important; }
   .product--flip .product-art{ order: 0; }
   .product-art, .product--flip .product-art{ transform: none !important; }
   .product{ padding: 24px 0 !important; }
@@ -520,9 +506,7 @@ html.hx-app .plan-lightbox{ z-index: 1100; }
 /* tablets and phones: a caption sits clear of the walk pill (a house caption has its own Walk inside, so the pill
    steps aside while a caption is open) */
 @media (max-width: 760px), (max-aspect-ratio: 9/10){
-  html.hxa-cap-on .h3d-ui .hx-homes.hx-two{ opacity: 0; visibility: hidden; }
   html.hx-app .hxa-cap{ bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }
-  html.hx-app .hero--cinematic .hero-specs{ display: none; }
 }
 /* zoomed into one feature: only its icon stays (the caption's arrows step to the others; closing it brings them back) */
 html.hx-app.hxa-cap-on .hx-pin:not(.sel){ opacity: 0 !important; visibility: hidden; pointer-events: none; transition: opacity .25s ease, visibility 0s .25s; }
@@ -533,13 +517,12 @@ html.hx-app.hxa-cap-on .hx-pin:not(.sel){ opacity: 0 !important; visibility: hid
 /* phones: Pricing and FAQ in the panel a size down (owner: "font can smaller, more nicer on mobile") */
 @media (max-width: 760px){
   html.hx-app .hxa-body .section .title{ font-size: 21px; line-height: 1.2; }
-  html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ font-size: 13.5px; line-height: 1.55; }
+  html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ line-height: 1.55; }
   html.hx-app .hxa-body .section .eyebrow{ font-size: 10.5px; }
   html.hx-app .hxa-body .section h3{ font-size: 19px; }
   html.hx-app .hxa-body .price-ranges h3{ font-size: 22px; }
   html.hx-app .hxa-body .section .val{ font-size: 19px; }
   html.hx-app .hxa-body .calc-result .big, html.hx-app .hxa-body .calc-result .big span{ font-size: 34px !important; }
-  html.hx-app .hxa-body .calc-result .big small{ font-size: 12.5px; }
   html.hx-app .hxa-body .section .v, html.hx-app .hxa-body .section .v span{ font-size: 17px; }
   html.hx-app .hxa-body .calc-preapprove-title{ font-size: 17px; }
   html.hx-app .hxa-body .calc-preapprove-sub{ font-size: 12.5px; }
@@ -566,14 +549,11 @@ html.hx-app .hero--cinematic .hero-copy h1, html.hx-app .hero--cinematic .hero-c
   html.hx-app .hx-pin-go .hx-pin-l{ width: 34px; height: 34px; padding: 0; justify-content: center; border-radius: 50%; gap: 0; }
   html.hx-app .hx-pin-go .hx-pin-l svg{ width: 18px; height: 18px; }
 }
-/* phones: the Location panel full height (the map needs the room); its map controls and text a size down */
-@media (max-width: 760px), (max-aspect-ratio: 9/10){
-  html.hx-app .hxa-panel.wide{ top: calc(env(safe-area-inset-top, 0px) + 58px); border-radius: 16px 16px 0 0; }
-}
+/* phones: the Location panel full height (set with the other panels below); its map controls and text a size down */
 @media (max-width: 760px){
   html.hx-app .hxa-body .section .lede, html.hx-app .hxa-body .section p{ font-size: 13px; }
   html.hx-app .hxa-body .loc-livemap-actions button, html.hx-app .hxa-body .loc-livemap-actions a{ padding: 6px 10px !important; font-size: 9.5px !important; min-height: 0 !important; letter-spacing: 0.06em; }
-  html.hx-app .hxa-body .map-filters button{ padding: 6px 10px !important; font-size: 10px !important; min-height: 0 !important; }
+  html.hx-app .hxa-body .map-filters button{ padding: 6px 10px !important; min-height: 0 !important; }
 }
 
 /* app mode: the top bar is the logo on the left and the language button in the right corner, at every width (its
@@ -591,7 +571,7 @@ html.hx-app .hxa-cap-nav .hxa-cap-more{ background: rgba(242,233,223,0.94); bord
 /* app mode, wider screens: the walk pill sits centred just above the bottom menu, one group with it (owner: "the walk
    inside pill too far away"), at every desktop width */
 @media (min-width: 761px) and (min-aspect-ratio: 9/10){
-  html.hx-app .h3d-ui .hx-homes.hx-two{ left: 50%; right: auto; top: auto; bottom: 78px; translate: -50% 0; }
+  html.hx-app .h3d-ui .hx-homes.hx-two{ left: 50%; right: auto; top: auto; translate: -50% 0; }
 }
 /* the headline a size down in app mode, every language (owner: "maybe font can be smaller"); one line each on desktop */
 @media (min-width: 761px){
@@ -605,49 +585,37 @@ html.hx-app .hxa-cap-nav .hxa-cap-more{ background: rgba(242,233,223,0.94); bord
 }
 /* the sound button, by the language button */
 .hxa-sound{ display: none; }
-html.hx-app .hxa-sound{ display: inline-grid; place-items: center; width: 32px; height: 32px; margin-right: 6px; padding: 0; border-radius: 50%; border: 1px solid var(--rule, rgba(46,40,37,0.22)); background: transparent; color: var(--ink, #2E2825); cursor: pointer; }
+html.hx-app .hxa-sound{ display: inline-grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid var(--rule, rgba(46,40,37,0.22)); background: transparent; color: var(--ink, #2E2825); cursor: pointer; }
 html.hx-app .hxa-sound[aria-pressed="true"]{ background: var(--ink, #2E2825); color: var(--cream, #F2E9DF); border-color: var(--ink, #2E2825); }
 html.hx-app .topbar-side.right{ display: inline-flex; align-items: center; }
 /* the panels take more of the screen (owner, Nov 2026: Pricing, FAQ and Register "more of the screen"): full height on
    phones (under the top bar, as Location), a little wider on desktop with the 3D still beside them */
 .hxa-panel{ width: min(840px, 58vw); }
 @media (max-width: 760px), (max-aspect-ratio: 9/10){
-  html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ top: calc(env(safe-area-inset-top, 0px) + 58px); border-radius: 16px 16px 0 0; width: auto; }
+  html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ border-radius: 16px 16px 0 0; width: auto; }
 }
 /* the bottom bar: words on wider screens; on phones a tab bar, an icon over a small word (owner: icons on the bar) */
 .hxa-m-ic{ display: none; }
 @media (max-width: 760px){
-  html.hx-app .hxa-menu .hxa-m{ display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex: 1 1 0; min-width: 0; padding: 6px 2px 5px; border-radius: 12px; font-size: 8.5px; letter-spacing: 0.06em; line-height: 1; }
+  html.hx-app .hxa-menu .hxa-m{ display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-width: 0; line-height: 1; }
   html.hx-app .hxa-menu .hxa-m-ic{ display: block; line-height: 0; }
   html.hx-app .hxa-menu .hxa-m-ic svg{ width: 20px; height: 20px; }
-  html.hx-app .hxa-menu .hxa-m-l{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-  html.hx-app .hxa-menu .hxa-m.hxa-m-cta{ background: var(--cream, #F2E9DF); color: var(--ink, #2E2825); }
+  html.hx-app .hxa-menu .hxa-m-l{ max-width: 100%; }
   html.hx-app .hxa-menu{ align-items: stretch; }
   html.hx-app .hxa-menu .hxa-wa{ align-self: center; flex: none; }
 }
 /* phones: a long label (BM "Daftar Minat") may take two short lines */
 @media (max-width: 760px){
-  html.hx-app .hxa-menu .hxa-m-l{ white-space: normal; text-align: center; line-height: 1.12; overflow: visible; }
+  html.hx-app .hxa-menu .hxa-m-l{ white-space: normal; text-align: center; overflow: visible; }
 }
-/* the 3D's icons pulse softly (a ring every few seconds, staggered) until the visitor taps one, so they read as
-   tappable (owner: "the icons on 3d can pulsate so people know that can click") */
-@keyframes hx-ic-pulse{ 0%{ transform: scale(1); opacity: 0.75; } 70%{ transform: scale(1.75); opacity: 0; } 100%{ transform: scale(1.75); opacity: 0; } }
-html.hx-app .hx-feat .hx-feat-ic{ position: relative; }
-html.hx-app .hx-feat .hx-feat-ic::after{ content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 2px solid rgba(242,233,223,0.9); opacity: 0; pointer-events: none; animation: hx-ic-pulse 2.8s ease-out infinite; }
-html.hx-app .hx-feat:nth-child(2n) .hx-feat-ic::after{ animation-delay: .9s; }
-html.hx-app .hx-feat:nth-child(3n) .hx-feat-ic::after{ animation-delay: 1.8s; }
-html.hx-app.hxa-felt .hx-feat .hx-feat-ic::after, html.hx-app .hx-feat.sel .hx-feat-ic::after{ animation: none; opacity: 0; }
-@media (prefers-reduced-motion: reduce){ html.hx-app .hx-feat .hx-feat-ic::after{ animation: none; } }
-/* the bottom bar and the walk pill lighter, so the 3D shows through (owner: "can be more transparent abit"); a blur
-   behind keeps the words readable */
-html.hx-app .hxa-menu{ background: rgba(28,23,20,0.58); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%); box-shadow: 0 10px 30px rgba(28,23,20,0.2); }
+/* the walk pill lighter, so the 3D shows through (owner: "can be more transparent abit"); a blur behind keeps the
+   words readable (the bottom bar's own glass is set further down) */
 html.hx-app .h3d-ui .hx-homes.hx-two{ background: rgba(22,15,10,0.34); -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); }
-@media (max-width: 760px){ html.hx-app .hxa-menu{ background: rgba(28,23,20,0.66); } }
 /* the bottom bar, refined (owner: "can design it nicely"): Register is the one terracotta call to action; the others
    are a soft cream, the current one full cream with a small terracotta dot under it instead of a grey block */
 html.hx-app .hxa-menu .hxa-m{ color: rgba(242,233,223,0.72); background: transparent; position: relative; transition: color .2s ease, background .2s ease; }
 html.hx-app .hxa-menu .hxa-m:hover{ color: var(--cream, #F2E9DF); background: rgba(242,233,223,0.08); }
-html.hx-app .hxa-menu .hxa-m.on{ color: var(--cream, #F2E9DF); background: transparent; }
+html.hx-app .hxa-menu .hxa-m.on{ background: transparent; }
 html.hx-app .hxa-menu .hxa-m.on::after{ content: ""; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--terra, #B17664); }
 html.hx-app .hxa-menu .hxa-m.hxa-m-cta, html.hx-app .hxa-menu .hxa-m.hxa-m-cta.on{ background: var(--terra-2, #8A4638); color: var(--cream, #F2E9DF); }
 html.hx-app .hxa-menu .hxa-m.hxa-m-cta:hover{ background: var(--terra, #B17664); }
@@ -658,12 +626,13 @@ html.hx-app .hxa-menu .hxa-m.hxa-m-cta.on::after{ background: var(--cream, #F2E9
   html.hx-app .hxa-menu .hxa-m.on::after{ bottom: 2px; }
   html.hx-app .hxa-menu .hxa-m .hxa-m-ic svg{ stroke-width: 1.5; }
 }
-/* the pulse, clearer (owner: "these icons to pulsate too"): every 3D icon breathes and sends out a ring with a terracotta
-   edge, and keeps doing so after a tap (only the open one rests) */
+/* the 3D's icons pulse so they read as tappable (owner: "the icons on 3d can pulsate so people know that can click"),
+   made clearer (owner: "these icons to pulsate too"): every 3D icon breathes and sends out a ring with a terracotta
+   edge, staggered, and keeps doing so after a tap (only the open one rests) */
 @keyframes hx-ic-breathe{ 0%, 100%{ transform: scale(1); } 50%{ transform: scale(1.09); } }
 @keyframes hx-ic-ring{ 0%{ transform: scale(1); opacity: 0.95; } 75%{ transform: scale(1.9); opacity: 0; } 100%{ transform: scale(1.9); opacity: 0; } }
-html.hx-app .hx-feat .hx-feat-ic{ animation: hx-ic-breathe 2.4s ease-in-out infinite; }
-html.hx-app .hx-feat .hx-feat-ic::after{ border: 2px solid rgba(242,233,223,0.95); box-shadow: 0 0 0 1px rgba(177,118,100,0.7); animation: hx-ic-ring 2.4s ease-out infinite; }
+html.hx-app .hx-feat .hx-feat-ic{ position: relative; animation: hx-ic-breathe 2.4s ease-in-out infinite; }
+html.hx-app .hx-feat .hx-feat-ic::after{ content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 2px solid rgba(242,233,223,0.95); box-shadow: 0 0 0 1px rgba(177,118,100,0.7); opacity: 0; pointer-events: none; animation: hx-ic-ring 2.4s ease-out infinite; }
 html.hx-app .hx-feat:nth-child(2n) .hx-feat-ic, html.hx-app .hx-feat:nth-child(2n) .hx-feat-ic::after{ animation-delay: .8s; }
 html.hx-app .hx-feat:nth-child(3n) .hx-feat-ic, html.hx-app .hx-feat:nth-child(3n) .hx-feat-ic::after{ animation-delay: 1.6s; }
 html.hx-app.hxa-felt .hx-feat .hx-feat-ic::after{ animation: hx-ic-ring 2.4s ease-out infinite; opacity: 0; }
@@ -681,20 +650,15 @@ html.hxa-open .hx-homes.hx-two::after, html.pbw-going .hx-homes.hx-two::after{ a
    panel is no longer a child of body, so its contour float keeps going there */
 html.hx-app body > .ambient{ display: none; }
 html.hx-app body > .section::before{ animation-play-state: paused; }
-/* the old aerial render as a banner at the top of the Register panel (owner, Nov 2026); the scrolling page keeps its
-   own layout without it */
+/* the old aerial render as a banner at the top of the Register panel (owner, Nov 2026), the whole photo, uncropped
+   (owner: "dunt crop ya"); the scrolling page keeps its own layout without it */
 .reg-hero{ display: none; }
-html.hx-app .hxa-body .reg-hero{ display: block; margin: 0 0 26px; border-radius: 14px; overflow: hidden; aspect-ratio: 16 / 9; box-shadow: 0 14px 36px -18px rgba(22,15,10,0.55); }
-html.hx-app .hxa-body .reg-hero img{ display: block; width: 100%; height: 100%; object-fit: cover; }
+html.hx-app .hxa-body .reg-hero{ display: block; margin: 0 0 26px; border-radius: 14px; overflow: hidden; box-shadow: 0 14px 36px -18px rgba(22,15,10,0.55); }
+html.hx-app .hxa-body .reg-hero img{ display: block; width: 100%; height: auto; object-fit: contain; }
 @media (max-width: 760px){ html.hx-app .hxa-body .reg-hero{ margin-bottom: 18px; border-radius: 12px; } }
-/* the whole photo, uncropped (owner: "dunt crop ya") */
-html.hx-app .hxa-body .reg-hero{ aspect-ratio: auto; }
-html.hx-app .hxa-body .reg-hero img{ height: auto; object-fit: contain; }
 /* app mode at every width: none of the scrolling page's hero extras (sales line, buttons, figures row, floating
    WhatsApp, page dock); a resize across a breakpoint must never bring them back (owner: "seeing old things") */
 html.hx-app .hero--cinematic .hero-specs, html.hx-app .hero--cinematic .hero-cta, html.hx-app .topbar-side.left, html.hx-app .fab-wa, html.hx-app .dock{ display: none !important; }
-/* no light strip under the bar: the page behind the app is dark */
-html.hx-app, html.hx-app body{ background: #1C1714; }
 /* the headline and lede on the captions' left margin, not in the page's centred column (owner: "append these more to
    left, just like the captions") */
 @media (min-width: 761px){
@@ -746,8 +710,8 @@ html.hx-app .hxa-panel{ top: calc(var(--hx-tb, 72px) + 12px); }
 /* app mode: the top bar spans the whole width, logo hard left, sound and language hard right */
 html.hx-app .topbar-inner{ max-width: none; width: 100%; padding-left: var(--gutter, 40px); padding-right: var(--gutter, 40px); }
 /* app mode: one tighter edge margin for the bar, the copy and the captions (the page's grows to 8vw = 160 px on wide
-   screens); the page's Semi-D | Bungalow switch is not needed up there (the 3D's icons and pill pick a home) */
-html.hx-app{ --gutter: clamp(20px, 3.2vw, 64px); }
+   screens; the value is set further down, with the 1600 px frame); the page's Semi-D | Bungalow switch is not needed
+   up there (the 3D's icons and pill pick a home) */
 html.hx-app .topbar .home-pill{ display: none !important; }
 html.hx-app .topbar-side.right{ width: auto; gap: 8px; }
 /* app mode: no cream fade at the foot of the hero (on the page it led into the section below; here it read as a pale
@@ -759,11 +723,8 @@ html.hx-app .topbar{ border-bottom: 0; }
 /* F1: the desktop/tablet bottom bar holds all its items (it was capped at 50vw by its centring) */
 @media (min-width: 761px){ html.hx-app .hxa-menu{ width: max-content; max-width: calc(100vw - 32px); } }
 @media (min-width: 761px) and (max-width: 860px){ html.hx-app .hxa-menu .hxa-m{ padding: 10px 11px; gap: 6px; letter-spacing: 0.1em; } }
-/* F2: captions on a glass card, readable over white walls; the copy leaves first, then the caption rises in */
-html.hx-app .hxa-cap{ padding: 20px 22px 18px; border-radius: 18px; background: rgba(22,15,10,0.58); border: 1px solid rgba(242,233,223,0.12); -webkit-backdrop-filter: blur(14px) saturate(130%); backdrop-filter: blur(14px) saturate(130%); box-shadow: 0 18px 40px -14px rgba(18,12,8,0.55); }
+/* F2: the captions' width; the copy leaves first, then the caption rises in */
 html.hx-app .hxa-cap{ width: min(480px, 40vw); } html.hx-app .hxa-cap.house{ width: min(520px, 44vw); }
-@media (min-width: 761px) and (min-aspect-ratio: 9/10){ html.hx-app .hxa-cap{ left: max(12px, calc(var(--gutter, 40px) - 22px)); } }
-@media (max-width: 760px), (max-aspect-ratio: 9/10){ html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ padding: 14px 14px 12px; border-radius: 16px; } }
 html.hx-app.hxa-cap-on .hero-inner{ transition: opacity .15s ease, visibility 0s linear .15s; }
 @keyframes hxa-cap-in{ from{ opacity: 0; transform: translateY(8px); } }
 html.hx-app .hxa-cap:not([hidden]){ animation: hxa-cap-in .32s cubic-bezier(.2,.75,.2,1) .12s both; }
@@ -785,7 +746,7 @@ html.hx-app .hx-feat .hx-feat-ic::before{ content: ""; position: absolute; inset
 html.hx-app .h3d-ui .hx-homes.hx-two .hx-walk{ min-height: 40px; }
 html.hx-app .hxa-menu .hxa-wa{ width: 40px; height: 40px; }
 @media (max-width: 760px), (max-aspect-ratio: 9/10){ html.hx-app .hxa-cap-nav button, html.hx-app .hxa-cap-home button{ height: 40px; min-width: 40px; } }
-@media (pointer: coarse) and (min-width: 761px){ html.hx-app .hxa-menu .hxa-m{ min-height: 42px; } html.hx-app .h3d-ui .hx-homes.hx-two{ bottom: 84px; } }
+@media (pointer: coarse) and (min-width: 761px){ html.hx-app .hxa-menu .hxa-m{ min-height: 42px; } }
 /* F8: phone tab labels larger, every tab the same two-line height in every language */
 @media (max-width: 760px){ html.hx-app .hxa-menu .hxa-m{ font-size: 9.5px; letter-spacing: 0.03em; min-height: 60px; } html.hx-app .hxa-menu .hxa-m-l{ line-height: 1.1; } }
 @media (max-width: 360px){ html.hx-app .hxa-menu .hxa-m{ font-size: 9px; letter-spacing: 0.02em; } }
@@ -823,8 +784,6 @@ html.hx-app .hxa-body .leaflet-control-attribution{ font-size: 9px; white-space:
 html[lang^="zh"].hx-app .hxa-menu .hxa-m-l{ font-size: 12.5px; letter-spacing: 0.04em; }
 @media (max-width: 760px){ html[lang^="zh"].hx-app .hxa-menu .hxa-m-l{ font-size: 11px; letter-spacing: 0; } }
 html[lang^="zh"].hx-app .hx-homes .hx-walk-k{ font-size: 11.5px; letter-spacing: 0.06em; }
-/* F17: a steadier top bar so the wordmark reads */
-@media (min-width: 721px){ html.hx-app .topbar{ background: rgba(242,233,223,0.72); box-shadow: none; } }
 /* F18: FAQ rows inside their box */
 .hxa-body .faq summary{ grid-template-columns: 36px minmax(0, 1fr) 24px; }
 @container (max-width: 600px){ .hxa-body .faq summary{ grid-template-columns: 28px minmax(0, 1fr) 22px; gap: 10px; } }
@@ -834,42 +793,35 @@ html.hx-app .hxa-body .map-filters{ -webkit-mask-image: linear-gradient(90deg, #
 @media (min-width: 721px) and (max-width: 760px){ html.hx-app .hxa-menu{ left: 0; right: 0; bottom: 0; transform: none; translate: none; width: auto; max-width: none; border-radius: 0; } }
 /* F3 + F4 (last): phone landscape (short screens) gets a compact layout, captions and panels that fit */
 @media (min-width: 761px) and (max-height: 520px){
-  html.hx-app .topbar{ background: rgba(242,233,223,0.72); }
   html.hx-app .topbar-inner{ padding: 5px max(16px, env(safe-area-inset-right, 0px)) 5px max(16px, env(safe-area-inset-left, 0px)); }
-  html.hx-app .hero--cinematic .hero-inner.wrap{ padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-bottom: 72px !important; }
+  html.hx-app .hero--cinematic .hero-inner.wrap{ padding-left: max(20px, env(safe-area-inset-left, 0px)); }
   html.hx-app .hero--cinematic .hero-copy h1.display{ font-size: 22px; line-height: 1.08; margin: 0 0 6px; }
   html.hx-app .hero--cinematic .hero-copy .lede{ font-size: 12.5px; line-height: 1.45; max-width: min(46ch, 48vw); }
   html.hx-app .hxa-menu{ bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
-  html.hx-app .h3d-ui .hx-homes.hx-two{ left: auto; right: max(16px, env(safe-area-inset-right, 0px)); translate: none; top: auto; bottom: 72px; gap: 4px; padding: 4px; }
+  html.hx-app .h3d-ui .hx-homes.hx-two{ left: auto; right: max(16px, env(safe-area-inset-right, 0px)); translate: none; top: auto; gap: 4px; padding: 4px; }
   html.hx-app .h3d-ui .hx-homes.hx-two .hx-walk{ padding: 8px 12px; font-size: 15px; min-height: 40px; }
   html.hx-app .hx-homes.hx-two .hx-walk-ic{ width: 32px; height: 32px; }
   html.hx-app .hx-homes.hx-two .hx-walk-k{ display: none; }
   html.hx-app .hx-homes.hx-two .hx-walk-l{ font-size: 14px; }
-  html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ left: max(12px, env(safe-area-inset-left, 0px)); bottom: 70px; width: min(440px, 52vw); max-height: calc(100dvh - var(--hx-tb, 50px) - 8px - 70px); overflow-y: auto; overscroll-behavior: contain; padding: 12px 14px; }
+  html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ left: max(12px, env(safe-area-inset-left, 0px)); bottom: 70px; width: min(440px, 52vw); max-height: calc(100dvh - var(--hx-tb, 50px) - 8px - 70px); overflow-y: auto; overscroll-behavior: contain; }
   html.hx-app .hxa-cap-ic, html.hx-app .hxa-cap.house .hxa-cap-b{ display: none; }
   html.hx-app .hxa-cap-h{ font-size: 10px; margin-bottom: 4px; }
   html.hx-app .hxa-cap-t{ font-size: 20px; margin-bottom: 4px; }
   html.hx-app .hxa-cap-b{ font-size: 13px; }
-  html.hx-app .hxa-cap-specs{ gap: 6px 14px; margin-top: 8px; padding-top: 8px; }
+  html.hx-app .hxa-cap-specs{ gap: 6px 14px; margin-top: 8px; }
   html.hx-app .hxa-cap-specs dd{ font-size: 14px; }
   html.hx-app .hxa-cap-home, html.hx-app .hxa-cap-nav{ margin-top: 8px; }
   html.hx-app .hxa-panel, html.hx-app .hxa-panel.wide{ top: calc(var(--hx-tb, 50px) + 4px); right: 0; bottom: 0; width: min(560px, 66vw); border-radius: 16px 0 0 0; }
   html.hx-app .hxa-body{ padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
   html.hx-app .hxa-head{ padding: 8px 12px 8px 20px; }
   html.hx-app .hxa-title{ font-size: 18px; }
-}
-/* app mode: the hero is exactly the screen, never taller (the page's min-height of 580 px put the copy and the walk pill
-   below a 375 px landscape phone) */
-html.hx-app .hero--cinematic{ min-height: 0 !important; height: 100vh; height: 100dvh; }
-/* phone landscape: the copy in the left half, above the bottom bar; the headline may wrap there */
-@media (min-width: 761px) and (max-height: 520px){
-  html.hx-app .hero--cinematic .hero-inner, html.hx-app .hero--cinematic .hero-inner.wrap{ padding-bottom: 76px !important; }
+  /* the copy in the left half, above the bottom bar; the headline may wrap there, and stands alone above the bar */
+  html.hx-app .hero--cinematic .hero-inner, html.hx-app .hero--cinematic .hero-inner.wrap{ padding-top: 12px !important; padding-bottom: 76px !important; }
   html.hx-app .hero--cinematic .hero-copy{ max-width: 52vw; }
   html.hx-app .hero--cinematic .hero-copy h1.display span{ white-space: normal; }
   html.hx-app .hero--cinematic .hero-copy h1.display{ max-width: 52vw; }
+  html.hx-app .hero--cinematic .hero-copy .lede{ display: none; }
 }
-@media (min-width: 761px) and (max-height: 520px){ html.hx-app .hero--cinematic .hero-inner, html.hx-app .hero--cinematic .hero-inner.wrap{ padding-top: 12px !important; } }
-@media (min-width: 761px) and (max-height: 520px){ html.hx-app .hero--cinematic .hero-copy .lede{ display: none; } }   /* landscape phones: the headline alone above the bar */
 /* captions back to words on the 3D, no card (owner, Nov 2026: "no card, just the words", "no blackish background");
    a soft text shadow keeps them readable over white walls. Phones: the full width between the gutters again. */
 html.hx-app .hxa-cap, html.hx-app .hxa-cap.house{ padding: 0; border: 0; border-radius: 0; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; }
@@ -884,8 +836,9 @@ html.hx-app .hxa-cap-specs dt{ color: rgba(242,233,223,0.85); }
   html.hx-app .hxa-cap-home button{ white-space: nowrap; }
 }
 /* the top bar lighter, more of the 3D through it (owner, Nov 2026: "more transparent abit") */
-html.hx-app .topbar, html.hx-app.scrolled .topbar{ background: rgba(242,233,223,0.42) !important; -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: none; }
-/* the bottom menu lighter too (owner, Nov 2026: "transparent abit more"); labels keep a soft shadow to stay readable */
+html.hx-app .topbar{ background: rgba(242,233,223,0.42) !important; -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: none; }
+/* the bottom menu lighter, so the 3D shows through (owner: "can be more transparent abit", then Nov 2026: "transparent
+   abit more"); a blur behind and a soft shadow on the labels keep them readable */
 html.hx-app .hxa-menu{ background: rgba(28,23,20,0.36); -webkit-backdrop-filter: blur(12px) saturate(140%); backdrop-filter: blur(12px) saturate(140%); box-shadow: none; }
 @media (max-width: 760px){ html.hx-app .hxa-menu{ background: rgba(28,23,20,0.44); } }
 html.hx-app .hxa-menu .hxa-m:not(.hxa-m-cta){ color: rgba(242,233,223,0.9); text-shadow: 0 1px 6px rgba(18,12,8,0.55); }

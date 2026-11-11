@@ -37,11 +37,10 @@ const HASH = { estate: 'estate', site: 'site', location: 'location', bertam: 'lo
 // panels still open from those icons and from links on the page
 // Register and WhatsApp first (owner, Nov 2026); WhatsApp is the bar's only WhatsApp link, as a logo
 const MENU_IC = { register: '<path d="M5 19h4l10-10-4-4L5 15z"/><path d="M13.5 6.5l4 4"/>', estate: '<path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/>', location: '<path d="M12 21s-6-5.6-6-10.5a6 6 0 0 1 12 0C18 15.4 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.2"/>', pricing: '<path d="M4 13.2V5h8.2L20 12.8 12.8 20z"/><circle cx="8.2" cy="9.2" r="1.3"/>', faq: '<path d="M5 6.5h14v9H11l-4 3v-3H5z"/><path d="M10.4 9.6a1.7 1.7 0 1 1 2.3 1.6c-.5.2-.7.6-.7 1.1"/><path d="M12 13.9h.01"/>' };
-export const MENU = ['register', 'estate', 'location', 'pricing', 'faq', 'wa'];   // WhatsApp on the right; Location back in the bar as well as on the 3D (owner)
-export { VIEWS };
+const MENU = ['register', 'estate', 'location', 'pricing', 'faq', 'wa'];   // WhatsApp on the right; Location back in the bar as well as on the 3D (owner)
 
 export function createApp(ctx) {
-  const { ui, T, rig, homeNow, walkInto, location3d, setPanel, reduced, wide } = ctx;
+  const { ui, T, rig, homeNow, walkInto, location3d, setPanel, reduced } = ctx;
   const html = document.documentElement;
   let current = null, busy = false;
 

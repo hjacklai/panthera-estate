@@ -420,7 +420,10 @@ function frame(spec, kind) {
   let cx, cz, fw, fd, rot = spec.rot || 0;
   if (spec.x0 != null) { cx = (spec.x0 + spec.x1) / 2; cz = (spec.z0 + spec.z1) / 2; fw = Math.abs(spec.x1 - spec.x0); fd = Math.abs(spec.z1 - spec.z0); }
   else { cx = spec.cx; cz = spec.cz; fw = spec.w; fd = spec.d; }
-  let side = spec.back || (spec.head) || (spec.front && OPP[String(spec.front).replace('local', '').trim()]);
+  // a counter with a worktop overhang (a breakfast peninsula): its back is the overhang side, where the stools tuck in;
+  // the doors and drawers face the kitchen (owner, Nov 2026: "the chairs are in the cabinets")
+  const oh = kind === 'counter' && spec.overhang ? (typeof spec.overhang === 'object' ? spec.overhang.side : spec.overhang) : null;
+  let side = oh || spec.back || (spec.head) || (spec.front && OPP[String(spec.front).replace('local', '').trim()]);
   if (!side) {   // default: back on a long side (beds and baths: on the short side for beds)
     if (kind === 'bed') side = fw >= fd ? '-x' : '-z';
     else side = fw >= fd ? '-z' : '-x';
@@ -770,7 +773,9 @@ function buildFridge(F, s, M) {
 }
 // Base cabinet run with a stone top (cut-outs for sinks), plinth recess, door / drawer fronts, bar handles.
 function buildCounter(F, s, M) {
-  const kit = new Kit(), W = F.W, D = F.D, H = F.h || 0.9, t = 0.03, z0 = -D / 2;
+  // overhang: the worktop runs the full depth, the cabinet stops this far short of it on the back (stool) side
+  const oh = s.overhang ? (typeof s.overhang === 'object' && s.overhang.d != null ? s.overhang.d : 0.25) : 0;
+  const kit = new Kit(), W = F.W, D = F.D, H = F.h || 0.9, t = 0.03, z0 = -D / 2 + oh;
   const col = s.color ?? P.SAGE, fr = s.wood ? M.wood(s.wood, 0.5) : M.paint(col, 0.5), carc = fr, plinth = M.paint(s.plinth ?? 0x2E2B28, 0.7);
   const handle = M.handle(s.handle);
   const fz1 = D / 2 - 0.033, fz0 = fz1 - 0.019, ph = 0.1, top = H - t;
@@ -807,7 +812,7 @@ function buildCounter(F, s, M) {
     }
   }
   // stone top with cut-outs
-  const shape = roundRectShape(-W / 2, z0, W / 2, D / 2, 0.004);
+  const shape = roundRectShape(-W / 2, -D / 2, W / 2, D / 2, 0.004);
   for (const c of cuts) shape.holes.push(roundRectShape(c[0] + 0.03, c[1] + 0.03, c[2] - 0.03, c[3] - 0.03, 0.02, T.Path));
   kit.add(M.quartz(s.top ?? P.QUARTZ), slab(shape, top, H, 0.0025), 0.5);
   if (s.upper) {   // wall cabinets

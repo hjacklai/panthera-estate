@@ -121,7 +121,7 @@ export function createApp(ctx) {
   // (owner, Nov 2026: "in mobile view ... zoom out further")
   const tall = () => innerWidth < innerHeight * 0.9;
   // the estate view: framed to the screen's clear band (hero.js fitDist), pulled back a touch more than a tight fit
-  function home() { const v = VIEWS.estate, el = tall() ? 0.78 : v.goal.el, d = ctx.fitDist ? ctx.fitDist(el, v.goal.fov) * 1.12 : v.goal.dist; rig.setGoal({ ...v.goal, el, dist: d }, { ...v.lim, dmax: Math.max(v.lim.dmax, d * 1.5) }); }
+  function home(instant = false) { const v = VIEWS.estate, el = tall() ? 0.78 : v.goal.el, d = ctx.fitDist ? ctx.fitDist(el, v.goal.fov) * 1.12 : v.goal.dist; rig.setGoal({ ...v.goal, el, dist: d }, { ...v.lim, dmax: Math.max(v.lim.dmax, d * 1.5) }, { instant }); }
 
   let opener = null;
   async function open(id, { fromHash = false, fromLink = false } = {}) {
@@ -328,7 +328,7 @@ export function createApp(ctx) {
   // deep link (#pricing, ...) once the intro is done
   const start = HASH[(location.hash || '').slice(1)];
   // ---------- sound: quiet songbirds, clean (no hiss, no insects), off until the visitor turns it on
-  // (owner, Nov 2026). One 390 KB loop (audio/SOURCE.txt: CC0), downloaded once (buffered at idle, or at the first tap); it fades in and out and
+  // (owner, Nov 2026). One 390 KB loop (audio/SOURCE.txt: CC0), downloaded once (buffered at idle, or at the first tap; phones: at the first tap only); it fades in and out and
   // pauses while the tab is hidden. The button sits by the language button.
   {
     const side = document.querySelector('.topbar-side.right');
@@ -370,6 +370,7 @@ export function createApp(ctx) {
     // birdsong fetched ahead; the speaker's own tap still fetches and starts it
     const saver = !!(navigator.connection && navigator.connection.saveData) || !!(window.__hx && window.__hx.careful);
     if (saver) on = false;
+    const phone = !!(window.__hx && window.__hx.lite);
     show();
     if (on) {
       armed = true;
@@ -378,15 +379,34 @@ export function createApp(ctx) {
         for (const t of ['pointerdown', 'keydown', 'touchstart', 'wheel']) removeEventListener(t, first, true);
         if (e.target && e.target.closest && e.target.closest('.hxa-sound')) return;   // the speaker's own tap decides
         if (on) start();
+        // phones: a finger counts as the go-ahead for sound only when it lifts (touchend / pointerup), so the start
+        // above may be refused there; each lift tries again until it plays
+        // (pointerup comes first; a browser that counts only touchend or click gets those too). The listeners stay until
+        // the sound is really playing, the visitor decides with the speaker, or a few lifts have gone by
+        if (phone) {
+          const LIFT = ['pointerup', 'touchend', 'click'];
+          let tries = 9;
+          const playing = () => ac && ac.state === 'running' && el && !el.paused;
+          const drop = () => { for (const t of LIFT) removeEventListener(t, lift, true); };
+          const lift = () => {
+            if (!on || playing() || --tries < 0) return drop();
+            start();
+            if (ac) ac.resume().then(() => { if (playing()) drop(); }, () => {});
+          };
+          for (const t of LIFT) addEventListener(t, lift, true);
+        }
       };
       for (const t of ['pointerdown', 'keydown', 'touchstart', 'wheel']) addEventListener(t, first, true);
-      (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => { if (on) audioEl(); }, { timeout: 4000 });
+      // phones (the hero's lite tier): nothing fetched at idle, the 388 KB loop starts downloading at the first touch
+      // (start() above makes the element), so a visit with no touch costs no birdsong; wider screens buffer it at idle
+      if (!phone) (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => { if (on) audioEl(); }, { timeout: 4000 });
     }
     document.addEventListener('visibilitychange', () => { if (!on || !ac) return; if (document.hidden) el.pause(); else { ac.resume(); el.play().catch(() => {}); } });
   }
 
   const api = {
     open, close, menu, panel, feature,
+    toEstate() { if (current && current !== 'location') close(); unfeature(); home(true); },   // the tour's Back to estate
     get current() { return current; },
     startHash: start || null,
     onLang() { title.textContent = T(title.getAttribute('data-i18n') || ''); if (feat) feature(feat, { move: false }); },

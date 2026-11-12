@@ -75,9 +75,9 @@
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lines/LineMaterial.js" crossorigin>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/geometries/RoundedBoxGeometry.js" crossorigin>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/utils/BufferGeometryUtils.js" crossorigin>
-<link rel="modulepreload" href="walk.js?v=152">
+<link rel="modulepreload" href="walk.js?v=153">
 <link rel="modulepreload" href="estate.js?v=38">
-<link rel="modulepreload" href="furniture.js?v=13">
+<link rel="modulepreload" href="furniture.js?v=14">
 <link rel="modulepreload" href="car.js?v=4">
 <link rel="modulepreload" href="hd.js?v=9">
 <link rel="modulepreload" href="versions.js?v=3">
@@ -230,6 +230,9 @@
   </ul>
   <p>Furniture, kitchen cabinetry, appliances, art and landscaping in the walkthrough are illustrative. The signed Sale and Purchase Agreement and the stamped drawings are the binding documents.</p>
 </section>
-<script type="module" src="walk.js?v=152"></script>
+<!-- links back to the home page go to the visitor's language (/ms/ or /zh/ when BM or 中 is the choice the home page
+     saved), fixed as the link is used, so the links walk.js adds later follow too -->
+<script>(function(){function fix(e){var a=e.target.closest&&e.target.closest('a[href]'),p;if(!a)return;try{var l=localStorage.getItem('panthera.lang');p=l==='bm'?'/ms/':l==='zh'?'/zh/':''}catch(x){return}if(!p)return;var u=new URL(a.href);if(u.origin===location.origin&&(u.pathname==='/'||u.pathname==='/index.html')){u.pathname=p;a.href=u.href}}['click','auxclick','contextmenu'].forEach(function(t){document.addEventListener(t,fix,true)})})();</script>
+<script type="module" src="walk.js?v=153"></script>
 </body>
 </html>

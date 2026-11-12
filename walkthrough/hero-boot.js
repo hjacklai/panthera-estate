@@ -23,7 +23,7 @@
   // keep in step with the import maps in walkthrough/index.html and tools/bake.html
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '127';   // bump with any hero file change
+  var V = '128';   // bump with any hero file change
   var BAKE_Q = '?v=1';   // the bake files' stamp: keep in step with versions.js BAKE_REV (bump with every rebake)
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
@@ -35,7 +35,6 @@
     'hx.stage': '3D view of the estate',
     'hx.stage.role': '3D estate view',
     'hx.l1': '16 semi-detached homes and 3 bungalows.',
-    'hx.l2': "A children's playground on the central green.",
     'hx.l3': 'Scroll on, then walk inside either home.',
     'hx.l3app': 'Drag to look around, then walk inside either home.',
     'hx.pins': 'Places in the estate',

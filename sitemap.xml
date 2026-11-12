@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- One page for the whole site (EN, with BM and 中 switched in place). No #section URLs: search engines drop
-       the fragment, so they were only duplicates of /. Set lastmod to the push date. -->
+  <!-- The home page in three languages, each at its own address: / (English), /ms/ (Bahasa Malaysia), /zh/ (Chinese).
+       /ms/ and /zh/ are made by scripts/build_lang.py. Each <url> lists all three as hreflang alternates (x-default is /),
+       matching the <link rel="alternate" hreflang> block in the pages. No #section URLs: search engines drop the
+       fragment, so they were only duplicates. Set lastmod to the push date. -->
   <url>
     <loc>https://www.pantheraestate.com/</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/"/>
     <image:image><image:loc>https://www.pantheraestate.com/assets/hero-estate-3d.webp</image:loc></image:image>
     <image:image><image:loc>https://www.pantheraestate.com/assets/perspective-semid-front.webp</image:loc></image:image>
     <image:image><image:loc>https://www.pantheraestate.com/assets/perspective-bungalow-front.webp</image:loc></image:image>
     <image:image><image:loc>https://www.pantheraestate.com/assets/hero-2.webp</image:loc></image:image>
     <image:image><image:loc>https://www.pantheraestate.com/assets/hero-3.webp</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://www.pantheraestate.com/ms/</loc>
+    <lastmod>2026-11-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/zh/</loc>
+    <lastmod>2026-11-12</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/"/>
+  </url>
   <!-- 3D walkthrough of the two home types (one canonical URL; ?home=bungalow is the same page) -->
   <url>
     <loc>https://www.pantheraestate.com/walkthrough/</loc>
-    <lastmod>2026-11-11</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <image:image><image:loc>https://www.pantheraestate.com/walkthrough/og-3d.jpg</image:loc></image:image>
   </url>
 </urlset>

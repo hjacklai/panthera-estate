@@ -135,7 +135,7 @@ const PACK_P = LIB ? Promise.resolve(opts.pack || null)   // embedded: the hero'
       BAKE ? null : opt(J(`./tour_${HOME}.json?v=11${/[?&]tourdev/.test(QS) ? '&t=' + Date.now() : ''}`), null),   // the room-by-room tour
       opt(J('./parapets.json?v=1'), null),                                         // balcony half-wall grooves
       SEMID ? opt(J('./semid_lights.json?v=5'), []) : [],                          // E-01 lights, fans, wall lights, air-con
-      import('./furniture.js?v=13').catch(() => null),                              // realistic furniture and sanitary ware
+      import('./furniture.js?v=14').catch(() => null),                              // realistic furniture and sanitary ware
       SEMID ? opt(J('./semid_furniture.json?v=15'), []) : [],                       // Semi-D furniture, 8 Apr 2026 layout (audited)
     ]);
   } catch (e) { fail('Could not load the drawings.'); throw e; }

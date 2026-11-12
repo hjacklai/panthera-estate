@@ -41,10 +41,12 @@ const KEYS = [
 // south, laid across the band under the top bar
 const END_PORTRAIT = { pos: [-44, 110, 210], tgt: [-44, 22, 28], fov: 44 };
 const STILLS = [0, 0.42, 0.8, 1];   // reduced motion: crossfade between these
-const LINES = [[0.03, 0.26], [0.27, 0.56], [0.58, 0.95]];   // hx.l1..l3 shown over these stretches (the pins take over at the end)
+// hx.l1 and hx.l3 shown over these stretches (the pins take over at the end); the playground line is gone (owner, Nov 2026:
+// "this one can remove")
+const LINES = [[0.03, 0.40], [0.44, 0.95]];
 // app mode: the lines keep their own slower clock (ms from the start of the intro), so they can be read whatever the
 // camera does; no l1 (the headline already says it). Owner: "people no enough time to read"
-const LINES_APP = [null, [300, 4000], [4300, 8800]], LINE_FADE = 450;
+const LINES_APP = [null, [600, 6800]], LINE_FADE = 450;
 const PINS_AT = 0.93;
 const POI = {   // anchors (estate frame) and what each card says
   // the estate itself carries no labels (owner, Nov 2026: "no need show" the Semi-D, Bungalow, Central green, Playground
@@ -138,7 +140,7 @@ export async function start(o) {
   const el = (tag, cls, attrs = {}, text) => { const e = document.createElement(tag); if (cls) e.className = cls; for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
   const i18n = (e, key) => { e.setAttribute('data-i18n', key); e.textContent = T(key); return e; };
   const lines = el('div', 'hx-lines');
-  const lineEls = [1, 2, 3].map(i => lines.appendChild(i18n(el('p', 'hx-line'), APP && i === 3 ? 'hx.l3app' : 'hx.l' + i)));
+  const lineEls = [1, 3].map(i => lines.appendChild(i18n(el('p', 'hx-line'), APP && i === 3 ? 'hx.l3app' : 'hx.l' + i)));
   const pinsNav = el('nav', 'hx-pins', { 'aria-label': T('hx.pins'), 'data-i18n-aria': 'hx.pins' });
   const hasLoc = !!document.getElementById('loc-leaflet');   // the Location pin only where the page has its map
   // app mode: Location lives in the bottom bar now, so no compass on the 3D (owner, Nov 2026: "no need keep compass icon")
@@ -630,7 +632,7 @@ export async function start(o) {
       if (u >= 1) finishIntro();
     }
     if (rigOn && rig.tick(dt)) moving = true;
-    if (lineT0 != null && lineMs < LINES_APP[2][1] + 100) moving = true;   // the intro lines are still showing
+    if (lineT0 != null && lineMs < LINES_APP[1][1] + 100) moving = true;   // the intro lines are still showing
     if (todCtl.tick(dt)) { moving = true; expo = renderer.toneMappingExposure; }
     if (mixTick(dt)) moving = true;
     if (aimOff.distanceToSquared(aimGoal) > 1e-4) { aimOff.lerp(aimGoal, 1 - Math.exp(-dt / 0.45)); moving = true; }
@@ -646,7 +648,7 @@ export async function start(o) {
     // still enough for one-off jobs (quiet): no intro, dissolve or intro lines, and the camera stopped or only creeping
     // through the last centimetres of a glide (the rig's tail runs on for seconds at well under a pixel a frame)
     const shift = camera.position.distanceTo(camWas) + tgt.distanceTo(tgtWas); camWas.copy(camera.position); tgtWas.copy(tgt);
-    if (introT0 != null || (m > 0 && m < 0.999) || (lineT0 != null && lineMs < LINES_APP[2][1]) || (moving && shift > 0.03)) movingAt = now;
+    if (introT0 != null || (m > 0 && m < 0.999) || (lineT0 != null && lineMs < LINES_APP[1][1]) || (moving && shift > 0.03)) movingAt = now;
     if (moving) {   // adaptive resolution, as walk.js adapt()
       if (dt > 0.026 && dt < 0.09) slow++; else if (dt < 0.02) okF++;
       if (slow > 20 && slow > okF * 0.5) { if (dpr > 1.01) { dpr = Math.max(1, dpr - 0.25); dprLock = true; renderer.setPixelRatio(dpr); resize(); } slow = okF = 0; }
@@ -788,6 +790,10 @@ export async function start(o) {
       poseAt(s); orbit.apply(pos, tgt);
       return { pos: pos.clone(), tgt: tgt.clone(), up: V(0, 1, 0), fov, off: off.slice() };
     },
+    estatePoseNow() {   // Back to estate: the app's whole-estate view, set at once (the tour flies there), the home's caption closed
+      if (rigOn && app && app.toEstate) app.toEstate();
+      return ctx.heroPoseNow();
+    },
     onHome: h => announce(h),   // the tour opened on, or switched to, this home
     context: () => neighbours,   // the neighbourhood (hero-context.js), once built: the tour lays a copy of it
     onClosed: () => syncUrl(),
@@ -799,7 +805,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=32').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=33').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   const moving = () => hero.classList.contains('hx-leave');   // the tour or the Location move is under way
   function walkInto(h, from) { if (moving()) return; if (!live) { pendingWalk = [h, from]; return; } tour().then(t => t.open(h, from)).catch(e => { console.warn('tour', e); location.href = base + 'index.html?home=' + h; }); }
@@ -916,7 +922,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=33').then(mod => {
+      import(base + 'hero-app.js?v=34').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

@@ -12,7 +12,7 @@ const SHEET = {   // walk.js rig(0): the plan sheet's centre (model frame) and t
 };
 const PLAN_FOV = 2.2, NEAR_FOV = 35;
 const LENIS_URL = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
-const WALK_V = '152', CSS_V = '13';
+const WALK_V = '153', CSS_V = '13';
 
 export function createTour(ctx) {
   const { THREE, renderer, canvas, camera, base, T, reduced } = ctx;
@@ -411,9 +411,11 @@ export function createTour(ctx) {
     } catch (e) { console.warn('tour: back to the estate', e); busy = false; await closeTour(false); return; }
     busy = false; runPending();
   }
-  async function closeTour(fromPop = false) {
+  // estate: the Back to estate buttons (and Escape) pull out to the whole estate, not to the home the tour began from
+  // (owner, Nov 2026: "when click back to estate, it shud go back to the estate, not just show the semi d or bungalow")
+  async function closeTour(fromPop = false, { estate = false } = {}) {
     if (!open) return;
-    if (busy) { pending = ['close', fromPop]; return; }
+    if (busy) { pending = ['close', fromPop, estate]; return; }
     busy = true;
     const w = walks[open];
     if (!fromPop && history.state && history.state.pbw) { ignorePop = true; history.back(); }
@@ -421,7 +423,7 @@ export function createTour(ctx) {
       let s = heroNow(), fade = null;
       if (w && w.api && active === w) ({ s, fade } = await leave(w, true));
       else { showBar(false); loopFn = null; }
-      const to = ctx.heroPoseNow ? ctx.heroPoseNow() : heroPose;
+      const to = estate && ctx.estatePoseNow ? ctx.estatePoseNow() : ctx.heroPoseNow ? ctx.heroPoseNow() : heroPose;
       // owner, Nov 2026 ("zoom in and out abit, dizzy"): one steady pull-out straight to the estate view, while the
       // room's last frame simply fades (no climb and drop, no lens swing, no shrinking picture)
       if (s.fov < 20) s = planPose(open, NEAR_FOV);
@@ -447,19 +449,19 @@ export function createTour(ctx) {
   function runPending() {
     const p = pending; pending = null; if (!p) return;
     if (p[0] === 'open') { if (open) switchHome(p[1]); else openHome(p[1]); }
-    else if (p[0] === 'close') closeTour(p[1]);
+    else if (p[0] === 'close') closeTour(p[1], { estate: p[2] });
   }
 
   // ---------- controls ----------
   let ignorePop = false;
   addEventListener('popstate', () => { if (ignorePop) { ignorePop = false; return; } if (open) closeTour(true); });
-  back.addEventListener('click', () => closeTour(false));
+  back.addEventListener('click', () => closeTour(false, { estate: true }));
   pill.addEventListener('click', e => { const b = e.target.closest('button[data-home]'); if (b && open && b.dataset.home !== open) switchHome(b.dataset.home); });
   pill.addEventListener('pointerenter', () => { if (open && !LOWMEM) prefetch(OTHER[open]); });
   ov.addEventListener('click', e => {
     const a = e.target.closest('[data-pbw]'); if (!a) return;
     const k = a.dataset.pbw;
-    if (k === 'back') closeTour(false);
+    if (k === 'back') closeTour(false, { estate: true });
     else if (k === 'other' && open) switchHome(OTHER[open]);
     else if (k === 'register') {   // close the tour, then go to the form on this page (or follow the link)
       e.preventDefault();
@@ -469,7 +471,7 @@ export function createTour(ctx) {
   ov.addEventListener('keydown', e => {
     if (e.key !== 'Escape' || !open) return;
     e.stopPropagation(); e.preventDefault();   // the tour's own Escape (a panel or caption behind it stays)
-    closeTour(false);
+    closeTour(false, { estate: true });
   });
   // once per frame at most (a phone's URL bar showing or hiding fires many resize events, each a WebGL resize and draw)
   let rz = 0;

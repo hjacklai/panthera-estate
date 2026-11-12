@@ -125,7 +125,7 @@ const I18N = {
     "faq.a7": "A Residents' Association maintains the green, roads, drains and pond from handover, around RM 180 per home a month. Not gated; the layout keeps traffic out.",
     "faq.a8": "Yes, within the approved envelope. Porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA & MPSP sign-off. Guideline given at handover.",
     "faq.a9": "Yes. It's a freehold home, so any major bank can finance it, and our team will help with the application. Approval and terms depend on your profile.",
-    "faq.a10": "Register anyway. It is free, with no deposit and no obligation, and it holds today's pre-launch price and first pick of the lots you like, for when you are ready.",
+    "faq.a10": "Register anyway. It is free, with no deposit and no obligation, and you get first pick of the lots you like, for when you are ready.",
     "bertam.eyebrow": "Why Bertam, now",
     "bertam.title": "Bertam is developing.",
     "map.twofinger": "Use two fingers to move the map",
@@ -215,6 +215,7 @@ const I18N = {
     "footer.h.explore": "Explore",
     "footer.h.legal": "Legal",
     "footer.h.contact": "Contact",
+    "footer.map": "Bertam, Penang ↗",
     "footer.legal.disclaimer": "Disclaimer",
     "footer.legal.privacy": "Privacy",
     "footer.legal.spa": "SPA terms",
@@ -259,7 +260,7 @@ const I18N = {
     "map.t.streets": "Map", "map.t.satellite": "Satellite", "map.t.terrain": "Terrain",
     "map.f.all": "All", "map.f.daily": "Daily", "map.f.schools": "Schools", "map.f.lifestyle": "Play & Lifestyle", "map.f.connect": "Connect", "map.f.future": "Jobs & Industry",
     "map.note": "Pinned at the exact site. Drag, zoom or two-finger zoom on mobile. Tap any numbered pin for details. Use the filter chips to show only what matters to you, or hit a row in the list below to fly the map to that amenity.",
-    "loc.em.walk": "walkable", "loc.em.across": "across the road", "loc.em.gp": "(GP clinic)", "loc.em.amdi": "(medical / dental institute)",
+    "loc.em.walk": "walkable", "loc.em.across": "across the road", "loc.em.gp": "(GP clinic)", "loc.em.amdi": "(medical / dental institute)", "loc.min": "min",
     // aria-label (data-i18n-aria) and alt text (data-i18n-alt); the alt values are the current alts
     "aria.lang": "Language", "aria.primary": "Primary", "aria.glance": "At a glance", "aria.hometype": "Home type", "aria.why": "Why register now", "aria.wa": "WhatsApp sales", "aria.filter": "Filter amenities",
     "alt.hero": "Aerial view of Panthera Bertam at golden hour: 19 homes around the shared central green, with the neighbourhood around it. 3D render, artist's impression",
@@ -274,7 +275,15 @@ const I18N = {
     // dock, skip link, top-bar sales label, Bertam stat labels
     "a11y.skip": "Skip to content", "topbar.sales": "Sales · +60 17-598 1858",
     "dock.estate": "Estate", "dock.homes": "Homes", "dock.site": "Site", "dock.location": "Location", "dock.register": "Register ↗",
-    "bertam.s1k": "INV New Material", "bertam.s2k": "Penang Tech Park", "bertam.s3k": "Infineon · Kulim", "bertam.s5k": "Penang, 2025", "bertam.s6k": "New jobs"
+    "bertam.s1k": "INV New Material", "bertam.s2k": "Penang Tech Park", "bertam.s3k": "Infineon · Kulim", "bertam.s5k": "Penang, 2025", "bertam.s6k": "New jobs",
+    // the page's <head> (title, search snippet, share cards): scripts/build_lang.py writes these into /ms/ and /zh/, and
+    // the language button sets the title and description in place. The EN values must equal index.html's <head>.
+    "meta.title": "Panthera Bertam · Freehold Semi-D & Bungalows, Bertam Penang",
+    "meta.desc": "Freehold semi-D and bungalow homes in Bertam, Kepala Batas, Penang. 19 landed homes around a shared green of over 700 m². Semi-D from RM 726,000.",
+    "meta.og.desc": "Three bungalows and sixteen semi-detached homes around a central park of over 700 m² in Bertam, Penang. From RM 726,000. Freehold. Pre-launch, register your interest.",
+    "meta.tw.desc": "Three bungalows and sixteen semi-detached homes around a central park of over 700 m² in Bertam, Penang. From RM 726,000. Pre-launch.",
+    "meta.img.alt": "Panthera Bertam, an artist's impression of a bungalow at the estate in Bertam, Penang",
+    "meta.tw.img.alt": "Panthera Bertam, bungalow artist's impression"
   },
 
   bm: {
@@ -400,7 +409,7 @@ const I18N = {
     "faq.a7": "Persatuan Penduduk menyelenggara taman, jalan, longkang dan kolam dari penyerahan, sekitar RM 180 sebulan setiap rumah. Tidak berpagar; susun atur menghalang lalu lintas.",
     "faq.a8": "Ya, dalam lingkungan yang diluluskan. Penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP & MPSP. Garis panduan diberi semasa penyerahan.",
     "faq.a9": "Ya. Ia rumah pegangan bebas, jadi mana-mana bank utama boleh membiayainya, dan pasukan kami akan bantu dengan permohonan. Kelulusan dan terma bergantung pada profil anda.",
-    "faq.a10": "Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan ia menyimpan harga pra-pelancaran hari ini serta pilihan utama lot yang anda suka, untuk bila anda bersedia.",
+    "faq.a10": "Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan anda mendapat pilihan utama lot yang anda suka, untuk bila anda bersedia.",
     "bertam.eyebrow": "Mengapa Bertam, sekarang",
     "bertam.title": "Bertam sedang membangun.",
     "map.twofinger": "Guna dua jari untuk menggerakkan peta",
@@ -490,6 +499,7 @@ const I18N = {
     "footer.h.explore": "Layari",
     "footer.h.legal": "Undang-undang",
     "footer.h.contact": "Hubungi",
+    "footer.map": "Bertam, Pulau Pinang ↗",
     "footer.legal.disclaimer": "Penafian",
     "footer.legal.privacy": "Privasi",
     "footer.legal.spa": "Terma SPA",
@@ -515,7 +525,6 @@ const I18N = {
     "hx.stage": "Paparan 3D kediaman",
     "hx.stage.role": "Paparan 3D kediaman",
     "hx.l1": "16 rumah berkembar dan 3 banglo.",
-    "hx.l2": "Taman permainan kanak-kanak di taman pusat.",
     "hx.l3": "Tatal ke bawah, kemudian jelajah dalam mana-mana rumah.",
     "hx.l3app": "Seret untuk melihat sekeliling, kemudian jelajah dalam mana-mana rumah.",
     "hx.pins": "Tempat dalam kediaman",
@@ -559,7 +568,7 @@ const I18N = {
     "map.t.streets": "Peta", "map.t.satellite": "Satelit", "map.t.terrain": "Rupa bumi",
     "map.f.all": "Semua", "map.f.daily": "Harian", "map.f.schools": "Sekolah", "map.f.lifestyle": "Riadah & Gaya Hidup", "map.f.connect": "Perhubungan", "map.f.future": "Pekerjaan & Industri",
     "map.note": "Ditanda di lokasi tapak sebenar. Seret, zum, atau zum dengan dua jari di telefon. Ketik mana-mana pin bernombor untuk butiran. Guna cip penapis untuk memaparkan perkara yang penting bagi anda, atau ketik satu baris dalam senarai di bawah untuk terus ke kemudahan itu di peta.",
-    "loc.em.walk": "boleh berjalan kaki", "loc.em.across": "di seberang jalan", "loc.em.gp": "(klinik am)", "loc.em.amdi": "(institut perubatan / pergigian)",
+    "loc.em.walk": "boleh berjalan kaki", "loc.em.across": "di seberang jalan", "loc.em.gp": "(klinik am)", "loc.em.amdi": "(institut perubatan / pergigian)", "loc.min": "minit",
     "aria.lang": "Bahasa", "aria.primary": "Navigasi utama", "aria.glance": "Sekilas pandang", "aria.hometype": "Jenis rumah", "aria.why": "Kenapa daftar sekarang", "aria.wa": "WhatsApp jualan", "aria.filter": "Tapis kemudahan",
     "alt.hero": "Pandangan udara Panthera Bertam pada waktu senja: 19 rumah mengelilingi taman pusat yang dikongsi, bersama kejiranan di sekitarnya. Paparan 3D, gambaran artis",
     "alt.sd.hero": "Rumah berkembar di Panthera Bertam pada waktu senja, gambaran artis",
@@ -572,7 +581,13 @@ const I18N = {
     "alt.bg.gf": "Pelan tingkat bawah banglo", "alt.bg.ff": "Pelan tingkat atas banglo",
     "a11y.skip": "Langkau ke kandungan", "topbar.sales": "Jualan · +60 17-598 1858",
     "dock.estate": "Kediaman", "dock.homes": "Rumah", "dock.site": "Tapak", "dock.location": "Lokasi", "dock.register": "Daftar ↗",
-    "bertam.s1k": "INV New Material", "bertam.s2k": "Penang Tech Park", "bertam.s3k": "Infineon · Kulim", "bertam.s5k": "Pulau Pinang, 2025", "bertam.s6k": "Pekerjaan baharu"
+    "bertam.s1k": "INV New Material", "bertam.s2k": "Penang Tech Park", "bertam.s3k": "Infineon · Kulim", "bertam.s5k": "Pulau Pinang, 2025", "bertam.s6k": "Pekerjaan baharu",
+    "meta.title": "Panthera Bertam · Rumah Berkembar & Banglo Pegangan Bebas, Bertam Pulau Pinang",
+    "meta.desc": "Rumah berkembar dan banglo pegangan bebas di Bertam, Kepala Batas, Pulau Pinang. 19 rumah bertanah mengelilingi taman bersama seluas lebih 700 m². Rumah berkembar dari RM 726,000.",
+    "meta.og.desc": "Tiga banglo dan enam belas rumah berkembar mengelilingi taman tengah seluas lebih 700 m² di Bertam, Pulau Pinang. Dari RM 726,000. Pegangan bebas. Pra-pelancaran, daftar minat anda.",
+    "meta.tw.desc": "Tiga banglo dan enam belas rumah berkembar mengelilingi taman tengah seluas lebih 700 m² di Bertam, Pulau Pinang. Dari RM 726,000. Pra-pelancaran.",
+    "meta.img.alt": "Panthera Bertam, gambaran artis sebuah banglo di kediaman ini, di Bertam, Pulau Pinang",
+    "meta.tw.img.alt": "Panthera Bertam, gambaran artis sebuah banglo"
   },
 
   zh: {
@@ -698,7 +713,7 @@ const I18N = {
     "faq.a7": "业主委员会自交屋起维护绿地、道路、排水与水池，每户每月约 RM 180。非封闭式；布局本身阻挡过境车辆。",
     "faq.a8": "可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MPSP 批准。交屋时提供指南。",
     "faq.a9": "可以。这是永久地契住宅，任何大型银行皆可融资，我们的团队会协助办理申请。批准与条款视您的个人状况而定。",
-    "faq.a10": "也请先登记。完全免费，无需订金、绝无义务，并为您锁定今天的预发布价格，以及您心仪地段的优先选择权，待您准备好时再决定。",
+    "faq.a10": "也请先登记。完全免费，无需订金、绝无义务，并让您优先挑选心仪的地段，待您准备好时再决定。",
     "bertam.eyebrow": "为何选 Bertam，趁现在",
     "bertam.title": "Bertam 正在发展。",
     "map.twofinger": "请用两指移动地图",
@@ -788,6 +803,7 @@ const I18N = {
     "footer.h.explore": "浏览",
     "footer.h.legal": "法律",
     "footer.h.contact": "联系",
+    "footer.map": "槟城 Bertam ↗",
     "footer.legal.disclaimer": "免责声明",
     "footer.legal.privacy": "隐私",
     "footer.legal.spa": "SPA 条款",
@@ -813,7 +829,6 @@ const I18N = {
     "hx.stage": "项目 3D 视图",
     "hx.stage.role": "项目 3D 视图",
     "hx.l1": "16 间半独立式与 3 间独立式洋房。",
-    "hx.l2": "中央绿地设有儿童游乐场。",
     "hx.l3": "继续向下滚动，然后走进任一户型参观。",
     "hx.l3app": "拖动即可环视四周，然后走进任一户型参观。",
     "hx.pins": "项目内地点",
@@ -857,7 +872,7 @@ const I18N = {
     "map.t.streets": "地图", "map.t.satellite": "卫星", "map.t.terrain": "地形",
     "map.f.all": "全部", "map.f.daily": "日常", "map.f.schools": "学校", "map.f.lifestyle": "休闲与生活", "map.f.connect": "交通", "map.f.future": "就业与产业",
     "map.note": "已标注于项目确切位置。可拖动、缩放，手机上可用双指缩放。点击任一编号标记查看详情。使用筛选标签只显示您关心的类别，或点击下方列表中的任一行，地图即飞至该设施。",
-    "loc.em.walk": "步行可达", "loc.em.across": "就在马路对面", "loc.em.gp": "（普通科诊所）", "loc.em.amdi": "（医学 / 牙科研究院）",
+    "loc.em.walk": "步行可达", "loc.em.across": "就在马路对面", "loc.em.gp": "（普通科诊所）", "loc.em.amdi": "（医学 / 牙科研究院）", "loc.min": "分钟",
     "aria.lang": "语言", "aria.primary": "主导航", "aria.glance": "概览", "aria.hometype": "房型", "aria.why": "为何现在登记", "aria.wa": "WhatsApp 销售", "aria.filter": "筛选周边设施",
     "alt.hero": "黄昏时分的 Panthera Bertam 鸟瞰图：19 户围绕共享中央绿地，周边社区一并呈现。3D 渲染图，艺术家构想",
     "alt.sd.hero": "黄昏时分的 Panthera Bertam 半独立式住宅，艺术家构想",
@@ -870,7 +885,13 @@ const I18N = {
     "alt.bg.gf": "独立式一楼平面图", "alt.bg.ff": "独立式二楼平面图",
     "a11y.skip": "跳至主要内容", "topbar.sales": "销售 · +60 17-598 1858",
     "dock.estate": "项目", "dock.homes": "房屋", "dock.site": "总平面", "dock.location": "位置", "dock.register": "登记 ↗",
-    "bertam.s1k": "INV New Material", "bertam.s2k": "槟城科技园", "bertam.s3k": "英飞凌 · 居林", "bertam.s5k": "槟城，2025", "bertam.s6k": "新增就业"
+    "bertam.s1k": "INV New Material", "bertam.s2k": "槟城科技园", "bertam.s3k": "英飞凌 · 居林", "bertam.s5k": "槟城，2025", "bertam.s6k": "新增就业",
+    "meta.title": "Panthera Bertam · 槟城 Bertam 永久地契半独立式与独立式洋房",
+    "meta.desc": "槟城甲抛峇底 Bertam 的永久地契半独立式与独立式洋房。19 间有地住宅环绕逾 700 平方米的共享绿地。半独立式 RM 726,000 起。",
+    "meta.og.desc": "槟城 Bertam，3 间独立式洋房与 16 间半独立式洋房环绕逾 700 平方米的中央公园。RM 726,000 起，永久地契。预发布阶段，欢迎登记意向。",
+    "meta.tw.desc": "槟城 Bertam，3 间独立式洋房与 16 间半独立式洋房环绕逾 700 平方米的中央公园。RM 726,000 起，预发布阶段。",
+    "meta.img.alt": "Panthera Bertam，槟城 Bertam 项目内一间独立式洋房的艺术家构想图",
+    "meta.tw.img.alt": "Panthera Bertam，独立式洋房艺术家构想图"
   }
 };
 
@@ -878,12 +899,56 @@ const I18N = {
 const LS_KEY = "panthera.lang";
 // Storage can throw (blocked site data, some in-app or sandboxed browsers): fall back to EN
 // instead of stopping the whole script (translations, form, map, calculator).
-let currentLang = "en";
-try { currentLang = localStorage.getItem(LS_KEY) || "en"; } catch (e) {}
+// Each language has its own address (Nov 2026, so search engines and AI crawlers, which do not run this script, see
+// BM and Chinese too): / is English, /ms/ Bahasa Malaysia, /zh/ Chinese. /ms/ and /zh/ are index.html with the text
+// already in place (scripts/build_lang.py). The address wins on load; on / the saved choice applies as before.
+// The button switches in place (no reload, the 3D keeps running) and moves the address to the matching path.
+// Every page carries <base href="/">, so relative URLs still resolve from the site root after that move.
+const LANG_PATH = { en: "/", bm: "/ms/", zh: "/zh/" };
+function langOfPath(p){
+  const m = /^\/(ms|zh)(?:\/|$)/.exec(p || "");
+  return m ? (m[1] === "ms" ? "bm" : "zh") : null;
+}
+const PATH_LANG = langOfPath(location.pathname);
+let currentLang = PATH_LANG || "en";
+if (!PATH_LANG) try { const s = localStorage.getItem(LS_KEY); if (s && I18N[s]) currentLang = s; } catch (e) {}
+
+// the address follows the language shown: replaceState only (no new history entry, no reload), keeping ?query and
+// #hash. Only on the home page's own paths (/, /index.html, /ms/, /zh/), never anywhere else.
+const HOME_PATH = /^\/(?:(?:ms|zh)(?:\/(?:index\.html)?)?|index\.html)?$/;
+function syncLangUrl(lang){
+  try {
+    const p = location.pathname;
+    if (!HOME_PATH.test(p)) return;
+    if ((langOfPath(p) || "en") === lang || !LANG_PATH[lang]) return;
+    history.replaceState(history.state, "", LANG_PATH[lang] + location.search + location.hash);
+  } catch (e) {}
+}
 
 function applyI18n(lang){
-  const dict = I18N[lang] || I18N.en;
-  document.documentElement.lang = lang === "zh" ? "zh-CN" : (lang === "bm" ? "ms" : "en");
+  if (!I18N[lang]) lang = "en";
+  const dict = I18N[lang];
+  // zh-Hans: the same value /zh/ is served with (html:lang(zh) and [lang^="zh"] rules match it)
+  document.documentElement.lang = lang === "zh" ? "zh-Hans" : (lang === "bm" ? "ms" : "en");
+  if (dict["meta.title"] && document.title !== dict["meta.title"]) document.title = dict["meta.title"];
+  const md = document.querySelector('meta[name="description"]');
+  if (md && dict["meta.desc"] && md.getAttribute("content") !== dict["meta.desc"]) md.setAttribute("content", dict["meta.desc"]);
+  // canonical and share-card tags follow too (the same values scripts/build_lang.py writes into /ms/ and /zh/), so a
+  // page switched in place never names one language's address with another's text. Home page paths only.
+  if (HOME_PATH.test(location.pathname)) {
+    const url = "https://www.pantheraestate.com" + (LANG_PATH[lang] || "/");
+    const set = (sel, attr, v) => { const el = document.querySelector(sel); if (el && v != null && el.getAttribute(attr) !== v) el.setAttribute(attr, v); };
+    set('link[rel="canonical"]', "href", url);
+    set('meta[property="og:url"]', "content", url);
+    set('meta[name="twitter:url"]', "content", url);
+    set('meta[property="og:locale"]', "content", { en: "en_GB", bm: "ms_MY", zh: "zh_CN" }[lang]);
+    set('meta[property="og:title"]', "content", dict["meta.title"]);
+    set('meta[name="twitter:title"]', "content", dict["meta.title"]);
+    set('meta[property="og:description"]', "content", dict["meta.og.desc"]);
+    set('meta[name="twitter:description"]', "content", dict["meta.tw.desc"]);
+    set('meta[property="og:image:alt"]', "content", dict["meta.img.alt"]);
+    set('meta[name="twitter:image:alt"]', "content", dict["meta.tw.img.alt"]);
+  }
   // Toggle a body class so .zh-only elements only render in Mandarin
   document.body.classList.toggle("lang-zh", lang === "zh");
   // Only write when the text differs: on an EN load the HTML already holds it, and each
@@ -910,6 +975,7 @@ function applyI18n(lang){
   });
   currentLang = lang;
   try { localStorage.setItem(LS_KEY, lang); } catch (e) {}
+  syncLangUrl(lang);
   // The <head> hides the hero copy (html.i18n-wait) for a saved BM / ZH visitor until
   // the text is in their language, so it never flashes English first.
   document.documentElement.classList.remove("i18n-wait");
@@ -921,6 +987,24 @@ function applyI18n(lang){
     });
   }
 }
+
+// In-page links (href="#faq") with <base href="/">: the browser would resolve them against the site root, so on /ms/,
+// /zh/ or with a ?query they would load / instead of scrolling. Any such click that no other script has handled
+// (the 3D app's own handlers run first and call preventDefault) becomes the same jump on this page. Where the two
+// resolve to the same address (/ with no query) the browser's own jump is left alone.
+addEventListener("click", e => {
+  if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const a = e.target.closest && e.target.closest('a[href^="#"]');
+  if (!a || (a.target && a.target !== "_self") || a.hasAttribute("download")) return;
+  try {
+    const here = new URL(a.getAttribute("href"), location.href).href;
+    if (here === a.href) return;
+    e.preventDefault();
+    location.assign(here);
+  } catch (err) {}
+});
+// back / forward onto an entry made before a language switch: keep the address on the language shown
+addEventListener("popstate", () => syncLangUrl(currentLang));
 
 /* ── WhatsApp form submit ────────────────────── */
 const WA_NUMBER = "60175981858"; // 0175981858 in MY format

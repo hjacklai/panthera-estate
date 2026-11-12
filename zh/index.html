@@ -11,8 +11,10 @@
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
      old copy (owner, Nov 2026: their phone kept showing an old version). Keep "128" equal to hero-boot.js V and version.txt; one reload per
-     build per tab session, so a stale CDN copy can never loop -->
-<script>(function(){var B="128";function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+     build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
+     script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
+     would spoil that render -->
+<script>(function(){var B="128",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -122,6 +124,7 @@
       "name": "Panthera Bertam · 槟城 Bertam 永久地契半独立式与独立式洋房",
       "description": "槟城甲抛峇底 Bertam 的永久地契半独立式与独立式洋房。19 间有地住宅环绕逾 700 平方米的共享绿地。半独立式 RM 726,000 起。",
       "inLanguage": "zh-Hans",
+      "dateModified": "2026-11-12",
       "isPartOf": {
         "@id": "https://www.pantheraestate.com/#website"
       },
@@ -166,6 +169,7 @@
       "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows around a shared green of over 700 m² in Bertam, Kepala Batas, Seberang Perai Utara, Penang. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 726,000; bungalow price on request.",
       "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, rumah berkembar, banglo, pegangan bebas, 半独立式洋房, 独立式洋房, 永久地契, 槟城",
       "datePosted": "2026-05-20",
+      "dateModified": "2026-11-12",
       "image": [
         "https://www.pantheraestate.com/assets/hero-estate-3d.webp",
         "https://www.pantheraestate.com/assets/og-card.jpg",
@@ -180,16 +184,13 @@
       },
       "offers": [
         {
-          "@type": "Offer",
+          "@type": "AggregateOffer",
           "name": "Semi-Detached · 16 units",
-          "price": "726000",
+          "lowPrice": 726000,
           "priceCurrency": "MYR",
-          "priceSpecification": {
-            "@type": "PriceSpecification",
-            "minPrice": 726000,
-            "priceCurrency": "MYR"
-          },
-          "availability": "https://schema.org/PreOrder",
+          "offerCount": 16,
+          "url": "https://www.pantheraestate.com/#pricing",
+          "availability": "https://schema.org/PreSale",
           "itemOffered": {
             "@id": "https://www.pantheraestate.com/#semid"
           },
@@ -201,7 +202,8 @@
           "@type": "Offer",
           "name": "Bungalow · 3 units",
           "description": "Price on request",
-          "availability": "https://schema.org/PreOrder",
+          "url": "https://www.pantheraestate.com/#pricing",
+          "availability": "https://schema.org/PreSale",
           "itemOffered": {
             "@id": "https://www.pantheraestate.com/#bungalow"
           },
@@ -215,12 +217,54 @@
       "@type": "Residence",
       "@id": "https://www.pantheraestate.com/#estate",
       "name": "Panthera Bertam",
+      "alternateName": [
+        "Panthera Bertam Kepala Batas",
+        "Panthera Bertam Penang"
+      ],
       "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) around a shared central green of over 700 m².",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Bertam, Kepala Batas",
+        "addressLocality": "Kepala Batas",
+        "postalCode": "13200",
         "addressRegion": "Pulau Pinang",
         "addressCountry": "MY"
+      },
+      "containedInPlace": {
+        "@type": "Place",
+        "name": "Bertam",
+        "containedInPlace": {
+          "@type": "Place",
+          "name": "Kepala Batas",
+          "alternateName": "甲抛峇底",
+          "containedInPlace": {
+            "@type": "AdministrativeArea",
+            "name": "Seberang Perai Utara",
+            "alternateName": [
+              "SPU",
+              "North Seberang Perai",
+              "northern Seberang Perai",
+              "威北"
+            ],
+            "containedInPlace": {
+              "@type": "AdministrativeArea",
+              "name": "Seberang Perai",
+              "alternateName": [
+                "Seberang Prai",
+                "Penang mainland",
+                "威省"
+              ],
+              "containedInPlace": {
+                "@type": "AdministrativeArea",
+                "name": "Pulau Pinang",
+                "alternateName": "Penang",
+                "containedInPlace": {
+                  "@type": "Country",
+                  "name": "Malaysia"
+                }
+              }
+            }
+          }
+        }
       },
       "geo": {
         "@type": "GeoCoordinates",
@@ -277,15 +321,15 @@
           "name": "外国人可以购买吗?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "威省 (槟城本土) 有地住宅的外国人门槛为每单位 RM 180 万，因此仅独立式单位可能符合 (须州政府批准)。半独立式不符合。详情请询销售。"
+            "text": "在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，因此仅独立式单位可能符合资格。详情请询销售。"
           }
         },
         {
           "@type": "Question",
-          "name": "什么是土著保留单位?",
+          "name": "什么是土著固打单位?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "六个单位为土著保留，享 5% 折扣，只能转让予土著业主。其余十三个不受限制。"
+            "text": "六个单位为土著固打单位，享 5% 折扣，只能转让予土著业主。其余十三个不受限制。"
           }
         },
         {
@@ -325,7 +369,7 @@
           "name": "日后可以扩建或改装吗?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MPSP 批准。交屋时提供指南。"
+            "text": "可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。"
           }
         },
         {
@@ -409,42 +453,10 @@
   </div>
 </nav>
 
-<!-- ─── OLD NAV (hidden, kept for ARIA fallback) ── -->
-<header class="nav" data-screen-label="00 Nav" hidden>
-  <div class="wrap nav-inner">
-    <a href="#" class="brand" aria-label="Panthera">
-      <span class="mk"><img src="assets/panthera-mark.svg" alt=""></span>
-      <span>PANTHERA</span>
-      <span class="sub">BERTAM</span>
-    </a>
-
-    <nav class="nav-links" aria-label="主导航" data-i18n-aria="aria.primary">
-      <a href="#estate"   data-i18n="nav.estate">项目概览</a>
-      <a href="#homes"    data-i18n="nav.homes">房屋</a>
-      <a href="#site"     data-i18n="nav.site">总平面</a>
-      <a href="#location" data-i18n="nav.location">位置</a>
-      <a href="#register" data-i18n="nav.register">登记意向</a>
-    </nav>
-
-    <div class="nav-cta">
-      <div class="lang" role="tablist" aria-label="语言" data-i18n-aria="aria.lang">
-        <button type="button" data-lang="en" aria-pressed="false">EN</button>
-        <button type="button" data-lang="bm" aria-pressed="false">BM</button>
-        <button type="button" data-lang="zh" aria-pressed="true">中</button>
-      </div>
-      <a href="#register" class="btn btn-primary">
-        <span class="label-long" data-i18n="nav.cta">登记意向</span>
-        <span class="label-short">↗</span>
-        <span class="arrow label-long" aria-hidden="true">→</span>
-      </a>
-    </div>
-  </div>
-</header>
-
 <!-- ─── HERO ──────────────────────────────────── -->
 <section class="hero hero--cinematic" data-screen-label="01 Hero">
   <figure class="hero-bg">
-    <picture><source media="(max-aspect-ratio: 9/16)" srcset="assets/hero-estate-3d-port-720.webp?v=7 720w, assets/hero-estate-3d-port-1080.webp?v=7 1080w, assets/hero-estate-3d-port-1440.webp?v=7 1440w" sizes="57vh"><img class="hero-slide" src="assets/hero-estate-3d-1600.webp?v=7" srcset="assets/hero-estate-3d-768.webp?v=7 768w, assets/hero-estate-3d-1080.webp?v=7 1080w, assets/hero-estate-3d-1600.webp?v=7 1600w, assets/hero-estate-3d-2400.webp?v=7 2400w, assets/hero-estate-3d.webp?v=7 3200w" sizes="(min-aspect-ratio: 16/9) 100vw, 178vh" alt="黄昏时分的 Panthera Bertam 鸟瞰图：19 户围绕共享中央绿地，周边社区一并呈现。3D 渲染图，艺术家构想" data-i18n-alt="alt.hero" fetchpriority="high"></picture>
+    <picture><source media="(max-aspect-ratio: 9/16)" srcset="assets/hero-estate-3d-port-720.webp?v=7 720w, assets/hero-estate-3d-port-1080.webp?v=7 1080w, assets/hero-estate-3d-port-1440.webp?v=7 1440w" sizes="57vh"><img class="hero-slide" src="assets/hero-estate-3d-1600.webp?v=7" srcset="assets/hero-estate-3d-768.webp?v=7 768w, assets/hero-estate-3d-1080.webp?v=7 1080w, assets/hero-estate-3d-1600.webp?v=7 1600w, assets/hero-estate-3d-2400.webp?v=7 2400w, assets/hero-estate-3d.webp?v=7 3200w" sizes="(min-aspect-ratio: 16/9) 100vw, 178vh" width="1600" height="900" alt="黄昏时分的 Panthera Bertam 鸟瞰图：19 户围绕共享中央绿地，周边社区一并呈现。3D 渲染图，艺术家构想" data-i18n-alt="alt.hero" fetchpriority="high"></picture>
   </figure>
   <div class="hero-scrim" aria-hidden="true"></div>
 
@@ -525,8 +537,8 @@
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18.5v-6L16 7l7 5.5v6"/><path d="M14 18.5v-3.5h4v3.5"/><path d="M5.5 18.5h21v3h-21z"/><path d="M3 26.5c2 0 2-1.4 4-1.4s2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4"/></svg>
-          <div class="h" data-i18n="site.note4.h">无水患区</div>
-          <div class="t" data-i18n="site.note4.t">工程排水，保持干爽。</div>
+          <div class="h" data-i18n="site.note4.h">排水系统完善</div>
+          <div class="t" data-i18n="site.note4.t">298 平方米滞洪池与外围排水沟。</div>
         </div>
       </div>
     </div>
@@ -587,14 +599,14 @@
     <div class="sketch-row" data-reveal>
       <div class="sketch-row-grid sketch-row-grid--two">
         <figure class="sketch-card" style="--rot:-0.8deg;">
-          <div class="sketch-img"><img src="assets/perspective-semid-left.webp?v=7" alt="半独立式水彩画，左侧透视" data-i18n-alt="alt.sd.wc.left" loading="lazy" decoding="async"></div>
+          <div class="sketch-img"><img src="assets/perspective-semid-left.webp?v=7" width="1200" height="720" alt="半独立式水彩画，左侧透视" data-i18n-alt="alt.sd.wc.left" loading="lazy" decoding="async"></div>
           <figcaption>
             <span class="num mono">L</span>
             <span class="lbl" data-i18n="sketches.s.left">半独立 · 左侧</span>
           </figcaption>
         </figure>
         <figure class="sketch-card" style="--rot:0.6deg;">
-          <div class="sketch-img"><img src="assets/perspective-semid-right.webp?v=7" alt="半独立式水彩画，右侧透视" data-i18n-alt="alt.sd.wc.right" loading="lazy" decoding="async"></div>
+          <div class="sketch-img"><img src="assets/perspective-semid-right.webp?v=7" width="1200" height="773" alt="半独立式水彩画，右侧透视" data-i18n-alt="alt.sd.wc.right" loading="lazy" decoding="async"></div>
           <figcaption>
             <span class="num mono">R</span>
             <span class="lbl" data-i18n="sketches.s.right">半独立 · 右侧</span>
@@ -680,14 +692,14 @@
     <div class="sketch-row" data-reveal>
       <div class="sketch-row-grid sketch-row-grid--two">
         <figure class="sketch-card" style="--rot:-0.8deg;">
-          <div class="sketch-img"><img src="assets/perspective-bungalow-left.webp?v=7" alt="独立式水彩画，左侧透视" data-i18n-alt="alt.bg.wc.left" loading="lazy" decoding="async"></div>
+          <div class="sketch-img"><img src="assets/perspective-bungalow-left.webp?v=7" width="1156" height="882" alt="独立式水彩画，左侧透视" data-i18n-alt="alt.bg.wc.left" loading="lazy" decoding="async"></div>
           <figcaption>
             <span class="num mono">L</span>
             <span class="lbl" data-i18n="sketches.b.left">独立式 · 左侧</span>
           </figcaption>
         </figure>
         <figure class="sketch-card" style="--rot:0.6deg;">
-          <div class="sketch-img"><img src="assets/perspective-bungalow-right.webp?v=7" alt="独立式水彩画，右侧透视" data-i18n-alt="alt.bg.wc.right" loading="lazy" decoding="async"></div>
+          <div class="sketch-img"><img src="assets/perspective-bungalow-right.webp?v=7" width="1134" height="928" alt="独立式水彩画，右侧透视" data-i18n-alt="alt.bg.wc.right" loading="lazy" decoding="async"></div>
           <figcaption>
             <span class="num mono">R</span>
             <span class="lbl" data-i18n="sketches.b.right">独立式 · 右侧</span>
@@ -727,7 +739,7 @@
       <div>
         <div class="eyebrow" data-i18n="loc.eyebrow">位置</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="loc.title">您身处何方。</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="loc.human">学校就在马路对面，surau 步行几分钟即达，上班的科技园距家门仅六分钟车程。</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="loc.human">学校就在马路对面，surau 就在附近，上班的科技园距家门仅六分钟车程。</p>
         <p class="lede" style="margin-top:8px; font-size:0.92em; opacity:0.8;" data-i18n="loc.lede">就在 Bertam 路旁，距大道交汇口十分钟。学校、商场、医院、清真寺，皆在一刻钟车程内。</p>
       </div>
     </div>
@@ -766,15 +778,15 @@
         <div class="amen-grp">
           <div class="h" data-i18n="loc.g1.h">日常生活</div>
           <ul>
-            <li data-pin="21"><span class="num">21</span><span class="name">Surau Bertam Perdana <em class="walk" data-i18n="loc.em.walk">步行可达</em></span><span class="dist">3 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="3"><span class="num">3</span><span class="name">Mydin Bertam Hypermarket</span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="5"><span class="num">5</span><span class="name">Bertam Resort &amp; Water Park</span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="1"><span class="num">1</span><span class="name">Sunshine Bertam Shopping Mall</span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="26"><span class="num">26</span><span class="name">Petronas Bertam <em class="zh-only">(国油)</em></span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="21"><span class="num">21</span><span class="name">Surau Bertam Perdana</span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="3"><span class="num">3</span><span class="name">Mydin Bertam Hypermarket</span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="1"><span class="num">1</span><span class="name">Sunshine Bertam Shopping Mall</span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="26"><span class="num">26</span><span class="name">Petronas Bertam <em class="zh-only">(国油)</em></span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="27"><span class="num">27</span><span class="name">Klinik Desa Paya Keladi <em data-i18n="loc.em.gp">（普通科诊所）</em></span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="28"><span class="num">28</span><span class="name">Police HQ Seberang Perai Utara</span><span class="dist">7 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="6"><span class="num">6</span><span class="name">Masjid At-Taqwa Bertam Indah</span><span class="dist">8 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="2"><span class="num">2</span><span class="name">Lotus's Kepala Batas</span><span class="dist">8 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="5"><span class="num">5</span><span class="name">Bertam Resort &amp; Water Park</span><span class="dist">9 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="28"><span class="num">28</span><span class="name">Police HQ Seberang Perai Utara</span><span class="dist">9 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="4"><span class="num">4</span><span class="name">Hospital Kepala Batas</span><span class="dist">9 <span data-i18n="loc.min">分钟</span></span></li>
           </ul>
         </div>
@@ -782,20 +794,20 @@
         <div class="amen-grp schools">
           <div class="h" data-i18n="loc.g2.h">学校与教育</div>
           <ul>
-            <li data-pin="20"><span class="num">20</span><span class="name">SK Bertam Perdana <em class="walk" data-i18n="loc.em.across">就在马路对面</em></span><span class="dist">2 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="10"><span class="num">10</span><span class="name">UiTM Kampus Bertam</span><span class="dist">3 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="9"><span class="num">9</span><span class="name">AMDI USM <em data-i18n="loc.em.amdi">（医学 / 牙科研究院）</em></span><span class="dist">4 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="7"><span class="num">7</span><span class="name">SMK Sains Kepala Batas</span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="8"><span class="num">8</span><span class="name">Kolej Matrikulasi Pulau Pinang</span><span class="dist">12 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="7"><span class="num">7</span><span class="name">SM Sains Kepala Batas</span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="10"><span class="num">10</span><span class="name">UiTM Kampus Bertam</span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="20"><span class="num">20</span><span class="name">SK Bertam Perdana <em class="walk" data-i18n="loc.em.across">就在马路对面</em></span><span class="dist">7 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="9"><span class="num">9</span><span class="name">Pusat Kanser Tun Abdullah Ahmad Badawi USM <em data-i18n="loc.em.amdi">（癌症中心，前称 AMDI）</em></span><span class="dist">7 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="8"><span class="num">8</span><span class="name">Kolej Matrikulasi Pulau Pinang</span><span class="dist">13 <span data-i18n="loc.min">分钟</span></span></li>
           </ul>
         </div>
 
         <div class="amen-grp lifestyle">
           <div class="h" data-i18n="loc.g5.h">休闲与生活方式</div>
           <ul>
-            <li data-pin="22"><span class="num">22</span><span class="name">Taman Bandaraya Vision Park <em class="zh-only">(宏愿公园)</em></span><span class="dist">3 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="24"><span class="num">24</span><span class="name">Bertam Indah sports pitches &amp; tennis</span><span class="dist">4 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="25"><span class="num">25</span><span class="name">Bertam Plaza <em>(Pizza Hut, Domino's, Secret Recipe, 7-Eleven, Maybank)</em></span><span class="dist">5 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="22"><span class="num">22</span><span class="name">Taman Bandaraya Vision Park <em class="zh-only">(宏愿公园)</em></span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="25"><span class="num">25</span><span class="name">Bertam Plaza <em>(Pizza Hut, Domino's, Secret Recipe, 7-Eleven, Maybank)</em></span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="29"><span class="num">29</span><span class="name">KFC Bertam</span><span class="dist">8 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="30"><span class="num">30</span><span class="name">Kepala Batas Town <em>(Public Bank, Hong Leong, Bank Islam, Pizza Hut)</em></span><span class="dist">8 <span data-i18n="loc.min">分钟</span></span></li>
           </ul>
@@ -818,8 +830,8 @@
             <li data-pin="17"><span class="num">17</span><span class="name">Penang Technology Park @ Bertam</span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="18"><span class="num">18</span><span class="name">INV Battery-Separator Plant</span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="19"><span class="num">19</span><span class="name">Setia Fontaines Township</span><span class="dist">6 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="32"><span class="num">32</span><span class="name">Prai Industrial Area &amp; Free Zone</span><span class="dist">20 <span data-i18n="loc.min">分钟</span></span></li>
-            <li data-pin="34"><span class="num">34</span><span class="name">Penang Port · NBCT</span><span class="dist">25 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="32"><span class="num">32</span><span class="name">Prai Industrial Area &amp; Free Zone</span><span class="dist">27 <span data-i18n="loc.min">分钟</span></span></li>
+            <li data-pin="34"><span class="num">34</span><span class="name">Penang Port · NBCT</span><span class="dist">28 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="33"><span class="num">33</span><span class="name">Bayan Lepas Free Industrial Zone</span><span class="dist">40 <span data-i18n="loc.min">分钟</span></span></li>
             <li data-pin="31"><span class="num">31</span><span class="name">Kulim Hi-Tech Park <em>(Intel, Infineon, ams Osram)</em></span><span class="dist">45 <span data-i18n="loc.min">分钟</span></span></li>
           </ul>
@@ -943,7 +955,7 @@
         </div>
       </div>
     </div>
-    <p class="lede" data-i18n="bertam.close" style="margin-top:30px; max-width:62ch;">现在登记，就能锁定永久地契住宅的预发布价格。</p>
+    <p class="lede" data-i18n="bertam.close" style="margin-top:30px; max-width:62ch;">现在登记，在公开推介前优先挑选永久地契住宅。</p>
   </div>
 </section>
 
@@ -999,7 +1011,7 @@
       <div class="prc-cta-text">
         <div class="prc-cta-eyebrow" data-i18n="pricing.eyebrow">价格</div>
         <h3 data-i18n="pricing.cta.title">需要完整逐栋价目表?</h3>
-        <p data-i18n="pricing.cta.body">WhatsApp 联系销售，我们当天发送实时价目表、库存与土著保留地信息。</p>
+        <p data-i18n="pricing.cta.body">WhatsApp 联系销售，我们当天发送实时价目表、库存与土著固打单位信息。</p>
       </div>
       <a href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20please%20send%20me%20the%20full%20lot-by-lot%20price%20list%20with%20current%20availability." target="_blank" rel="noopener" class="btn btn-primary prc-cta-btn">
         <span data-i18n="pricing.cta.btn">WhatsApp 销售 →</span>
@@ -1007,7 +1019,7 @@
     </aside>
 
     <div class="prc-foot" style="margin-top: 28px; border-top: 1px solid var(--rule-soft); padding-top: 22px;">
-      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">土著保留地，已计入 5% 折扣</span></span>
+      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">土著固打单位，已计入 5% 折扣</span></span>
       <span class="spacer"></span>
       <span data-i18n="pricing.leg.note">所有价格以 SPA 为准 · E. &amp; O.E.</span>
     </div>
@@ -1136,11 +1148,11 @@
         </details>
         <details class="faq">
           <summary><span class="ix">02</span><span data-i18n="faq.q2">外国人可以购买吗?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a2">威省 (槟城本土) 有地住宅的外国人门槛为每单位 RM 180 万，因此仅独立式单位可能符合 (须州政府批准)。半独立式不符合。详情请询销售。</p></div>
+          <div class="answer"><p data-i18n="faq.a2">在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，因此仅独立式单位可能符合资格。详情请询销售。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">03</span><span data-i18n="faq.q3">什么是土著保留单位?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a3">六个单位为土著保留，享 5% 折扣，只能转让予土著业主。其余十三个不受限制。</p></div>
+          <summary><span class="ix">03</span><span data-i18n="faq.q3">什么是土著固打单位?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a3">六个单位为土著固打单位，享 5% 折扣，只能转让予土著业主。其余十三个不受限制。</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">04</span><span data-i18n="faq.q4">何时交屋?</span><span class="tog">+</span></summary>
@@ -1160,7 +1172,7 @@
         </details>
         <details class="faq">
           <summary><span class="ix">08</span><span data-i18n="faq.q8">日后可以扩建或改装吗?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MPSP 批准。交屋时提供指南。</p></div>
+          <div class="answer"><p data-i18n="faq.a8">可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">09</span><span data-i18n="faq.q9">你们协助银行贷款吗?</span><span class="tog">+</span></summary>
@@ -1190,7 +1202,7 @@
     <ul class="reg-trust" data-reveal aria-label="为何现在登记" data-i18n-aria="aria.why">
       <li data-i18n="trust.1">仅 19 户</li>
       <li data-i18n="trust.2">永久地契</li>
-      <li data-i18n="trust.3">6 个土著保留单位 · 减 5%</li>
+      <li data-i18n="trust.3">6 个土著固打单位 · 减 5%</li>
     </ul>
 
     <div class="reg-grid">
@@ -1261,6 +1273,7 @@
           <li><a href="#site" data-i18n="nav.site">总平面</a></li>
           <li><a href="#location" data-i18n="nav.location">位置</a></li>
           <li><a href="#register" data-i18n="nav.register">登记意向</a></li>
+          <li><a href="walkthrough/" data-i18n="footer.walk">3D 实景漫游</a></li>
         </ul>
       </div>
 
@@ -1307,7 +1320,7 @@
   </div>
 </div>
 
-<script src="app.js?v=123" defer></script>
+<script src="app.js?v=124" defer></script>
 <script src="walkthrough/hero-boot.js?v=128" defer></script>
 <script src="home-toggle.js?v=4" defer></script>
 <script src="topo-flow.js?v=6" defer></script>

@@ -2,6 +2,8 @@
 
 > Panthera Bertam is a small freehold residential estate of 19 homes (3 bungalows and 16 semi-detached houses) arranged around a shared central park of over 700 m2 in Bertam, Seberang Perai Utara, Penang, Malaysia. Developed by Panthera Development Sdn Bhd. Pre-launch in 2026, estimated handover Q4 2028. Official site: https://www.pantheraestate.com
 
+Last updated: 2026-11-12. Prices and terms are pre-launch and subject to the Sale and Purchase Agreement (SPA).
+
 ## Pages
 
 - [Home and overview](https://www.pantheraestate.com/): estate, both homes, location, pricing, FAQ, registration
@@ -29,8 +31,15 @@
 - Bungalow spec: 2,642 sq ft built-up, 356 to 493 m2 land, 5 bed, 5 bath, 2 storey, ceiling heights 2.85 to 3.5 m clear, freehold.
 - Inclusions: the full inclusions and finishes schedule is being finalised and will be published with the Sale and Purchase Agreement (SPA). Registered buyers receive it first.
 - Timeline: pre-launch 2026, 24-month build from SPA signing, estimated handover Q4 2028, protected by a Liquidated Ascertained Damages (LAD) clause.
-- Why Bertam: about five minutes from Penang Technology Park @ Bertam (880 acres, launched 2023), where INV New Material Technology opened the first phase of its RM 6.4 billion battery-separator plant in June 2025. Setia Fontaines broke ground on a 509-acre industrial park in Bertam in June 2026. Schools, malls and a hospital are within a fifteen-minute drive.
-- Languages: site available in English (https://www.pantheraestate.com/), Bahasa Malaysia (https://www.pantheraestate.com/ms/) and Simplified Chinese (https://www.pantheraestate.com/zh/).
+- Why Bertam: about five minutes from Penang Technology Park @ Bertam (880 acres, launched 2023), where INV New Material Technology began phase 1 of its RM 6.4 billion battery-separator plant in June 2025 (full operation targeted for June 2027). Setia Fontaines broke ground on a 509-acre industrial park in Bertam in June 2026. Schools, malls and a hospital are within a fifteen-minute drive.
+
+## Languages
+
+- English: https://www.pantheraestate.com/ (hreflang en, also x-default)
+- Bahasa Malaysia: https://www.pantheraestate.com/ms/ (hreflang ms)
+- Chinese, Simplified (中文): https://www.pantheraestate.com/zh/ (hreflang zh-Hans)
+- 3D walkthrough (English only): https://www.pantheraestate.com/walkthrough/ and https://www.pantheraestate.com/walkthrough/?home=bungalow
+- Plain-text facts: https://www.pantheraestate.com/llms.txt (this file) and https://www.pantheraestate.com/llms-full.txt
 
 ## Buying
 
@@ -38,7 +47,7 @@
 - Booking fee: RM 5,000, fully refundable for 14 days.
 - Sale and Purchase Agreement (SPA) signed within 14 days of booking, with a 10% downpayment.
 - Bumiputera lots: 6 of the 19 lots are Bumiputera-reserved with a 5% discount and transfer only to Bumiputera owners; the other 13 are unrestricted.
-- Foreign buyers: the Penang mainland threshold for landed property is RM 1.8 million per unit, so semi-Ds are not eligible; bungalow lots may qualify subject to state consent. Ask sales for the current rule.
+- Foreign buyers: on the Penang mainland (Seberang Perai) the minimum price for foreigners buying landed property is RM 1 million, with State Authority approval and a state levy (Bar Council Circular 444/2024, dated 23 Dec 2024). The semi-Ds are priced below that, so they are not eligible; bungalow lots may qualify. Ask sales for the current rule.
 - Maintenance: a Residents' Association maintains the green, roads, drains and pond from handover, around RM 180 per home per month.
 - Financing: freehold, financeable by any major bank; the sales team helps with the loan application.
 
@@ -68,7 +77,7 @@ Panthera Bertam ialah projek 19 rumah dua tingkat pegangan bebas di Bertam, Sebe
 
 ## 中文
 
-Panthera Bertam 位于槟城威省北部 Bertam，共 19 间双层永久地契住宅：16 间半独立式洋房与 3 间独立式洋房，全部面向逾 700 平方米的共享绿地。半独立式建筑面积 2,006 平方英尺，土地 210 至 318 平方米，4 房 4 浴，RM 726,000 起。独立式建筑面积 2,642 平方英尺，土地 356 至 493 平方米，5 房 5 浴，价格面议。6 个土著保留单位享 5% 折扣。预计 2028 年第四季交屋。距槟城科技园约五分钟车程。WhatsApp 咨询：+60 17-598 1858。
+Panthera Bertam 位于槟城威省北部 Bertam，共 19 间双层永久地契住宅：16 间半独立式洋房与 3 间独立式洋房，全部面向逾 700 平方米的共享绿地。半独立式建筑面积 2,006 平方英尺，土地 210 至 318 平方米，4 房 4 浴，RM 726,000 起。独立式建筑面积 2,642 平方英尺，土地 356 至 493 平方米，5 房 5 浴，价格面议。6 个土著固打单位享 5% 折扣。预计 2028 年第四季交屋。距槟城科技园约五分钟车程。WhatsApp 咨询：+60 17-598 1858。
 
 ## Optional
 

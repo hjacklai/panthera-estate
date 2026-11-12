@@ -77,3 +77,6 @@ __pycache__/
 # Google Drive for desktop temp folders
 .tmp.drivedownload/
 .tmp.driveupload/
+
+# owner-facing proposals and notes (never published: GitHub Pages would serve them)
+/docs/

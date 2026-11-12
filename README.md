@@ -47,7 +47,7 @@ Do these on whichever computer you push from, in this order:
 - Rebake: bump `BAKE_REV` in `walkthrough/versions.js` and `BAKE_Q` in `hero-boot.js`. `BAKE_VER` renames the pack files.
 - A texture or sky replaced under the same name: bump `TEX_REV` / `SKY_REV` in `walkthrough/hd.js` (and hero-boot.js's golden-sky preload with `SKY_REV`).
 - `sw.js`: rename `CACHE` to drop every kept file; `OFF = true` is the kill switch.
-- `sitemap.xml` `lastmod` is the push date (the `/`, `/ms/` and `/zh/` entries move together).
+- `sitemap.xml` `lastmod` is the push date (the `/`, `/ms/` and `/zh/` entries move together). On a content change, move these to the same date: `dateModified` in the JSON-LD of `index.html` (WebPage and RealEstateListing; build_lang.py carries it to `/ms/` and `/zh/`) and of `walkthrough/index.html` if that page changed, and the `Last updated:` line in `llms.txt` and `llms-full.txt`.
 - A stale `/ms/` or `/zh/` page cannot loop: the version check reloads at most once per build per tab session (`sessionStorage` `pb-build`), but run `--check` so they never go out of date.
 
 ## Bake workflow

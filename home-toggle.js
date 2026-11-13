@@ -178,7 +178,7 @@
       var kk = home === "bungalow" ? "hero.f1b.k" : "hero.f1.k";
       heroV.setAttribute("data-i18n", kv);
       heroK.setAttribute("data-i18n", kk);
-      heroV.textContent = t(kv, home === "bungalow" ? "Price" : "RM 726k");
+      heroV.textContent = t(kv, home === "bungalow" ? "Price" : "RM 712.5k");
       heroK.textContent = t(kk, home === "bungalow" ? "on request" : "from");
     }
     // Pricing intro: one home's line instead of "two house types"

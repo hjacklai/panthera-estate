@@ -83,7 +83,7 @@ const I18N = {
     "pricing.cta.title": "Want the full lot-by-lot list?",
     "pricing.cta.body": "Reach our sales team on WhatsApp, we'll send the live list with availability and Bumi-lot status the same day.",
     "pricing.cta.btn": "WhatsApp sales →",
-    "pricing.leg.bumi": "Bumi lot, 5% discount applied",
+    "pricing.leg.bumi": "Bumi lot · contact us for the Bumi discount",
     "pricing.leg.note": "All prices subject to SPA · E. & O.E.",
     "calc.eyebrow": "Affordability",
     "calc.title": "What it takes to own one.",
@@ -91,7 +91,7 @@ const I18N = {
 
     "loc.eyebrow": "Location",
     "loc.title": "Where you are.",
-    "loc.human": "The school is a walk across the road, the surau is close by, and the tech park where the work is sits six minutes from your door.",
+    "loc.human": "The school is a walk across the road, the surau is close by, and the tech park where the work is sits five minutes from your door.",
     "loc.lede": "Just off Jalan Bertam, ten minutes from the expressway. Schools, mall, hospital and mosque all inside a quarter-hour drive.",
     "loc.open": "Open in Google Maps ↗",
     "loc.g1.h": "Daily life",
@@ -118,7 +118,7 @@ const I18N = {
     "faq.q10": "What if I'm not ready to buy yet?",
     "faq.a1": "Freehold. The land is Lot 24480, individual titles will be issued at handover. No 99-year clock.",
     "faq.a2": "On the Penang mainland, foreigners can buy landed homes priced from RM 1 million, with state approval and a state levy (Bar Council circular, Dec 2024). Our semi-Ds are priced below that, so only bungalow lots may qualify. Ask sales for the current rule.",
-    "faq.a3": "Six lots are Bumiputera-reserved with a 5% discount, and transfer only to Bumi owners. The other thirteen are unrestricted.",
+    "faq.a3": "Some lots are Bumiputera lots. Contact us for the Bumi discount and each lot's status.",
     "faq.a4": "Estimated Q4 2028, 24 months from SPA signing. The date is fixed in your SPA with an LAD clause, so you're compensated if we run late.",
     "faq.a5": "The full inclusions schedule is being finalised and will be published with the Sale & Purchase Agreement. Registered buyers receive it first.",
     "faq.a6": "Yes, first-come from the published price list. Corner lots (04 and 19) carry a premium; bungalow lots (01–03) are priced by land size.",
@@ -193,7 +193,7 @@ const I18N = {
     "reg.lede": "Register and we'll WhatsApp you the full price list, floor plans and brochure, plus first pick of lots before public launch. Claim the home that opens to the green while all nineteen are still on the table. No deposit, no obligation.",
     "trust.1": "Only 19 homes",
     "trust.2": "Freehold title",
-    "trust.3": "6 Bumi lots · 5% off",
+    "trust.3": "Bumi discount · contact us",
     "reg.f.name": "Your name",
     "reg.f.phone": "Phone / WhatsApp",
     "reg.f.interest": "Interested in",
@@ -368,7 +368,7 @@ const I18N = {
     "pricing.cta.title": "Mahukan senarai harga lot-demi-lot?",
     "pricing.cta.body": "Hubungi pasukan jualan kami di WhatsApp, kami hantar senarai terkini dengan status ketersediaan & lot Bumi pada hari yang sama.",
     "pricing.cta.btn": "WhatsApp jualan →",
-    "pricing.leg.bumi": "Lot Bumi, diskaun 5% diterapkan",
+    "pricing.leg.bumi": "Lot Bumi · hubungi kami untuk diskaun Bumi",
     "pricing.leg.note": "Semua harga tertakluk kepada SPA · E. & O.E.",
     "calc.eyebrow": "Kemampuan",
     "calc.title": "Apa yang diperlukan untuk memiliki satu.",
@@ -376,7 +376,7 @@ const I18N = {
 
     "loc.eyebrow": "Lokasi",
     "loc.title": "Di mana anda berada.",
-    "loc.human": "Sekolah hanya seberang jalan, surau berdekatan, dan taman teknologi tempat kerja berada enam minit dari pintu rumah anda.",
+    "loc.human": "Sekolah hanya seberang jalan, surau berdekatan, dan taman teknologi tempat kerja berada lima minit dari pintu rumah anda.",
     "loc.lede": "Di tepi Jalan Bertam, sepuluh minit dari lebuhraya. Sekolah, mal, hospital dan masjid dalam pemanduan suku jam.",
     "loc.open": "Buka di Google Maps ↗",
     "loc.g1.h": "Kehidupan harian",
@@ -403,7 +403,7 @@ const I18N = {
     "faq.q10": "Bagaimana jika saya belum bersedia membeli?",
     "faq.a1": "Pegangan bebas. Tanah ialah Lot 24480, hak milik individu dikeluarkan semasa penyerahan. Tiada kiraan 99 tahun.",
     "faq.a2": "Di tanah besar Pulau Pinang, warga asing boleh membeli rumah bertanah berharga RM 1 juta ke atas, dengan kelulusan negeri dan levi negeri (pekeliling Majlis Peguam, Dis 2024). Harga rumah berkembar kami di bawah paras itu, jadi hanya lot banglo mungkin layak. Tanya jualan untuk peraturan terkini.",
-    "faq.a3": "Enam lot dikhaskan untuk Bumiputera dengan diskaun 5%, dan hanya boleh dipindah milik kepada pemilik Bumi. Tiga belas yang lain tiada sekatan.",
+    "faq.a3": "Sebahagian lot ialah lot Bumiputera. Hubungi kami untuk diskaun Bumi dan status setiap lot.",
     "faq.a4": "Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Tarikh ditetapkan dalam SPA anda dengan klausa LAD, jadi anda diberi pampasan jika kami lewat.",
     "faq.a5": "Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu.",
     "faq.a6": "Ya, mengikut giliran daripada senarai harga. Lot penjuru (04 dan 19) ada premium; lot banglo (01–03) dihargai mengikut saiz tanah.",
@@ -478,7 +478,7 @@ const I18N = {
     "reg.lede": "Daftar dan kami akan WhatsApp anda senarai harga penuh, pelan lantai dan brosur, serta pilihan lot terdahulu sebelum pelancaran umum. Pilih rumah yang menghadap kehijauan selagi kesemua sembilan belas masih ada. Tiada deposit, tiada obligasi.",
     "trust.1": "Hanya 19 rumah",
     "trust.2": "Pegangan bebas",
-    "trust.3": "6 lot Bumi · diskaun 5%",
+    "trust.3": "Diskaun Bumi · hubungi kami",
     "reg.f.name": "Nama anda",
     "reg.f.phone": "Telefon / WhatsApp",
     "reg.f.interest": "Berminat dengan",
@@ -673,7 +673,7 @@ const I18N = {
     "pricing.cta.title": "需要完整逐栋价目表?",
     "pricing.cta.body": "WhatsApp 联系销售，我们当天发送实时价目表、库存与土著固打单位信息。",
     "pricing.cta.btn": "WhatsApp 销售 →",
-    "pricing.leg.bumi": "土著固打单位，已计入 5% 折扣",
+    "pricing.leg.bumi": "土著固打单位 · 折扣详情请联系我们",
     "pricing.leg.note": "所有价格以 SPA 为准 · E. & O.E.",
     "calc.eyebrow": "负担能力",
     "calc.title": "拥有一间，需要多少。",
@@ -681,7 +681,7 @@ const I18N = {
 
     "loc.eyebrow": "位置",
     "loc.title": "您身处何方。",
-    "loc.human": "学校就在马路对面，surau 就在附近，上班的科技园距家门仅六分钟车程。",
+    "loc.human": "学校就在马路对面，surau 就在附近，上班的科技园距家门仅五分钟车程。",
     "loc.lede": "就在 Bertam 路旁，距大道交汇口十分钟。学校、商场、医院、清真寺，皆在一刻钟车程内。",
     "loc.open": "在 Google Maps 中打开 ↗",
     "loc.g1.h": "日常生活",
@@ -708,7 +708,7 @@ const I18N = {
     "faq.q10": "如果我还没准备好购买呢?",
     "faq.a1": "永久地契。土地为 Lot 24480，交屋时发出个别地契。没有 99 年期限。",
     "faq.a2": "在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，因此仅独立式单位可能符合资格。详情请询销售。",
-    "faq.a3": "六个单位为土著固打单位，享 5% 折扣，只能转让予土著业主。其余十三个不受限制。",
+    "faq.a3": "部分单位为土著固打单位。土著折扣及各单位状况，请联系我们。",
     "faq.a4": "预计 2028 年第四季，自签署 SPA 起 24 个月。日期载于 SPA 并附 LAD 条款，逾期将获赔偿。",
     "faq.a5": "价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到。",
     "faq.a6": "可以，按价目表先到先得。角头单位(04 与 19)有溢价；独立式单位(01–03)按地段面积定价。",
@@ -783,7 +783,7 @@ const I18N = {
     "reg.lede": "登记后，我们会通过 WhatsApp 发送完整价目表、平面图与宣传册，并让您在公开发布前优先选购地段。趁十九户尚在，选下那间推窗见绿的家。无需订金，绝无义务。",
     "trust.1": "仅 19 户",
     "trust.2": "永久地契",
-    "trust.3": "6 个土著固打单位 · 减 5%",
+    "trust.3": "土著折扣 · 请联系我们",
     "reg.f.name": "您的姓名",
     "reg.f.phone": "电话 / WhatsApp",
     "reg.f.interest": "感兴趣的户型",
@@ -1678,7 +1678,8 @@ function initAmenityAccordion(){
    from SITE_COORD to the pin, 8-point compass; the far pins (13-16, 31-34) give road
    km instead, marked "by road" (OSRM / OpenStreetMap, free-flow, to the pin's own
    coordinate). Times: approximate drive times, checked against OSRM free-flow routing
-   (Nov 2026) and never shorter than it; peak-hour traffic is slower. */
+   (Nov 2026) and never shorter than it, except PTP @ Bertam: 5 min, the developer's own
+   timing to the park (OSRM routes to a point deeper inside the 880-acre park); peak-hour traffic is slower. */
 const PIN_DATA = {
   /* Daily life, groceries, medical, prayer, services */
   "1":  { name: "Sunshine Bertam Shopping Mall",   cat: "daily",   catLabel: "Daily life",     time: "6 min",  dist: "2.3 km SW",  gmaps: "5.5161017,100.4503648" },
@@ -1701,7 +1702,7 @@ const PIN_DATA = {
   "15": { name: "Penang Bridge",                   cat: "connect", catLabel: "Connectivity",   time: "30 min", dist: "≈25 km SW by road",    gmaps: "5.3820,100.3980" },
   "16": { name: "Penang International Airport",    cat: "connect", catLabel: "Connectivity",   time: "45 min", dist: "≈44 km SW by road",   gmaps: "5.2971,100.2769" },
   /* Future jobs */
-  "17": { name: "Penang Technology Park @ Bertam", cat: "future",  catLabel: "Jobs & Industry",    time: "6 min",  dist: "3.0 km E",   gmaps: "5.5339619,100.4924177" },
+  "17": { name: "Penang Technology Park @ Bertam", cat: "future",  catLabel: "Jobs & Industry",    time: "5 min",  dist: "3.0 km E",   gmaps: "5.5339619,100.4924177" },
   "18": { name: "INV Battery-Separator Plant", cat: "future", catLabel: "Jobs & Industry", time: "6 min", dist: "≈3 km E", gmaps: "5.5360,100.4920" },
   "19": { name: "Setia Fontaines Township",        cat: "future",  catLabel: "Jobs & Industry",    time: "6 min",  dist: "2.6 km SE",  gmaps: "5.5151210,100.4837305" },
   /* Walk-to amenities, right across the street */

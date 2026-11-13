@@ -41,4 +41,125 @@
     <lastmod>2026-11-12</lastmod>
     <image:image><image:loc>https://www.pantheraestate.com/walkthrough/og-3d.jpg</image:loc></image:image>
   </url>
+  <!-- Homes and area guides, each in three languages with hreflang alternates -->
+  <url>
+    <loc>https://www.pantheraestate.com/guides/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/ms/guides/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/zh/guides/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/semi-d/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/semi-d/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/ms/semi-d/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/semi-d/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/zh/semi-d/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/semi-d/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/semi-d/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/bungalow/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/bungalow/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/ms/bungalow/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/bungalow/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/zh/bungalow/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/bungalow/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/bungalow/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/guides/living-in-bertam/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/living-in-bertam/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/ms/guides/living-in-bertam/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/living-in-bertam/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/zh/guides/living-in-bertam/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/living-in-bertam/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/living-in-bertam/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/guides/kepala-batas-penang/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/kepala-batas-penang/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/ms/guides/kepala-batas-penang/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/kepala-batas-penang/"/>
+  </url>
+  <url>
+    <loc>https://www.pantheraestate.com/zh/guides/kepala-batas-penang/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.pantheraestate.com/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.pantheraestate.com/ms/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.pantheraestate.com/zh/guides/kepala-batas-penang/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.pantheraestate.com/guides/kepala-batas-penang/"/>
+  </url>
 </urlset>

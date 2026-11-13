@@ -94,12 +94,12 @@ DQA('.hometoggle a').forEach(a => a.classList.toggle('on', a.dataset.home === HO
 if (!SEMID) {
   if (!LIB) document.title = 'Bungalow 3D Walkthrough · Panthera Bertam';
   const q = DQ;
-  q('.intro .eyebrow').textContent = 'Bungalow · 2,642 sq ft · 4+1 bed · 4+1 bath';
+  q('.intro .eyebrow').textContent = 'Bungalow · 2,642 sq ft · 5 bed · 6 bath';
   q('.intro p').textContent = 'The bungalow in 3D. Scroll to walk through every room.';
   const tb = DQA('.titleblock > div');
   tb[1].innerHTML = '<span class="k">Drawing</span>Bungalow · ground floor';
   tb[2].innerHTML = '<span><span class="k">House</span>46 × 28 ft</span><span><span class="k">Lot</span>5,308 sq ft</span>';
-  q('.endcard p').textContent = 'Bungalow · 2,642 sq ft built-up · 4+1 bedrooms · 4+1 bathrooms · freehold. Pre-launch registration is open.';
+  q('.endcard p').textContent = 'Bungalow · 2,642 sq ft built-up · 5 bedrooms · 6 bathrooms · freehold. Pre-launch registration is open.';
   if (!LIB) $('scene').setAttribute('aria-label', '3D model of the Panthera Bertam bungalow, built from its building plans');
 }
 

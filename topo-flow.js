@@ -203,7 +203,13 @@
     ctx.drawImage(buffer, 0, -Math.round(off * DPR));
   }
 
+  // The contour field is drawn only when the canvas can be seen: in the 3D app (html.hx-app) it is hidden, and drawing
+  // it there was main-thread time during the 3D's boot on phones (load-time pass, Nov 2026). It is drawn the moment
+  // hx-app comes off (the observer below), so the scrolling page shows exactly what it did
+  var stale = false;
   function resize() {
+    if (document.documentElement.classList.contains('hx-app')) { stale = true; return; }
+    stale = false;
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     W = canvas.clientWidth;
     H = canvas.clientHeight;
@@ -233,6 +239,7 @@
     rafId = requestAnimationFrame(animate);
   }
   if (window.MutationObserver) new MutationObserver(function () {
+    if (stale && !html.classList.contains('hx-app')) resize();
     if (!reduce && !rafId && !document.hidden && !parked()) rafId = requestAnimationFrame(animate);
   }).observe(html, { attributes: true, attributeFilter: ['class'] });
 
@@ -251,5 +258,5 @@
 
   buildHills();
   resize();
-  if (reduce) { blit(0); } else { rafId = requestAnimationFrame(animate); }
+  if (reduce) { if (!stale) blit(0); } else { rafId = requestAnimationFrame(animate); }
 })();

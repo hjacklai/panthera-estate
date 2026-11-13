@@ -18,7 +18,7 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
-import { createHD, SKIES } from './hd.js?v=9';
+import { createHD, SKIES } from './hd.js?v=10';
 import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=3';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)

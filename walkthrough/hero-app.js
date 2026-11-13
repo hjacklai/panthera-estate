@@ -340,8 +340,18 @@ export function createApp(ctx) {
     // the one <audio> element: made ahead at idle (it buffers the loop then) or at the first tap, and reused by start(),
     // so the file is downloaded once (a <link rel=prefetch> before it was a second, separate download of 388 KB:
     // load-time pass, Nov 2026). crossOrigin is set before src, so its one request is the one the Web Audio graph needs.
-    const audioEl = () => {
-      if (!el) { el = new Audio(); el.crossOrigin = 'anonymous'; el.loop = true; el.preload = 'auto'; el.src = new URL('./audio/songbirds-loop.mp3', import.meta.url).href; }
+    // Buffered ahead (wider screens), the file is fetched whole with ?v= (the site's service worker keeps it, so a repeat
+    // visit downloads nothing: the element's own range requests were never kept) and played from that copy. A tap that
+    // comes first gives the element the file's address at once, so it plays from the tap as before (load-time pass, Nov 2026)
+    const SRC = new URL('./audio/songbirds-loop.mp3?v=1', import.meta.url).href;
+    let fileP = null;
+    const audioEl = (now = true) => {
+      if (!el) { el = new Audio(); el.crossOrigin = 'anonymous'; el.loop = true; el.preload = 'auto'; }
+      if (!el.src) {
+        if (now) el.src = SRC;
+        else if (!fileP) fileP = fetch(SRC, { priority: 'low' }).then(r => { if (!r.ok) throw new Error('birdsong'); return r.blob(); })
+          .then(b => { if (!el.src) { el.src = URL.createObjectURL(b); if (on && ac) el.play().catch(() => {}); } }).catch(() => {});
+      }
       return el;
     };
     const fade = (to, s) => { if (!gain) return; const t0 = ac.currentTime; gain.gain.cancelScheduledValues(t0); gain.gain.setValueAtTime(gain.gain.value, t0); gain.gain.linearRampToValueAtTime(to, t0 + s); };
@@ -399,7 +409,13 @@ export function createApp(ctx) {
       for (const t of ['pointerdown', 'keydown', 'touchstart', 'wheel']) addEventListener(t, first, true);
       // phones (the hero's lite tier): nothing fetched at idle, the 388 KB loop starts downloading at the first touch
       // (start() above makes the element), so a visit with no touch costs no birdsong; wider screens buffer it at idle
-      if (!phone) (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => { if (on) audioEl(); }, { timeout: 4000 });
+      // (from the end of the intro: armed at the first frame, it landed in the middle of the 3D's own downloads)
+      if (!phone) {
+        const pre = () => (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => { if (on) audioEl(false); }, { timeout: 4000 });
+        const html = document.documentElement;
+        if (html.classList.contains('hx-app-ready')) pre();
+        else { const mo = new MutationObserver(() => { if (html.classList.contains('hx-app-ready')) { mo.disconnect(); pre(); } }); mo.observe(html, { attributes: true, attributeFilter: ['class'] }); }
+      }
     }
     document.addEventListener('visibilitychange', () => { if (!on || !ac) return; if (document.hidden) el.pause(); else { ac.resume(); el.play().catch(() => {}); } });
   }

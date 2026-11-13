@@ -12,10 +12,10 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { fetchPack } from './pack.js?v=4';
-import { createHD } from './hd.js?v=9';
+import { createHD } from './hd.js?v=10';
 import { BAKE_VER, BAKE_REV } from './versions.js?v=3';
 import { buildHeroEstate } from './hero-lod.js?v=4';
-import { createTod } from './hero-tod.js?v=10';
+import { createTod } from './hero-tod.js?v=11';
 import { createOrbit } from './hero-orbit.js?v=2';
 import { createRig } from './hero-rig.js?v=6';
 
@@ -215,17 +215,22 @@ export async function start(o) {
   // both go in before the first frame now (see there)
   const ctxP = Promise.all([import(base + 'hero-context.js?v=14'), fetch(base + 'context.e1.json?v=1').then(r => (r.ok ? r.json() : null))]).catch(e => { console.warn('hero 3D: no neighbourhood', e); return null; });
   const lifeP = reduced ? null : import(base + 'hero-life.js?v=9').catch(e => { console.warn('hero 3D: no life', e); return null; });
+  // the room light (RoomEnvironment's PMREM) made while the pack downloads: it needs nothing from the pack, and made after
+  // it, it sat in the long task before the first frame (load-time pass, Nov 2026); the same texture either way
+  const envP = import('three/addons/environments/RoomEnvironment.js').then(({ RoomEnvironment }) => {
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const t = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; pmrem.dispose(); return t;
+  });
+  envP.catch(() => {});
   let pack;
-  try { pack = await packP; } catch (e) { renderer.dispose(); fail(e); return; }
+  try { pack = await packP; } catch (e) { await envP.then(t => t.dispose(), () => {}); renderer.dispose(); fail(e); return; }
   performance.mark('hx-data');
 
   // ---------- scene ----------
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xF3E7D6);
   scene.fog = new THREE.Fog(0xF3E7D6, 380, 1500);
-  const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  const roomEnv = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; pmrem.dispose();
+  const roomEnv = await envP;
   scene.environment = roomEnv;
   const lod = await masksP, masks = lod && lod.ver === BAKE_VER ? lod[lite ? 'lite' : 'full'] : null;
   const est = buildHeroEstate({ THREE, renderer, pack, mergeGeometries, lite, aniso: lite ? 4 : 8, prune: o.flag !== 'full', masks });   // ?hero=full: no pruning (for comparing)
@@ -805,8 +810,23 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=35').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=36').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
+  // the tour's files fetched (and its modules compiled, not run) as soon as the intro settles, at low priority: the
+  // background build above, or a tap on Walk inside, then finds them on the device instead of a chain of 3-4 round
+  // trips (load-time pass, Nov 2026). Nothing is built here, so the settle glide is untouched. Keep these URLs in step
+  // with explore.js (WALK_V, CSS_V) and walk.js's import and data lines: a stale one is only a wasted download
+  function warmTour(h) {   // (its once-only mark is on the function itself: finishIntro may call it before this line has run)
+    if (warmTour.done || !APP || o.careful) return; warmTour.done = true;
+    const link = (href, cors) => { const l = document.createElement('link'); l.rel = 'modulepreload'; l.href = href; l.setAttribute('fetchpriority', 'low'); if (cors) l.crossOrigin = ''; document.head.appendChild(l); };
+    ['explore.js?v=36', 'walk.js?v=156&lib=1', 'estate.js?v=38', 'tropical.js?v=2', 'furniture.js?v=14', 'car.js?v=4'].forEach(u => link(base + u));
+    try {
+      for (const a of ['lines/LineSegments2.js', 'lines/LineSegmentsGeometry.js', 'lines/LineMaterial.js', 'geometries/RoundedBoxGeometry.js']) link(import.meta.resolve('three/addons/' + a), true);
+    } catch (e) { /* no import.meta.resolve: the tour fetches them itself */ }
+    const data = ['walk-hud.css?v=13', `${h}.json?v=10`, `${h}_detail.json?v=5`, `${h}_fittings.json?v=7`, 'bungalow_furniture.json?v=14', 'semid_cars.json?v=1',
+      'estate.json?v=25', 'parapets.json?v=1', `tour_${h}.json?v=11`].concat(h === 'semid' ? ['semid_lights.json?v=5', 'semid_furniture.json?v=15'] : []);
+    for (const u of data) fetch(base + u, { priority: 'low' }).then(r => r.blob()).catch(() => {});
+  }
   const moving = () => hero.classList.contains('hx-leave');   // the tour or the Location move is under way
   function walkInto(h, from) { if (moving()) return; if (!live) { pendingWalk = [h, from]; return; } tour().then(t => t.open(h, from)).catch(e => { console.warn('tour', e); location.href = base + 'index.html?home=' + h; }); }
   cardWalk.addEventListener('click', e => {
@@ -909,6 +929,7 @@ export async function start(o) {
     rig.setGoal({ tgt: endTgt.toArray(), az: Math.atan2(d.z, d.x), el: Math.atan2(d.y, h), dist: fitDist(Math.atan2(d.y, h), endFov), fov: endFov, off: offNow() },
       { cx: -42, cz: 46, R: 28, dmin: 70, dmax: portrait ? 460 : 240, emin: 0.2, emax: 1.35, arc: null });   // phones may pull back further
     html.classList.add('hx-app-ready');
+    if (!o.careful) warmTour(homeNow());
     if (introDoneRes) { introDoneRes(); introDoneRes = null; }   // the deferred idle work may run now
     if (app && app.startHash) setTimeout(() => { const h = app && app.startHash; if (!h || app.current) return; app.startHash = null; app.open(h, { fromHash: true }); }, 200);
     dirty = true; need();
@@ -922,7 +943,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=34').then(mod => {
+      import(base + 'hero-app.js?v=35').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

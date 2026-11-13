@@ -65,6 +65,30 @@ async function skyFile(url) {
   return out;
 }
 
+// Shared by every createHD on the page (the hero's, the tour's, each walk's: one module instance, so every importer must
+// keep the same './hd.js?v=' URL). Load-time pass, Nov 2026: two walks building at once asked for the same 2k photo
+// at the same moment and both downloaded it, and the tour fetched and decoded again the sky the hero had just decoded.
+// Photo files: the download in flight is shared and let go once it lands (a kept 2k file would sit in memory; later
+// asks read the browser's cache). Sky files: the decoded bytes are kept for a minute after their last use, the gap
+// between the hero's sky and the tour's build, then let go. The same bytes either way, so the same pixels.
+const SKYF = new Map(), BLOBS = new Map();
+const abs = url => new URL(url, location.href).href;
+function skyFileShared(url) {
+  const k = abs(url); let e = SKYF.get(k);
+  const drop = x => () => { if (SKYF.get(k) === x) SKYF.delete(k); };
+  if (!e) { e = { p: skyFile(url), t: 0 }; SKYF.set(k, e); e.p.catch(drop(e)); }
+  clearTimeout(e.t); e.t = setTimeout(drop(e), 60000);
+  return e.p;
+}
+function blobShared(url) {
+  const k = abs(url); let p = BLOBS.get(k);
+  if (!p) {
+    p = fetch(url, { priority: 'low' }).then(r => { if (!r.ok) throw new Error(url); return r.blob(); });
+    BLOBS.set(k, p); const off = () => BLOBS.delete(k); p.then(off, off);
+  }
+  return p;
+}
+
 // World-space box projection (metres) for map, normal and roughness maps.
 const WORLD_UV = shader => {
   shader.vertexShader = shader.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
@@ -126,7 +150,7 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
   const UA = navigator.userAgent, ffv = /Firefox\/(\d+)/.exec(UA);
   const BITMAP = typeof createImageBitmap === 'function' && !/^((?!chrome|android).)*safari/i.test(UA) && !(ffv && +ffv[1] < 98);
   const isBmp = src => typeof ImageBitmap !== 'undefined' && src instanceof ImageBitmap;
-  const loadBmp = url => fetch(url, { priority: 'low' }).then(r => { if (!r.ok) throw new Error(url); return r.blob(); })
+  const loadBmp = url => blobShared(url)
     .then(b => createImageBitmap(b, { imageOrientation: 'flipY', premultiplyAlpha: 'none', colorSpaceConversion: 'none' }));
   // Mean of an image (0..1 per channel, as stored), from a 32 px copy. Cached per image.
   function avg(src) {
@@ -321,7 +345,7 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     if (!def || !res) return Promise.resolve(null);
     if (!skies.has(name)) skies.set(name, (async () => {
       const stem = `${base}sky/${def.file}_${SKY_SIZE}`;
-      const fileP = skyFile(`${stem}.rgbe.gz?v=${SKY_REV}`); fileP.catch(() => {});   // downloads while the loader's module does
+      const fileP = skyFileShared(`${stem}.rgbe.gz?v=${SKY_REV}`); fileP.catch(() => {});   // downloads while the loader's module does
       const { RGBELoader } = await import('three/addons/loaders/RGBELoader.js');
       let src;
       try {   // the packed file through three's own loader (same texture setup as before), the plain .hdr if it fails

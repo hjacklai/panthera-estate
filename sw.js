@@ -62,6 +62,27 @@ async function keep(cache, req, res) {
   for (let i = 0; i < keys.length - MAX; i++) await cache.delete(keys[i]);
 }
 
+// Backfill: the worker registers only once the first visit has loaded and gone idle, so everything that visit fetched
+// (the 3D data, three.js, the hero's modules, fonts, styles) went past it. The page then sends the list of what it
+// loaded (index.html) and the files this worker would keep are copied in from the browser's own HTTP cache
+// (cache: 'force-cache': normally no network at all), so the next visit, even after a deploy, reads them from here.
+// The same rules as the fetch handler (wanted, good): the same bytes, only ?v= and exact-version CDN URLs.
+self.addEventListener('message', e => {
+  const list = e.data && Array.isArray(e.data.warm) ? e.data.warm : null;
+  if (!list || OFF) return;
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(list.slice(0, 200).map(u => {
+    let q;
+    try {
+      const url = new URL(u);
+      q = new Request(url.href, { mode: url.origin === self.location.origin ? 'same-origin' : 'cors', credentials: 'same-origin' });
+    } catch (err) { return null; }
+    if (!wanted(q)) return null;
+    return c.match(q, { ignoreVary: true })
+      .then(hit => hit || fetch(q, { cache: 'force-cache' }).then(res => (good(res) ? keep(c, q, res) : null)))
+      .catch(() => {});
+  }))).catch(() => {}));
+});
+
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (!wanted(req)) return;   // not handled: fetched as if there were no worker

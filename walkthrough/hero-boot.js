@@ -23,7 +23,7 @@
   // keep in step with the import maps in walkthrough/index.html and tools/bake.html
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '129';   // bump with any hero file change
+  var V = '130';   // bump with any hero file change
   var BAKE_Q = '?v=1';   // the bake files' stamp: keep in step with versions.js BAKE_REV (bump with every rebake)
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);

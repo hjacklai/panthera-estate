@@ -13,7 +13,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { fetchPack } from './pack.js?v=4';
 import { createHD } from './hd.js?v=11';
-import { BAKE_VER, BAKE_REV } from './versions.js?v=6';
+import { BAKE_VER, BAKE_REV } from './versions.js?v=7';
 import { buildHeroEstate } from './hero-lod.js?v=4';
 import { createTod } from './hero-tod.js?v=12';
 import { createOrbit } from './hero-orbit.js?v=2';
@@ -839,7 +839,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=39').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=40').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   // the tour's files fetched (and its modules compiled, not run) as soon as the intro settles, at low priority: the
   // background build above, or a tap on Walk inside, then finds them on the device instead of a chain of 3-4 round
@@ -848,7 +848,7 @@ export async function start(o) {
   function warmTour(h) {   // (its once-only mark is on the function itself: finishIntro may call it before this line has run)
     if (warmTour.done || !APP || o.careful) return; warmTour.done = true;
     const link = (href, cors) => { const l = document.createElement('link'); l.rel = 'modulepreload'; l.href = href; l.setAttribute('fetchpriority', 'low'); if (cors) l.crossOrigin = ''; document.head.appendChild(l); };
-    ['explore.js?v=39', 'walk.js?v=159&lib=1', 'estate.js?v=38', 'tropical.js?v=2', 'furniture.js?v=14', 'car.js?v=4'].forEach(u => link(base + u));
+    ['explore.js?v=40', 'walk.js?v=160&lib=1', 'estate.js?v=38', 'tropical.js?v=2', 'furniture.js?v=14', 'car.js?v=4'].forEach(u => link(base + u));
     try {
       for (const a of ['lines/LineSegments2.js', 'lines/LineSegmentsGeometry.js', 'lines/LineMaterial.js', 'geometries/RoundedBoxGeometry.js']) link(import.meta.resolve('three/addons/' + a), true);
     } catch (e) { /* no import.meta.resolve: the tour fetches them itself */ }

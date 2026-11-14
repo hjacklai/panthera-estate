@@ -19,7 +19,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
 import { createHD, SKIES } from './hd.js?v=11';
-import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=6';
+import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=7';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
 const COL = {
@@ -1871,14 +1871,41 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
         // no soffit box under the rakes (owner, Nov 2026: "do without that piece"): the triangle runs up to the tiles
         const sy = fb ? fb.y0 : FF_TOP_EAVE;                                                                  // the eave soffit / wall top
         prism([[zA, sy], ...offsetChain(ch, -0.005), [zB, sy]], xw - 0.15, xw, mWall);                        // the triangle, in the wall's plane
+        // a thin solid board under each rake's tiles, barge board to triangle (owner, Nov 2026: "fix the transparent part":
+        // the aerial copy's pruning can drop the tiles' underside, leaving the overhang see-through from below)
+        // (in the wall's material and sharing the triangle's edge, so the aerial copy keeps it with the triangle as one piece)
+        prism([...offsetChain(ch, -0.005), ...[...offsetChain(ch, -0.03)].reverse()], xo + T, xw - 0.15, mWall);
+      }
+      // the eave box either side of the gablet closed at its cut end, eave board to wall, soffit up to the tiles over it
+      // (owner, Nov 2026: a see-through gap where the eave stops at the triangle's corners); each plate's wall-side foot is
+      // the triangle's own corner, so the aerial copy keeps the plate with the triangle as one piece
+      if (fb) {
+        const tileY = (x, z) => { for (const P of X.roof.tiles) { let ins = false;
+            for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, , zi] = P[i], [xj, , zj] = P[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) ins = !ins; }
+            if (!ins) continue;
+            const [A, B, C] = P, u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], v = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
+            const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
+            if (Math.abs(n[1]) > 1e-6) return A[1] - (n[0] * (x - A[0]) + n[2] * (z - A[2])) / n[1]; }
+          return null; };
+        for (const ch of chainsAt(xo, -1)) {
+          if (ch.length < 3 || ch[0][0] > 0 || ch[ch.length - 1][0] < HOUSE.z0) continue;
+          const zs = [ch[0][0], ch[ch.length - 1][0]], zlo = Math.min(...zs), zhi = Math.max(...zs);
+          for (const [zc, dz] of [[zlo, -1], [zhi, 1]]) {
+            const zp = zc + dz * 0.05, ya = tileY(xo + 0.01, zp), yb = tileY(xw - 0.01, zp);
+            if (ya === null || yb === null) continue;
+            const sh = new THREE.Shape([[xo, fb.y0], [xw, fb.y0], [xw, yb - 0.01], [xo, ya - 0.01]].map(([x, y]) => new THREE.Vector2(x, y)));
+            const g = new THREE.ExtrudeGeometry(sh, { depth: 0.02, bevelEnabled: false }); g.translate(0, 0, dz > 0 ? zc : zc - 0.02);
+            const m = new THREE.Mesh(g, mWall); m.castShadow = m.receiveShadow = true; roof.add(m);
+          }
+        }
       }
       // The right unit's valley over its side balcony (the gallery render and the right elevation): a cream shelf 2.1 m
-      // wide just over the frame's apex, flush with the frame, under the two gables' eave boards; across the set-back
+      // wide just over the frame's apex, 0.25 m out from the wall, under the two gables' eave boards; across the set-back
       // strip it runs back to the wall's inner face, with the wall carried up under it, so nothing dark shows over the apex.
       const b2 = (X.balcony2 || []).find(b => b.outer_x > 0);
       if (b2 && VALLEY) {
         const za = Math.max(...b2.outer.map(q => q[1])), ap = b2.outer.find(q => q[1] === za), zc = ap[0], [v0, v1] = VALLEY;
-        const y0 = za + 0.03, y1 = y0 + 0.15, x0 = HOUSE.x1, x1 = HOUSE.x1 + 0.6, xb = HOUSE.x1 - 0.15;
+        const y0 = za + 0.03, y1 = y0 + 0.15, x0 = HOUSE.x1, x1 = HOUSE.x1 + 0.25, xb = HOUSE.x1 - 0.15;   // (owner, Nov 2026: sticks out much less, 0.25 m, was 0.6)
         const plan = [[x0, zc - 1.05], [x1, zc - 1.05], [x1, zc + 1.05], [x0, zc + 1.05], [x0, v1], [xb, v1], [xb, v0], [x0, v0]];
         const g = new THREE.ExtrudeGeometry(new THREE.Shape(plan.map(([x, z]) => new THREE.Vector2(x, -z))), { depth: y1 - y0, bevelEnabled: false });
         g.rotateX(-Math.PI / 2); g.translate(0, y0, 0);

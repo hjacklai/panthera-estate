@@ -61,7 +61,7 @@ const I18N = {
     "h.semid.s2.k": "Land Size", "h.semid.s2.v": "2,260–3,423 sq ft", "h.semid.s2.u": "",
     "h.semid.s3.k": "Bedrooms", "h.semid.s3.v": "4",
     "h.semid.s4.k": "Bathrooms", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "Floor heights", "h.semid.s5.v": "3.7 m downstairs · 3.45 m upstairs", "h.semid.s5.u": "",
+    "h.semid.s5.k": "Ceiling heights", "h.semid.s5.v": "3.7 m downstairs · 3.45 m upstairs", "h.semid.s5.u": "",
     "h.semid.s6.k": "Tenure", "h.semid.s6.v": "Freehold",
 
     "h.bungalow.name": "The Bungalow",
@@ -72,7 +72,7 @@ const I18N = {
     "h.bungalow.s2.k": "Land Size", "h.bungalow.s2.v": "3,832–5,308 sq ft", "h.bungalow.s2.u": "",
     "h.bungalow.s3.k": "Bedrooms", "h.bungalow.s3.v": "4+1",
     "h.bungalow.s4.k": "Bathrooms", "h.bungalow.s4.v": "5+1",
-    "h.bungalow.s5.k": "Floor heights", "h.bungalow.s5.v": "3.7 m downstairs · 3.45 m upstairs", "h.bungalow.s5.u": "",
+    "h.bungalow.s5.k": "Ceiling heights", "h.bungalow.s5.v": "3.7 m downstairs · 3.45 m upstairs", "h.bungalow.s5.u": "",
     "h.bungalow.s6.k": "Tenure", "h.bungalow.s6.v": "Freehold",
 
     "pricing.eyebrow": "Pricing",
@@ -347,7 +347,7 @@ const I18N = {
     "h.semid.s2.k": "Saiz tanah", "h.semid.s2.v": "2,260–3,423 kp", "h.semid.s2.u": "",
     "h.semid.s3.k": "Bilik tidur", "h.semid.s3.v": "4",
     "h.semid.s4.k": "Bilik air", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "Tinggi tingkat", "h.semid.s5.v": "3.7 m tingkat bawah · 3.45 m tingkat atas", "h.semid.s5.u": "",
+    "h.semid.s5.k": "Tinggi siling", "h.semid.s5.v": "3.7 m tingkat bawah · 3.45 m tingkat atas", "h.semid.s5.u": "",
     "h.semid.s6.k": "Pegangan", "h.semid.s6.v": "Bebas",
 
     "h.bungalow.name": "Banglo",
@@ -358,7 +358,7 @@ const I18N = {
     "h.bungalow.s2.k": "Saiz tanah", "h.bungalow.s2.v": "3,832–5,308 kp", "h.bungalow.s2.u": "",
     "h.bungalow.s3.k": "Bilik tidur", "h.bungalow.s3.v": "4+1",
     "h.bungalow.s4.k": "Bilik air", "h.bungalow.s4.v": "5+1",
-    "h.bungalow.s5.k": "Tinggi tingkat", "h.bungalow.s5.v": "3.7 m tingkat bawah · 3.45 m tingkat atas", "h.bungalow.s5.u": "",
+    "h.bungalow.s5.k": "Tinggi siling", "h.bungalow.s5.v": "3.7 m tingkat bawah · 3.45 m tingkat atas", "h.bungalow.s5.u": "",
     "h.bungalow.s6.k": "Pegangan", "h.bungalow.s6.v": "Bebas",
 
     "pricing.eyebrow": "Harga",
@@ -654,7 +654,7 @@ const I18N = {
     "h.semid.s2.k": "土地面积", "h.semid.s2.v": "2,260–3,423 平方英尺", "h.semid.s2.u": "",
     "h.semid.s3.k": "卧室", "h.semid.s3.v": "4",
     "h.semid.s4.k": "浴室", "h.semid.s4.v": "4",
-    "h.semid.s5.k": "层高", "h.semid.s5.v": "楼下 3.7 米 · 楼上 3.45 米", "h.semid.s5.u": "",
+    "h.semid.s5.k": "天花高度", "h.semid.s5.v": "楼下 3.7 米 · 楼上 3.45 米", "h.semid.s5.u": "",
     "h.semid.s6.k": "地契", "h.semid.s6.v": "永久",
 
     "h.bungalow.name": "独立式",
@@ -665,7 +665,7 @@ const I18N = {
     "h.bungalow.s2.k": "土地面积", "h.bungalow.s2.v": "3,832–5,308 平方英尺", "h.bungalow.s2.u": "",
     "h.bungalow.s3.k": "卧室", "h.bungalow.s3.v": "4+1",
     "h.bungalow.s4.k": "浴室", "h.bungalow.s4.v": "5+1",
-    "h.bungalow.s5.k": "层高", "h.bungalow.s5.v": "楼下 3.7 米 · 楼上 3.45 米", "h.bungalow.s5.u": "",
+    "h.bungalow.s5.k": "天花高度", "h.bungalow.s5.v": "楼下 3.7 米 · 楼上 3.45 米", "h.bungalow.s5.u": "",
     "h.bungalow.s6.k": "地契", "h.bungalow.s6.v": "永久",
 
     "pricing.eyebrow": "价格",

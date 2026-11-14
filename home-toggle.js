@@ -3,6 +3,8 @@
    A sticky pill in the top bar picks which house type the page shows.
    Only home-specific blocks switch (hero price chip, the #homes / #bungalow
    sections, the two pricing cards). Everything else is shared.
+   (Pricing always shows both homes; the old #pricing pill was removed.)
+   aria-pressed); it goes through PantheraHome.set(home, 'pill').
 
    · Default Semi-D. "#bungalow" or "?home=bungalow" opens on Bungalow.
      Nothing is stored; the URL is kept shareable with history.replaceState.
@@ -51,8 +53,7 @@
     var out = [];
     var sec = document.getElementById(SECTION_ID[home]);
     if (sec) out.push(sec);
-    var cards = document.querySelectorAll('#pricing .prc-card[data-home="' + home + '"]');
-    for (var i = 0; i < cards.length; i++) out.push(cards[i]);
+    // the pricing cards stay out of this: Pricing always shows both homes (owner, Nov 2026)
     return out;
   }
   function tagBlocks(){
@@ -170,21 +171,15 @@
   function setVisibility(home){
     blocks(home).forEach(function(el){ el.hidden = false; });
     blocks(other(home)).forEach(function(el){ el.hidden = true; });
-    var grid = document.querySelector("#pricing .price-ranges");
-    if (grid) grid.classList.add("is-single");
     // Hero price chip: swap the i18n key so later language switches keep it right.
     if (heroV && heroK){
       var kv = home === "bungalow" ? "hero.f1b.v" : "hero.f1.v";
       var kk = home === "bungalow" ? "hero.f1b.k" : "hero.f1.k";
       heroV.setAttribute("data-i18n", kv);
       heroK.setAttribute("data-i18n", kk);
-      heroV.textContent = t(kv, home === "bungalow" ? "Price" : "RM 712.5k");
-      heroK.textContent = t(kk, home === "bungalow" ? "on request" : "from");
+      heroV.textContent = t(kv, home === "bungalow" ? "RM 1.22m" : "RM 712.5k");
+      heroK.textContent = t(kk, "from");
     }
-    // Pricing intro: one home's line instead of "two house types"
-    var pl = document.querySelector('#pricing [data-i18n^="pricing.lede"]'), pf = document.querySelector('#pricing [data-i18n^="pricing.frame"]');
-    if (pl){ var kl = home === "bungalow" ? "pricing.lede.bg" : "pricing.lede.sd"; pl.setAttribute("data-i18n", kl); pl.textContent = t(kl, pl.textContent); }
-    if (pf){ var kf = home === "bungalow" ? "pricing.frame.bg" : "pricing.frame"; pf.setAttribute("data-i18n", kf); pf.textContent = t(kf, pf.textContent); }
     // Anything in the newly shown blocks that is already on screen should
     // not wait for the scroll reveal.
     var vh = window.innerHeight;

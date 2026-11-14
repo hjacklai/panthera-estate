@@ -366,5 +366,11 @@ export function createHD({ THREE, renderer, res = null, lite = false, base = './
     for (const p of skies.values()) p.then(s => { if (s) s.envRT.dispose(); });
   }
 
-  return { res, use, start, usesOf, settled, sky, level, dispose };
+  // after a lost GPU context: the skies' cube targets are empty, so the next sky() builds them again
+  function forgetSkies() {
+    for (const p of skies.values()) p.then(s => { if (s) s.envRT.dispose(); });
+    skies.clear();
+  }
+
+  return { res, use, start, usesOf, settled, sky, level, dispose, forgetSkies };
 }

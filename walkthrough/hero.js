@@ -12,10 +12,10 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { fetchPack } from './pack.js?v=4';
-import { createHD } from './hd.js?v=10';
-import { BAKE_VER, BAKE_REV } from './versions.js?v=3';
+import { createHD } from './hd.js?v=11';
+import { BAKE_VER, BAKE_REV } from './versions.js?v=4';
 import { buildHeroEstate } from './hero-lod.js?v=4';
-import { createTod } from './hero-tod.js?v=11';
+import { createTod } from './hero-tod.js?v=12';
 import { createOrbit } from './hero-orbit.js?v=2';
 import { createRig } from './hero-rig.js?v=6';
 
@@ -176,14 +176,21 @@ export async function start(o) {
   const walkIc = el('span', 'hx-walk-ic', { 'aria-hidden': 'true' });
   walkIc.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.8 3.5 7.4v9.2l8.5 4.6 8.5-4.6V7.4z"/><path d="M3.5 7.4 12 12l8.5-4.6M12 12v9.2"/></svg>';
   const walkTx = el('span', 'hx-walk-tx', { 'aria-hidden': 'true' });
-  walkTx.append(i18n(el('small', 'hx-walk-k'), 'hx.tour'), i18n(el('b', 'hx-walk-l'), 'hx.walk'));
+  walkTx.append(i18n(el('b', 'hx-walk-l'), 'hx.tour'));   // one line (owner, Nov 2026: "just 3d walk through enough?")
   homes.append(walkIc, walkTx);
   const homeBtns = ['semid', 'bungalow'].map(h => {
     const b = el('button', 'hx-homes-b hx-walk', { type: 'button', 'data-home': h });
     b.append(i18n(el('span', 'hx-walk-h'), 'hx.pin.' + h), el('span', 'hx-walk-ar', { 'aria-hidden': 'true' }, '→'));
     homes.append(b); return b;
   });
-  ui.append(lines, pinsNav, card, homes);   // no time-of-day switch on the landing hero (owner, Nov 2026): always golden hour
+  // the corner credits: the OpenStreetMap one (added with the neighbourhood, below) over a quiet "3D view: artist's
+  // impression" line to the disclaimer page in the visitor's language (its address follows a language switch)
+  const credits = el('div', 'hx-credits');
+  const disc = i18n(el('a', 'hx-disc'), 'hx.disc');
+  const discHref = () => { const l = (html.lang || 'en').toLowerCase(); disc.href = l.startsWith('ms') ? '/ms/disclaimer/' : l.startsWith('zh') ? '/zh/disclaimer/' : '/disclaimer/'; };
+  discHref(); new MutationObserver(discHref).observe(html, { attributes: true, attributeFilter: ['lang'] });
+  credits.append(disc);
+  ui.append(lines, pinsNav, card, homes, credits);   // no time-of-day switch on the landing hero (owner, Nov 2026): always golden hour
   hero.append(ui);
 
   // ---------- renderer ----------
@@ -217,9 +224,10 @@ export async function start(o) {
   const lifeP = reduced ? null : import(base + 'hero-life.js?v=9').catch(e => { console.warn('hero 3D: no life', e); return null; });
   // the room light (RoomEnvironment's PMREM) made while the pack downloads: it needs nothing from the pack, and made after
   // it, it sat in the long task before the first frame (load-time pass, Nov 2026); the same texture either way
+  let roomRT = null, RoomEnv = null;   // kept to draw the room light again after a lost GPU context (see webglcontextrestored)
   const envP = import('three/addons/environments/RoomEnvironment.js').then(({ RoomEnvironment }) => {
     const pmrem = new THREE.PMREMGenerator(renderer);
-    const t = pmrem.fromScene(new RoomEnvironment(), 0.04).texture; pmrem.dispose(); return t;
+    RoomEnv = RoomEnvironment; roomRT = pmrem.fromScene(new RoomEnvironment(), 0.04); pmrem.dispose(); return roomRT.texture;
   });
   envP.catch(() => {});
   let pack;
@@ -668,8 +676,29 @@ export async function start(o) {
   new ResizeObserver(resize).observe(stage);
   new IntersectionObserver(es => { for (const e of es) { visible = e.intersectionRatio > 0.05; if (visible) { dirty = true; need(); } } }, { threshold: [0, 0.05, 0.1] }).observe(stage);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { dirty = true; need(); } });
+  addEventListener('pageshow', e => { if (e.persisted) { dirty = true; need(); } });   // back from another page (back/forward cache): draw at once
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); lost = true; m = 0; mixTick(0); hero.classList.remove('hx-live'); if (ao) ao.lost(); });
-  canvas.addEventListener('webglcontextrestored', () => { renderer.shadowMap.needsUpdate = true; lost = false; if (ao) ao.restored(); dirty = true; hero.classList.add('hx-live'); need(); });
+  // a lost context (a phone in the background, a page kept in the back/forward cache) loses every render target's
+  // pixels: the room light and the HDRI sky are drawn on the GPU only, so after a restore the estate came back dark and
+  // muddy (owner, Nov 2026: "when people press back button, sometimes, like look broken"). Both are drawn again: the
+  // room light into its own target (the same texture object, so everything holding it stays valid), the sky re-fetched
+  function relight() {
+    try {
+      if (roomRT && RoomEnv) {
+        const pmrem = new THREE.PMREMGenerator(renderer), fresh = pmrem.fromScene(new RoomEnv(), 0.04); pmrem.dispose();
+        const mat = new THREE.RawShaderMaterial({ glslVersion: THREE.GLSL3, uniforms: { t: { value: fresh.texture } }, depthTest: false, depthWrite: false,
+          vertexShader: 'in vec3 position; void main() { gl_Position = vec4( position.xy, 0.0, 1.0 ); }',
+          fragmentShader: 'precision highp float; uniform sampler2D t; out vec4 o; void main() { o = texelFetch( t, ivec2( gl_FragCoord.xy ), 0 ); }' });
+        const q = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat), sc = new THREE.Scene(), prev = renderer.getRenderTarget(), ac = renderer.autoClear;
+        q.frustumCulled = false; sc.add(q);
+        try { renderer.autoClear = false; renderer.setRenderTarget(roomRT); renderer.render(sc, new THREE.OrthographicCamera()); }
+        finally { renderer.setRenderTarget(prev); renderer.autoClear = ac; fresh.dispose(); mat.dispose(); q.geometry.dispose(); }
+      }
+      if (hd.forgetSkies) hd.forgetSkies();
+      if (todCtl.restored && todCtl.restored()) todCtl.set(todName, true);   // the sky it had: fetched again (the room light meanwhile)
+    } catch (e) { console.warn('hero 3D: relight', e); }
+  }
+  canvas.addEventListener('webglcontextrestored', () => { renderer.shadowMap.needsUpdate = true; lost = false; relight(); if (ao) ao.restored(); dirty = true; hero.classList.add('hx-live'); need(); });
 
   // ---------- the neighbourhood and the breeze, before the first frame ----------
   // Owner, Nov 2026: "if i load on like some laptop or mobile, its like lagging in the transition screen and animation on
@@ -685,7 +714,7 @@ export async function start(o) {
       neighbours = c; if (rig) rig.setFloor(c.floor);
       // the streets and areas round the estate are OpenStreetMap data (ODbL): its credit, small, in a corner of the 3D
       if (!ui.querySelector('.hx-osm')) { const a = document.createElement('a'); a.className = 'hx-osm'; a.href = 'https://www.openstreetmap.org/copyright'; a.target = '_blank'; a.rel = 'noopener';
-        a.textContent = '© OpenStreetMap contributors'; ui.append(a); }
+        a.textContent = '© OpenStreetMap contributors'; credits.prepend(a); }
     }
   } catch (e) { console.warn('hero 3D: no neighbourhood', e); }
   // the leaves' and palms' sway at rest (the wind starts when hero-life.js does, after the intro)
@@ -810,7 +839,7 @@ export async function start(o) {
     },
   };
   let tourP = null;
-  const tour = () => tourP || (tourP = import(base + 'explore.js?v=36').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
+  const tour = () => tourP || (tourP = import(base + 'explore.js?v=37').then(m => m.createTour(ctx)).catch(e => { tourP = null; throw e; }));
   function intent(h) { tour().then(t => t.prefetch(h)).catch(() => {}); }
   // the tour's files fetched (and its modules compiled, not run) as soon as the intro settles, at low priority: the
   // background build above, or a tap on Walk inside, then finds them on the device instead of a chain of 3-4 round
@@ -819,7 +848,7 @@ export async function start(o) {
   function warmTour(h) {   // (its once-only mark is on the function itself: finishIntro may call it before this line has run)
     if (warmTour.done || !APP || o.careful) return; warmTour.done = true;
     const link = (href, cors) => { const l = document.createElement('link'); l.rel = 'modulepreload'; l.href = href; l.setAttribute('fetchpriority', 'low'); if (cors) l.crossOrigin = ''; document.head.appendChild(l); };
-    ['explore.js?v=36', 'walk.js?v=156&lib=1', 'estate.js?v=38', 'tropical.js?v=2', 'furniture.js?v=14', 'car.js?v=4'].forEach(u => link(base + u));
+    ['explore.js?v=37', 'walk.js?v=157&lib=1', 'estate.js?v=38', 'tropical.js?v=2', 'furniture.js?v=14', 'car.js?v=4'].forEach(u => link(base + u));
     try {
       for (const a of ['lines/LineSegments2.js', 'lines/LineSegmentsGeometry.js', 'lines/LineMaterial.js', 'geometries/RoundedBoxGeometry.js']) link(import.meta.resolve('three/addons/' + a), true);
     } catch (e) { /* no import.meta.resolve: the tour fetches them itself */ }
@@ -943,7 +972,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=35').then(mod => {
+      import(base + 'hero-app.js?v=36').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },
@@ -967,9 +996,11 @@ export async function start(o) {
   // ---------- Semi-D | Bungalow, in step with the landing page's pill (home-toggle.js) ----------
   // Its contract: html[data-home], window 'panthera:home' {home, source: 'pill' | 'url' | 'hero'}, window.PantheraHome.
   function homeNow() { return document.documentElement.dataset.home === 'bungalow' ? 'bungalow' : 'semid'; }
-  // app mode: the Semi-D is always the filled one (owner, Nov 2026: "high light semi d instead"); the page marks the chosen home
-  const markHome = h => { homeBtns.forEach(b => b.classList.toggle('hx-cur', b.dataset.home === (APP ? 'semid' : h))); };
+  // the filled one is the home the page is on, in app mode too (it stayed on the Semi-D after the top bar's pill, a
+  // PantheraHome.set or ?home=bungalow had switched to the Bungalow)
+  const markHome = h => { homeBtns.forEach(b => b.classList.toggle('hx-cur', b.dataset.home === h)); };
   markHome(homeNow());
+  new MutationObserver(() => markHome(homeNow())).observe(html, { attributes: true, attributeFilter: ['data-home'] });   // any switch, event or not
   function aimAt(h) {   // the end pose leans toward this home (straight away while the tour has the canvas)
     aimHome = h; aimFor(h);
     if (held) aimOff.copy(aimGoal);

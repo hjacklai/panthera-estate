@@ -23,8 +23,8 @@
   // keep in step with the import maps in walkthrough/index.html and tools/bake.html
   var THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js';
   var ADDONS = 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/';
-  var V = '131';   // bump with any hero file change
-  var BAKE_Q = '?v=1';   // the bake files' stamp: keep in step with versions.js BAKE_REV (bump with every rebake)
+  var V = '136';   // bump with any hero file change
+  var BAKE_Q = '?v=5';   // the bake files' stamp: keep in step with versions.js BAKE_REV (bump with every rebake)
 
   // English strings (hx.*), merged into the site's I18N where missing. BM and ZH live in app.js (I18N.bm, I18N.zh);
   // a key missing there falls back to this English.
@@ -63,7 +63,8 @@
     'nav.pricing': 'Pricing',
     'nav.faq': 'FAQ',
     'nav.menu': 'Site menu',
-    'hx.gallery': 'Gallery'
+    'hx.gallery': 'Gallery',
+    'hx.disc': "3D view: artist's impression"
   };
   var dictOf = function (l) { try { return (typeof I18N !== 'undefined' && I18N[l]) || null; } catch (e) { return null; } };
   var en = dictOf('en');
@@ -150,12 +151,12 @@
     addLink('preconnect', 'https://cdn.jsdelivr.net', { crossorigin: '' });
     addLink('modulepreload', THREE_URL, { crossorigin: '' });
     // as hero.js imports them (keep in step with its import lines: a stale ?v= here is a second, wasted download)
-    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '11', 'hero-orbit.js': '2', 'hero-rig.js': '6', 'pack.js': '4', 'hd.js': '10', 'versions.js': '3' };
+    var VER = { 'hero.js': V, 'hero-lod.js': '4', 'hero-tod.js': '12', 'hero-orbit.js': '2', 'hero-rig.js': '6', 'pack.js': '4', 'hd.js': '11', 'versions.js': '4' };
     // and the ones hero.js imports later (one module hop or the first frame later; keep in step with its import() lines):
     // the neighbourhood, the breeze (not with reduced motion) and, in app mode, the menu and panels
     VER['hero-context.js'] = '14';
     if (!reduced) VER['hero-life.js'] = '9';
-    if (app) VER['hero-app.js'] = '35';
+    if (app) VER['hero-app.js'] = '36';
     Object.keys(VER).forEach(function (f) { addLink('modulepreload', base + f + '?v=' + VER[f]); });
     addLink('modulepreload', ADDONS + 'utils/BufferGeometryUtils.js', { crossorigin: '' });
     // hero.js imports it once the pack is in, just before the first frame: fetched now, not as one more round trip then

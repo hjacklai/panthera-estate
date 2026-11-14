@@ -18,8 +18,8 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
-import { createHD, SKIES } from './hd.js?v=10';
-import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=3';
+import { createHD, SKIES } from './hd.js?v=11';
+import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=4';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
 const COL = {
@@ -625,10 +625,24 @@ if (LIB) await Y();   // embedded build: let the hero draw a frame
   }
 }
 for (const f of X.roof.flats.filter(f => f.y1 < 4)) ffBlock(f.r, f.y0, f.y1 - f.y0, mSlab);
+const PIERS = SEMID ? [] : ((D.outline && D.outline.pilasters) || []);   // bungalow: the four outer corner piers
+const PIER_KEYS = PIERS.map(rkey);
 for (const r of D.ff.filter(inZone)) {
   await slice();
   if (SEMID && (Math.max(r[1], r[3]) > 0.01 || Math.min(Math.abs(r[0]), Math.abs(r[2])) > 6.73 || Math.max(Math.abs(r[0]), Math.abs(r[2])) > 6.75)) continue;   // balcony + outside bits: from the spec below
+  if (PIER_KEYS.includes(rkey(r))) continue;   // bungalow corner piers: one piece from the ground-floor top, below
   ffBlock(r, FF_BASE, ffTop(r) - FF_BASE);
+}
+// Bungalow corner piers (owner, Nov 2026: "same for the bungalow, column to roof eave"): one piece from the ground-floor
+// top through the first-floor slab line to the truss seat (no notch at the slab, the string course stops at their faces);
+// the roof block below carries them on up to the eave soffit / tile underside.
+for (const r of PIERS.filter(inZone)) ffBlock(r, GF_TOP, ffTop(r) - GF_TOP);
+// Corner piers (owner, Nov 2026: "this column goes to 2nd floor too"): the pair's four outer corner piers run on past
+// the first-floor slab up to the eave soffit, as the elevations draw them (the ground-floor pier pieces stop at 3.50,
+// and the first-floor plan's pier pieces are skipped above with the outside bits).
+if (SEMID) for (const s of [1, -1]) for (const [z0, z1] of [[-13.255, -12.712], [-0.543, 0]]) {
+  const r = s > 0 ? [6.72, z0, 7.175, z1] : [-7.175, z0, -6.72, z1];
+  ffBlock(r, GF_TOP, ffTop(r) - GF_TOP);
 }
 for (const o of dedupe(D.ff_open.filter(o => inZone(o.r)))) {
   const r = o.r, ax = wallAxis(r);
@@ -669,7 +683,17 @@ for (const b of X.balcony) {
 }
 if (SEMID) ffBlock([-0.115, 0, 0.115, 1.07], 4.7, 2.3);
 // Bungalow: the projecting first-floor slab ledge (string course) round the house.
-if (!SEMID) for (const l of X.ff_slab_ledge || []) ffBlock(l.r, l.y0, l.y1 - l.y0);
+// It stops at the corner piers' faces, so no stub of it pokes across or past a pier.
+if (!SEMID) for (const l of X.ff_slab_ledge || []) {
+  let [x0, z0, x1, z1] = [Math.min(l.r[0], l.r[2]), Math.min(l.r[1], l.r[3]), Math.max(l.r[0], l.r[2]), Math.max(l.r[1], l.r[3])];
+  const alongX = x1 - x0 >= z1 - z0;
+  for (const p of PIERS) {
+    const [px0, pz0, px1, pz1] = [Math.min(p[0], p[2]), Math.min(p[1], p[3]), Math.max(p[0], p[2]), Math.max(p[1], p[3])];
+    if (alongX && px0 < x1 && px1 > x0 && pz0 < z1 + 0.2 && pz1 > z0 - 0.2) { if ((px0 + px1) / 2 < (x0 + x1) / 2) x0 = Math.max(x0, px1); else x1 = Math.min(x1, px0); }
+    if (!alongX && pz0 < z1 && pz1 > z0 && px0 < x1 + 0.2 && px1 > x0 - 0.2) { if ((pz0 + pz1) / 2 < (z0 + z1) / 2) z0 = Math.max(z0, pz1); else z1 = Math.min(z1, pz0); }
+  }
+  if (x1 - x0 > 0.02 && z1 - z0 > 0.02) ffBlock([x0, z0, x1, z1], l.y0, l.y1 - l.y0);
+}
 // Side balcony (Balkoni 2): a 600 mm ledge inside a gable-shaped frame on each outer wall.
 for (const b of X.balcony2) {
   const ring = new THREE.Shape(b.outer.map(([z, y]) => new THREE.Vector2(-z, y)));
@@ -721,20 +745,23 @@ scene.add(grooveGF, grooveFF);
 // Owner (Nov 2026: "the facade ... got groovelines ... it should show? shadow too?"): the battens stand a little prouder
 // (16 mm) and each has a thin shadow line either side where it meets the wall, so the rhythm reads from the air as well.
 const mBattenShade = new THREE.MeshStandardMaterial({ color: 0xA99B86, roughness: 1 });
+const BQ = new THREE.Quaternion(), BM4 = new THREE.Matrix4();
+function battenAt(im, i, [x, y0, z, , y1, , nx, nz]) {   // one batten (and its two shadow strips) as instance i
+  const side = nx !== 0, h = y1 - y0, cy = (y0 + y1) / 2, sh = im.children[0];
+  BM4.compose(V(x + nx * 0.008, cy, z + nz * (side ? 0 : 0.008)), BQ, V(side ? 0.016 : 0.035, h, side ? 0.035 : 0.016));
+  im.setMatrixAt(i, BM4);
+  for (const k of [-1, 1]) {   // the shadow gaps: 7 mm strips on the wall face, hard against each edge of the batten
+    const t = k * (0.035 / 2 + 0.0035);
+    BM4.compose(V(x + (side ? nx * 0.0012 : t), cy, z + (side ? t : nz * 0.0012)), BQ, V(side ? 0.002 : 0.007, h, side ? 0.007 : 0.002));
+    sh.setMatrixAt(i * 2 + (k > 0 ? 1 : 0), BM4);
+  }
+}
 function battens(list) {
-  const im = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), mWall, list.length), M4 = new THREE.Matrix4();
-  const sh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), mBattenShade, list.length * 2), Q = new THREE.Quaternion();
-  list.forEach(([x, y0, z, , y1, , nx, nz], i) => {
-    const side = nx !== 0, h = y1 - y0, cy = (y0 + y1) / 2;
-    M4.compose(V(x + nx * 0.008, cy, z + nz * (side ? 0 : 0.008)), Q, V(side ? 0.016 : 0.035, h, side ? 0.035 : 0.016));
-    im.setMatrixAt(i, M4);
-    for (const k of [-1, 1]) {   // the shadow gaps: 7 mm strips on the wall face, hard against each edge of the batten
-      const t = k * (0.035 / 2 + 0.0035);
-      M4.compose(V(x + (side ? nx * 0.0012 : t), cy, z + (side ? t : nz * 0.0012)), Q, V(side ? 0.002 : 0.007, h, side ? 0.007 : 0.002));
-      sh.setMatrixAt(i * 2 + (k > 0 ? 1 : 0), M4);
-    }
-  });
+  const im = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), mWall, list.length);
+  const sh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), mBattenShade, list.length * 2);
   sh.receiveShadow = true; im.add(sh);
+  list.forEach((g, i) => battenAt(im, i, g));
+  im.userData.list = list;
   im.castShadow = im.receiveShadow = true; scene.add(im); return im;
 }
 const battenGF = battens(GRV.filter(g => g[1] < 3.5)), battenFF = battens(GRV.filter(g => g[1] >= 3.5));
@@ -1427,12 +1454,8 @@ const mTile = new THREE.MeshStandardMaterial({ map: tileTex, bumpMap: tileTex, b
 const ROOF_V = 1;
 hd.use(mTile, 'roof_tile', { sv: ROOF_V });
 const mCapTile = new THREE.MeshStandardMaterial({ color: 0xA9573A, roughness: 0.75 });
-// Timber louvre vents for the gablet / gable triangles.
-const louvreTex = canvasTex(256, (g, s) => {
-  g.fillStyle = '#8a6648'; g.fillRect(0, 0, s, s);
-  for (let y = 0; y < s; y += 16) { const gr = g.createLinearGradient(0, y, 0, y + 16); gr.addColorStop(0, '#a77d58'); gr.addColorStop(0.7, '#7b5a3e'); gr.addColorStop(1, '#3d2a1c'); g.fillStyle = gr; g.fillRect(0, y, s, 16); }
-}, { repeat: 1 });
-const mLouvre = new THREE.MeshStandardMaterial({ map: louvreTex, roughness: 0.7, side: THREE.DoubleSide });
+// Gablet triangles (owner, Nov 2026): white plaster, the eave soffits' colour, instead of brown timber louvres.
+const mGablet = new THREE.MeshStandardMaterial({ color: 0xF3EFE8, roughness: 0.9, side: THREE.DoubleSide });
 const mSoffit = new THREE.MeshStandardMaterial({ color: 0xEDE6DA, roughness: 0.95, side: THREE.BackSide });
 const mFascia = new THREE.MeshStandardMaterial({ color: 0xF1EFEA, roughness: 0.45 });                   // white fascia and barge boards (owner, Nov 2026)
 const mPlasterDS = new THREE.MeshStandardMaterial({ color: COL.cream, roughness: 0.95, side: THREE.DoubleSide });
@@ -1441,7 +1464,7 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
   const tg = polyGeometry(X.roof.tiles, true);
   for (const mat of [mTile, mSoffit]) { const m = new THREE.Mesh(tg, mat); m.castShadow = m.receiveShadow = true; roof.add(m); }
   roof.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(tg, 12)), mInk));
-  // Vertical faces: triangles (gablets, the cross-gable end) get timber louvres, the rest is render.
+  // Vertical faces: triangles (gablets, the cross-gable end) are white plaster, the rest is render.
   const tri = X.roof.faces.filter(f => f.length === 3), rest = X.roof.faces.filter(f => f.length !== 3);
   const fg = polyGeometry(rest, false);
   const fm = new THREE.Mesh(fg, mPlasterDS); fm.castShadow = fm.receiveShadow = true; roof.add(fm);
@@ -1457,7 +1480,7 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
       }
     }
     const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); lg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); lg.computeVertexNormals();
-    const lm = new THREE.Mesh(lg, mLouvre); lm.castShadow = true; roof.add(lm);
+    const lm = new THREE.Mesh(lg, mGablet); lm.castShadow = true; roof.add(lm);
   }
   // Ridge, hip and verge caps: rounded clay caps on every convex edge between roof planes (and where a
   // roof plane meets a gable face along a slope). Valleys are left open.
@@ -1576,6 +1599,23 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
         block([Math.min(lo, hi), Math.min(zb0, zb1), Math.max(lo, hi), Math.max(zb0, zb1)], yb, tIn - yb, mFascia, roof, null);   // and its back, at the wall line
       }
     }
+    // Bungalow corner piers carried on above the truss seat (owner, Nov 2026: "column to roof eave"): under a gable verge
+    // they rise to the white verge soffit and follow its slope; under the hipped wing they stop just under the tiles.
+    for (const r of PIERS) {
+      const [px0, pz0, px1, pz1] = [Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])], y0 = ffTop(r), xc = (px0 + px1) / 2;
+      const sd = [...sides.values()].find(v => (v.out > 0 ? xc > v.xw - 0.2 && xc < v.xo : xc < v.xw + 0.2 && xc > v.xo) && v.gz.some(([g0, g1]) => pz0 > g0 - 0.05 && pz1 < g1 + 0.05));
+      if (sd) {
+        const xs = sd.out > 0 ? sd.xo - 0.06 : sd.xo + 0.06, zs = [pz0, pz0 + (pz1 - pz0) / 3, pz0 + 2 * (pz1 - pz0) / 3, pz1];
+        const top = zs.map(z => { const t = tileY(xs, Math.min(pz1 - 0.002, Math.max(pz0 + 0.002, z))); return t == null ? null : [z, t - 0.185]; });
+        if (top.some(q => q == null || q[1] <= y0 + 0.01)) continue;
+        const m = prism([[pz1, y0], [pz0, y0], ...top], px0, px1, mWall);
+        m.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(m.geometry, 30)), mInk));
+        continue;
+      }
+      let t = Infinity;
+      for (let i = 0; i <= 4; i++) for (let j = 0; j <= 4; j++) { const v = tileY(px0 + 0.002 + (px1 - px0 - 0.004) * i / 4, pz0 + 0.002 + (pz1 - pz0 - 0.004) * j / 4); if (v != null) t = Math.min(t, v); }
+      if (Number.isFinite(t) && t - 0.01 > y0 + 0.01) block([px0, pz0, px1, pz1], y0, t - 0.01 - y0, mWall, roof);
+    }
   }
   // Party wall top brought flush with the roof (the drawing stands it ~0.28 m proud): it follows the right
   // unit's tile line at the wall (20 then 35 deg up to the ridges) and the flat strips in between.
@@ -1644,6 +1684,34 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
       const r = alongX ? [ra, ca, rb, cb] : [ca, ra, cb, rb];
       block(r, s.y - 0.02, 0.02, mSoffitPlaster, roof, null);   // white plastered soffit (owner, Nov 2026: was timber boards)
     }
+  }
+}
+// Grooves up the gable ends (owner, Nov 2026: the lines stopped at a horizontal line under each gable): wherever a grooved
+// wall rises into a gable, its top grooves carry on up through the triangle, one continuous batten, and stop where each
+// meets the underside of the roof edge above it (verge soffit or barge board), following the slope.
+{
+  const list = battenFF.userData.list, py = roof.position.y;
+  roof.position.y = 0; roof.updateMatrixWorld(true);
+  const meshes = []; roof.traverse(o => { if (o.isMesh && !o.isLineSegments2) meshes.push(o); });
+  const rc = new THREE.Raycaster(); rc.far = 5;
+  let changed = false;
+  list.forEach((g, i) => {
+    const [x, y0, z, , y1, , nx] = g; if (!nx) return;
+    const G = X.roof.gables.find(G => { const zs = G.prof.map(q => q[0]);
+      return Math.abs((nx > 0 ? G.x1 : G.x0) - x) < 0.02 && z > Math.min(...zs) + 0.02 && z < Math.max(...zs) - 0.02; });
+    if (!G || y1 < G.y0 - 0.05) return;
+    if (list.some(h => h !== g && h[0] === x && h[2] === z && h[1] > y1 - 0.01)) return;   // the top run of each line only
+    rc.set(V(x + nx * 0.008, Math.max(y0, G.y0) + 0.01, z), V(0, 1, 0));
+    const hit = rc.intersectObjects(meshes, false)[0]; if (!hit) return;
+    let top = hit.point.y - 0.003;
+    for (const o of X.openings) if (o.axis === 'z' && Math.abs((o.c0 + o.c1) / 2 - x) < 0.25 && z > o.a0 - 0.06 && z < o.a1 + 0.06 && o.head + 0.05 > y1 && o.sill - 0.05 < top) top = Math.min(top, o.sill - 0.05);   // never across a vent or window
+    if (Math.abs(top - y1) < 0.005 || top < y1 - 0.5 || top <= y0 + 0.05) return;
+    g[4] = top; battenAt(battenFF, i, g); changed = true;
+  });
+  roof.position.y = py; roof.updateMatrixWorld(true);
+  if (changed) {
+    for (const im of [battenFF, battenFF.children[0]]) { im.instanceMatrix.needsUpdate = true; im.boundingSphere = im.boundingBox = null; }
+    grooveFF.geometry.dispose(); grooveFF.geometry = new LineSegmentsGeometry().setPositions(list.flatMap(g => g.slice(0, 6)));
   }
 }
 
@@ -1965,6 +2033,66 @@ function plantGeometry(height, leaves, leafLen, seed = 1) {
   const stem = new THREE.CylinderGeometry(0.012, 0.02, height * 0.95, 6).translate(0, height * 0.475, 0);
   stem.deleteAttribute('uv'); colorize(stem, new THREE.Color(0x6B5843)); parts.push(stem.toNonIndexed());
   const out = mergeGeometries(parts); out.computeVertexNormals(); return out;
+}
+// Side balcony (Balkoni 2) as a Juliet balcony with planters (owner, Nov 2026): a row of three timber troughs standing
+// against the half wall, greenery mounded in them and trailing over the coping down the outside face, and a potted
+// plant at each end by the house wall, clear of the door. Two meshes per balcony (boxes and pots, leaves), low-poly
+// leaves (two triangles each), so it stays light on every Semi-D in the estate. The leaves grow in rosettes from shared
+// points and in chains down the strands, tied together by hair-thin runners, so each balcony's greenery is one piece:
+// the hero's aerial prune (hero-lod.js) judges it as a whole instead of dropping every leaf as a speck.
+for (const b of X.balcony2) {
+  const sx = Math.sign(b.outer_x), xo = b.outer_x, xi = xo - sx * 0.15, xt = xi - sx * 0.24;   // half wall outer / inner face, trough front
+  const y0 = Math.min(...b.inner.map(q => q[1])), yc = b.parapet_y[1], yb = yc - 0.08, ys = yb - 0.04;   // ledge floor, coping top, box top, soil
+  let sd = (sx > 0 ? 71 : 37) * 9973; const rnd = () => ((sd = (sd * 16807) % 2147483647) / 2147483647);
+  const solid = [], col = (g, c) => { g = g.toNonIndexed(); g.deleteAttribute('uv'); const C = new THREE.Color(c); g.setAttribute('color', new THREE.Float32BufferAttribute(Array.from({ length: g.attributes.position.count }, () => [C.r, C.g, C.b]).flat(), 3)); solid.push(g); };
+  const lp = [], lc = [], greens = [LEAF, 0x6E8A45, 0x4E6235];
+  const tint = c => new THREE.Color(c).offsetHSL((rnd() - 0.5) * 0.04, (rnd() - 0.5) * 0.12, (rnd() - 0.5) * 0.1);
+  const leaf = (p, tip, W, c) => {   // a diamond leaf from p to tip, W wide
+    const d = tip.clone().sub(p), L = d.length(); d.normalize();
+    const s = new THREE.Vector3().crossVectors(d, Math.abs(d.y) > 0.9 ? V(1, 0, 0) : V(0, 1, 0)).normalize().multiplyScalar(W / 2);
+    const mid = p.clone().addScaledVector(d, L * 0.45), a = mid.clone().add(s), e = mid.clone().sub(s);
+    for (const q of [p, a, tip, p, tip, e]) lp.push(q.x, q.y, q.z);
+    const C = tint(c); for (let k = 0; k < 6; k++) lc.push(C.r, C.g, C.b);
+  };
+  const leafDir = (p, d, L, W, c) => leaf(p, p.clone().addScaledVector(d.normalize(), L), W, c);
+  const up = (th, el) => V(Math.cos(th) * Math.cos(el), Math.sin(el), Math.sin(th) * Math.cos(el));
+  let last = null;
+  const link = p => {   // a runner, 3 mm, from the last rosette or strand root to this one
+    if (last) { const q = p.clone(); q.y += 0.003; for (const v of [last, p, q]) lp.push(v.x, v.y, v.z); const C = new THREE.Color(0x4E6235); for (let k = 0; k < 3; k++) lc.push(C.r, C.g, C.b); }
+    last = p;
+  };
+  const rosette = (p, nL, L0, L1, el0, el1, W) => { link(p); for (let k = 0; k < nL; k++) leafDir(p, up(k * 2.4 + rnd() * 0.6, el0 + rnd() * (el1 - el0)), L0 + rnd() * (L1 - L0), W, greens[k % 3]); };
+  const pots = [Math.min(...b.parapet_z) + 0.13, Math.max(...b.parapet_z) - 0.25], xp = xt - sx * 0.105;
+  const potPlant = zp => {   // a potted plant by the house wall: a low rosette and a higher one up its stem
+    col(new THREE.CylinderGeometry(0.1, 0.075, 0.42, 10).translate(xp, y0 + 0.21, zp), POT);
+    col(new THREE.CylinderGeometry(0.09, 0.09, 0.01, 10).translate(xp, y0 + 0.405, zp), 0x3B2E24);
+    rosette(V(xp, y0 + 0.42, zp), 9, 0.2, 0.3, 0.45, 1.1, 0.1);
+    rosette(V(xp, y0 + 0.68, zp), 9, 0.18, 0.28, 0.6, 1.4, 0.1);
+  };
+  potPlant(pots[0]);
+  const z0 = Math.min(...b.parapet_z) + 0.03, z1 = Math.max(...b.parapet_z) - 0.03, gap = 0.04, n = 3, len = (z1 - z0 - gap * (n - 1)) / n;
+  for (let i = 0; i < n; i++) {
+    const za = z0 + i * (len + gap), zb = za + len, [xa, xb] = [Math.min(xi, xt), Math.max(xi, xt)];
+    col(new THREE.BoxGeometry(xb - xa, yb - y0, zb - za).translate((xa + xb) / 2, (y0 + yb) / 2, (za + zb) / 2), 0x6B4A33);                       // timber trough
+    col(new THREE.BoxGeometry(xb - xa - 0.04, 0.02, zb - za - 0.04).translate((xa + xb) / 2, ys, (za + zb) / 2), 0x3B2E24);                       // soil
+    for (let k = 0; k < 6; k++)   // the mound: rosettes out of the soil, leaning every way, the tallest a hand over the coping
+      rosette(V((xa + xb) / 2 + (rnd() - 0.5) * 0.08, ys + 0.012, za + (k + 0.5) * len / 6 + (rnd() - 0.5) * 0.05), 10, 0.17, 0.32, 0.45, 1.4, 0.1);
+    for (let k = 0; k < 7; k++) {   // trailing strands: across the coping, then down the outside face, a leaf on every link
+      const z = za + (k + 0.2 + rnd() * 0.6) * len / 7, drop = 0.3 + rnd() * 0.55;
+      const pts = [V(xi + sx * 0.03, yc + 0.012, z), V(xo + sx * 0.02, yc + 0.006, z + 0.02)];
+      for (let y = yc - 0.06, j = 0; y > yc - drop; y -= 0.07, j++) pts.push(V(xo + sx * (0.015 + rnd() * 0.035), y, z + Math.sin(y * 9 + k) * 0.03 + (j % 2 ? 0.03 : -0.03)));
+      link(pts[0]);
+      for (let j = 0; j + 1 < pts.length; j++) {
+        leaf(pts[j], pts[j + 1], 0.08, greens[(k + j) % 3]);
+        if (j % 2) leafDir(pts[j], V(sx * 0.35, -0.7, j % 4 === 1 ? 0.6 : -0.6), 0.1, 0.07, greens[(k + j + 1) % 3]);   // a side leaf
+      }
+    }
+  }
+  potPlant(pots[1]);
+  const box = new THREE.Mesh(mergeGeometries(solid), new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.75 }));
+  box.geometry.computeVertexNormals(); box.castShadow = box.receiveShadow = true; ffDetail.add(box);
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(lp, 3)); lg.setAttribute('color', new THREE.Float32BufferAttribute(lc, 3)); lg.computeVertexNormals();
+  const lm = new THREE.Mesh(lg, new THREE.MeshStandardMaterial({ vertexColors: true, side: THREE.DoubleSide, roughness: 0.65 })); lm.castShadow = true; ffDetail.add(lm);
 }
 for (const [x, z, s, seed] of [[-2.70, -0.55, 0.85, 3], [-6.22, -4.15, 1.2, 5]]) {
   piece(x, z, 0.40 * s, 0.40 * s, 0, 0.40 * s, POT, 0, { round: true, rTop: 0.22 * s, rough: 0.85 });
@@ -2508,8 +2636,19 @@ function rectsMinus(holes, inset = 0) {
   }
   return out;
 }
-if (SEMID) for (const r of [[-6.72, -13.255, 6.72, -10.466], [-6.72, -2.789, 6.72, 0], [-6.72, -10.466, -1.615, -2.789], [1.615, -10.466, 6.72, -2.789]]) ffBlock(r, 7.20, 0.045, mSlab, mInkSoft);
-else for (const r of rectsMinus([...X.voids, ...OUT_FF, ...X.ff_top.zones.map(z => z.r)])) ffBlock(r, X.levels.ff_ceiling || 7.0, 0.045, mSlab, mInkSoft);
+// The ceiling stops 20 mm inside every outside wall face (owner's check, Nov 2026: a faint line round the house at the
+// wall top, under the Semi-D's gables): its edge was flush with the face, a 45 mm strip of ceiling colour fighting the
+// render there. Inside the wall's thickness it still closes the room.
+const ceilIn = r => {
+  const out = (x, z) => x < HOUSE.x0 + 0.001 || x > HOUSE.x1 - 0.001 || z < HOUSE.z0 + 0.001 || z > HOUSE.z1 - 0.001 || OUT_FF.some(o => x > o[0] && x < o[2] && z > o[1] && z < o[3]);
+  let [x0, z0, x1, z1] = [Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])];
+  const xm = (x0 + x1) / 2, zm = (z0 + z1) / 2;
+  if (out(x0 - 0.01, zm)) x0 += 0.02; if (out(x1 + 0.01, zm)) x1 -= 0.02;
+  if (out(xm, z0 - 0.01)) z0 += 0.02; if (out(xm, z1 + 0.01)) z1 -= 0.02;
+  return [x0, z0, x1, z1];
+};
+if (SEMID) for (const r of [[-6.72, -13.255, 6.72, -10.466], [-6.72, -2.789, 6.72, 0], [-6.72, -10.466, -1.615, -2.789], [1.615, -10.466, 6.72, -2.789]]) ffBlock(ceilIn(r), 7.20, 0.045, mSlab, mInkSoft);
+else for (const r of rectsMinus([...X.voids, ...OUT_FF, ...X.ff_top.zones.map(z => z.r)])) ffBlock(ceilIn(r), X.levels.ff_ceiling || 7.0, 0.045, mSlab, mInkSoft);
 if (!SEMID && X.ceilings) {   // Bungalow: the right wing's flat plaster false ceiling at 3.00 (section BB HEIGHT 3.000), hiding the 3.15 beams
   const fc = X.ceilings.GF.filter(c => c.ceiling === 3.0).map(c => c.r);
   for (const r of fc) ffBlock(r, 3.0, 0.02, mSlab, mInkSoft);

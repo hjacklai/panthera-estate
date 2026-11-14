@@ -2866,6 +2866,9 @@ body:not(.lang-zh) .zh-only-inline{ display: none; }
   html[data-home="bungalow"] .hero-specs li:first-child .k{ max-width: 9em; }
 }
 
+/* no hairline under the Pricing intro (owner, Nov 2026); other sections keep theirs */
+#pricing .hd{ border-bottom: 0; padding-bottom: 0; }
+
 /* The switched-off home: hidden attribute, guarded against display rules */
 [data-home-block][hidden]{ display: none !important; }
 /* One pricing card at a time: let it take the full row */
@@ -2931,3 +2934,6 @@ html.hx-app .hxa-body .section::before{ animation-play-state: running; }
   background: rgba(28,23,20,0.42); color: var(--cream, #F2E9DF); font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; text-align: center;
   opacity: 0; transition: opacity .25s ease; }
 .map-2f-hint.on{ opacity: 1; }
+/* the FAQ panel's closing links in the brand terracotta, so they read as links without adding a line */
+.faq-more a{ color: var(--terra-2); }
+.faq-more a:hover{ color: var(--terra); }

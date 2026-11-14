@@ -6,7 +6,7 @@
 //
 // Levels follow walk.js (TODS, LIGHT) at the end of the walk, where the camera is over the estate, so the hero and
 // the tour's bird's-eye match. HDRI skies come from hd.js; until one arrives the RoomEnvironment lights the scene.
-import { SKIES } from './hd.js?v=10';
+import { SKIES } from './hd.js?v=11';
 
 export function createTod({ THREE, renderer, scene, sun, hemi, sky, hd, roomEnv, lamps = [], glass = [], pools = null, reduced = false, onChange = () => {} }) {
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -96,5 +96,13 @@ export function createTod({ THREE, renderer, scene, sun, hemi, sky, hd, roomEnv,
     renderer.shadowMap.needsUpdate = (++frames % 4 === 0) || k >= 1;
     return k < 1;
   }
-  return { set, tick, jump, get name() { return name; }, presets: P, load: n => hd.sky(n) };
+  // after a lost GPU context: the loaded skies are empty now; forget them and light with the room light until set()
+  // loads the sky again. Returns whether the current time of day had its sky (so the caller fetches it again)
+  function restored() {
+    const had = !!skies[name];
+    for (const k of Object.keys(skies)) delete skies[k];
+    k = 1; jump(name);
+    return had;
+  }
+  return { set, tick, jump, restored, get name() { return name; }, presets: P, load: n => hd.sky(n) };
 }

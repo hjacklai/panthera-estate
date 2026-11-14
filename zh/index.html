@@ -10,11 +10,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "131" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "132" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="131",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="132",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -24,8 +24,8 @@
 <style>html.hx-app{--gutter:max(clamp(20px,3.2vw,64px),calc((100vw - 1600px) / 2))}@media (max-width:720px){html.hx-app .topbar-inner{padding:6px 16px}html.hx-app .topbar .lang{padding:2px;font-size:10px}html.hx-app .topbar .lang button{min-height:30px;padding:2px 8px}html.hx-app .hero-copy h1.display{font-size:25px;line-height:1.08;margin:0 0 8px}html.hx-app .hero-copy .lede{font-size:13px;line-height:1.45;margin-top:0}html.hx-app .hero--cinematic .hero-inner{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}}html.hx-app .topbar-inner{grid-template-columns:1fr auto}html.hx-app .topbar .brand-mark{justify-self:start}html.hx-app .topbar-side.right{justify-self:end}@media (min-width:761px){html.hx-app .hero--cinematic .hero-copy h1.display{font-size:clamp(30px,3vw,48px);line-height:1.06;max-width:none}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:nowrap}html.hx-app .hero--cinematic .hero-copy .lede{font-size:15px;max-width:46ch}}@media (max-width:760px){html.hx-app .hero-copy h1.display{font-size:22px}html.hx-app .hero-copy .lede{font-size:12.5px}}@media (min-width:761px){html.hx-app .hero--cinematic .hero-inner.wrap{max-width:none;margin-left:0;margin-right:0;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}}html.hx-app .topbar-inner{max-width:none;width:100%;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}html.hx-app .topbar .home-pill{display:none!important}html.hx-app .topbar-side.right{width:auto;gap:8px}html.hx-app .topbar{border-bottom:0}@media (min-width:761px) and (min-aspect-ratio:9/10){html.hx-app .hero--cinematic .hero-inner{padding-bottom:max(clamp(120px,16vh,205px),166px)}}html.hx-app .topbar .lang{padding:0;border:0}html.hx-app .topbar .lang button{width:40px;height:40px;min-height:40px;min-width:40px;padding:0;justify-content:center;border-radius:50%}@media (max-width:340px){html.hx-app .topbar .brand-mark .sub{display:none}}html.hx-app .topbar .brand-mark{min-width:0}@media (min-width:761px) and (max-height:520px){html.hx-app .topbar-inner{padding:5px max(16px,env(safe-area-inset-right,0px)) 5px max(16px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-inner.wrap{padding-left:max(20px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-copy h1.display{font-size:22px;line-height:1.08;margin:0 0 6px}html.hx-app .hero--cinematic .hero-inner,html.hx-app .hero--cinematic .hero-inner.wrap{padding-bottom:76px!important;padding-top:12px!important}html.hx-app .hero--cinematic .hero-copy{max-width:52vw}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:normal}html.hx-app .hero--cinematic .hero-copy h1.display{max-width:52vw}html.hx-app .hero--cinematic .hero-copy .lede{display:none}}</style>
 
 
-<title>Panthera Bertam · 槟城 Bertam 永久地契半独立式与独立式洋房</title>
-<meta name="description" content="槟城甲抛峇底 Bertam 的永久地契半独立式与独立式洋房。19 间有地住宅环绕逾 700 平方米的共享绿地。半独立式 RM 712,500 起。">
+<title>Panthera Bertam · 槟城 Bertam 首购屋：永久地契半独立式洋房</title>
+<meta name="description" content="槟城甲抛峇底 Bertam 永久地契半独立式洋房，为成长中的家庭而设计：4 房（其中 1 间在楼下，方便三代同堂）、私人侧院草坪，门前是逾 700 平方米的共享绿地。RM 712,500 起。">
 <meta name="author" content="Panthera Development Sdn Bhd">
 <meta name="keywords" content="Panthera Bertam, Bertam Penang property, Kepala Batas, Seberang Perai Utara, Penang semi-D, Penang bungalow, freehold Penang homes, Penang Technology Park, rumah berkembar Bertam, banglo Pulau Pinang, rumah pegangan bebas, projek baharu Seberang Perai Utara, 槟城 半独立式洋房, 独立式洋房, 永久地契, 威北, 甲抛峇底, pantheraestate">
 <meta name="theme-color" content="#F2E9DF" media="(prefers-color-scheme: light)">
@@ -50,8 +50,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Panthera Bertam">
 <meta property="og:url" content="https://www.pantheraestate.com/zh/">
-<meta property="og:title" content="Panthera Bertam · 槟城 Bertam 永久地契半独立式与独立式洋房">
-<meta property="og:description" content="槟城 Bertam，3 间独立式洋房与 16 间半独立式洋房环绕逾 700 平方米的中央公园。RM 712,500 起，永久地契。预发布阶段，欢迎登记意向。">
+<meta property="og:title" content="Panthera Bertam · 槟城 Bertam 首购屋：永久地契半独立式洋房">
+<meta property="og:description" content="为成长中的家庭而设计的首购屋：槟城 Bertam 永久地契半独立式洋房，建筑面积 2,006 平方英尺，4 房（其中 1 间在楼下，有门直通浴室，该浴室也可从客厅进出）、开放一侧附私人侧院草坪，每间住宅都面向逾 700 平方米的共享绿地，SK Bertam Perdana 小学就在对面。RM 712,500 起，预发布阶段，欢迎登记意向。">
 <meta property="og:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:secure_url" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:type" content="image/jpeg">
@@ -65,8 +65,8 @@
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://www.pantheraestate.com/zh/">
-<meta name="twitter:title" content="Panthera Bertam · 槟城 Bertam 永久地契半独立式与独立式洋房">
-<meta name="twitter:description" content="槟城 Bertam，3 间独立式洋房与 16 间半独立式洋房环绕逾 700 平方米的中央公园。RM 712,500 起，预发布阶段。">
+<meta name="twitter:title" content="Panthera Bertam · 槟城 Bertam 首购屋：永久地契半独立式洋房">
+<meta name="twitter:description" content="槟城首购屋：Bertam 永久地契半独立式洋房，4 房（其中 1 间在楼下，适合三代同堂）、私人侧院草坪，门前是逾 700 平方米的共享绿地。RM 712,500 起，预发布阶段。">
 <meta name="twitter:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta name="twitter:image:alt" content="Panthera Bertam，独立式洋房艺术家构想图">
 
@@ -121,10 +121,10 @@
       "@type": "WebPage",
       "@id": "https://www.pantheraestate.com/zh/#webpage",
       "url": "https://www.pantheraestate.com/zh/",
-      "name": "Panthera Bertam · 槟城 Bertam 永久地契半独立式与独立式洋房",
-      "description": "槟城甲抛峇底 Bertam 的永久地契半独立式与独立式洋房。19 间有地住宅环绕逾 700 平方米的共享绿地。半独立式 RM 712,500 起。",
+      "name": "Panthera Bertam · 槟城 Bertam 首购屋：永久地契半独立式洋房",
+      "description": "槟城甲抛峇底 Bertam 永久地契半独立式洋房，为成长中的家庭而设计：4 房（其中 1 间在楼下，方便三代同堂）、私人侧院草坪，门前是逾 700 平方米的共享绿地。RM 712,500 起。",
       "inLanguage": "zh-Hans",
-      "dateModified": "2026-11-12",
+      "dateModified": "2026-11-13",
       "isPartOf": {
         "@id": "https://www.pantheraestate.com/#website"
       },
@@ -166,10 +166,10 @@
       "name": "Panthera Bertam, freehold semi-D and bungalow homes in Bertam, Penang",
       "url": "https://www.pantheraestate.com/",
       "inLanguage": "en",
-      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows around a shared green of over 700 m² in Bertam, Kepala Batas, Seberang Perai Utara, Penang. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow price on request.",
-      "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, rumah berkembar, banglo, pegangan bebas, 半独立式洋房, 独立式洋房, 永久地契, 槟城",
+      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m² and ceilings of 2.85 to 3.5 m. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) price on request.",
+      "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, first home, family home, rumah berkembar, banglo, pegangan bebas, rumah pertama, 半独立式洋房, 独立式洋房, 永久地契, 首购屋, 三代同堂, 槟城",
       "datePosted": "2026-05-20",
-      "dateModified": "2026-11-12",
+      "dateModified": "2026-11-13",
       "image": [
         "https://www.pantheraestate.com/assets/hero-estate-3d.webp",
         "https://www.pantheraestate.com/assets/og-card.jpg",
@@ -186,6 +186,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Semi-Detached · 16 units",
+          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, facing the shared green of over 700 m². From RM 712,500.",
           "lowPrice": 712500,
           "priceCurrency": "MYR",
           "offerCount": 16,
@@ -221,7 +222,7 @@
         "Panthera Bertam Kepala Batas",
         "Panthera Bertam Penang"
       ],
-      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) around a shared central green of over 700 m².",
+      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, every one facing a shared central green of over 700 m², with SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Kepala Batas",
@@ -465,7 +466,7 @@
   <div class="wrap hero-inner">
     <div class="hero-copy" data-reveal>
       <h1 class="display">
-        <span data-i18n="hero.h1.a">仅此 19 间永久地契住宅，</span><br>
+        <span data-i18n="hero.h1.a">尊享永久地契住宅，</span><br>
         <span class="terra-mark" data-i18n="hero.h1.b">全部面向公园。</span>
       </h1>
       <p class="lede" data-i18n="hero.lede">位于槟城 Bertam 的 16 间半独立式与 3 间独立式洋房。每间都面向共享绿地，距槟城科技园仅五分钟车程。</p>
@@ -1323,8 +1324,8 @@
   </div>
 </div>
 
-<script src="app.js?v=130" defer></script>
-<script src="walkthrough/hero-boot.js?v=131" defer></script>
+<script src="app.js?v=131" defer></script>
+<script src="walkthrough/hero-boot.js?v=132" defer></script>
 <script src="home-toggle.js?v=5" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of
@@ -1336,3 +1337,4 @@
 <script>(function(){var n=navigator,q=location.search;if(!("serviceWorker" in n))return;var sw=n.serviceWorker,local=/^(127\.0\.0\.1|localhost)$/.test(location.hostname);if(/[?&]nosw\b/.test(q)||(local&&!/[?&]sw=1\b/.test(q))){sw.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(ks){ks.forEach(function(k){if(/^pb-/.test(k))caches.delete(k)})}).catch(function(){});return}if(location.protocol!=="https:"&&!local)return;addEventListener("load",function(){(window.requestIdleCallback||setTimeout)(function(){sw.register("/sw.js",{scope:"/",updateViaCache:"none"}).then(function(){return sw.ready}).then(function(r){var L=[];try{L=performance.getEntriesByType("resource").map(function(e){return e.name})}catch(e){}if(r.active&&L.length)r.active.postMessage({warm:L})}).catch(function(){})},{timeout:5000})})})();</script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       y}).then(function(r){var L=[];try{L=performance.getEntriesByType("resource").map(function(e){return e.name})}catch(e){}if(r.active&&L.length)r.active.postMessage({warm:L})}).catch(function(){})},{timeout:5000}

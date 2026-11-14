@@ -123,8 +123,43 @@ export function createApp(ctx) {
   // the estate view: framed to the screen's clear band (hero.js fitDist), pulled back a touch more than a tight fit
   function home(instant = false) { const v = VIEWS.estate, el = tall() ? 0.78 : v.goal.el, d = ctx.fitDist ? ctx.fitDist(el, v.goal.fov) * 1.12 : v.goal.dist; rig.setGoal({ ...v.goal, el, dist: d }, { ...v.lim, dmax: Math.max(v.lim.dmax, d * 1.5) }, { instant }); }
 
+  // ---------- history: an open panel or caption is one step that Back closes ----------
+  // (owner, Nov 2026: "when people press back button, sometimes, like look broken": Back with a panel open left the
+  // landing; a phone's Back is the way out of a sheet). The first panel or caption pushes one entry, the next ones
+  // replace it; closing it by its own button steps back off it, so Back from the estate still leaves at once.
+  const url = h => location.pathname + location.search + (h ? '#' + h : '');
+  const inLayer = () => !!(history.state && history.state.hxa);
+  let popIgnore = 0, stale = false;
+  function layer(st, hash) {
+    try {
+      if (inLayer()) history.replaceState(st, '', url(hash));
+      else {
+        if (location.hash) history.replaceState(history.state, '', url(''));   // the entry under it: the plain estate (a deep link's #id came in on it)
+        history.pushState(st, '', url(hash));
+      }
+    } catch (e) { /* the address stays */ }
+  }
+  function unlayer() {
+    try {
+      if (inLayer()) { popIgnore++; history.back(); }
+      else if (location.hash) history.replaceState(history.state, '', url(''));
+    } catch (e) { /* the address stays */ }
+  }
+  // the screen follows the history entry it is on (Back, Forward, a page restored from the back/forward cache)
+  function sync() {
+    if (busy) return;   // (the Location move: looked at again when it has landed)
+    const st = history.state, L = st && st.hxa;
+    if (L && stale) { stale = false; popIgnore++; history.back(); return; }   // closed under a tour (toEstate): its entry goes too
+    stale = false;
+    if (L === 'p' && VIEWS[st.id]) { if (current !== st.id) open(st.id, { fromPop: true }); }
+    else if (L === 'c' && FEATS[st.f]) { if (current) close(true); if (feat !== st.f) feature(st.f, { fromPop: true }); }
+    else { if (current) close(true); if (feat) { unfeature(); home(); } }
+  }
+  addEventListener('popstate', () => { if (popIgnore) { popIgnore--; return; } sync(); });
+  addEventListener('pageshow', e => { if (e.persisted) { popIgnore = 0; sync(); } });
+
   let opener = null;
-  async function open(id, { fromHash = false, fromLink = false } = {}) {
+  async function open(id, { fromHash = false, fromLink = false, fromPop = false } = {}) {
     if (id === 'register') document.querySelectorAll('.reg-hero img[loading="lazy"]').forEach(i => { i.loading = 'eager'; });   // the banner starts loading with the panel
     if (busy || !VIEWS[id]) return;
     if (!fromHash) api.startHash = null;   // the visitor chose: a pending deep link no longer applies
@@ -133,9 +168,9 @@ export function createApp(ctx) {
     if (id === 'estate' && !fromLink && !fromHash) { close(); home(); return; }
     if (!current && document.activeElement && !panel.contains(document.activeElement)) opener = document.activeElement;
     // from the Location panel: the camera comes down first (the 3D is held looking straight down until then)
-    if (current === 'location' && locClose) { const f = locClose; locClose = null; await f(); }
+    if (current === 'location' && locClose) { const f = locClose; locClose = null; await f(true); }
     const v = VIEWS[id];
-    if (v.special === 'location') { await openLocation(); return; }
+    if (v.special === 'location') { await openLocation(fromPop); return; }
     if (current) giveBack();
     current = id; mark(id);
     title.setAttribute('data-i18n', v.title); title.textContent = T(v.title);
@@ -147,7 +182,7 @@ export function createApp(ctx) {
     panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false'); html.classList.add('hxa-open');
     setPanel(true, !!v.wide);
     const g = goalFor(id); if (g) rig.setGoal(g.goal, g.lim);
-    if (!fromHash) history.replaceState(history.state, '', location.pathname + location.search + '#' + id);
+    if (!fromPop) layer({ hxa: 'p', id }, id);
     setTimeout(() => panel.focus({ preventScroll: true }), 60);
     if (id === 'homes') ctx.prefetchHome(homeNow());
   }
@@ -158,22 +193,23 @@ export function createApp(ctx) {
     const t = opener && opener.isConnected && !panel.contains(opener) ? opener : btns[was] || btns.estate || menu;
     opener = null; if (t && t.focus) t.focus({ preventScroll: true });
   }
-  function close() {
+  function close(keep = false) {   // keep: the history is already where it should be (Back), or the caller moves it on
     if (busy) return;
-    if (current === 'location' && locClose) { const f = locClose; locClose = null; f(); return; }
+    if (current === 'location' && locClose) { const f = locClose; locClose = null; f(keep); return; }
     const was = current;
     giveBack(); current = null; mark('estate');
     panel.classList.remove('open', 'wide', 'homes', 'hide-site'); panel.setAttribute('aria-hidden', 'true'); html.classList.remove('hxa-open');
     refocus(was);
     setPanel(false, false); home();
-    if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+    if (!keep) unlayer();
   }
 
   // Location: the lift into the map, landing in the (wide) panel
   let locClose = null;
-  async function openLocation() {
+  async function openLocation(fromPop = false) {
     if (current === 'location' || busy) return;
     busy = true;   // from here: no second panel can slip in while the move loads
+    if (!fromPop) layer({ hxa: 'p', id: 'location' }, 'location');   // at once, so Back during the lift brings it back down
     locClose = null;
     if (current) { giveBack(); current = null; panel.classList.remove('open'); }
     const v = VIEWS.location;
@@ -192,24 +228,24 @@ export function createApp(ctx) {
       // that"); once it has landed the panel glides up to its heading and intro ("it should show this first")
       const mb = document.getElementById('loc-leaflet');
       if (mb) { const br = body.getBoundingClientRect(), r = mb.getBoundingClientRect(); body.scrollTop += r.top - br.top - 12; }
-      history.replaceState(history.state, '', location.pathname + location.search + '#location');
     };
-    if (!loc) { busy = false; show(); body.scrollTop = 0; return; }
+    if (!loc) { busy = false; show(); body.scrollTop = 0; sync(); return; }
     try {
       locClose = await loc.goApp(show);   // resolves once the map has landed; returns how to fly back
     } finally { busy = false; }
     if (current === 'location') setTimeout(() => { try { body.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); } catch (e) { body.scrollTop = 0; } }, 450);   // up to the heading and intro
-    if (!locClose) { if (!shown) show(); return; }   // the map move could not run (Leaflet blocked): a plain panel, closed the usual way
+    if (!locClose) { if (!shown) show(); sync(); return; }   // the map move could not run (Leaflet blocked): a plain panel, closed the usual way
     const back = locClose;
-    locClose = async () => {   // closing the Location panel: the panel slides away and the camera comes back down
+    locClose = async (keep = false) => {   // closing the Location panel: the panel slides away and the camera comes back down
       busy = true;
       giveBack(); current = null; mark('estate');
       panel.classList.remove('open', 'wide'); panel.setAttribute('aria-hidden', 'true'); html.classList.remove('hxa-open');
       refocus('location');
       setPanel(false, false);
-      if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+      if (!keep) unlayer();
       try { await back(VIEWS.estate); home(); } finally { busy = false; }   // home(): the estate's camera limits again
     };
+    sync();   // Back pressed during the lift: it comes back down now
   }
 
   // ---------- features: icons on the estate, the caption changes (owner, Nov 2026) ----------
@@ -219,7 +255,7 @@ export function createApp(ctx) {
     road: { h: 'site.note2.h', t: 'site.note2.t', goal: { tgt: [-32, 0, 30], az: 0.42, el: 0.36, dist: 52, fov: 40 }, lim: { cx: -32, cz: 30, R: 12, dmin: 25, dmax: 140, emin: 0.1, emax: 1.3, arc: null } },
     pond: { h: 'site.note4.h', t: 'site.note4.t', goal: { tgt: [-11, 0, 42], az: 0.25, el: 0.62, dist: 48, fov: 40 }, lim: { cx: -11, cz: 42, R: 8, dmin: 25, dmax: 130, emin: 0.15, emax: 1.35, arc: null } },
     // every plot on its own title: the whole estate from a helicopter (owner, Nov 2026: "should do bird eye view ... helicopter view")
-    title: { h: 'site.note3.h', t: 'site.note3.t', goal: { tgt: [-44.5, 0, 48.5], az: 0.75, el: 0.95, dist: 190, fov: 40 }, lim: { cx: -44.5, cz: 48.5, R: 20, dmin: 90, dmax: 330, emin: 0.4, emax: 1.45, arc: null } },
+    title: { h: 'site.note3.h', t: 'site.note3.t', b: 'site.note3.b', goal: { tgt: [-44.5, 0, 48.5], az: 0.75, el: 0.95, dist: 190, fov: 40 }, lim: { cx: -44.5, cz: 48.5, R: 20, dmin: 90, dmax: 330, emin: 0.4, emax: 1.45, arc: null } },
     // the two houses: their name, the page's one-line description and figures (read from #homes / #bungalow)
     semid: { home: 'semid', h: 'hx.pin.semid', goal: HOME_GOAL.semid.goal, lim: HOME_GOAL.semid.lim },
     bungalow: { home: 'bungalow', h: 'hx.pin.bungalow', goal: HOME_GOAL.bungalow.goal, lim: HOME_GOAL.bungalow.lim },
@@ -257,9 +293,9 @@ export function createApp(ctx) {
   capWalk.addEventListener('click', () => { const f = FEATS[feat]; if (f && f.home) walkInto(f.home, capWalk); });
   let feat = null, warmT = 0;
   const say = (elx, key) => { if (key) { elx.setAttribute('data-i18n', key); elx.textContent = T(key); elx.hidden = false; } else { elx.removeAttribute('data-i18n'); elx.textContent = ''; elx.hidden = true; } };
-  function feature(id, { move = true } = {}) {
+  function feature(id, { move = true, fromPop = false } = {}) {
     const f = FEATS[id]; if (!f || (move && busy)) return;
-    if (move) { api.startHash = null; if (current) close(); ctx.skipIntro(); }
+    if (move) { api.startHash = null; if (current) close(true); ctx.skipIntro(); if (!fromPop) layer({ hxa: 'c', f: id }, ''); }
     feat = id;
     const src = document.querySelector('.hx-pin[data-id="' + id + '"] .hx-feat-ic svg');
     capIc.replaceChildren(...(src ? [src.cloneNode(true)] : []));
@@ -296,7 +332,7 @@ export function createApp(ctx) {
   const step = d => { const i = ORDER.indexOf(feat); feature(ORDER[(i + d + ORDER.length) % ORDER.length]); };
   capPrev.addEventListener('click', () => step(-1));
   capNext.addEventListener('click', () => step(1));
-  capX.addEventListener('click', () => { unfeature(); home(); });
+  capX.addEventListener('click', () => { unfeature(); home(); unlayer(); });
   capMore.addEventListener('click', () => { const f = FEATS[feat]; if (f && f.more) { unfeature(); open(f.more); } });
   // whose Escape is it: noted as the key goes down (capture), before the tour or a lightbox closes itself
   let escOther = false;
@@ -305,7 +341,7 @@ export function createApp(ctx) {
     const lb = document.getElementById('plan-lightbox');
     escOther = !!document.querySelector('.pbw:not([hidden]), .pbg') || html.classList.contains('pbw-going') || !!(lb && !lb.hidden);
   }, true);
-  addEventListener('keydown', e => { if (!feat || current || escOther || e.defaultPrevented) return; if (e.key === 'Escape') { unfeature(); home(); } else if (e.key === 'ArrowRight' && e.target === document.body) step(1); else if (e.key === 'ArrowLeft' && e.target === document.body) step(-1); });
+  addEventListener('keydown', e => { if (!feat || current || escOther || e.defaultPrevented) return; if (e.key === 'Escape') { unfeature(); home(); unlayer(); } else if (e.key === 'ArrowRight' && e.target === document.body) step(1); else if (e.key === 'ArrowLeft' && e.target === document.body) step(-1); });
 
   // links anywhere on the page open their panel
   document.addEventListener('click', e => {
@@ -422,7 +458,13 @@ export function createApp(ctx) {
 
   const api = {
     open, close, menu, panel, feature,
-    toEstate() { if (current && current !== 'location') close(); unfeature(); home(true); },   // the tour's Back to estate
+    // the tour's Back to estate: what was open under the tour closes, and its history entry goes with it (the tour's
+    // own entry may still be on top, popped a moment later: then it goes when that Back lands on it)
+    toEstate() {
+      const had = !!(current && current !== 'location') || !!feat;
+      if (current && current !== 'location') close(true); unfeature(); home(true);
+      if (had) { if (history.state && history.state.pbw) stale = true; else unlayer(); }
+    },
     get current() { return current; },
     startHash: start || null,
     onLang() { title.textContent = T(title.getAttribute('data-i18n') || ''); if (feat) feature(feat, { move: false }); },

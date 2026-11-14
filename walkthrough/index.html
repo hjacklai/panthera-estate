@@ -43,7 +43,7 @@
   u.forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = x; document.head.appendChild(l); });
   // the baked estate pack (1.2 to 1.7 MB) starts now, not after the whole module graph has run: the same files and tier as
   // walk.js's fetchPack (TEXHI = desk outside ?bake); 'e1' must follow BAKE_VER in versions.js
-  if (!/[?&](bake|live)/.test(location.search)) ['estate.e1.json', 'estate.e1.bin.gz', 'estate.e1.tex' + (desk ? 1024 : 512) + '.bin'].forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = 'bake/' + x + '?v=1'; document.head.appendChild(l); });   // ?v=: versions.js BAKE_REV
+  if (!/[?&](bake|live)/.test(location.search)) ['estate.e1.json', 'estate.e1.bin.gz', 'estate.e1.tex' + (desk ? 1024 : 512) + '.bin'].forEach(function (x) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = 'bake/' + x + '?v=5'; document.head.appendChild(l); });   // ?v=: versions.js BAKE_REV
   var m = [];
   if (desk) {   // desktop only: the post-processing modules (and the Semi-D's area-light tables)
     ['postprocessing/EffectComposer.js', 'postprocessing/RenderPass.js', 'postprocessing/GTAOPass.js', 'postprocessing/OutputPass.js', 'postprocessing/UnrealBloomPass.js',
@@ -59,7 +59,7 @@
      rules Google Fonts sent for the same request), so the first paint waits on no other site -->
 <link rel="stylesheet" href="../assets/fonts/fonts.css?v=1">
 <!-- The main site's own stylesheet: same tokens, logo ribbon and buttons. -->
-<link rel="stylesheet" href="../styles.css?v=108">
+<link rel="stylesheet" href="../styles.css?v=109">
 <link rel="stylesheet" href="walk.css?v=20">
 <script type="importmap">
 {
@@ -77,12 +77,12 @@
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/lines/LineMaterial.js" crossorigin>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/geometries/RoundedBoxGeometry.js" crossorigin>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/utils/BufferGeometryUtils.js" crossorigin>
-<link rel="modulepreload" href="walk.js?v=156">
+<link rel="modulepreload" href="walk.js?v=157">
 <link rel="modulepreload" href="estate.js?v=38">
 <link rel="modulepreload" href="furniture.js?v=14">
 <link rel="modulepreload" href="car.js?v=4">
-<link rel="modulepreload" href="hd.js?v=10">
-<link rel="modulepreload" href="versions.js?v=3">
+<link rel="modulepreload" href="hd.js?v=11">
+<link rel="modulepreload" href="versions.js?v=4">
 <link rel="modulepreload" href="pack.js?v=4">
 <script type="application/ld+json">
 {
@@ -236,6 +236,6 @@
 <!-- links back to the home page go to the visitor's language (/ms/ or /zh/ when BM or 中 is the choice the home page
      saved), fixed as the link is used, so the links walk.js adds later follow too -->
 <script>(function(){function fix(e){var a=e.target.closest&&e.target.closest('a[href]'),p;if(!a)return;try{var l=localStorage.getItem('panthera.lang');p=l==='bm'?'/ms/':l==='zh'?'/zh/':''}catch(x){return}if(!p)return;var u=new URL(a.href);if(u.origin===location.origin&&(u.pathname==='/'||u.pathname==='/index.html')){u.pathname=p;a.href=u.href}}['click','auxclick','contextmenu'].forEach(function(t){document.addEventListener(t,fix,true)})})();</script>
-<script type="module" src="walk.js?v=156"></script>
+<script type="module" src="walk.js?v=157"></script>
 </body>
 </html>

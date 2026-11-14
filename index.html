@@ -8,11 +8,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "131" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "136" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="131",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="136",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -22,8 +22,8 @@
 <style>html.hx-app{--gutter:max(clamp(20px,3.2vw,64px),calc((100vw - 1600px) / 2))}@media (max-width:720px){html.hx-app .topbar-inner{padding:6px 16px}html.hx-app .topbar .lang{padding:2px;font-size:10px}html.hx-app .topbar .lang button{min-height:30px;padding:2px 8px}html.hx-app .hero-copy h1.display{font-size:25px;line-height:1.08;margin:0 0 8px}html.hx-app .hero-copy .lede{font-size:13px;line-height:1.45;margin-top:0}html.hx-app .hero--cinematic .hero-inner{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}}html.hx-app .topbar-inner{grid-template-columns:1fr auto}html.hx-app .topbar .brand-mark{justify-self:start}html.hx-app .topbar-side.right{justify-self:end}@media (min-width:761px){html.hx-app .hero--cinematic .hero-copy h1.display{font-size:clamp(30px,3vw,48px);line-height:1.06;max-width:none}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:nowrap}html.hx-app .hero--cinematic .hero-copy .lede{font-size:15px;max-width:46ch}}@media (max-width:760px){html.hx-app .hero-copy h1.display{font-size:22px}html.hx-app .hero-copy .lede{font-size:12.5px}}@media (min-width:761px){html.hx-app .hero--cinematic .hero-inner.wrap{max-width:none;margin-left:0;margin-right:0;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}}html.hx-app .topbar-inner{max-width:none;width:100%;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}html.hx-app .topbar .home-pill{display:none!important}html.hx-app .topbar-side.right{width:auto;gap:8px}html.hx-app .topbar{border-bottom:0}@media (min-width:761px) and (min-aspect-ratio:9/10){html.hx-app .hero--cinematic .hero-inner{padding-bottom:max(clamp(120px,16vh,205px),166px)}}html.hx-app .topbar .lang{padding:0;border:0}html.hx-app .topbar .lang button{width:40px;height:40px;min-height:40px;min-width:40px;padding:0;justify-content:center;border-radius:50%}@media (max-width:340px){html.hx-app .topbar .brand-mark .sub{display:none}}html.hx-app .topbar .brand-mark{min-width:0}@media (min-width:761px) and (max-height:520px){html.hx-app .topbar-inner{padding:5px max(16px,env(safe-area-inset-right,0px)) 5px max(16px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-inner.wrap{padding-left:max(20px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-copy h1.display{font-size:22px;line-height:1.08;margin:0 0 6px}html.hx-app .hero--cinematic .hero-inner,html.hx-app .hero--cinematic .hero-inner.wrap{padding-bottom:76px!important;padding-top:12px!important}html.hx-app .hero--cinematic .hero-copy{max-width:52vw}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:normal}html.hx-app .hero--cinematic .hero-copy h1.display{max-width:52vw}html.hx-app .hero--cinematic .hero-copy .lede{display:none}}</style>
 
 
-<title>Panthera Bertam · Freehold Semi-D &amp; Bungalows, Bertam Penang</title>
-<meta name="description" content="Freehold semi-D and bungalow homes in Bertam, Kepala Batas, Penang. 19 landed homes around a shared green of over 700 m². Semi-D from RM 712,500.">
+<title>Panthera Bertam · First-Home Family Semi-D, Bertam Penang</title>
+<meta name="description" content="Freehold semi-D in Bertam, Penang, designed to grow with your family: 4 bedrooms (one downstairs), a private side lawn, facing the green. From RM 712,500.">
 <meta name="author" content="Panthera Development Sdn Bhd">
 <meta name="keywords" content="Panthera Bertam, Bertam Penang property, Kepala Batas, Seberang Perai Utara, Penang semi-D, Penang bungalow, freehold Penang homes, Penang Technology Park, rumah berkembar Bertam, banglo Pulau Pinang, rumah pegangan bebas, projek baharu Seberang Perai Utara, 槟城 半独立式洋房, 独立式洋房, 永久地契, 威北, 甲抛峇底, pantheraestate">
 <meta name="theme-color" content="#F2E9DF" media="(prefers-color-scheme: light)">
@@ -48,8 +48,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Panthera Bertam">
 <meta property="og:url" content="https://www.pantheraestate.com/">
-<meta property="og:title" content="Panthera Bertam · Freehold Semi-D &amp; Bungalows, Bertam Penang">
-<meta property="og:description" content="Three bungalows and sixteen semi-detached homes around a central park of over 700 m² in Bertam, Penang. From RM 712,500. Freehold. Pre-launch, register your interest.">
+<meta property="og:title" content="Panthera Bertam · First-Home Family Semi-D, Bertam Penang">
+<meta property="og:description" content="A first home designed to grow with your family: freehold 2,006 sq ft semi-Ds in Bertam, Penang, with 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area) and a private side lawn on the open side, every home facing a shared green of over 700 m². SK Bertam Perdana is across the road. From RM 712,500. Pre-launch, register your interest.">
 <meta property="og:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:secure_url" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:type" content="image/jpeg">
@@ -63,8 +63,8 @@
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://www.pantheraestate.com/">
-<meta name="twitter:title" content="Panthera Bertam · Freehold Semi-D &amp; Bungalows, Bertam Penang">
-<meta name="twitter:description" content="Three bungalows and sixteen semi-detached homes around a central park of over 700 m² in Bertam, Penang. From RM 712,500. Pre-launch.">
+<meta name="twitter:title" content="Panthera Bertam · First-Home Family Semi-D, Bertam Penang">
+<meta name="twitter:description" content="A semi-D for family in Bertam, Penang: freehold, 4 bedrooms (one on the ground floor), a private side lawn and a shared green of over 700 m² in front. From RM 712,500. Pre-launch.">
 <meta name="twitter:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta name="twitter:image:alt" content="Panthera Bertam, bungalow artist's impression">
 
@@ -83,7 +83,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=108">
+<link rel="stylesheet" href="styles.css?v=109">
 <!-- returning BM / 中 visitors on /: the hero copy waits (hidden, its space kept) until app.js has put it in their language,
      so the English text never flashes and reflows; English visitors are untouched. Cleared just after app.js's
      DOMContentLoaded (applyI18n), or after 3 s at worst. On /ms/ and /zh/ the text is already in the page's
@@ -109,10 +109,10 @@
       "@type": "WebPage",
       "@id": "https://www.pantheraestate.com/#webpage",
       "url": "https://www.pantheraestate.com/",
-      "name": "Panthera Bertam · Freehold Semi-D & Bungalows, Bertam Penang",
-      "description": "Freehold semi-D and bungalow homes in Bertam, Kepala Batas, Penang. 19 landed homes around a shared green of over 700 m². Semi-D from RM 712,500.",
+      "name": "Panthera Bertam · First-Home Family Semi-D, Bertam Penang",
+      "description": "Freehold semi-D in Bertam, Penang, designed to grow with your family: 4 bedrooms (one downstairs), a private side lawn, facing the green. From RM 712,500.",
       "inLanguage": "en",
-      "dateModified": "2026-11-12",
+      "dateModified": "2026-11-13",
       "isPartOf": { "@id": "https://www.pantheraestate.com/#website" },
       "about": { "@id": "https://www.pantheraestate.com/#listing" },
       "primaryImageOfPage": "https://www.pantheraestate.com/assets/og-card.jpg"
@@ -141,10 +141,10 @@
       "name": "Panthera Bertam, freehold semi-D and bungalow homes in Bertam, Penang",
       "url": "https://www.pantheraestate.com/",
       "inLanguage": "en",
-      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows around a shared green of over 700 m² in Bertam, Kepala Batas, Seberang Perai Utara, Penang. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow price on request.",
-      "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, rumah berkembar, banglo, pegangan bebas, 半独立式洋房, 独立式洋房, 永久地契, 槟城",
+      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous floor-to-floor heights of 3.7 m on the ground floor and 3.45 m upstairs, and full-height sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
+      "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, first home, family home, rumah berkembar, banglo, pegangan bebas, rumah pertama, 半独立式洋房, 独立式洋房, 永久地契, 首购屋, 三代同堂, 槟城",
       "datePosted": "2026-05-20",
-      "dateModified": "2026-11-12",
+      "dateModified": "2026-11-13",
       "image": [
         "https://www.pantheraestate.com/assets/hero-estate-3d.webp",
         "https://www.pantheraestate.com/assets/og-card.jpg",
@@ -157,6 +157,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Semi-Detached · 16 units",
+          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, facing the shared green of over 700 m². From RM 712,500.",
           "lowPrice": 712500,
           "priceCurrency": "MYR",
           "offerCount": 16,
@@ -166,9 +167,12 @@
           "seller": { "@id": "https://www.pantheraestate.com/#developer" }
         },
         {
-          "@type": "Offer",
+          "@type": "AggregateOffer",
           "name": "Bungalow · 3 units",
-          "description": "Price on request",
+          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, facing the shared green of over 700 m². From RM 1.22 million, each priced by its land size.",
+          "lowPrice": 1220000,
+          "priceCurrency": "MYR",
+          "offerCount": 3,
           "url": "https://www.pantheraestate.com/#pricing",
           "availability": "https://schema.org/PreSale",
           "itemOffered": { "@id": "https://www.pantheraestate.com/#bungalow" },
@@ -181,7 +185,7 @@
       "@id": "https://www.pantheraestate.com/#estate",
       "name": "Panthera Bertam",
       "alternateName": ["Panthera Bertam Kepala Batas", "Panthera Bertam Penang"],
-      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) around a shared central green of over 700 m².",
+      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, every one facing a shared central green of over 700 m², with SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
       "address": { "@type": "PostalAddress", "addressLocality": "Kepala Batas", "postalCode": "13200", "addressRegion": "Pulau Pinang", "addressCountry": "MY" },
       "containedInPlace": {
         "@type": "Place",
@@ -240,15 +244,15 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Is the title freehold or leasehold?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Freehold. The land is Lot 24480, individual titles will be issued at handover. No 99-year clock." }
+          "name": "Is it freehold or leasehold?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Freehold. The land is Lot 24480, and every home gets its own individual title at handover. No 99-year lease clock, so the home is yours to keep and to pass on to your children." }
         },
         {
           "@type": "Question",
-          "name": "Are foreigners allowed to buy?",
+          "name": "Can foreigners buy here?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "On the Penang mainland, foreigners can buy landed homes priced from RM 1 million, with state approval and a state levy (Bar Council circular, Dec 2024). Our semi-Ds are priced below that, so only bungalow lots may qualify. Ask sales for the current rule."
+            "text": "On the Penang mainland, foreigners can buy landed homes priced from RM 1 million, with state approval and a state levy (Bar Council circular, Dec 2024). Our semi-Ds are priced below that and the bungalows, from RM 1.22 million, above it, so for a foreign buyer only the bungalow lots may qualify, subject to state approval. Ask sales for the current rule before you plan around it."
           }
         },
         {
@@ -256,23 +260,23 @@
           "name": "What is a Bumi lot?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Some lots are Bumiputera lots. Contact us for each lot's status."
+            "text": "Some lots are Bumiputera lots. Ask us about any lot you like and we will confirm its status first, so you only plan around homes that are open to you."
           }
         },
         {
           "@type": "Question",
-          "name": "When is handover?",
+          "name": "When can we move in?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Estimated Q4 2028, 24 months from SPA signing. The date is fixed in your SPA with an LAD clause, so you're compensated if we run late."
+            "text": "Estimated Q4 2028, 24 months from SPA signing. That gives your family time to start planning the move around school terms and work."
           }
         },
         {
           "@type": "Question",
-          "name": "What's included in the price?",
+          "name": "What comes with the house?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The full inclusions schedule is being finalised and will be published with the Sale & Purchase Agreement. Registered buyers receive it first."
+            "text": "The full inclusions schedule is being finalised and will be published with the Sale & Purchase Agreement. Registered buyers receive it first, so you can see what your family is getting before you commit."
           }
         },
         {
@@ -280,39 +284,39 @@
           "name": "Can I choose my lot?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, first-come from the published price list. Corner lots (04 and 19) carry a premium; bungalow lots (01–03) are priced by land size."
+            "text": "Yes, first-come from the published price list, so the earlier you decide, the more choice you have. Corner lots (04 and 19) carry a premium; bungalow lots (01–03) are from RM 1.22 million, each priced by its land size."
           }
         },
         {
           "@type": "Question",
-          "name": "What's the maintenance arrangement?",
+          "name": "What will upkeep cost each month?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "A Residents' Association maintains the green, roads, drains and pond from handover, around RM 180 per home a month. Not gated; the layout keeps traffic out."
+            "text": "Around RM 180 per home a month. A Residents' Association looks after the green, roads, drains and pond from handover, so the spaces your family uses every day have someone looking after them. Not gated; the layout keeps traffic out."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I extend or modify the house later?",
+          "name": "Can we extend or change the house later?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, within the approved envelope. Porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA & MBSP sign-off. Guideline given at handover."
+            "text": "Yes, so the house can grow with your family. Work within the approved envelope: porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA & MBSP sign-off. Guideline given at handover."
           }
         },
         {
           "@type": "Question",
-          "name": "Do you assist with bank loans?",
+          "name": "Will you help with the bank loan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. It's a freehold home, so any major bank can finance it, and our team will help with the application. Approval and terms depend on your profile."
+            "text": "Yes. Our team helps you with the application, so you are not dealing with the bank alone. Approval, loan margin and rate are up to the bank, based on your profile."
           }
         },
         {
           "@type": "Question",
-          "name": "What if I'm not ready to buy yet?",
+          "name": "What if we're not ready to buy yet?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Register anyway. It is free, with no deposit and no obligation, and you get first pick of the lots you like, for when you are ready."
+            "text": "Register anyway. It is free, with no deposit and no obligation, and you get first pick of the lots you like. Your family decides when."
           }
         }
       ]
@@ -390,7 +394,7 @@
   <div class="wrap hero-inner">
     <div class="hero-copy" data-reveal>
       <h1 class="display">
-        <span data-i18n="hero.h1.a">19 exclusive freehold,</span><br>
+        <span data-i18n="hero.h1.a">Exclusive freehold,</span><br>
         <span class="terra-mark" data-i18n="hero.h1.b">park-facing homes.</span>
       </h1>
       <p class="lede" data-i18n="hero.lede">16 semi-Ds and 3 bungalows in Bertam, Penang. Every home faces a shared green, and Penang Technology Park is five minutes away.</p>
@@ -430,7 +434,7 @@
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="5.2"/><path d="M14.6 16.2l1.4-1.6 1.4 1.6M16 14.6v3.6"/><path d="M13 7.5V4.6L16 2.6l3 2V7.5zM13 29.4v-2.9l3-2 3 2v2.9zM2.6 19V16.1l3-2 3 2V19zM23.4 19v-2.9l3-2 3 2V19z"/></svg>
           <div class="h" data-i18n="idea.p1.h">01 · Courtyard plan</div>
           <div class="t" data-i18n="idea.p1.t">Every home faces the central green.</div>
-          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">All nineteen sit around a shared green of over 700 m², a short walk from every front gate.</div>
+          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">Your front gate opens onto shared green space: room for the kids to play, morning walks and evenings with the neighbours, no car needed.</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="23" height="17" rx="0.8"/><path d="M14 4.5v9h13.5M14 17.5v4"/><path d="M4.5 26.5h23M4.5 25v3M27.5 25v3"/></svg>
@@ -450,12 +454,12 @@
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="11.5" r="7.5"/><path d="M16 19v8.5M12.6 15.6l3.4 3.4 3.4-4.2M8.5 27.5h15"/></svg>
           <div class="h" data-i18n="site.note1.h">Central green</div>
-          <div class="t" data-i18n="site.note1.t">Over 700 m² of shared open space.</div>
+          <div class="t" data-i18n="site.note1.t">Green space right outside your front gate.</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="7" width="22" height="18" rx="7"/><rect x="9.5" y="11.5" width="13" height="9" rx="3.5" stroke-dasharray="2 2.4"/><path d="M1.5 16H5M27 16h3.5"/></svg>
           <div class="h" data-i18n="site.note2.h">Inner ring road</div>
-          <div class="t" data-i18n="site.note2.t">40-foot access roads, dual entry to the taman.</div>
+          <div class="t" data-i18n="site.note2.t">Wide roads and two ways in and out: easy to get home, easy to head out, with the main road minutes away.</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 3.5h12l4 4V26a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M20 3.5v4h4M10.5 11h9M10.5 14.5h9M10.5 18h5"/><circle cx="20.5" cy="22" r="3"/><path d="M19 24.6l-.8 3.4 2.3-1.2 2.3 1.2-.8-3.4"/></svg>
@@ -465,7 +469,7 @@
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18.5v-6L16 7l7 5.5v6"/><path d="M14 18.5v-3.5h4v3.5"/><path d="M5.5 18.5h21v3h-21z"/><path d="M3 26.5c2 0 2-1.4 4-1.4s2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4"/></svg>
           <div class="h" data-i18n="site.note4.h">Drainage built in</div>
-          <div class="t" data-i18n="site.note4.t">A 298 m² retention pond and perimeter drains.</div>
+          <div class="t" data-i18n="site.note4.t">Planned for the rain: a retention pond and drains around the estate carry storm water away from the homes.</div>
         </div>
       </div>
     </div>
@@ -481,7 +485,7 @@
       <div class="home-cover-scrim" aria-hidden="true"></div>
       <div class="home-cover-copy">
         <h2 class="title" data-i18n="h.semid.name">The Semi-D</h2>
-        <p class="product-pitch" data-i18n="h.semid.pitch">A big open-plan kitchen, living and dining, with high ceilings and floor-to-ceiling glass to the garden. Three bedrooms upstairs, one on the ground floor.</p>
+        <p class="product-pitch" data-i18n="h.semid.pitch">A big open-plan kitchen, living and dining, with generous floor-to-floor heights and full-height sliding glass doors onto your side lawn. Three bedrooms upstairs, one on the ground floor.</p>
       </div>
     </figure>
 
@@ -508,8 +512,8 @@
             <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.semid.s5.k">Ceilings</div>
-            <div class="v"><span data-i18n="h.semid.s5.v">2.85–3.5 m</span></div>
+            <div class="k" data-i18n="h.semid.s5.k">Floor heights</div>
+            <div class="v"><span data-i18n="h.semid.s5.v">3.7 / 3.45 m</span> <small data-i18n="h.semid.s5.u">ground / first, floor to floor</small></div>
           </div>
           <div>
             <div class="k" data-i18n="h.semid.s6.k">Tenure</div>
@@ -517,7 +521,7 @@
           </div>
         </div>
         <div class="product-foot">
-          <div class="price"><span class="lbl" data-i18n="h.semid.price.l">From</span><strong data-i18n="h.semid.price.v">RM 712,500 onwards</strong></div>
+          <div class="price"><span class="lbl" data-i18n="h.semid.price.l">From</span><strong data-i18n="h.semid.price.v">RM 712,500</strong></div>
           <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -601,8 +605,8 @@
             <div class="v"><span data-i18n="h.bungalow.s4.v">5+1</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.bungalow.s5.k">Ceilings</div>
-            <div class="v"><span data-i18n="h.bungalow.s5.v">2.85–3.5 m</span></div>
+            <div class="k" data-i18n="h.bungalow.s5.k">Floor heights</div>
+            <div class="v"><span data-i18n="h.bungalow.s5.v">3.7 / 3.45 m</span> <small data-i18n="h.bungalow.s5.u">ground / first, floor to floor</small></div>
           </div>
           <div>
             <div class="k" data-i18n="h.bungalow.s6.k">Tenure</div>
@@ -610,7 +614,7 @@
           </div>
         </div>
         <div class="product-foot">
-          <div class="price"><strong data-i18n="h.bungalow.price.v">Price on request</strong></div>
+          <div class="price"><span class="lbl" data-i18n="h.bungalow.price.l">From</span><strong data-i18n="h.bungalow.price.v">RM 1,220,000</strong></div>
           <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -901,7 +905,8 @@
       </div>
     </div>
 
-    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">These are pre-launch prices. From RM 712.5k for a freehold home that faces its own green, while the list is still open before public launch.</p>
+
+    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Pre-launch prices: the Semi-D from RM 712,500 and the bungalow from RM 1.22 million. Register to get the full lot-by-lot list and first pick of the lots you like.</p>
 
     <div class="price-ranges" data-reveal>
 
@@ -927,7 +932,8 @@
 
         <div class="prc-range">
           <div class="row">
-            <span class="val" data-i18n="h.bungalow.price.v">Price on request</span>
+            <span class="lbl" data-i18n="h.bungalow.price.l">From</span>
+            <span class="val">RM 1.22m</span>
           </div>
         </div>
 
@@ -950,7 +956,7 @@
     </aside>
 
     <div class="prc-foot" style="margin-top: 28px; border-top: 1px solid var(--rule-soft); padding-top: 22px;">
-      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">Bumi lot</span></span>
+      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">Bumi lots available</span></span>
       <span class="spacer"></span>
       <span data-i18n="pricing.leg.note">All prices subject to SPA · E. & O.E.</span>
     </div>
@@ -964,7 +970,7 @@
       <div>
         <div class="eyebrow" data-i18n="calc.eyebrow">Affordability</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="calc.title">What it takes to own one.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Drag the sliders and the monthly figure updates live. Indicative only; final approval rests with your bank.</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Drag the sliders and the monthly figure updates live. Indicative only, subject to the loan margin and rate your bank approves.</p>
       </div>
     </div>
 
@@ -979,7 +985,7 @@
             <span class="lbl" data-i18n="calc.price">Property price</span>
             <span class="val" id="calc-price-v">RM 712,500</span>
           </div>
-          <input id="calc-price" type="range" min="700000" max="1000000" step="500" value="712500" aria-label="Property price" data-i18n-aria="calc.price">
+          <input id="calc-price" type="range" min="700000" max="1500000" step="500" value="712500" aria-label="Property price" data-i18n-aria="calc.price">
         </div>
 
         <div class="calc-field">
@@ -1074,47 +1080,47 @@
 
       <div class="faq-list" data-reveal>
         <details class="faq" open>
-          <summary><span class="ix">01</span><span data-i18n="faq.q1">Is the title freehold or leasehold?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a1">Freehold. The land is Lot 24480, individual titles will be issued at handover. No 99-year clock.</p></div>
+          <summary><span class="ix">01</span><span data-i18n="faq.q1">Is it freehold or leasehold?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a1">Freehold. The land is Lot 24480, and every home gets its own individual title at handover. No 99-year lease clock, so the home is yours to keep and to pass on to your children.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">02</span><span data-i18n="faq.q2">Are foreigners allowed to buy?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a2">On the Penang mainland, foreigners can buy landed homes priced from RM 1 million, with state approval and a state levy (Bar Council circular, Dec 2024). Our semi-Ds are priced below that, so only bungalow lots may qualify. Ask sales for the current rule.</p></div>
+          <summary><span class="ix">02</span><span data-i18n="faq.q2">Can foreigners buy here?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a2">On the Penang mainland, foreigners can buy landed homes priced from RM 1 million, with state approval and a state levy (Bar Council circular, Dec 2024). Our semi-Ds are priced below that and the bungalows, from RM 1.22 million, above it, so for a foreign buyer only the bungalow lots may qualify, subject to state approval. Ask sales for the current rule before you plan around it.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">03</span><span data-i18n="faq.q3">What is a Bumi lot?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a3">Some lots are Bumiputera lots. Contact us for each lot's status.</p></div>
+          <div class="answer"><p data-i18n="faq.a3">Some lots are Bumiputera lots. Ask us about any lot you like and we will confirm its status first, so you only plan around homes that are open to you.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">04</span><span data-i18n="faq.q4">When is handover?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a4">Estimated Q4 2028, 24 months from SPA signing. The date is fixed in your SPA with an LAD clause, so you're compensated if we run late.</p></div>
+          <summary><span class="ix">04</span><span data-i18n="faq.q4">When can we move in?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a4">Estimated Q4 2028, 24 months from SPA signing. That gives your family time to start planning the move around school terms and work.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">05</span><span data-i18n="faq.q5">What's included in the price?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a5">The full inclusions schedule is being finalised and will be published with the Sale &amp; Purchase Agreement. Registered buyers receive it first.</p></div>
+          <summary><span class="ix">05</span><span data-i18n="faq.q5">What comes with the house?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a5">The full inclusions schedule is being finalised and will be published with the Sale &amp; Purchase Agreement. Registered buyers receive it first, so you can see what your family is getting before you commit.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">06</span><span data-i18n="faq.q6">Can I choose my lot?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a6">Yes, first-come from the published price list. Corner lots (04 and 19) carry a premium; bungalow lots (01–03) are priced by land size.</p></div>
+          <div class="answer"><p data-i18n="faq.a6">Yes, first-come from the published price list, so the earlier you decide, the more choice you have. Corner lots (04 and 19) carry a premium; bungalow lots (01–03) are from RM 1.22 million, each priced by its land size.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">07</span><span data-i18n="faq.q7">What's the maintenance arrangement?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a7">A Residents' Association maintains the green, roads, drains and pond from handover, around RM 180 per home a month. Not gated; the layout keeps traffic out.</p></div>
+          <summary><span class="ix">07</span><span data-i18n="faq.q7">What will upkeep cost each month?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a7">Around RM 180 per home a month. A Residents' Association looks after the green, roads, drains and pond from handover, so the spaces your family uses every day have someone looking after them. Not gated; the layout keeps traffic out.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">08</span><span data-i18n="faq.q8">Can I extend or modify the house later?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">Yes, within the approved envelope. Porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA &amp; MBSP sign-off. Guideline given at handover.</p></div>
+          <summary><span class="ix">08</span><span data-i18n="faq.q8">Can we extend or change the house later?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a8">Yes, so the house can grow with your family. Work within the approved envelope: porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA &amp; MBSP sign-off. Guideline given at handover.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">09</span><span data-i18n="faq.q9">Do you assist with bank loans?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a9">Yes. It's a freehold home, so any major bank can finance it, and our team will help with the application. Approval and terms depend on your profile.</p></div>
+          <summary><span class="ix">09</span><span data-i18n="faq.q9">Will you help with the bank loan?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a9">Yes. Our team helps you with the application, so you are not dealing with the bank alone. Approval, loan margin and rate are up to the bank, based on your profile.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">10</span><span data-i18n="faq.q10">What if I'm not ready to buy yet?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a10">Register anyway. It is free, with no deposit and no obligation, and you get first pick of the lots you like, for when you are ready.</p></div>
+          <summary><span class="ix">10</span><span data-i18n="faq.q10">What if we're not ready to buy yet?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a10">Register anyway. It is free, with no deposit and no obligation, and you get first pick of the lots you like. Your family decides when.</p></div>
         </details>
       </div>
-      <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">More questions? <a href="/guides/">Read our guides →</a></p>
+      <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">More questions? <a href="/guides/">Read our <span style="white-space:nowrap">guides →</span></a> · <a href="/disclaimer/">Disclaimer</a></p>
     </div>
   </div>
 </section>
@@ -1127,7 +1133,7 @@
       <div>
         <div class="eyebrow cream" data-i18n="reg.eyebrow">Register your interest</div>
         <h2 class="title" style="margin-top:10px; color:var(--cream);" data-i18n="reg.title">Be first in line.</h2>
-        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">Register and we'll WhatsApp you the full price list, floor plans and brochure, plus first pick of lots before public launch. Claim the home that opens to the green while all nineteen are still on the table. No deposit, no obligation.</p>
+        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">Register to join our list, and we'll keep you updated as the project moves.</p>
       </div>
     </div>
 
@@ -1169,19 +1175,14 @@
 
       <aside class="reg-contact" data-reveal>
         <div class="card wa">
-          <div class="h" data-i18n="reg.contact.wa.h">Faster, chat now</div>
+          <div class="h" data-i18n="reg.contact.wa.h">Chat now</div>
           <div class="n" data-i18n="reg.contact.wa.n">+60 17-598 1858</div>
           <a class="action" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" data-i18n="reg.contact.wa.cta">Open WhatsApp ↗</a>
         </div>
         <div class="card">
           <div class="h" data-i18n="reg.contact.fin.h">Mortgage help</div>
           <div class="n" data-i18n="reg.contact.fin.n">Any major bank</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">Freehold title, so it's financeable like any home. We help with the application, terms depend on your profile.</p>
-        </div>
-        <div class="card">
-          <div class="h" data-i18n="reg.contact.dev.h">Developer</div>
-          <div class="n" data-i18n="reg.contact.dev.n">Panthera Development Sdn. Bhd.</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.dev.b">Sales enquiries Mon–Sat, 9am–6pm.</p>
+          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">We help you prepare and submit the application. The loan margin and rate are what your bank approves.</p>
         </div>
       </aside>
     </div>
@@ -1212,9 +1213,7 @@
       <div>
         <div class="h" data-i18n="footer.h.legal">Legal</div>
         <ul>
-          <li><a href="#" data-i18n="footer.legal.disclaimer">Disclaimer</a></li>
-          <li><a href="#" data-i18n="footer.legal.privacy">Privacy</a></li>
-          <li><a href="#" data-i18n="footer.legal.spa">SPA terms</a></li>
+          <li data-i18n-html="footer.legal.disclaimer"><a href="/disclaimer/">Disclaimer</a></li>
         </ul>
       </div>
 
@@ -1252,9 +1251,9 @@
   </div>
 </div>
 
-<script src="app.js?v=130" defer></script>
-<script src="walkthrough/hero-boot.js?v=131" defer></script>
-<script src="home-toggle.js?v=5" defer></script>
+<script src="app.js?v=131" defer></script>
+<script src="walkthrough/hero-boot.js?v=136" defer></script>
+<script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of
      downloading them again (owner, Nov 2026: "optimize load time on all devices, without compromising quality"). Pages and

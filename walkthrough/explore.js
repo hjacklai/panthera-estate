@@ -12,7 +12,7 @@ const SHEET = {   // walk.js rig(0): the plan sheet's centre (model frame) and t
 };
 const PLAN_FOV = 2.2, NEAR_FOV = 35;
 const LENIS_URL = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
-const WALK_V = '156', CSS_V = '13';
+const WALK_V = '157', CSS_V = '13';
 
 export function createTour(ctx) {
   const { THREE, renderer, canvas, camera, base, T, reduced } = ctx;
@@ -63,7 +63,12 @@ export function createTour(ctx) {
   const wait = el('div', 'pbw-wait', { role: 'status', hidden: '' });
   const waitT = el('span', '', { 'data-i18n': 'hx.prep' }, T('hx.prep')), waitN = el('b', '', {}, '0%');
   wait.append(el('span', 'pbw-ring', { 'aria-hidden': 'true' }), waitT, waitN);
-  ov.append(stage, bar, wait);
+  // "3D view: artist's impression", small and quiet in the corner (as on the estate 3D), to the disclaimer page in the
+  // visitor's language (its address follows a language switch)
+  const disc = el('a', 'pbw-disc', { 'data-i18n': 'hx.disc' }); disc.textContent = T('hx.disc');
+  const discHref = () => { const l = (document.documentElement.lang || 'en').toLowerCase(); disc.href = l.startsWith('ms') ? '/ms/disclaimer/' : l.startsWith('zh') ? '/zh/disclaimer/' : '/disclaimer/'; };
+  discHref(); new MutationObserver(discHref).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  ov.append(stage, bar, wait, disc);
   document.body.append(ov);
 
   // one HUD per home (a copy of walkthrough/index.html's, ids unique as only the active one is in the page)
@@ -169,6 +174,7 @@ export function createTour(ctx) {
   function drop(home) {
     const w = walks[home]; if (!w) return;
     delete walks[home];
+    w.urgent = false;   // a build still running goes on at idle pace only (it is thrown away when done)
     w.root.remove();
     if (w.api) w.api.dispose();   // still building: disposed when it finishes (see prefetch)
   }
@@ -187,7 +193,7 @@ export function createTour(ctx) {
   const phase = { name: '', u: 0, fade: 1 };
   const animate = (ms, fn, name = '') => new Promise(res => {
     const t0 = clock();
-    loop(() => { const u = ms > 0 ? clamp((clock() - t0) / ms) : 1; phase.name = name; phase.u = u; fn(u); if (u >= 1) { res(); return false; } });
+    loop(() => { if (stopReq) { res(); return false; } const u = ms > 0 ? clamp((clock() - t0) / ms) : 1; phase.name = name; phase.u = u; fn(u); if (u >= 1) { res(); return false; } });
   });
   const frameOnce = () => new Promise(res => loop(() => { res(); return false; }));
 
@@ -274,6 +280,18 @@ export function createTour(ctx) {
 
   // ---------- state ----------
   let open = null, busy = false, pending = null, opener = null, waitingFor = null, heroPose = null, inertList = [], lockPad = '';
+  // Back (or Escape) while the tour is still flying in or across: the moves stop where they are and the camera flies
+  // straight back (owner, Nov 2026: "when people press back button, sometimes, like look broken"; the close used to wait
+  // for the whole fly-in, build, lens and handoff, about 9 s, and a second Back left the site)
+  let going = false, stopReq = false, stopWake = null;
+  const STOP = new Error('stopped');
+  const halt = () => { if (stopReq) throw STOP; };
+  async function stopped(e) {   // after a stopped open or switch: the waiting close runs now
+    if (e !== STOP) console.warn('tour: back to the estate', e);
+    const p = pending && pending[0] === 'close' ? pending : ['close', false, false];
+    pending = null; stopReq = false; going = false; busy = false;
+    await closeTour(p[1], { estate: p[2] });
+  }
   const here = () => location.pathname + location.search;   // absolute, so a <base> on the page cannot redirect it
   const markPill = home => pillBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.home === home)));
   const showBar = on => { ov.classList.toggle('pbw-ui', on); };
@@ -306,8 +324,9 @@ export function createTour(ctx) {
     waitingFor = home; waitN.textContent = Math.round(w.pct * 100) + '%'; wait.hidden = false;
     const p0 = planPose(home, NEAR_FOV), t0 = performance.now();
     let done = false; w.p.then(() => { done = true; }, () => { done = true; });
-    loop(t => { const k = Math.sin((Math.max(t, performance.now()) - t0) / 1400) * 0.02; const p = { ...p0, pos: p0.tgt.clone().add(V(0, (p0.pos.y - p0.tgt.y) * (1 + k), 0)) }; setCam(p); ctx.renderHero(); return !done; });
-    try { await w.p; } finally { waitingFor = null; wait.hidden = true; }
+    loop(t => { const k = Math.sin((Math.max(t, performance.now()) - t0) / 1400) * 0.02; const p = { ...p0, pos: p0.tgt.clone().add(V(0, (p0.pos.y - p0.tgt.y) * (1 + k), 0)) }; setCam(p); ctx.renderHero(); return !done && !stopReq; });
+    try { await new Promise((res, rej) => { w.p.then(res, rej); stopWake = res; }); } finally { stopWake = null; waitingFor = null; wait.hidden = true; }
+    if (stopReq) return null;
     await frameOnce();
     setCam(p0); ctx.renderHero();
     return w.api;
@@ -351,16 +370,16 @@ export function createTour(ctx) {
   }
 
   // ---------- open, switch, back ----------
-  async function openHome(home, from) {
-    if (busy) { pending = ['open', home]; return; }
+  async function openHome(home, from, pop = false) {   // pop: Forward onto a tour's history entry (that entry is kept)
+    if (busy) { pending = ['open', home, pop]; return; }
     if (open) { if (open !== home) switchHome(home); return; }
-    busy = true; open = home; opener = from || document.activeElement;
+    busy = true; going = true; stopReq = false; open = home; opener = from || document.activeElement;
     try {
       const w = (prefetch(home, true), walks[home]);   // built ahead, or from now on at the flight's pace
       measure();
       heroPose = heroNow();
       if (ctx.onHome) ctx.onHome(home);   // the landing page follows (before the push, so Back returns to its URL)
-      history.pushState({ pbw: home }, '', here() + '#walk-' + home);
+      history[pop ? 'replaceState' : 'pushState']({ pbw: home }, '', here() + '#walk-' + home);
       ctx.leaving(true);   // the hero copy, pins and the site bars fade while the camera sets off
       ctx.hold(true);
       // the page must not scroll meanwhile (the scroll lock itself waits: it would unstick the sticky hero)
@@ -380,21 +399,23 @@ export function createTour(ctx) {
       const moved = () => canvas.parentElement === stage;
       try { await fly([heroPose, approach(home), planPose(home, NEAR_FOV)], 2400, 'fly-in', u => { if (!moved() && (u >= 0.16 || reduced)) moveIn(); }); }   // after about 0.4 s
       finally { if (!moved()) moveIn(); }
+      halt();
       inertPage();
       const api = await hoverUntil(home, w);
+      halt();
       if (!api) throw new Error('no walk');
       await lens(home, NEAR_FOV, PLAN_FOV, 1100);
+      halt();
+      going = false;
       await handoff(w);
-    } catch (e) {
-      console.warn('tour: back to the estate', e); busy = false; await closeTour(false); return;
-    }
-    busy = false; runPending();
+    } catch (e) { await stopped(e); return; }
+    going = false; busy = false; runPending();
   }
   async function switchHome(home) {
     if (!open || home === open) return;
     if (busy) { pending = ['open', home]; return; }
     const from = walks[open]; if (!from || !from.api) return;
-    busy = true;
+    busy = true; going = true; stopReq = false;
     const was = open; open = home;
     if (ctx.onHome) ctx.onHome(home);
     history.replaceState({ pbw: home }, '', here() + '#walk-' + home);
@@ -402,20 +423,28 @@ export function createTour(ctx) {
     try {
       const { s, fade, plan } = await leave(from);
       const w = (prefetch(home, true), walks[home]);
-      if (plan) { await fade; await lens(was, s.fov, NEAR_FOV, 900); await fly([planPose(was, NEAR_FOV), aerial(was, home), approach(home), planPose(home, NEAR_FOV)], 3400, 'fly-across'); }
+      if (plan) { await fade; halt(); await lens(was, s.fov, NEAR_FOV, 900); halt(); await fly([planPose(was, NEAR_FOV), aerial(was, home), approach(home), planPose(home, NEAR_FOV)], 3400, 'fly-across'); }
       else { await fly([s, aerial(was, home), approach(home), planPose(home, NEAR_FOV)], 3600, 'fly-across'); await fade; }
+      halt();
       const api = await hoverUntil(home, w);
+      halt();
       if (!api) throw new Error('no walk');
       await lens(home, NEAR_FOV, PLAN_FOV, 1100);
+      halt();
+      going = false;
       await handoff(w);
-    } catch (e) { console.warn('tour: back to the estate', e); busy = false; await closeTour(false); return; }
-    busy = false; runPending();
+    } catch (e) { await stopped(e); return; }
+    going = false; busy = false; runPending();
   }
   // estate: the Back to estate buttons (and Escape) pull out to the whole estate, not to the home the tour began from
   // (owner, Nov 2026: "when click back to estate, it shud go back to the estate, not just show the semi d or bungalow")
   async function closeTour(fromPop = false, { estate = false } = {}) {
     if (!open) return;
-    if (busy) { pending = ['close', fromPop, estate]; return; }
+    if (busy) {
+      pending = ['close', fromPop, estate];
+      if (going) { stopReq = true; if (stopWake) stopWake(); }   // an open or switch still on its way: it stops now
+      return;
+    }
     busy = true;
     const w = walks[open];
     if (!fromPop && history.state && history.state.pbw) { ignorePop = true; history.back(); }
@@ -444,17 +473,27 @@ export function createTour(ctx) {
     const f = opener && opener.isConnected && opener !== document.body ? opener : ctx.focusHome;   // focus back where the visitor left
     if (f) f.focus({ preventScroll: true });
     if (ctx.onClosed) ctx.onClosed();
+    // Back and then Forward while it was closing: the address is on a tour's entry again, so that tour opens
+    { const h = history.state && history.state.pbw; if (h && SHEET[h] && !pending) pending = ['open', h, true]; }
     busy = false; runPending();
   }
   function runPending() {
     const p = pending; pending = null; if (!p) return;
-    if (p[0] === 'open') { if (open) switchHome(p[1]); else openHome(p[1]); }
+    if (p[0] === 'open') { if (open) switchHome(p[1]); else openHome(p[1], null, p[2]); }
     else if (p[0] === 'close') closeTour(p[1], { estate: p[2] });
   }
 
   // ---------- controls ----------
   let ignorePop = false;
-  addEventListener('popstate', () => { if (ignorePop) { ignorePop = false; return; } if (open) closeTour(true); });
+  // Back closes the tour; Forward onto a tour's entry opens that tour again (it showed the estate under a #walk URL)
+  addEventListener('popstate', () => {
+    if (ignorePop) { ignorePop = false; return; }
+    const st = history.state, h = st && st.pbw;
+    if (h && SHEET[h]) { if (!open) openHome(h, null, true); }   // (a tour still closing: closeTour looks again when done)
+    else if (open) closeTour(true);
+  });
+  // a lost GPU context empties the built walks' render targets (their light): built again when next opened
+  canvas.addEventListener('webglcontextrestored', () => { for (const h of Object.keys(walks)) if (walks[h] !== active && walks[h].api) drop(h); });
   back.addEventListener('click', () => closeTour(false, { estate: true }));
   pill.addEventListener('click', e => { const b = e.target.closest('button[data-home]'); if (b && open && b.dataset.home !== open) switchHome(b.dataset.home); });
   pill.addEventListener('pointerenter', () => { if (open && !LOWMEM) prefetch(OTHER[open]); });

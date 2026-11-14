@@ -10,11 +10,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "131" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "136" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="131",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="136",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -24,8 +24,8 @@
 <style>html.hx-app{--gutter:max(clamp(20px,3.2vw,64px),calc((100vw - 1600px) / 2))}@media (max-width:720px){html.hx-app .topbar-inner{padding:6px 16px}html.hx-app .topbar .lang{padding:2px;font-size:10px}html.hx-app .topbar .lang button{min-height:30px;padding:2px 8px}html.hx-app .hero-copy h1.display{font-size:25px;line-height:1.08;margin:0 0 8px}html.hx-app .hero-copy .lede{font-size:13px;line-height:1.45;margin-top:0}html.hx-app .hero--cinematic .hero-inner{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}}html.hx-app .topbar-inner{grid-template-columns:1fr auto}html.hx-app .topbar .brand-mark{justify-self:start}html.hx-app .topbar-side.right{justify-self:end}@media (min-width:761px){html.hx-app .hero--cinematic .hero-copy h1.display{font-size:clamp(30px,3vw,48px);line-height:1.06;max-width:none}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:nowrap}html.hx-app .hero--cinematic .hero-copy .lede{font-size:15px;max-width:46ch}}@media (max-width:760px){html.hx-app .hero-copy h1.display{font-size:22px}html.hx-app .hero-copy .lede{font-size:12.5px}}@media (min-width:761px){html.hx-app .hero--cinematic .hero-inner.wrap{max-width:none;margin-left:0;margin-right:0;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}}html.hx-app .topbar-inner{max-width:none;width:100%;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}html.hx-app .topbar .home-pill{display:none!important}html.hx-app .topbar-side.right{width:auto;gap:8px}html.hx-app .topbar{border-bottom:0}@media (min-width:761px) and (min-aspect-ratio:9/10){html.hx-app .hero--cinematic .hero-inner{padding-bottom:max(clamp(120px,16vh,205px),166px)}}html.hx-app .topbar .lang{padding:0;border:0}html.hx-app .topbar .lang button{width:40px;height:40px;min-height:40px;min-width:40px;padding:0;justify-content:center;border-radius:50%}@media (max-width:340px){html.hx-app .topbar .brand-mark .sub{display:none}}html.hx-app .topbar .brand-mark{min-width:0}@media (min-width:761px) and (max-height:520px){html.hx-app .topbar-inner{padding:5px max(16px,env(safe-area-inset-right,0px)) 5px max(16px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-inner.wrap{padding-left:max(20px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-copy h1.display{font-size:22px;line-height:1.08;margin:0 0 6px}html.hx-app .hero--cinematic .hero-inner,html.hx-app .hero--cinematic .hero-inner.wrap{padding-bottom:76px!important;padding-top:12px!important}html.hx-app .hero--cinematic .hero-copy{max-width:52vw}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:normal}html.hx-app .hero--cinematic .hero-copy h1.display{max-width:52vw}html.hx-app .hero--cinematic .hero-copy .lede{display:none}}</style>
 
 
-<title>Panthera Bertam · Rumah Berkembar &amp; Banglo Pegangan Bebas, Bertam Pulau Pinang</title>
-<meta name="description" content="Rumah berkembar dan banglo pegangan bebas di Bertam, Kepala Batas, Pulau Pinang. 19 rumah bertanah mengelilingi taman bersama seluas lebih 700 m². Rumah berkembar dari RM 712,500.">
+<title>Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas</title>
+<meta name="description" content="Rumah semi-D pegangan bebas di Bertam, Pulau Pinang untuk keluarga: 4 bilik (satu di bawah), laman tepi persendirian, menghadap taman. Dari RM 712,500.">
 <meta name="author" content="Panthera Development Sdn Bhd">
 <meta name="keywords" content="Panthera Bertam, Bertam Penang property, Kepala Batas, Seberang Perai Utara, Penang semi-D, Penang bungalow, freehold Penang homes, Penang Technology Park, rumah berkembar Bertam, banglo Pulau Pinang, rumah pegangan bebas, projek baharu Seberang Perai Utara, 槟城 半独立式洋房, 独立式洋房, 永久地契, 威北, 甲抛峇底, pantheraestate">
 <meta name="theme-color" content="#F2E9DF" media="(prefers-color-scheme: light)">
@@ -50,8 +50,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Panthera Bertam">
 <meta property="og:url" content="https://www.pantheraestate.com/ms/">
-<meta property="og:title" content="Panthera Bertam · Rumah Berkembar &amp; Banglo Pegangan Bebas, Bertam Pulau Pinang">
-<meta property="og:description" content="Tiga banglo dan enam belas rumah berkembar mengelilingi taman tengah seluas lebih 700 m² di Bertam, Pulau Pinang. Dari RM 712,500. Pegangan bebas. Pra-pelancaran, daftar minat anda.">
+<meta property="og:title" content="Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas">
+<meta property="og:description" content="Rumah pertama yang direka untuk berkembang bersama keluarga anda: rumah berkembar (semi-D) pegangan bebas 2,006 kaki persegi di Bertam, Kepala Batas, dengan 4 bilik tidur (satu di tingkat bawah, dengan pintu sendiri ke bilik air yang juga boleh dimasuki dari ruang tamu) dan laman tepi persendirian di sisi yang terbuka, setiap rumah menghadap taman bersama seluas lebih 700 m². SK Bertam Perdana di seberang jalan. Dari RM 712,500. Pra-pelancaran, daftar minat anda.">
 <meta property="og:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:secure_url" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:type" content="image/jpeg">
@@ -65,8 +65,8 @@
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://www.pantheraestate.com/ms/">
-<meta name="twitter:title" content="Panthera Bertam · Rumah Berkembar &amp; Banglo Pegangan Bebas, Bertam Pulau Pinang">
-<meta name="twitter:description" content="Tiga banglo dan enam belas rumah berkembar mengelilingi taman tengah seluas lebih 700 m² di Bertam, Pulau Pinang. Dari RM 712,500. Pra-pelancaran.">
+<meta name="twitter:title" content="Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas">
+<meta name="twitter:description" content="Rumah untuk keluarga besar di Pulau Pinang: semi-D pegangan bebas di Bertam, 4 bilik tidur (satu di tingkat bawah), laman tepi persendirian dan taman bersama lebih 700 m² di hadapan. Dari RM 712,500. Pra-pelancaran.">
 <meta name="twitter:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta name="twitter:image:alt" content="Panthera Bertam, gambaran artis sebuah banglo">
 
@@ -85,7 +85,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=108">
+<link rel="stylesheet" href="styles.css?v=109">
 <!-- returning BM / 中 visitors on /: the hero copy waits (hidden, its space kept) until app.js has put it in their language,
      so the English text never flashes and reflows; English visitors are untouched. Cleared just after app.js's
      DOMContentLoaded (applyI18n), or after 3 s at worst. On /ms/ and /zh/ the text is already in the page's
@@ -121,10 +121,10 @@
       "@type": "WebPage",
       "@id": "https://www.pantheraestate.com/ms/#webpage",
       "url": "https://www.pantheraestate.com/ms/",
-      "name": "Panthera Bertam · Rumah Berkembar & Banglo Pegangan Bebas, Bertam Pulau Pinang",
-      "description": "Rumah berkembar dan banglo pegangan bebas di Bertam, Kepala Batas, Pulau Pinang. 19 rumah bertanah mengelilingi taman bersama seluas lebih 700 m². Rumah berkembar dari RM 712,500.",
+      "name": "Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas",
+      "description": "Rumah semi-D pegangan bebas di Bertam, Pulau Pinang untuk keluarga: 4 bilik (satu di bawah), laman tepi persendirian, menghadap taman. Dari RM 712,500.",
       "inLanguage": "ms",
-      "dateModified": "2026-11-12",
+      "dateModified": "2026-11-13",
       "isPartOf": {
         "@id": "https://www.pantheraestate.com/#website"
       },
@@ -166,10 +166,10 @@
       "name": "Panthera Bertam, freehold semi-D and bungalow homes in Bertam, Penang",
       "url": "https://www.pantheraestate.com/",
       "inLanguage": "en",
-      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows around a shared green of over 700 m² in Bertam, Kepala Batas, Seberang Perai Utara, Penang. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow price on request.",
-      "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, rumah berkembar, banglo, pegangan bebas, 半独立式洋房, 独立式洋房, 永久地契, 槟城",
+      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous floor-to-floor heights of 3.7 m on the ground floor and 3.45 m upstairs, and full-height sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
+      "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, first home, family home, rumah berkembar, banglo, pegangan bebas, rumah pertama, 半独立式洋房, 独立式洋房, 永久地契, 首购屋, 三代同堂, 槟城",
       "datePosted": "2026-05-20",
-      "dateModified": "2026-11-12",
+      "dateModified": "2026-11-13",
       "image": [
         "https://www.pantheraestate.com/assets/hero-estate-3d.webp",
         "https://www.pantheraestate.com/assets/og-card.jpg",
@@ -186,6 +186,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Semi-Detached · 16 units",
+          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, facing the shared green of over 700 m². From RM 712,500.",
           "lowPrice": 712500,
           "priceCurrency": "MYR",
           "offerCount": 16,
@@ -199,9 +200,12 @@
           }
         },
         {
-          "@type": "Offer",
+          "@type": "AggregateOffer",
           "name": "Bungalow · 3 units",
-          "description": "Price on request",
+          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, facing the shared green of over 700 m². From RM 1.22 million, each priced by its land size.",
+          "lowPrice": 1220000,
+          "priceCurrency": "MYR",
+          "offerCount": 3,
           "url": "https://www.pantheraestate.com/#pricing",
           "availability": "https://schema.org/PreSale",
           "itemOffered": {
@@ -221,7 +225,7 @@
         "Panthera Bertam Kepala Batas",
         "Panthera Bertam Penang"
       ],
-      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) around a shared central green of over 700 m².",
+      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, every one facing a shared central green of over 700 m², with SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Kepala Batas",
@@ -315,15 +319,15 @@
           "name": "Pegangan bebas atau pajakan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pegangan bebas. Tanah ialah Lot 24480, hak milik individu dikeluarkan semasa penyerahan. Tiada kiraan 99 tahun."
+            "text": "Pegangan bebas. Tanah ialah Lot 24480, dan setiap rumah mendapat hak milik individu semasa penyerahan. Tiada kiraan pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak."
           }
         },
         {
           "@type": "Question",
-          "name": "Bolehkah warga asing membeli?",
+          "name": "Bolehkah warga asing beli di sini?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Di tanah besar Pulau Pinang, warga asing boleh membeli rumah bertanah berharga RM 1 juta ke atas, dengan kelulusan negeri dan levi negeri (pekeliling Majlis Peguam, Dis 2024). Harga rumah berkembar kami di bawah paras itu, jadi hanya lot banglo mungkin layak. Tanya jualan untuk peraturan terkini."
+            "text": "Di tanah besar Pulau Pinang, warga asing boleh membeli rumah bertanah berharga RM 1 juta ke atas, dengan kelulusan negeri dan levi negeri (pekeliling Majlis Peguam, Dis 2024). Harga rumah berkembar kami di bawah paras itu dan banglo, dari RM 1.22 juta, di atasnya, jadi bagi pembeli asing hanya lot banglo mungkin layak, tertakluk kepada kelulusan negeri. Tanya jualan untuk peraturan terkini sebelum anda membuat perancangan."
           }
         },
         {
@@ -331,23 +335,23 @@
           "name": "Apa itu lot Bumi?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sebahagian lot ialah lot Bumiputera. Hubungi kami untuk status setiap lot."
+            "text": "Sebahagian lot ialah lot Bumiputera. Tanya kami tentang mana-mana lot yang anda suka dan kami akan sahkan statusnya dahulu, supaya anda hanya merancang rumah yang terbuka untuk anda."
           }
         },
         {
           "@type": "Question",
-          "name": "Bila penyerahan?",
+          "name": "Bila boleh pindah masuk?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Tarikh ditetapkan dalam SPA anda dengan klausa LAD, jadi anda diberi pampasan jika kami lewat."
+            "text": "Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Ini memberi keluarga anda masa untuk mula merancang perpindahan mengikut sesi persekolahan dan kerja."
           }
         },
         {
           "@type": "Question",
-          "name": "Apa yang termasuk dalam harga?",
+          "name": "Apa yang didapati bersama rumah?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu."
+            "text": "Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu, jadi anda boleh lihat apa yang keluarga anda dapat sebelum membuat keputusan."
           }
         },
         {
@@ -355,39 +359,39 @@
           "name": "Bolehkah saya pilih lot?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Ya, mengikut giliran daripada senarai harga. Lot penjuru (04 dan 19) ada premium; lot banglo (01–03) dihargai mengikut saiz tanah."
+            "text": "Ya, mengikut giliran daripada senarai harga, jadi lebih awal anda putuskan, lebih banyak pilihan anda. Lot penjuru (04 dan 19) ada premium; lot banglo (01–03) dari RM 1.22 juta, setiap satunya dihargai mengikut saiz tanah."
           }
         },
         {
           "@type": "Question",
-          "name": "Bagaimana pengurusan penyelenggaraan?",
+          "name": "Berapa kos penyelenggaraan sebulan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Persatuan Penduduk menyelenggara taman, jalan, longkang dan kolam dari penyerahan, sekitar RM 180 sebulan setiap rumah. Tidak berpagar; susun atur menghalang lalu lintas."
+            "text": "Sekitar RM 180 sebulan setiap rumah. Persatuan Penduduk menjaga taman, jalan, longkang dan kolam dari penyerahan, jadi ruang yang keluarga anda guna setiap hari ada yang menjaganya. Tidak berpagar; susun atur menghalang lalu lintas."
           }
         },
         {
           "@type": "Question",
-          "name": "Bolehkah saya ubah suai rumah kemudian?",
+          "name": "Bolehkah kami besarkan atau ubah suai rumah kemudian?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Ya, dalam lingkungan yang diluluskan. Penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP & MBSP. Garis panduan diberi semasa penyerahan."
+            "text": "Ya, supaya rumah boleh berkembang bersama keluarga anda. Dalam lingkungan yang diluluskan: penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP & MBSP. Garis panduan diberi semasa penyerahan."
           }
         },
         {
           "@type": "Question",
-          "name": "Adakah anda membantu pinjaman bank?",
+          "name": "Adakah anda bantu dengan pinjaman bank?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Ya. Ia rumah pegangan bebas, jadi mana-mana bank utama boleh membiayainya, dan pasukan kami akan bantu dengan permohonan. Kelulusan dan terma bergantung pada profil anda."
+            "text": "Ya. Pasukan kami bantu anda dengan permohonan, jadi anda tidak berurusan dengan bank seorang diri. Kelulusan, margin dan kadar pinjaman bergantung pada bank, berdasarkan profil anda."
           }
         },
         {
           "@type": "Question",
-          "name": "Bagaimana jika saya belum bersedia membeli?",
+          "name": "Bagaimana jika kami belum bersedia membeli?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan anda mendapat pilihan utama lot yang anda suka, untuk bila anda bersedia."
+            "text": "Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan anda mendapat pilihan utama lot yang anda suka. Keluarga anda yang tentukan masanya."
           }
         }
       ]
@@ -465,7 +469,7 @@
   <div class="wrap hero-inner">
     <div class="hero-copy" data-reveal>
       <h1 class="display">
-        <span data-i18n="hero.h1.a">19 rumah eksklusif pegangan bebas,</span><br>
+        <span data-i18n="hero.h1.a">Rumah eksklusif pegangan bebas,</span><br>
         <span class="terra-mark" data-i18n="hero.h1.b">semuanya menghadap taman.</span>
       </h1>
       <p class="lede" data-i18n="hero.lede">16 rumah berkembar dan 3 banglo di Bertam, Pulau Pinang. Setiap rumah menghadap taman bersama, dan Penang Technology Park hanya lima minit dari sini.</p>
@@ -505,7 +509,7 @@
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="5.2"/><path d="M14.6 16.2l1.4-1.6 1.4 1.6M16 14.6v3.6"/><path d="M13 7.5V4.6L16 2.6l3 2V7.5zM13 29.4v-2.9l3-2 3 2v2.9zM2.6 19V16.1l3-2 3 2V19zM23.4 19v-2.9l3-2 3 2V19z"/></svg>
           <div class="h" data-i18n="idea.p1.h">01 · Pelan halaman</div>
           <div class="t" data-i18n="idea.p1.t">Setiap rumah menghadap taman pusat.</div>
-          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">Kesemua sembilan belas rumah mengelilingi taman dikongsi seluas lebih 700 m², dekat sahaja dari setiap pintu pagar.</div>
+          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">Pintu pagar anda terbuka ke kawasan hijau bersama: ruang untuk anak-anak bermain, berjalan pagi dan beramah mesra dengan jiran pada waktu petang, tanpa perlu memandu.</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="23" height="17" rx="0.8"/><path d="M14 4.5v9h13.5M14 17.5v4"/><path d="M4.5 26.5h23M4.5 25v3M27.5 25v3"/></svg>
@@ -525,12 +529,12 @@
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="11.5" r="7.5"/><path d="M16 19v8.5M12.6 15.6l3.4 3.4 3.4-4.2M8.5 27.5h15"/></svg>
           <div class="h" data-i18n="site.note1.h">Kawasan lapang</div>
-          <div class="t" data-i18n="site.note1.t">Lebih 700 m² ruang terbuka dikongsi.</div>
+          <div class="t" data-i18n="site.note1.t">Kawasan hijau betul-betul di luar pintu pagar anda.</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="7" width="22" height="18" rx="7"/><rect x="9.5" y="11.5" width="13" height="9" rx="3.5" stroke-dasharray="2 2.4"/><path d="M1.5 16H5M27 16h3.5"/></svg>
           <div class="h" data-i18n="site.note2.h">Jalan cincin dalaman</div>
-          <div class="t" data-i18n="site.note2.t">Jalan akses 40 kaki, dua pintu masuk ke taman.</div>
+          <div class="t" data-i18n="site.note2.t">Jalan yang lebar dan dua laluan keluar masuk: mudah pulang, mudah keluar, dan jalan utama hanya beberapa minit.</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 3.5h12l4 4V26a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M20 3.5v4h4M10.5 11h9M10.5 14.5h9M10.5 18h5"/><circle cx="20.5" cy="22" r="3"/><path d="M19 24.6l-.8 3.4 2.3-1.2 2.3 1.2-.8-3.4"/></svg>
@@ -540,7 +544,7 @@
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18.5v-6L16 7l7 5.5v6"/><path d="M14 18.5v-3.5h4v3.5"/><path d="M5.5 18.5h21v3h-21z"/><path d="M3 26.5c2 0 2-1.4 4-1.4s2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4"/></svg>
           <div class="h" data-i18n="site.note4.h">Saliran terbina</div>
-          <div class="t" data-i18n="site.note4.t">Kolam tadahan 298 m² dan longkang perimeter.</div>
+          <div class="t" data-i18n="site.note4.t">Dirancang untuk musim hujan: kolam tadahan dan longkang di sekeliling kediaman menyalurkan air ribut jauh dari rumah.</div>
         </div>
       </div>
     </div>
@@ -556,7 +560,7 @@
       <div class="home-cover-scrim" aria-hidden="true"></div>
       <div class="home-cover-copy">
         <h2 class="title" data-i18n="h.semid.name">Rumah Berkembar</h2>
-        <p class="product-pitch" data-i18n="h.semid.pitch">Dapur, ruang tamu dan ruang makan konsep terbuka yang luas, dengan siling tinggi dan kaca dari lantai ke siling ke taman. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.</p>
+        <p class="product-pitch" data-i18n="h.semid.pitch">Dapur, ruang tamu dan ruang makan konsep terbuka yang luas, dengan ketinggian lantai ke lantai yang lapang dan pintu gelongsor kaca setinggi penuh ke laman tepi anda. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.</p>
       </div>
     </figure>
 
@@ -583,8 +587,8 @@
             <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.semid.s5.k">Tinggi siling</div>
-            <div class="v"><span data-i18n="h.semid.s5.v">2.85–3.5 m</span></div>
+            <div class="k" data-i18n="h.semid.s5.k">Tinggi tingkat</div>
+            <div class="v"><span data-i18n="h.semid.s5.v">3.7 / 3.45 m</span> <small data-i18n="h.semid.s5.u">bawah / atas, lantai ke lantai</small></div>
           </div>
           <div>
             <div class="k" data-i18n="h.semid.s6.k">Pegangan</div>
@@ -676,8 +680,8 @@
             <div class="v"><span data-i18n="h.bungalow.s4.v">5+1</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.bungalow.s5.k">Tinggi siling</div>
-            <div class="v"><span data-i18n="h.bungalow.s5.v">2.85–3.5 m</span></div>
+            <div class="k" data-i18n="h.bungalow.s5.k">Tinggi tingkat</div>
+            <div class="v"><span data-i18n="h.bungalow.s5.v">3.7 / 3.45 m</span> <small data-i18n="h.bungalow.s5.u">bawah / atas, lantai ke lantai</small></div>
           </div>
           <div>
             <div class="k" data-i18n="h.bungalow.s6.k">Pegangan</div>
@@ -685,7 +689,7 @@
           </div>
         </div>
         <div class="product-foot">
-          <div class="price"><strong data-i18n="h.bungalow.price.v">Harga atas permintaan</strong></div>
+          <div class="price"><span class="lbl" data-i18n="h.bungalow.price.l">Bermula</span><strong data-i18n="h.bungalow.price.v">RM 1,220,000</strong></div>
           <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Daftar minat anda</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -972,7 +976,8 @@
       </div>
     </div>
 
-    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Ini harga pra-pelancaran. Dari RM 712.5k untuk rumah pegangan bebas yang menghadap kehijauannya sendiri, selagi senarai masih terbuka sebelum pelancaran umum.</p>
+
+    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Harga pra-pelancaran: rumah berkembar dari RM 712,500 dan banglo dari RM 1.22 juta. Daftar untuk dapatkan senarai penuh setiap lot dan pilihan pertama lot yang anda suka.</p>
 
     <div class="price-ranges" data-reveal>
 
@@ -998,7 +1003,8 @@
 
         <div class="prc-range">
           <div class="row">
-            <span class="val" data-i18n="h.bungalow.price.v">Harga atas permintaan</span>
+            <span class="lbl" data-i18n="h.bungalow.price.l">Bermula</span>
+            <span class="val">RM 1.22m</span>
           </div>
         </div>
 
@@ -1021,7 +1027,7 @@
     </aside>
 
     <div class="prc-foot" style="margin-top: 28px; border-top: 1px solid var(--rule-soft); padding-top: 22px;">
-      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">Lot Bumi</span></span>
+      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">Lot Bumi tersedia</span></span>
       <span class="spacer"></span>
       <span data-i18n="pricing.leg.note">Semua harga tertakluk kepada SPA · E. &amp; O.E.</span>
     </div>
@@ -1035,7 +1041,7 @@
       <div>
         <div class="eyebrow" data-i18n="calc.eyebrow">Kemampuan</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="calc.title">Apa yang diperlukan untuk memiliki satu.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Tarik penggelongsor dan angka bulanan dikemas kini secara langsung. Anggaran sahaja; kelulusan akhir terletak pada bank anda.</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Tarik penggelongsor dan angka bulanan dikemas kini secara langsung. Anggaran sahaja, tertakluk kepada margin pinjaman dan kadar yang diluluskan oleh bank anda.</p>
       </div>
     </div>
 
@@ -1050,7 +1056,7 @@
             <span class="lbl" data-i18n="calc.price">Harga hartanah</span>
             <span class="val" id="calc-price-v">RM 712,500</span>
           </div>
-          <input id="calc-price" type="range" min="700000" max="1000000" step="500" value="712500" aria-label="Harga hartanah" data-i18n-aria="calc.price">
+          <input id="calc-price" type="range" min="700000" max="1500000" step="500" value="712500" aria-label="Harga hartanah" data-i18n-aria="calc.price">
         </div>
 
         <div class="calc-field">
@@ -1146,46 +1152,46 @@
       <div class="faq-list" data-reveal>
         <details class="faq" open>
           <summary><span class="ix">01</span><span data-i18n="faq.q1">Pegangan bebas atau pajakan?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a1">Pegangan bebas. Tanah ialah Lot 24480, hak milik individu dikeluarkan semasa penyerahan. Tiada kiraan 99 tahun.</p></div>
+          <div class="answer"><p data-i18n="faq.a1">Pegangan bebas. Tanah ialah Lot 24480, dan setiap rumah mendapat hak milik individu semasa penyerahan. Tiada kiraan pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">02</span><span data-i18n="faq.q2">Bolehkah warga asing membeli?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a2">Di tanah besar Pulau Pinang, warga asing boleh membeli rumah bertanah berharga RM 1 juta ke atas, dengan kelulusan negeri dan levi negeri (pekeliling Majlis Peguam, Dis 2024). Harga rumah berkembar kami di bawah paras itu, jadi hanya lot banglo mungkin layak. Tanya jualan untuk peraturan terkini.</p></div>
+          <summary><span class="ix">02</span><span data-i18n="faq.q2">Bolehkah warga asing beli di sini?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a2">Di tanah besar Pulau Pinang, warga asing boleh membeli rumah bertanah berharga RM 1 juta ke atas, dengan kelulusan negeri dan levi negeri (pekeliling Majlis Peguam, Dis 2024). Harga rumah berkembar kami di bawah paras itu dan banglo, dari RM 1.22 juta, di atasnya, jadi bagi pembeli asing hanya lot banglo mungkin layak, tertakluk kepada kelulusan negeri. Tanya jualan untuk peraturan terkini sebelum anda membuat perancangan.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">03</span><span data-i18n="faq.q3">Apa itu lot Bumi?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a3">Sebahagian lot ialah lot Bumiputera. Hubungi kami untuk status setiap lot.</p></div>
+          <div class="answer"><p data-i18n="faq.a3">Sebahagian lot ialah lot Bumiputera. Tanya kami tentang mana-mana lot yang anda suka dan kami akan sahkan statusnya dahulu, supaya anda hanya merancang rumah yang terbuka untuk anda.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">04</span><span data-i18n="faq.q4">Bila penyerahan?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a4">Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Tarikh ditetapkan dalam SPA anda dengan klausa LAD, jadi anda diberi pampasan jika kami lewat.</p></div>
+          <summary><span class="ix">04</span><span data-i18n="faq.q4">Bila boleh pindah masuk?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a4">Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Ini memberi keluarga anda masa untuk mula merancang perpindahan mengikut sesi persekolahan dan kerja.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">05</span><span data-i18n="faq.q5">Apa yang termasuk dalam harga?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a5">Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu.</p></div>
+          <summary><span class="ix">05</span><span data-i18n="faq.q5">Apa yang didapati bersama rumah?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a5">Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu, jadi anda boleh lihat apa yang keluarga anda dapat sebelum membuat keputusan.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">06</span><span data-i18n="faq.q6">Bolehkah saya pilih lot?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a6">Ya, mengikut giliran daripada senarai harga. Lot penjuru (04 dan 19) ada premium; lot banglo (01–03) dihargai mengikut saiz tanah.</p></div>
+          <div class="answer"><p data-i18n="faq.a6">Ya, mengikut giliran daripada senarai harga, jadi lebih awal anda putuskan, lebih banyak pilihan anda. Lot penjuru (04 dan 19) ada premium; lot banglo (01–03) dari RM 1.22 juta, setiap satunya dihargai mengikut saiz tanah.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">07</span><span data-i18n="faq.q7">Bagaimana pengurusan penyelenggaraan?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a7">Persatuan Penduduk menyelenggara taman, jalan, longkang dan kolam dari penyerahan, sekitar RM 180 sebulan setiap rumah. Tidak berpagar; susun atur menghalang lalu lintas.</p></div>
+          <summary><span class="ix">07</span><span data-i18n="faq.q7">Berapa kos penyelenggaraan sebulan?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a7">Sekitar RM 180 sebulan setiap rumah. Persatuan Penduduk menjaga taman, jalan, longkang dan kolam dari penyerahan, jadi ruang yang keluarga anda guna setiap hari ada yang menjaganya. Tidak berpagar; susun atur menghalang lalu lintas.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">08</span><span data-i18n="faq.q8">Bolehkah saya ubah suai rumah kemudian?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">Ya, dalam lingkungan yang diluluskan. Penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP &amp; MBSP. Garis panduan diberi semasa penyerahan.</p></div>
+          <summary><span class="ix">08</span><span data-i18n="faq.q8">Bolehkah kami besarkan atau ubah suai rumah kemudian?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a8">Ya, supaya rumah boleh berkembang bersama keluarga anda. Dalam lingkungan yang diluluskan: penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP &amp; MBSP. Garis panduan diberi semasa penyerahan.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">09</span><span data-i18n="faq.q9">Adakah anda membantu pinjaman bank?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a9">Ya. Ia rumah pegangan bebas, jadi mana-mana bank utama boleh membiayainya, dan pasukan kami akan bantu dengan permohonan. Kelulusan dan terma bergantung pada profil anda.</p></div>
+          <summary><span class="ix">09</span><span data-i18n="faq.q9">Adakah anda bantu dengan pinjaman bank?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a9">Ya. Pasukan kami bantu anda dengan permohonan, jadi anda tidak berurusan dengan bank seorang diri. Kelulusan, margin dan kadar pinjaman bergantung pada bank, berdasarkan profil anda.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">10</span><span data-i18n="faq.q10">Bagaimana jika saya belum bersedia membeli?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a10">Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan anda mendapat pilihan utama lot yang anda suka, untuk bila anda bersedia.</p></div>
+          <summary><span class="ix">10</span><span data-i18n="faq.q10">Bagaimana jika kami belum bersedia membeli?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a10">Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan anda mendapat pilihan utama lot yang anda suka. Keluarga anda yang tentukan masanya.</p></div>
         </details>
       </div>
-      <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">Ada soalan lain? <a href="/ms/guides/">Baca panduan kami →</a></p>
+      <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">Ada soalan lain? <a href="/ms/guides/">Baca panduan <span style="white-space:nowrap">kami →</span></a> · <a href="/ms/disclaimer/">Penafian</a></p>
     </div>
   </div>
 </section>
@@ -1198,7 +1204,7 @@
       <div>
         <div class="eyebrow cream" data-i18n="reg.eyebrow">Daftar minat anda</div>
         <h2 class="title" style="margin-top:10px; color:var(--cream);" data-i18n="reg.title">Jadilah yang pertama.</h2>
-        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">Daftar dan kami akan WhatsApp anda senarai harga penuh, pelan lantai dan brosur, serta pilihan lot terdahulu sebelum pelancaran umum. Pilih rumah yang menghadap kehijauan selagi kesemua sembilan belas masih ada. Tiada deposit, tiada obligasi.</p>
+        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">Daftar untuk menyertai senarai kami, dan kami akan memaklumkan perkembangan projek kepada anda.</p>
       </div>
     </div>
 
@@ -1240,19 +1246,14 @@
 
       <aside class="reg-contact" data-reveal>
         <div class="card wa">
-          <div class="h" data-i18n="reg.contact.wa.h">Lebih cepat, borak sekarang</div>
+          <div class="h" data-i18n="reg.contact.wa.h">Borak sekarang</div>
           <div class="n" data-i18n="reg.contact.wa.n">+60 17-598 1858</div>
           <a class="action" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" data-i18n="reg.contact.wa.cta">Buka WhatsApp ↗</a>
         </div>
         <div class="card">
           <div class="h" data-i18n="reg.contact.fin.h">Bantuan pinjaman</div>
           <div class="n" data-i18n="reg.contact.fin.n">Mana-mana bank utama</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">Hak milik pegangan bebas, jadi boleh dibiayai seperti rumah biasa. Kami bantu permohonan, terma bergantung pada profil anda.</p>
-        </div>
-        <div class="card">
-          <div class="h" data-i18n="reg.contact.dev.h">Pemaju</div>
-          <div class="n" data-i18n="reg.contact.dev.n">Panthera Development Sdn. Bhd.</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.dev.b">Pertanyaan jualan Isnin–Sabtu, 9pg–6ptg.</p>
+          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">Kami bantu anda menyediakan dan menghantar permohonan. Margin dan kadar pinjaman adalah seperti yang diluluskan oleh bank anda.</p>
         </div>
       </aside>
     </div>
@@ -1283,9 +1284,7 @@
       <div>
         <div class="h" data-i18n="footer.h.legal">Undang-undang</div>
         <ul>
-          <li><a href="#" data-i18n="footer.legal.disclaimer">Penafian</a></li>
-          <li><a href="#" data-i18n="footer.legal.privacy">Privasi</a></li>
-          <li><a href="#" data-i18n="footer.legal.spa">Terma SPA</a></li>
+          <li data-i18n-html="footer.legal.disclaimer"><a href="/ms/disclaimer/">Penafian</a></li>
         </ul>
       </div>
 
@@ -1323,9 +1322,9 @@
   </div>
 </div>
 
-<script src="app.js?v=130" defer></script>
-<script src="walkthrough/hero-boot.js?v=131" defer></script>
-<script src="home-toggle.js?v=5" defer></script>
+<script src="app.js?v=131" defer></script>
+<script src="walkthrough/hero-boot.js?v=136" defer></script>
+<script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of
      downloading them again (owner, Nov 2026: "optimize load time on all devices, without compromising quality"). Pages and

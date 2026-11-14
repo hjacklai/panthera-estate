@@ -94,6 +94,15 @@ body.guide{ padding-bottom: 0 !important; }
 }
 .g-sec a:not(.btn):hover{ text-decoration-color: var(--terra-2); }
 .g-note{ font-size: 14.5px !important; line-height: 1.6 !important; color: var(--text-mute); }
+/* the closing line under every guide (images are artist's impressions, link to the disclaimer): set close
+   under the last section rather than a full section gap below it */
+.g-body > .g-legal{ margin: clamp(-64px, -4vw, -28px) 0 0; max-width: 64ch; }
+.g-legal a{
+  color: var(--terra-2);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+  text-decoration-color: rgba(138,70,56,0.35);
+}
+.g-legal a:hover{ text-decoration-color: var(--terra-2); }
 
 /* dotted list (soft terracotta dots, no rules) */
 .g-list{ list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 12px; max-width: 64ch; }

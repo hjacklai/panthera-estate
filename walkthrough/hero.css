@@ -870,12 +870,14 @@ html.hx-app .hero--cinematic{ background-color: #2A231E; }
   .pbw .pbw-bar .pbw-pill{ letter-spacing: 0.08em; }
   .pbw .pbw-bar .pbw-pill button{ padding: 6px 9px; }
 }
-/* OpenStreetMap credit for the neighbourhood (ODbL): small and quiet, in the corner of the 3D, above the menu on phones */
-.h3d-ui .hx-osm{ position: absolute; right: 10px; bottom: 6px; z-index: 3; pointer-events: auto; font-family: var(--sans, system-ui, sans-serif); font-size: 9.5px; line-height: 1;
+/* the corner credits: OpenStreetMap for the neighbourhood (ODbL) over "3D view: artist's impression" (to the disclaimer),
+   small and quiet, in the corner of the 3D, above the menu on phones */
+.h3d-ui .hx-credits{ position: absolute; right: 10px; bottom: 6px; z-index: 3; pointer-events: none; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.h3d-ui .hx-osm, .h3d-ui .hx-disc{ pointer-events: auto; font-family: var(--sans, system-ui, sans-serif); font-size: 9.5px; line-height: 1;
   color: rgba(242,233,223,0.72); text-decoration: none; text-shadow: 0 1px 3px rgba(18,12,8,0.6); }
-.h3d-ui .hx-osm:hover{ color: var(--cream, #F2E9DF); text-decoration: underline; }
-html.hxa-open .h3d-ui .hx-osm{ visibility: hidden; }
-@media (max-width: 760px){ .h3d-ui .hx-osm{ bottom: calc(env(safe-area-inset-bottom, 0px) + 80px); right: 8px; font-size: 9px; } }
+.h3d-ui .hx-osm:hover, .h3d-ui .hx-disc:hover{ color: var(--cream, #F2E9DF); text-decoration: underline; }
+html.hxa-open .h3d-ui .hx-credits{ visibility: hidden; }
+@media (max-width: 760px){ .h3d-ui .hx-credits{ bottom: calc(env(safe-area-inset-bottom, 0px) + 80px); right: 8px; } .h3d-ui .hx-osm, .h3d-ui .hx-disc{ font-size: 9px; } }
 /* the 3D pans under its words (owner, Nov 2026: "pan touchscreen over the description wording"): a drag on a caption's
    text and figures, or on the headline, goes to the 3D; only the buttons and links take the tap. Very short landscape
    screens keep a scrollable caption instead. */
@@ -895,4 +897,12 @@ html:lang(zh) .hxa-cap-specs dt, html:lang(zh) .pbw .intro .pbw-specs dt{ font-s
 /* the walk pill always 10 px above the menu's measured top (hero-app.js --hxa-mgap), whatever the screen (folding phones) */
 html.hx-app .h3d-ui .hx-homes.hx-two{ bottom: calc(var(--hxa-mgap, 76px) + 10px) !important; }
 /* the OpenStreetMap credit under the top bar, clear of the pill and the menu (it sat on the Bungalow button) */
-html.hx-app .h3d-ui .hx-osm{ top: calc(var(--hxa-tbh, var(--hx-tb, 64px)) + 6px); bottom: auto !important; right: max(10px, env(safe-area-inset-right, 0px)); }
+/* the tour's "3D view: artist's impression" line: the same quiet credit, in the bottom right corner, in ink over the
+   light plan sheet and rooms */
+.pbw .pbw-disc{ position: absolute; z-index: 8; right: max(clamp(16px,3vw,36px), env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 9px);
+  font-family: var(--sans, system-ui, sans-serif); font-size: 9.5px; line-height: 1; color: rgba(46,40,37,0.62); text-decoration: none;
+  text-shadow: 0 0 3px rgba(242,233,223,0.85); opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+.pbw.pbw-ui .pbw-disc{ opacity: 1; pointer-events: auto; }
+.pbw .pbw-disc:hover{ color: var(--ink-deep, #2E2825); text-decoration: underline; }
+@media (max-width: 760px){ .pbw .pbw-disc{ right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 9px); font-size: 9px; } }
+html.hx-app .h3d-ui .hx-credits{ top: calc(var(--hxa-tbh, var(--hx-tb, 64px)) + 6px); bottom: auto !important; right: max(10px, env(safe-area-inset-right, 0px)); }

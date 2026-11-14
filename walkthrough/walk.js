@@ -19,7 +19,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
 import { createHD, SKIES } from './hd.js?v=11';
-import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=7';
+import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=8';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
 const COL = {
@@ -349,7 +349,8 @@ function gfWall(r, base, full, mats = [mWall, mWall, mCap, mWall, mWall, mWall],
 const VALLEY = SEMID ? [-7.077, -6.177] : null;
 let LEFT_GABLET_Z = null;   // Semi-D: the z span of the left unit's side gablet, where the eave stops (roof, below)
 function valleyCut(r, base, h) {
-  if (!VALLEY || Math.min(Math.abs(r[0]), Math.abs(r[2])) < 6.5 || base > 6.8) return [[r, h]];
+  // (the right unit's side only: on the left wall it left a hole over the balcony frame's tip, owner Nov 2026)
+  if (!VALLEY || Math.min(r[0], r[2]) < 6.5 || base > 6.8) return [[r, h]];
   let pcs = [[Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])]];
   for (const z of VALLEY) pcs = pcs.flatMap(q => z > q[1] + 0.005 && z < q[3] - 0.005 ? [[q[0], q[1], q[2], z], [q[0], z, q[2], q[3]]] : [q]);
   if (pcs.length === 1) return [[r, h]];

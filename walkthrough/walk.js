@@ -19,7 +19,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
 import { createHD, SKIES } from './hd.js?v=11';
-import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=5';
+import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=6';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
 const COL = {
@@ -347,6 +347,7 @@ function gfWall(r, base, full, mats = [mWall, mWall, mCap, mWall, mWall, mWall],
 // it stops at the slab's soffit (6.80) instead of standing 0.3 m proud of the slab as a block (owner, Nov 2026: "just
 // the roof overhang, and flat slab").
 const VALLEY = SEMID ? [-7.077, -6.177] : null;
+let LEFT_GABLET_Z = null;   // Semi-D: the z span of the left unit's side gablet, where the eave stops (roof, below)
 function valleyCut(r, base, h) {
   if (!VALLEY || Math.min(Math.abs(r[0]), Math.abs(r[2])) < 6.5 || base > 6.8) return [[r, h]];
   let pcs = [[Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])]];
@@ -1530,11 +1531,34 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
       pm.rotation.y = Math.PI / 2; pm.position.x = -0.115;   // (its face on the tile edge, under it: no pale strip beside the tiles from above)
       pm.castShadow = pm.receiveShadow = true; roof.add(pm);
     }
-    // the valley between the right unit's two gables: the fascia boards and end faces there stop at the wall line instead
-    // of running out under the verges as loose boxes and strips (owner, Nov 2026: "just the roof overhang, and flat slab")
+    // the valley between the right unit's two gables: each gable's eave board runs out to the verge line, a slight
+    // overhang finished under the barge board (owner, Nov 2026: "these 2 roofs should have slight overhang no?"), while
+    // the strip's end faces between them stop at the wall line, so the strip stays set back and shaded
     const xw = HOUSE.x1;
-    for (const f of R0.fascia) if (f.r[0] > 1 && f.r[1] > -7.3 && f.r[3] < -6.0 && f.r[2] > xw) f.r = [f.r[0], f.r[1], xw, f.r[3]];
     R0.faces = R0.faces.map(P => P.every(q => q[0] > 1 && q[2] < -6.1 && q[2] > -7.1) && P.every(q => Math.abs(q[2] - P[0][2]) < 1e-3) ? P.map(q => [Math.min(q[0], xw), q[1], q[2]]) : P);
+    // the left unit's gablet over its side balcony (owner, Nov 2026: "the side triangle is to be recessed from the roof
+    // and flush with building wall"): its triangle leaves the eave line for the wall's own plane (built with the verges,
+    // below), and the side eave board under it runs straight on, one board from front to back
+    const gt = R0.faces.find(P => P.length === 3 && P.every(q => Math.abs(q[0] - HOUSE.x0 + 0.6) < 1e-3));
+    R0.faces = R0.faces.filter(P => !(P.length === 3 && P.every(q => Math.abs(q[0] - HOUSE.x0 + 0.6) < 1e-3)));
+    const sf = R0.fascia.filter(f => Math.abs(f.r[0] - HOUSE.x0 + 0.6) < 1e-3 && Math.abs(f.r[2] - HOUSE.x0 + 0.45) < 1e-3);
+    if (sf.length > 1) {
+      const z0 = Math.min(...sf.map(f => Math.min(f.r[1], f.r[3]))), z1 = Math.max(...sf.map(f => Math.max(f.r[1], f.r[3])));
+      R0.fascia = R0.fascia.filter(f => !sf.includes(f)); R0.fascia.push({ r: [sf[0].r[0], z0, sf[0].r[2], z1], y0: sf[0].y0, y1: sf[0].y1 });
+    }
+    // ...but under the triangle itself no eave at all (owner, Nov 2026: "left side do without that piece"): the eave board
+    // and soffit stop at the gablet's two corners, so no ledge runs in front of the triangle and the wall goes straight up
+    // into it; the eave carries on either side
+    if (gt) {
+      const ga = Math.min(...gt.map(q => q[2])), gb = Math.max(...gt.map(q => q[2]));
+      LEFT_GABLET_Z = [ga, gb];
+      R0.fascia = R0.fascia.flatMap(f => {
+        if (!(Math.abs(f.r[0] - HOUSE.x0 + 0.6) < 1e-3 && Math.abs(f.r[2] - HOUSE.x0 + 0.45) < 1e-3)) return [f];
+        const z0 = Math.min(f.r[1], f.r[3]), z1 = Math.max(f.r[1], f.r[3]);
+        if (z1 <= ga || z0 >= gb) return [f];
+        return [[z0, ga], [gb, z1]].filter(([a, b]) => b - a > 0.005).map(([a, b]) => ({ ...f, r: [f.r[0], a, f.r[2], b] }));
+      });
+    }
   } else {
     // a hipped wing's side eave running out over the flat roof: its fascia stops where the flat roof stops, instead of
     // hanging on past the wall line beside the parapet as a loose block (owner, Nov 2026)
@@ -1832,6 +1856,37 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
         if (bx1 - bx0 > 0.01 && bIn - yb > 0.005) block([bx0, Math.min(zIn, zb), bx1, Math.max(zIn, zb)], yb, bIn - yb + 0.01, mWall, roof, null);
       }
     }
+    // The left unit's gablet over its side balcony, recessed (owner, Nov 2026): its triangle stands in the wall's plane, the
+    // wall carrying on up from the eave soffit to the underside of the gablet's own tiles, which run out 0.6 m over it like
+    // a verge, each rake finished with the gable verges' barge board (landing on the eave board's top) and soffit box.
+    if (SEMID) {
+      const xo = HOUSE.x0 - 0.6, xw = HOUSE.x0, T = 0.03, fb = X.roof.fascia.find(f => Math.abs(f.r[0] - xo) < 1e-3 && Math.abs(f.r[1] - f.r[3]) > 5);
+      const clipLo = (poly, k) => { const res = []; for (let i = 0; i < poly.length; i++) { const A = poly[i], B = poly[(i + 1) % poly.length], ia = A[1] >= k, ib = B[1] >= k;
+        if (ia) res.push(A); if (ia !== ib) res.push([A[0] + (B[0] - A[0]) * (k - A[1]) / (B[1] - A[1]), k]); } return res; };
+      for (const ch of chainsAt(xo, -1)) {
+        if (ch.length < 3 || ch[0][0] > 0 || ch[ch.length - 1][0] < HOUSE.z0) continue;
+        const top = offsetChain(ch, 0.03), bot = offsetChain(ch, SOF1), zA = ch[0][0], zB = ch[ch.length - 1][0];
+        const brd = [...top, ...[...bot].reverse()];
+        prism(fb ? clipLo(brd, fb.y1) : brd, xo - 0.005, xo + T, mFascia);                                 // barge board
+        // no soffit box under the rakes (owner, Nov 2026: "do without that piece"): the triangle runs up to the tiles
+        const sy = fb ? fb.y0 : FF_TOP_EAVE;                                                                  // the eave soffit / wall top
+        prism([[zA, sy], ...offsetChain(ch, -0.005), [zB, sy]], xw - 0.15, xw, mWall);                        // the triangle, in the wall's plane
+      }
+      // The right unit's valley over its side balcony (the gallery render and the right elevation): a cream shelf 2.1 m
+      // wide just over the frame's apex, flush with the frame, under the two gables' eave boards; across the set-back
+      // strip it runs back to the wall's inner face, with the wall carried up under it, so nothing dark shows over the apex.
+      const b2 = (X.balcony2 || []).find(b => b.outer_x > 0);
+      if (b2 && VALLEY) {
+        const za = Math.max(...b2.outer.map(q => q[1])), ap = b2.outer.find(q => q[1] === za), zc = ap[0], [v0, v1] = VALLEY;
+        const y0 = za + 0.03, y1 = y0 + 0.15, x0 = HOUSE.x1, x1 = HOUSE.x1 + 0.6, xb = HOUSE.x1 - 0.15;
+        const plan = [[x0, zc - 1.05], [x1, zc - 1.05], [x1, zc + 1.05], [x0, zc + 1.05], [x0, v1], [xb, v1], [xb, v0], [x0, v0]];
+        const g = new THREE.ExtrudeGeometry(new THREE.Shape(plan.map(([x, z]) => new THREE.Vector2(x, -z))), { depth: y1 - y0, bevelEnabled: false });
+        g.rotateX(-Math.PI / 2); g.translate(0, y0, 0);
+        const m = new THREE.Mesh(g, mWall); m.castShadow = m.receiveShadow = true;
+        m.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(g, 30)), mInkSoft)); roof.add(m);
+        block([xb, v0, x0, v1], 6.8, y0 - 6.8, mWall, roof, null);   // the wall under it, up from where the valley cut stops it
+      }
+    }
     // Gable walls: where a corner column stands in the gable wall's thickness, the column rises in its place up to the
     // verge soffit and the wall goes on over it from there (no sliver of wall beside or over the column top)
     const sideOf = G => [...sides.values()].find(v => !v.flush && Math.abs(v.xw - (v.out > 0 ? G.x1 : G.x0)) < 0.01 && v.gz.some(([g0, g1]) => G.prof.every(q => q[0] >= g0 - 0.01 && q[0] <= g1 + 0.01)));
@@ -1942,6 +1997,10 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
     for (const [ra, rb, [ca, cb]] of runs) {
       if (rb - ra < 0.09 || cb - ca < 0.05) continue;
       const r = alongX ? [ra, ca, rb, cb] : [ca, ra, cb, rb];
+      if (LEFT_GABLET_Z && r[2] <= HOUSE.x0 + 0.01 && r[1] < LEFT_GABLET_Z[1] && r[3] > LEFT_GABLET_Z[0]) {   // none under the left gablet
+        for (const [a, b] of [[r[1], LEFT_GABLET_Z[0]], [LEFT_GABLET_Z[1], r[3]]]) if (b - a > 0.05) block([r[0], a, r[2], b], s.y - 0.02, 0.02, mSoffitPlaster, roof, null);
+        continue;
+      }
       block(r, s.y - 0.02, 0.02, mSoffitPlaster, roof, null);   // white plastered soffit (owner, Nov 2026: was timber boards)
     }
   }

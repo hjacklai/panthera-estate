@@ -12,7 +12,7 @@ const SHEET = {   // walk.js rig(0): the plan sheet's centre (model frame) and t
 };
 const PLAN_FOV = 2.2, NEAR_FOV = 35;
 const LENIS_URL = 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js';
-const WALK_V = '157', CSS_V = '13';
+const WALK_V = '158', CSS_V = '13';
 
 export function createTour(ctx) {
   const { THREE, renderer, canvas, camera, base, T, reduced } = ctx;

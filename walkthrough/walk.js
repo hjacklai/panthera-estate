@@ -19,7 +19,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { buildEstate } from './estate.js?v=38';
 import { createHD, SKIES } from './hd.js?v=11';
-import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=4';
+import { BAKE_VER, BAKE_REV, ENTRY_P } from './versions.js?v=5';
 
 const texCache = new Map();   // procedural textures, made once and shared (see cachedTex)
 const COL = {
@@ -303,19 +303,62 @@ const house = new THREE.Group(); scene.add(house);
 const gfDetail = new THREE.Group(), ffDetail = new THREE.Group(), roof = new THREE.Group();
 scene.add(gfDetail, ffDetail, roof);
 
+// Outer corner columns (owner, Nov 2026: "make neater please, its roof to the ground"): each is ONE prism from the
+// garden up to the underside of the roof (pierPart, below), so there is no joint at the slab line, no float over the
+// lawn and no cap under the eave. Every wall, slab and plinth piece that ran into a column is cut at its faces.
+const CORNER_PIERS = (SEMID
+  ? [1, -1].flatMap(s => [[-13.255, -12.712], [-0.543, 0]].map(([z0, z1]) => s > 0 ? [6.72, z0, 7.175, z1] : [-7.175, z0, -6.72, z1]))
+  : ((D.outline && D.outline.pilasters) || []).map(r => [Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])])).filter(inZone);
+const PIER_BASE = GROUND - 0.01;   // just into the garden: no seam or gap where the column meets the ground
+function cutPiers(r) {   // plan rect minus the columns, as the pieces left over (none if it lay inside one)
+  let out = [[Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])]];
+  for (const p of CORNER_PIERS) out = out.flatMap(q => {
+    if (Math.min(q[2], p[2]) - Math.max(q[0], p[0]) < 1e-4 || Math.min(q[3], p[3]) - Math.max(q[1], p[1]) < 1e-4) return [q];
+    const a = Math.max(q[0], p[0]), b = Math.min(q[2], p[2]), res = [];
+    if (p[0] > q[0]) res.push([q[0], q[1], p[0], q[3]]);
+    if (p[2] < q[2]) res.push([p[2], q[1], q[2], q[3]]);
+    if (p[1] > q[1]) res.push([a, q[1], b, p[1]]);
+    if (p[3] < q[3]) res.push([a, p[3], b, q[3]]);
+    return res;
+  });
+  return out.filter(q => q[2] - q[0] > 0.005 && q[3] - q[1] > 0.005);
+}
+const pierParts = [];   // grow with the walls (cut at 1.20 on the plan, to the slab with the ground floor, on up with the first)
+function pierPart(m, top) {
+  m.userData.h0 = CUT - PIER_BASE; m.userData.gf = GF_TOP - PIER_BASE; m.userData.up = top - GF_TOP;
+  setH(m, m.userData.h0); pierParts.push(m); return m;
+}
+
 // Plinth: the ground floor slab sits 0.30 m above the porch, with a 600 mm step at -0.15 along the front.
-block([HOUSE.x0, HOUSE.z0, HOUSE.x1, HOUSE.z1], GROUND, -GROUND, [mSlab, mSlab, mLight, mSlab, mSlab, mSlab], house, mInkSoft);
+for (const q of cutPiers([HOUSE.x0, HOUSE.z0, HOUSE.x1, HOUSE.z1])) block(q, GROUND, -GROUND, [mSlab, mSlab, mLight, mSlab, mSlab, mSlab], house, mInkSoft);
 if (SEMID) block([HOUSE.x0, 0, HOUSE.x1, 0.6], GROUND, 0.15, [mSlab, mSlab, mLight, mSlab, mSlab, mSlab], house, mInkSoft);
 
 // A ground-floor wall piece: cut at +1.20 m on the plan, rising to its full height.
 function gfWall(r, base, full, mats = [mWall, mWall, mCap, mWall, mWall, mWall], line = mInk) {
-  const m = block(r, base, 0.001, mats, house, line);
-  m.userData.full = full; m.userData.h0 = Math.max(0, Math.min(full, CUT - base));
-  setH(m, m.userData.h0); gfWalls.push(m); return m;
+  let m = null;
+  for (const q of cutPiers(r)) {
+    m = block(q, base, 0.001, mats, house, line);
+    m.userData.full = full; m.userData.h0 = Math.max(0, Math.min(full, CUT - base));
+    setH(m, m.userData.h0); gfWalls.push(m);
+  }
+  return m;
+}
+// A Semi-D side wall running into the valley between the right unit's two gables is cut at the flat roof's edges: there
+// it stops at the slab's soffit (6.80) instead of standing 0.3 m proud of the slab as a block (owner, Nov 2026: "just
+// the roof overhang, and flat slab").
+const VALLEY = SEMID ? [-7.077, -6.177] : null;
+function valleyCut(r, base, h) {
+  if (!VALLEY || Math.min(Math.abs(r[0]), Math.abs(r[2])) < 6.5 || base > 6.8) return [[r, h]];
+  let pcs = [[Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])]];
+  for (const z of VALLEY) pcs = pcs.flatMap(q => z > q[1] + 0.005 && z < q[3] - 0.005 ? [[q[0], q[1], q[2], z], [q[0], z, q[2], q[3]]] : [q]);
+  if (pcs.length === 1) return [[r, h]];
+  const toTop = Math.abs(base + h - ffTop(r)) < 1e-3;   // a wall to its full height: each piece to its own (a lintel half under a gable too)
+  return pcs.map(q => [q, (q[1] + q[3]) / 2 > VALLEY[0] && (q[1] + q[3]) / 2 < VALLEY[1] ? Math.min(h, 6.8 - base) : toTop ? ffTop(q) - base : h]).filter(([, hh]) => hh > 0.002);
 }
 function ffBlock(r, base, h, mats = mWall, line = mInk) {
-  const m = block(r, base, h, mats, house, line);
-  m.userData.full = h; setH(m, 0); ffParts.push(m); return m;
+  let m = null;
+  for (const [p, hh] of valleyCut(r, base, h)) for (const q of cutPiers(p)) { m = block(q, base, hh, mats, house, line); m.userData.full = hh; setH(m, 0); ffParts.push(m); }
+  return m;
 }
 // The old stair's stringer wall (x 0.965..1.115 beside flight 1) only rises to the stair; the stair below replaces it.
 const isStringer = r => {
@@ -379,6 +422,9 @@ function ffTop(r) {
   if (Math.abs(cx) < 1.62 && cz < -2.78 && cz > -10.47) return 7.0;
   if (Math.abs(cx) < 0.12) return 7.0;
   if (cx > 1.6 && cz < -6.17 && cz > -7.08) return 6.8;
+  // the right unit's rear eave soffit sits at 7.387: its rear wall rises to meet it (owner, Nov 2026: a see-through slot
+  // between the wall top and the eave board)
+  if (cx > 0.12 && cz < -13.0) return 7.387;
   return FF_TOP_EAVE;
 }
 
@@ -625,25 +671,16 @@ if (LIB) await Y();   // embedded build: let the hero draw a frame
   }
 }
 for (const f of X.roof.flats.filter(f => f.y1 < 4)) ffBlock(f.r, f.y0, f.y1 - f.y0, mSlab);
-const PIERS = SEMID ? [] : ((D.outline && D.outline.pilasters) || []);   // bungalow: the four outer corner piers
-const PIER_KEYS = PIERS.map(rkey);
 for (const r of D.ff.filter(inZone)) {
   await slice();
   if (SEMID && (Math.max(r[1], r[3]) > 0.01 || Math.min(Math.abs(r[0]), Math.abs(r[2])) > 6.73 || Math.max(Math.abs(r[0]), Math.abs(r[2])) > 6.75)) continue;   // balcony + outside bits: from the spec below
-  if (PIER_KEYS.includes(rkey(r))) continue;   // bungalow corner piers: one piece from the ground-floor top, below
-  ffBlock(r, FF_BASE, ffTop(r) - FF_BASE);
+  ffBlock(r, FF_BASE, ffTop(r) - FF_BASE);   // (cut at the corner columns' faces; the columns' own plan pieces vanish)
 }
-// Bungalow corner piers (owner, Nov 2026: "same for the bungalow, column to roof eave"): one piece from the ground-floor
-// top through the first-floor slab line to the truss seat (no notch at the slab, the string course stops at their faces);
-// the roof block below carries them on up to the eave soffit / tile underside.
-for (const r of PIERS.filter(inZone)) ffBlock(r, GF_TOP, ffTop(r) - GF_TOP);
-// Corner piers (owner, Nov 2026: "this column goes to 2nd floor too"): the pair's four outer corner piers run on past
-// the first-floor slab up to the eave soffit, as the elevations draw them (the ground-floor pier pieces stop at 3.50,
-// and the first-floor plan's pier pieces are skipped above with the outside bits).
-if (SEMID) for (const s of [1, -1]) for (const [z0, z1] of [[-13.255, -12.712], [-0.543, 0]]) {
-  const r = s > 0 ? [6.72, z0, 7.175, z1] : [-7.175, z0, -6.72, z1];
-  ffBlock(r, GF_TOP, ffTop(r) - GF_TOP);
-}
+// Semi-D corner columns (owner, Nov 2026: "this column goes to 2nd floor too", then "roof to the ground"): the pair's four
+// outer corner columns, each one piece from the garden up to the eave soffit, as the elevations draw them.
+// (The bungalow's, and the right unit's under its gable verges, are made with the roof, below, where their tops die into
+// the verge soffit or the eave.)
+if (SEMID) for (const r of CORNER_PIERS.filter(r => r[0] < 0)) pierPart(block(r, PIER_BASE, ffTop(r) - PIER_BASE, mWall, house), ffTop(r));
 for (const o of dedupe(D.ff_open.filter(o => inZone(o.r)))) {
   const r = o.r, ax = wallAxis(r);
   if (ax) { refillGap(1, r, ax); continue; }
@@ -687,7 +724,7 @@ if (SEMID) ffBlock([-0.115, 0, 0.115, 1.07], 4.7, 2.3);
 if (!SEMID) for (const l of X.ff_slab_ledge || []) {
   let [x0, z0, x1, z1] = [Math.min(l.r[0], l.r[2]), Math.min(l.r[1], l.r[3]), Math.max(l.r[0], l.r[2]), Math.max(l.r[1], l.r[3])];
   const alongX = x1 - x0 >= z1 - z0;
-  for (const p of PIERS) {
+  for (const p of CORNER_PIERS) {
     const [px0, pz0, px1, pz1] = [Math.min(p[0], p[2]), Math.min(p[1], p[3]), Math.max(p[0], p[2]), Math.max(p[1], p[3])];
     if (alongX && px0 < x1 && px1 > x0 && pz0 < z1 + 0.2 && pz1 > z0 - 0.2) { if ((px0 + px1) / 2 < (x0 + x1) / 2) x0 = Math.max(x0, px1); else x1 = Math.min(x1, px0); }
     if (!alongX && pz0 < z1 && pz1 > z0 && px0 < x1 + 0.2 && px1 > x0 - 0.2) { if ((pz0 + pz1) / 2 < (z0 + z1) / 2) z0 = Math.max(z0, pz1); else z1 = Math.min(z1, pz0); }
@@ -830,8 +867,10 @@ for (const o of dedupe(D.ff_open.filter(o => inZone(o.r) && Math.max(o.r[1], o.r
 // 100 mm skirting (tender) on every wall inside the house, both floors.
 {
   const inside = r => Math.min(r[1], r[3]) > HOUSE.z0 - 0.01 && Math.max(r[1], r[3]) < 0.01 && Math.min(r[0], r[2]) > HOUSE.x0 - 0.01 && Math.max(r[0], r[2]) < HOUSE.x1 + 0.01;
-  for (const r of D.gf.filter(inZone).filter(inside).filter(r => !isStringer(r))) block([Math.min(r[0], r[2]) - 0.008, Math.min(r[1], r[3]) - 0.008, Math.max(r[0], r[2]) + 0.008, Math.max(r[1], r[3]) + 0.008], 0, 0.1, mSkirting, gfDetail, null);
-  for (const r of D.ff.filter(inZone).filter(inside)) block([Math.min(r[0], r[2]) - 0.008, Math.min(r[1], r[3]) - 0.008, Math.max(r[0], r[2]) + 0.008, Math.max(r[1], r[3]) + 0.008], FF_BASE, 0.1, mSkirting, ffDetail, null);
+  // kept 2 mm inside the outer wall faces and clear of the corner columns, so none shows outside as a strip at the base
+  const skirt = r => cutPiers([Math.max(HOUSE.x0 + 0.002, Math.min(r[0], r[2]) - 0.008), Math.max(HOUSE.z0 + 0.002, Math.min(r[1], r[3]) - 0.008), Math.min(HOUSE.x1 - 0.002, Math.max(r[0], r[2]) + 0.008), Math.min(HOUSE.z1 - 0.002, Math.max(r[1], r[3]) + 0.008)]);
+  for (const r of D.gf.filter(inZone).filter(inside).filter(r => !isStringer(r))) for (const q of skirt(r)) block(q, 0, 0.1, mSkirting, gfDetail, null);
+  for (const r of D.ff.filter(inZone).filter(inside)) for (const q of skirt(r)) block(q, FF_BASE, 0.1, mSkirting, ffDetail, null);
 }
 // (No projecting window sills: none are drawn on any of the four elevations.)
 // Exterior details from the verified exterior spec (wf_semid_ext): both units unless noted.
@@ -878,15 +917,16 @@ if (SEMID) {
   for (const s of [1, -1]) {
     for (const [z0, z1] of [[-5.027, -0.543], [-12.712, -8.228]]) block(s > 0 ? [6.72, z0, 6.869, z1] : [-6.869, z0, -6.72, z1], 3.55, 0.15, mWall, extDetail, null);
   }
-  block([-6.871, -13.405, 6.869, -13.255], 3.55, 0.15, mWall, extDetail, null);
+  block([-6.72, -13.405, 6.72, -13.255], 3.55, 0.15, mWall, extDetail, null);   // between the corner columns: it stops at their faces
   // Aprons at -0.15: rear and rear side; side patio paved strip (1.265 m, z 0.6..-8.59).
+  // They end flush with the corner column's outer face and stop against it (owner, Nov 2026: no slab nosing past the column).
   const mApron = new THREE.MeshStandardMaterial({ color: 0xC9C2B7, roughness: 0.9 });
   for (const s of [1, -1]) {
     const R = r => s > 0 ? [-r[2], r[1], -r[0], r[3]] : r;
-    block(R([-7.32, -13.855, -0.075, -13.255]), GROUND, 0.15, mApron, extDetail, null);
-    block(R([-7.32, -13.255, -6.72, -8.59]), GROUND, 0.15, mApron, extDetail, null);
+    block(R([-7.175, -13.855, -0.075, -13.255]), GROUND, 0.15, mApron, extDetail, null);
+    block(R([-7.175, -12.712, -6.72, -8.59]), GROUND, 0.15, mApron, extDetail, null);
     // perimeter drain (300 wide) along the side and rear, a dark channel just below the garden
-    for (const r of [[-8.285, -8.891, -7.985, 0.9], [-7.62, -14.155, -7.32, -8.891], [-7.62, -14.155, -0.075, -13.855]])
+    for (const r of [[-8.285, -8.891, -7.985, 0.9], [-7.475, -14.155, -7.175, -8.891], [-7.475, -14.155, -0.075, -13.855]])
       block(R(r), GROUND - 0.02, 0.025, new THREE.MeshStandardMaterial({ color: 0x6F6A64, roughness: 0.9 }), extDetail, null);
   }
 }
@@ -1453,7 +1493,7 @@ const mTile = new THREE.MeshStandardMaterial({ map: tileTex, bumpMap: tileTex, b
 // Photo roof tile: uv metres, u along the eave, v up the slope (polyGeometry). ROOF_V = -1 turns the courses over.
 const ROOF_V = 1;
 hd.use(mTile, 'roof_tile', { sv: ROOF_V });
-const mCapTile = new THREE.MeshStandardMaterial({ color: 0xA9573A, roughness: 0.75 });
+const mCapTile = new THREE.MeshStandardMaterial({ color: 0xA9573A, roughness: 0.75, side: THREE.DoubleSide });   // (both sides: a half-round cap seen from below reads solid, not as a thin line)
 // Gablet triangles (owner, Nov 2026): white plaster, the eave soffits' colour, instead of brown timber louvres.
 const mGablet = new THREE.MeshStandardMaterial({ color: 0xF3EFE8, roughness: 0.9, side: THREE.DoubleSide });
 const mSoffit = new THREE.MeshStandardMaterial({ color: 0xEDE6DA, roughness: 0.95, side: THREE.BackSide });
@@ -1461,6 +1501,69 @@ const mFascia = new THREE.MeshStandardMaterial({ color: 0xF1EFEA, roughness: 0.4
 const mPlasterDS = new THREE.MeshStandardMaterial({ color: COL.cream, roughness: 0.95, side: THREE.DoubleSide });
 hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable and parapet faces: outside only
 {
+  // Roof junction tidy-ups on this build's copy of the roof data (owner, Nov 2026: "just fix what i told u to fix")
+  const R0 = X.roof;
+  if (SEMID) {
+    // the slot between the two units' front eaves (x -0.115..0.115, z 1.07..1.67, open to the sky where the party wall
+    // ends): the right unit's lower roof, its fascia and its soffit run on across it to the left unit's eave end (no fin)
+    const ti = R0.tiles.findIndex(P => P.length === 4 && P.some(q => Math.abs(q[0] - 0.115) < 1e-3 && Math.abs(q[2] - 1.67) < 1e-3) && P.some(q => Math.abs(q[0] - 0.115) < 1e-3 && q[2] < -0.5));
+    if (ti >= 0) {
+      const P = R0.tiles[ti], e = P.find(q => q[0] > 1 && q[2] > 1.6), r = P.find(q => q[0] > 1 && q[2] < -0.5), yS = e[1] + (r[1] - e[1]) * (e[2] - 1.07) / (e[2] - r[2]);
+      R0.tiles[ti] = [[-0.115, e[1], e[2]], [e[0], e[1], e[2]], [r[0], r[1], r[2]], [0.115, r[1], r[2]], [0.115, yS, 1.07], [-0.115, yS, 1.07]];
+      for (const f of R0.fascia) if (Math.abs(f.r[0] - 0.115) < 1e-3 && f.r[1] > 1.5) f.r = [-0.115, f.r[1], f.r[2], f.r[3]];
+      const s = R0.soffits.find(s => Math.abs(s.r[0] - 0.115) < 1e-3 && s.r[3] > 1.6);
+      if (s) block([-0.115, 1.07, 0.115, s.r[3]], s.y - 0.02, 0.02, mFascia, roof, null);
+      // and the left unit's eave end over it is closed, from that soffit up to the left eave's tile edge
+      block([-0.135, 1.07, -0.115, e[2]], (s ? s.y : e[1]) - 0.02, 7.519 - (s ? s.y : e[1]) + 0.02, mFascia, roof, null);
+    }
+    // the same slot at the back (z -13.855..-13.255), where the right unit's roof is the higher one: it runs on across,
+    // with its fascia and soffit, and its end over the left unit's eave is closed down to that eave's soffit
+    const tr = R0.tiles.findIndex(P => P.length === 4 && P.some(q => Math.abs(q[0] - 0.115) < 1e-3 && q[2] < -13.8) && P.some(q => Math.abs(q[0] - 0.115) < 1e-3 && q[2] > -13 && q[2] < -12));
+    if (tr >= 0) {
+      const P = R0.tiles[tr], e = P.find(q => q[0] > 1 && q[2] < -13.8), r = P.find(q => q[0] > 1 && q[2] > -13), zP = -13.255, yS = e[1] + (r[1] - e[1]) * (zP - e[2]) / (r[2] - e[2]);
+      R0.tiles[tr] = [[-0.115, e[1], e[2]], [e[0], e[1], e[2]], [r[0], r[1], r[2]], [0.115, r[1], r[2]], [0.115, yS, zP], [-0.115, yS, zP]];
+      for (const f of R0.fascia) if (Math.abs(f.r[0] - 0.115) < 1e-3 && f.r[1] < -13.8) f.r = [-0.115, f.r[1], f.r[2], f.r[3]];
+      const s = R0.soffits.find(s => Math.abs(s.r[0] - 0.115) < 1e-3 && s.r[1] < -13.8), sl = R0.soffits.find(s => Math.abs(s.r[2] + 0.115) < 1e-3 && s.r[1] < -13.8);
+      if (s) block([-0.115, e[2], 0.115, zP], s.y - 0.02, 0.02, mFascia, roof, null);
+      const y0 = (sl ? sl.y : e[1]) - 0.02, sh = new THREE.Shape([[e[2], y0], [zP, y0], [zP, yS - 0.005], [e[2], e[1] - 0.005]].map(([z, y]) => new THREE.Vector2(-z, y)));
+      const pg = new THREE.ExtrudeGeometry(sh, { depth: 0.02, bevelEnabled: false }), pm = new THREE.Mesh(pg, mFascia);
+      pm.rotation.y = Math.PI / 2; pm.position.x = -0.115;   // (its face on the tile edge, under it: no pale strip beside the tiles from above)
+      pm.castShadow = pm.receiveShadow = true; roof.add(pm);
+    }
+    // the valley between the right unit's two gables: the fascia boards and end faces there stop at the wall line instead
+    // of running out under the verges as loose boxes and strips (owner, Nov 2026: "just the roof overhang, and flat slab")
+    const xw = HOUSE.x1;
+    for (const f of R0.fascia) if (f.r[0] > 1 && f.r[1] > -7.3 && f.r[3] < -6.0 && f.r[2] > xw) f.r = [f.r[0], f.r[1], xw, f.r[3]];
+    R0.faces = R0.faces.map(P => P.every(q => q[0] > 1 && q[2] < -6.1 && q[2] > -7.1) && P.every(q => Math.abs(q[2] - P[0][2]) < 1e-3) ? P.map(q => [Math.min(q[0], xw), q[1], q[2]]) : P);
+  } else {
+    // a hipped wing's side eave running out over the flat roof: its fascia stops where the flat roof stops, instead of
+    // hanging on past the wall line beside the parapet as a loose block (owner, Nov 2026)
+    for (const f of R0.fascia) {
+      const fx0 = Math.min(f.r[0], f.r[2]), fx1 = Math.max(f.r[0], f.r[2]); if (fx1 - fx0 > 0.05) continue;
+      const fl = R0.flats.find(s => s.y1 < f.y0 && s.y1 > 6.5 && fx0 > Math.min(s.r[0], s.r[2]) && fx1 < Math.max(s.r[0], s.r[2]));
+      if (fl) f.r = [f.r[0], Math.max(Math.min(f.r[1], f.r[3]), Math.min(fl.r[1], fl.r[3])), f.r[2], Math.min(Math.max(f.r[1], f.r[3]), Math.max(fl.r[1], fl.r[3]))];
+    }
+  }
+  // The data's own barge bands (the bungalow's three, drawn as flat faces with their own kinks) give way to one board per
+  // verge, below; and a wall-top closure face running into a corner column stops at it (no two faces on one plane).
+  const isBargeFace = P => P.length > 4 && P.every(q => Math.abs(q[0] - P[0][0]) < 0.01) && Math.abs(P[0][2] - P[P.length - 1][2]) < 0.01 && Math.abs(P[0][1] - P[P.length - 1][1]) < 0.6;
+  const bargeFaces = R0.faces.filter(isBargeFace);
+  const trimFace = P => {
+    if (P.length !== 4) return [P];
+    const xs = P.map(q => q[0]), zs = P.map(q => q[2]), ys = P.map(q => q[1]), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const onX = Math.max(...xs) - Math.min(...xs) < 1e-3, onZ = Math.max(...zs) - Math.min(...zs) < 1e-3;
+    if (onX === onZ || ys.some(y => Math.abs(y - y0) > 1e-3 && Math.abs(y - y1) > 1e-3)) return [P];
+    const c = onX ? xs[0] : zs[0], al = onX ? zs : xs;
+    let segs = [[Math.min(...al), Math.max(...al)]];
+    for (const p of CORNER_PIERS) {
+      const [c0, c1, a0, a1] = onX ? [p[0], p[2], p[1], p[3]] : [p[1], p[3], p[0], p[2]];
+      if (c < c0 - 1e-3 || c > c1 + 1e-3) continue;
+      segs = segs.flatMap(([a, b]) => a1 <= a || a0 >= b ? [[a, b]] : [[a, a0], [a1, b]].filter(([u, v]) => v - u > 0.005));
+    }
+    if (segs.length === 1 && segs[0][0] === Math.min(...al) && segs[0][1] === Math.max(...al)) return [P];
+    return segs.map(([a, b]) => onX ? [[c, y0, a], [c, y0, b], [c, y1, b], [c, y1, a]] : [[a, y0, c], [b, y0, c], [b, y1, c], [a, y1, c]]);
+  };
+  R0.faces = R0.faces.filter(P => !isBargeFace(P)).flatMap(trimFace);
   const tg = polyGeometry(X.roof.tiles, true);
   for (const mat of [mTile, mSoffit]) { const m = new THREE.Mesh(tg, mat); m.castShadow = m.receiveShadow = true; roof.add(m); }
   roof.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(tg, 12)), mInk));
@@ -1469,21 +1572,86 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
   const fg = polyGeometry(rest, false);
   const fm = new THREE.Mesh(fg, mPlasterDS); fm.castShadow = fm.receiveShadow = true; roof.add(fm);
   fm.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(fg, 12)), mInk));
+  // Gablets (owner, Nov 2026: "make it more nicely detailed, looks broken"; kept white): an inset white panel with neat
+  // horizontal louvre slats in a slim frame on a small sill. The frame's face is the gablet's own plane, where the tiles
+  // stop, so nothing stands proud of the wall or eave below; a gablet standing on an eave sits on a board in the
+  // fascias' line, so the eave under it is closed too.
   {
-    const pos = [], uv = [];
+    const mGabletBack = new THREE.MeshStandardMaterial({ color: 0xDCD5CA, roughness: 0.95, side: THREE.DoubleSide });
+    const fr = [], back = [], M4 = new THREE.Matrix4();
     for (const P of tri) {
-      const ys = P.map(q => q[1]), y0 = Math.min(...ys), y1 = Math.max(...ys);
+      const yb = Math.min(...P.map(q => q[1])), base = P.filter(q => q[1] < yb + 0.01), C = P.find(q => q[1] >= yb + 0.01);
+      if (base.length !== 2 || !C) continue;
       const vertX = Math.abs(P[0][0] - P[1][0]) < 0.01 && Math.abs(P[1][0] - P[2][0]) < 0.01;   // face in a y-z plane
-      for (const q of P) {
-        const off = vertX ? [Math.sign(q[0]) * -0.04, 0, 0] : [0, 0, q[2] > -6 ? -0.04 : 0.04];   // set back a little behind the eave line
-        pos.push(q[0] + off[0], q[1], q[2] + off[2]); uv.push((vertX ? q[2] : q[0]) / 1.2, (q[1] - y0) / Math.max(0.1, y1 - y0) * (y1 - y0) / 0.6);
+      const N = vertX ? V(Math.sign(P[0][0] - HCX), 0, 0) : V(0, 0, Math.sign(P[0][2] - HCZ)), Up = V(0, 1, 0), U = Up.clone().cross(N);
+      const O = V(...base[0]), loc = q => [V(...q).sub(O).dot(U), q[1] - O.y];
+      let a = loc(base[0]), b = loc(base[1]); if (a[0] > b[0]) [a, b] = [b, a];
+      const c = loc(C), cen = [(a[0] + b[0] + c[0]) / 3, (a[1] + b[1] + c[1]) / 3];
+      M4.makeBasis(U, Up, N).setPosition(O);
+      const offLine = (p, q, d) => { const dx = q[0] - p[0], dy = q[1] - p[1], L = Math.hypot(dx, dy); let nx = -dy / L, ny = dx / L;
+        if (nx * (cen[0] - p[0]) + ny * (cen[1] - p[1]) < 0) { nx = -nx; ny = -ny; } return [[p[0] + nx * d, p[1] + ny * d], [dx, dy]]; };
+      const meet = ([p, d1], [q, d2]) => { const den = d1[0] * d2[1] - d1[1] * d2[0], t = ((q[0] - p[0]) * d2[1] - (q[1] - p[1]) * d2[0]) / den; return [p[0] + d1[0] * t, p[1] + d1[1] * t]; };
+      const D = 0.07, IN = 0.012, FW = 0.055, SH = 0.07;   // frame depth, set-in under the tile edges, frame width, sill height
+      const tri2 = (d, h) => { const l = offLine(a, c, d), r = offLine(b, c, d), s = [[0, h], [1, 0]]; return [meet(s, l), meet(s, r), meet(l, r)]; };
+      const [oa, ob, oc] = tri2(IN, 0), [ia, ib, ic] = tri2(IN + FW, SH);
+      if (ic[1] - ia[1] < 0.12) continue;
+      const v2 = p => new THREE.Vector2(p[0], p[1]);
+      const sh = new THREE.Shape([oa, ob, oc].map(v2)); sh.holes.push(new THREE.Path([ia, ic, ib].map(v2)));
+      const g = new THREE.ExtrudeGeometry(sh, { depth: D, bevelEnabled: false }); g.translate(0, 0, -D); g.applyMatrix4(M4); fr.push(g);   // frame and sill
+      const bp = new THREE.ShapeGeometry(new THREE.Shape([oa, ob, oc].map(v2))).toNonIndexed(); bp.translate(0, 0, -D + 0.004); bp.applyMatrix4(M4); back.push(bp);
+      for (let y = SH + 0.03; y < ic[1] - 0.07; y += 0.08) {   // louvre slats, 80 mm apart, tilted to shed rain, behind the frame's face
+        const ym = y + 0.0225, t = (ym - ia[1]) / (ic[1] - ia[1]), xl = ia[0] + (ic[0] - ia[0]) * t, xr = ib[0] + (ic[0] - ib[0]) * t;
+        if (xr - xl < 0.06) break;
+        const sg = new THREE.BoxGeometry(xr - xl, 0.045, 0.04).toNonIndexed(); sg.rotateX(0.5); sg.translate((xl + xr) / 2, ym, -D / 2 - 0.004); sg.applyMatrix4(M4); fr.push(sg);
+      }
+      // on an eave: a board under it in the fascias' line, from the eave soffit up to the gablet's sill
+      const s = R0.soffits.find(s => yb - s.y > 0.05 && yb - s.y < 0.5 && base.every(q => q[0] >= Math.min(s.r[0], s.r[2]) - 0.01 && q[0] <= Math.max(s.r[0], s.r[2]) + 0.01 && q[2] >= Math.min(s.r[1], s.r[3]) - 0.01 && q[2] <= Math.max(s.r[1], s.r[3]) + 0.01));
+      if (s) {
+        const [p, q] = base, T = 0.15;
+        const r = vertX ? [Math.min(p[0], p[0] - N.x * T), Math.min(p[2], q[2]), Math.max(p[0], p[0] - N.x * T), Math.max(p[2], q[2])] : [Math.min(p[0], q[0]), Math.min(p[2], p[2] - N.z * T), Math.max(p[0], q[0]), Math.max(p[2], p[2] - N.z * T)];
+        block(r, s.y, yb - s.y, mFascia, roof, null);
       }
     }
-    const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); lg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); lg.computeVertexNormals();
-    const lm = new THREE.Mesh(lg, mGablet); lm.castShadow = true; roof.add(lm);
+    if (fr.length) { const m = new THREE.Mesh(mergeGeometries(fr.map(g => g.index ? g.toNonIndexed() : g)), mGablet); m.castShadow = m.receiveShadow = true; roof.add(m); }
+    if (back.length) { const m = new THREE.Mesh(mergeGeometries(back), mGabletBack); m.receiveShadow = true; roof.add(m); }
   }
+  // Verge helpers: is (x, z) under the tiles, and their height there
+  const inTiles = (x, z) => X.roof.tiles.some(P => { let ins = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, , zi] = P[i], [xj, , zj] = P[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) ins = !ins; } return ins; });
+  const planeY = (P, x, z) => { for (let i = 1; i + 1 < P.length; i++) { const a = P[0], b = P[i], c = P[i + 1];
+    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+    const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    if (Math.abs(ny) > 1e-6) return a[1] - (nx * (x - a[0]) + nz * (z - a[2])) / ny; } return null; };
+  const inP = (P, x, z) => { let ins = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, , zi] = P[i], [xj, , zj] = P[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) ins = !ins; } return ins; };
+  const tileY = (x, z) => { let y = null; for (const P of X.roof.tiles) if (inP(P, x, z)) { const v = planeY(P, x, z); if (v != null && (y == null || v > y)) y = v; } return y; };
+  const reach = (x, z, dir) => { let d = 0; while (d < 1.2 && inTiles(x + dir * (d + 0.02), z)) d += 0.02; return d; };
+  // Which faces carry a barge board: every verge with a gable wall under it, and every verge the data drew a barge band on
+  const OV = 0.3, BB = 0.2, sides = new Map(), lowGables = [];
+  for (const G of X.roof.gables) {
+    const segs = G.prof.slice(1).map((q, i) => [G.prof[i], q]).filter(([u, v]) => Math.abs(u[1] - v[1]) > 0.05 && Math.abs(u[0] - v[0]) > 0.05);
+    if (!segs.length) continue;
+    const [[za, ya], [zb, yb]] = segs[0], zt = (za + zb) / 2;
+    // which face is outside: where the tiles stop after a short overhang (inside, the roof carries on over the house)
+    const rP = reach(G.x1, zt, 1), rN = reach(G.x0, zt, -1);
+    if (rP >= 1.19 && rN >= 1.19) continue;   // roof on both sides (a gable inside the roofscape): no open verge to finish
+    const out = rP < rN ? 1 : rP > rN ? -1 : (inTiles(G.x1 + 0.25, zt) ? -1 : 1), xw = out > 0 ? G.x1 : G.x0, R = out > 0 ? rP : rN;
+    if (R < 0.2) { lowGables.push({ G, segs, out, xw }); continue; }   // the tiles stop at the wall: they run 300 mm out over it (below)
+    // the tiles already overhang the wall (the Semi-D's gable unit, the bungalow's east gable: 600 mm): the barge board
+    // goes on the tiles' own edge and the soffit under them (owner, Nov 2026: it was put inside the roof, out of sight,
+    // and the eave soffits ended in mid-air at the corners as a white wedge)
+    let xo = xw + out * R; for (const P of X.roof.tiles) for (const q of P) if (Math.abs(q[0] - xo) < 0.05 && (q[0] - xo) * out > 0) xo = q[0];
+    const k = out + ':' + xo.toFixed(2); if (!sides.has(k)) sides.set(k, { out, xw, xo, gz: [] });
+    const sd = sides.get(k), zs = G.prof.map(q => q[0]); sd.gz.push([Math.min(...zs), Math.max(...zs)]); sd.xw = out > 0 ? Math.min(sd.xw, xw) : Math.max(sd.xw, xw);
+  }
+  for (const P of bargeFaces) {   // a verge with no overhang (the bungalow's front right roof over the flat roof): the board alone
+    const fx = P[0][0], zm = P.reduce((s, q) => s + q[2], 0) / P.length; let xo = null;
+    for (const T of X.roof.tiles) for (const q of T) if (Math.abs(q[0] - fx) < 0.06 && (xo == null || Math.abs(q[0] - fx) < Math.abs(xo - fx))) xo = q[0];
+    if (xo == null) continue;
+    const out = inTiles(xo + 0.04, zm) ? -1 : 1, k = out + ':' + xo.toFixed(2);
+    if (!sides.has(k)) sides.set(k, { out, xw: xo, xo, gz: [], flush: true });
+  }
+  const bargeXs = [...sides.values()].map(s => s.xo);
   // Ridge, hip and verge caps: rounded clay caps on every convex edge between roof planes (and where a
-  // roof plane meets a gable face along a slope). Valleys are left open.
+  // roof plane meets a gablet face along a slope). Valleys are left open; a verge with a barge board has no cap.
   {
     const key = p => p.map(v => v.toFixed(2)).join(',');
     const edges = new Map();
@@ -1494,25 +1662,48 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
     });
     X.roof.tiles.forEach(P => addPoly(P, 'tile')); X.roof.faces.forEach(P => addPoly(P, 'face'));
     const cent = P => P.reduce((s, q) => [s[0] + q[0] / P.length, s[1] + q[1] / P.length, s[2] + q[2] / P.length], [0, 0, 0]);
-    const caps = [];
     for (const { a, b, polys } of edges.values()) {
       const tiles = polys.filter(q => q.kind === 'tile');
       if (!tiles.length) continue;
       const midY = (a[1] + b[1]) / 2, sloped = Math.abs(a[1] - b[1]) > 0.1;
       let isCap = false;
       if (tiles.length >= 2) isCap = tiles.every(q => cent(q.P)[1] < midY - 0.05);            // ridge or hip (convex)
-      else if (polys.length >= 2 && sloped && !X.roof.gables.some(G => Math.min(a[0], b[0]) > G.x0 - 0.06 && Math.max(a[0], b[0]) < G.x1 + 0.06)) isCap = true;   // verge against a gablet face (gable walls get a barge board instead)
+      else if (polys.length >= 2 && sloped && !X.roof.gables.some(G => Math.min(a[0], b[0]) > G.x0 - 0.06 && Math.max(a[0], b[0]) < G.x1 + 0.06)
+        && !bargeXs.some(x => Math.abs(a[0] - x) < 0.01 && Math.abs(b[0] - x) < 0.01)) isCap = true;   // verge against a gablet face (gable walls get a barge board instead)
       if (!isCap) continue;
       const A = V(...a), B = V(...b), L = A.distanceTo(B); if (L < 0.2) continue;
       const g = new THREE.CylinderGeometry(0.095, 0.095, L, 14, 1, false, 0, Math.PI);
       const m = new THREE.Mesh(g, mCapTile);
       m.position.copy(A).lerp(B, 0.5); m.position.y += 0.035;
-      m.quaternion.setFromUnitVectors(V(0, 1, 0), B.clone().sub(A).normalize());
-      m.rotateY(Math.PI / 2 + (Math.abs(B.x - A.x) > Math.abs(B.z - A.z) ? 0 : 0));
-      m.castShadow = true; caps.push(m); roof.add(m);
+      // its crown out over the edge, halfway between the two planes that meet there (owner, Nov 2026: some caps lay on
+      // their side and read as a thin line, one beside each gablet)
+      const e = B.clone().sub(A).normalize(), d = V(0, 0, 0);
+      for (const { P } of polys) { const c = V(...cent(P)), w = A.clone().sub(c); w.addScaledVector(e, -w.dot(e)); if (w.lengthSq() > 1e-8) d.add(w.normalize()); }
+      d.addScaledVector(e, -d.dot(e)); if (d.lengthSq() < 1e-8) d.set(0, 1, 0).addScaledVector(e, -e.y); if (d.y < 0) d.negate(); d.normalize();
+      m.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(d, e, d.clone().cross(e)));
+      m.castShadow = true; roof.add(m);
+      // bedded on the tiles (owner, Nov 2026: a thin see-through sliver showed under a cap's edge): the gap under each of
+      // its two edges filled down to the roof plane on that side, in the cap's own colour
+      const w = d.clone().cross(e), M0 = A.clone().lerp(B, 0.5), loc = p => new THREE.Vector2(p.clone().sub(M0).dot(w), p.clone().sub(M0).dot(d));
+      const sec = [];
+      for (const sg of [-1, 1]) {
+        const R = m.position.clone().addScaledVector(w, sg * 0.095), side = polys.find(({ P }) => V(...cent(P)).sub(M0).dot(w) * sg > 0);
+        let F = R.clone();
+        if (side) {
+          const P = side.P, n = V(0, 0, 0);
+          P.forEach((q, i) => { const r = P[(i + 1) % P.length]; n.x += (q[1] - r[1]) * (q[2] + r[2]); n.y += (q[2] - r[2]) * (q[0] + r[0]); n.z += (q[0] - r[0]) * (q[1] + r[1]); });
+          const nd = n.dot(d), t = Math.abs(nd) > 1e-6 ? n.dot(R.clone().sub(V(...P[0]))) / nd : 0;
+          if (t > 0 && t < 0.4) F = R.clone().addScaledVector(d, -t - 0.004);
+        }
+        sec.push(R, F);
+      }
+      if (sec[0].distanceTo(sec[1]) > 0.003 || sec[2].distanceTo(sec[3]) > 0.003) {
+        const sh = new THREE.Shape([sec[0], sec[1], M0.clone().addScaledVector(d, -0.004), sec[3], sec[2]].map(loc));
+        const bg = new THREE.ExtrudeGeometry(sh, { depth: L, bevelEnabled: false });
+        bg.applyMatrix4(new THREE.Matrix4().makeBasis(w, d, e).setPosition(M0.clone().addScaledVector(e, -L / 2)));
+        const bm = new THREE.Mesh(bg, mCapTile); bm.castShadow = bm.receiveShadow = true; roof.add(bm);
+      }
     }
-    // keep the half-round crown facing up
-    for (const m of caps) { const up = V(0, 0, 1).applyQuaternion(m.quaternion); if (up.y < 0) m.rotateY(Math.PI); }
   }
   const extrudeZY = (prof, x0, x1, mat) => {   // a wall standing on x0..x1 with its top following prof [[z, y]...]
     const sh = new THREE.Shape(prof.map(([z, y]) => new THREE.Vector2(-z, y)));
@@ -1521,13 +1712,9 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
     m.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(g, 30)), mInk));
     roof.add(m);
   };
-  for (const G of X.roof.gables) {
-    const p = G.prof; extrudeZY([[p[0][0], G.y0], ...p, [p[p.length - 1][0], G.y0]], G.x0, G.x1, mWall);
-  }
-  // Gable verges (owner, Nov 2026): the tiles run 300 mm out past every gable wall, finished with a white barge board
-  // down the slope and a white plastered soffit under the overhang.
+  // Gable verges (owner, Nov 2026): the tiles run out past every gable wall, finished with a white barge board down the
+  // slope and a white plastered soffit under the overhang.
   {
-    const inTiles = (x, z) => X.roof.tiles.some(P => { let ins = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, , zi] = P[i], [xj, , zj] = P[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) ins = !ins; } return ins; });
     const band = (za, ya, zb, yb, top, bot, x0, x1, mats) => {   // a strip following one roof slope, between x0 and x1
       const sh = new THREE.Shape([[za, ya + top], [zb, yb + top], [zb, yb + bot], [za, ya + bot]].map(([z, y]) => new THREE.Vector2(-z, y)));
       const g = new THREE.ExtrudeGeometry(sh, { depth: x1 - x0, bevelEnabled: false });
@@ -1537,84 +1724,157 @@ hd.use(mPlasterDS, 'render_ext', { world: true, normalScale: 0.35 });   // gable
       const g = new THREE.ExtrudeGeometry(new THREE.Shape(pts.map(([z, y]) => new THREE.Vector2(-z, y))), { depth: x1 - x0, bevelEnabled: false });
       const m = new THREE.Mesh(g, mat); m.rotation.y = Math.PI / 2; m.position.x = x0; m.castShadow = m.receiveShadow = true; roof.add(m); return m;
     };
-    const planeY = (P, x, z) => { for (let i = 1; i + 1 < P.length; i++) { const a = P[0], b = P[i], c = P[i + 1];
-      const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2], vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
-      const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
-      if (Math.abs(ny) > 1e-6) return a[1] - (nx * (x - a[0]) + nz * (z - a[2])) / ny; } return null; };
-    const inP = (P, x, z) => { let ins = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, , zi] = P[i], [xj, , zj] = P[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) ins = !ins; } return ins; };
-    const tileY = (x, z) => { let y = null; for (const P of X.roof.tiles) if (inP(P, x, z)) { const v = planeY(P, x, z); if (v != null && (y == null || v > y)) y = v; } return y; };
-    const reach = (x, z, dir) => { let d = 0; while (d < 1.2 && inTiles(x + dir * (d + 0.02), z)) d += 0.02; return d; };
-    const OV = 0.3, BB = 0.2, sides = new Map();
-    for (const G of X.roof.gables) {
-      const segs = G.prof.slice(1).map((q, i) => [G.prof[i], q]).filter(([u, v]) => Math.abs(u[1] - v[1]) > 0.05 && Math.abs(u[0] - v[0]) > 0.05);
-      if (!segs.length) continue;
-      const [[za, ya], [zb, yb]] = segs[0], zt = (za + zb) / 2;
-      // which face is outside: where the tiles stop after a short overhang (inside, the roof carries on over the house)
-      const rP = reach(G.x1, zt, 1), rN = reach(G.x0, zt, -1);
-      if (rP >= 1.19 && rN >= 1.19) continue;   // roof on both sides (a gable inside the roofscape): no open verge to finish
-      const out = rP < rN ? 1 : rP > rN ? -1 : (inTiles(G.x1 + 0.25, zt) ? -1 : 1), xw = out > 0 ? G.x1 : G.x0, R = out > 0 ? rP : rN;
-      if (R < 0.2) {   // the tiles stop at the wall: they run 300 mm out over it
-        const xo = xw + out * OV, [lo, hi] = out > 0 ? [xw, xo] : [xo, xw];
-        for (const [[z0, y0], [z1, y1]] of segs) {
-          band(z0, y0, z1, y1, 0.065, 0.02, out > 0 ? lo : lo - 0.03, out > 0 ? hi + 0.03 : hi, [mCapTile, mTile]);                           // tile run-out
-          band(z0, y0, z1, y1, 0.02, 0.02 - BB, out > 0 ? hi - 0.025 : lo, out > 0 ? hi : lo + 0.025, mFascia);                                // barge board
-          band(z0, y0, z1, y1, 0.02 - BB + 0.03, 0.02 - BB + 0.018, lo + (out > 0 ? 0 : 0.025), hi - (out > 0 ? 0.025 : 0), mFascia);          // soffit
-        }
-        continue;
+    for (const { segs, out, xw } of lowGables) {   // (no such gable in the current data)
+      const xo = xw + out * OV, [lo, hi] = out > 0 ? [xw, xo] : [xo, xw];
+      for (const [[z0, y0], [z1, y1]] of segs) {
+        band(z0, y0, z1, y1, 0.065, 0.02, out > 0 ? lo : lo - 0.03, out > 0 ? hi + 0.03 : hi, [mCapTile, mTile]);                           // tile run-out
+        band(z0, y0, z1, y1, 0.02, 0.02 - BB, out > 0 ? hi - 0.025 : lo, out > 0 ? hi : lo + 0.025, mFascia);                                // barge board
+        band(z0, y0, z1, y1, 0.02 - BB + 0.03, 0.02 - BB + 0.018, lo + (out > 0 ? 0 : 0.025), hi - (out > 0 ? 0.025 : 0), mFascia);          // soffit
       }
-      // the tiles already overhang the wall (the Semi-D's gable unit, the bungalow's east gable: 600 mm): the barge board
-      // goes on the tiles' own edge and the soffit under them (owner, Nov 2026: it was put inside the roof, out of sight,
-      // and the eave soffits ended in mid-air at the corners as a white wedge)
-      let xo = xw + out * R; for (const P of X.roof.tiles) for (const q of P) if (Math.abs(q[0] - xo) < 0.05 && (q[0] - xo) * out > 0) xo = q[0];
-      const k = out + ':' + xo.toFixed(2); if (!sides.has(k)) sides.set(k, { out, xw, xo, gz: [] });
-      const sd = sides.get(k), zs = G.prof.map(q => q[0]); sd.gz.push([Math.min(...zs), Math.max(...zs)]); sd.xw = out > 0 ? Math.min(sd.xw, xw) : Math.max(sd.xw, xw);
     }
-    for (const { out, xw, xo, gz } of sides.values()) {
-      const T = 0.03, xb0 = out > 0 ? xo - T : xo, xb1 = out > 0 ? xo + 0.005 : xo + T;   // barge board, a hair proud of the tile edge
-      const [lo, hi] = out > 0 ? [xw, xo - T] : [xo + T, xw];
-      const edges = [];
+    // A verge as one line down the tile edge ([z, y], z falling: eave, ridge, eave), and lines parallel to it: each a
+    // constant distance d square off the slope (d < 0 below), mitred where the slope changes, cut plumb at the ends.
+    const chainsAt = (xo, out) => {
+      const segs = [];
       for (const P of X.roof.tiles) P.forEach((a, i) => { const b = P[(i + 1) % P.length];
         if (Math.abs(a[0] - xo) < 0.01 && Math.abs(b[0] - xo) < 0.01 && Math.abs(a[2] - b[2]) > 0.05 && Math.abs(a[1] - b[1]) > 0.05
-          && !inTiles(xo + out * 0.04, (a[2] + b[2]) / 2)) edges.push([[a[2], a[1]], [b[2], b[1]]]); });   // only a real verge, open air beyond: never a seam between two roof planes (owner, Nov 2026: a white line across the bungalow roof)
-      for (const [[z0, y0], [z1, y1]] of edges) {
-        band(z0, y0, z1, y1, 0.03, 0.03 - BB, xb0, xb1, mFascia);                                                        // barge board, eave to ridge
-        for (const [g0, g1] of gz) {                                                                                       // soffit, over the gable wall's own length
-          const za = Math.max(Math.min(z0, z1), g0), zb = Math.min(Math.max(z0, z1), g1); if (zb - za < 0.02) continue;
-          const yAt = z => y0 + (y1 - y0) * (z - z0) / (z1 - z0);
-          band(za, yAt(za), zb, yAt(zb), -0.17, -0.19, lo, hi, mFascia);
-        }
+          && !inTiles(xo + out * 0.04, (a[2] + b[2]) / 2)) segs.push(a[2] > b[2] ? [[a[2], a[1]], [b[2], b[1]]] : [[b[2], b[1]], [a[2], a[1]]]); });   // only a real verge, open air beyond: never a seam between two roof planes (owner, Nov 2026: a white line across the bungalow roof)
+      segs.sort((u, v) => v[0][0] - u[0][0]);
+      const chains = [];
+      for (const s of segs) { const c = chains[chains.length - 1];
+        if (c && Math.abs(c[c.length - 1][0] - s[0][0]) < 0.01 && Math.abs(c[c.length - 1][1] - s[0][1]) < 0.01) c.push(s[1]); else chains.push([s[0], s[1]]); }
+      return chains.map(ch => ch.filter((p, i) => { if (i === 0 || i === ch.length - 1) return true;   // a point on a straight run is no kink
+        const a = ch[i - 1], b = ch[i + 1]; return Math.abs((p[0] - a[0]) * (b[1] - a[1]) - (p[1] - a[1]) * (b[0] - a[0])) / Math.hypot(b[0] - a[0], b[1] - a[1]) > 0.004; }));
+    };
+    const offsetChain = (ch, d) => {
+      const n = ch.length, sg = [], res = [];
+      for (let i = 0; i + 1 < n; i++) { const dz = ch[i + 1][0] - ch[i][0], dy = ch[i + 1][1] - ch[i][1], L = Math.hypot(dz, dy); let nz = -dy / L, ny = dz / L; if (ny < 0) { nz = -nz; ny = -ny; } sg.push([nz, ny, dz / L, dy / L]); }
+      for (let i = 0; i < n; i++) {
+        const [z, y] = ch[i];
+        if (i === 0 || i === n - 1) { const s = sg[i === 0 ? 0 : n - 2], pz = z + s[0] * d, py = y + s[1] * d; res.push([z, py + s[3] * (z - pz) / s[2]]); continue; }
+        const a = sg[i - 1], b = sg[i], p = [z + a[0] * d, y + a[1] * d], q = [z + b[0] * d, y + b[1] * d], den = a[2] * b[3] - a[3] * b[2];
+        if (Math.abs(den) < 1e-6) { res.push(p); continue; }
+        const t = ((q[0] - p[0]) * b[3] - (q[1] - p[1]) * b[2]) / den; res.push([p[0] + a[2] * t, p[1] + a[3] * t]);
       }
-      // an eave soffit that runs out to the verge: its end boxed in up to the verge soffit (no open wedge at the corner)
-      const gmin = Math.min(...gz.map(g => g[0])), gmax = Math.max(...gz.map(g => g[1])), xi = xo - out * 0.05;
-      for (const s of X.roof.soffits) {
-        const sx0 = Math.min(s.r[0], s.r[2]), sx1 = Math.max(s.r[0], s.r[2]), sz0 = Math.min(s.r[1], s.r[3]), sz1 = Math.max(s.r[1], s.r[3]);
-        if (out > 0 ? sx1 < xo - 0.05 : sx0 > xo + 0.05) continue;
-        if (sx1 - sx0 < sz1 - sz0) continue;   // eaves along x only (front and back)
-        const zIn = sz0 >= gmin - 0.05 && sz0 <= gmax + 0.05 ? sz0 : sz1 >= gmin - 0.05 && sz1 <= gmax + 0.05 ? sz1 : null; if (zIn == null) continue;
-        const zOut = zIn === sz0 ? sz1 : sz0, yIn = tileY(xi, zIn - Math.sign(zOut - zIn) * 0.01), yOut = tileY(xi, zOut - Math.sign(zOut - zIn) * 0.01);
-        if (yIn == null || yOut == null) continue;
-        const yb = s.y - 0.02, tIn = Math.max(yb + 0.02, yIn - 0.17), tOut = Math.max(yb + 0.02, yOut - 0.17);
-        prism([[zOut, yb], [zIn, yb], [zIn, tIn], [zOut, tOut]], out > 0 ? xo - T - 0.02 : xo + T, out > 0 ? xo - T : xo + T + 0.02, mFascia);   // the end panel
-        const zb0 = zIn + Math.sign(zOut - zIn) * 0.0, zb1 = zIn + Math.sign(zOut - zIn) * 0.02;
-        block([Math.min(lo, hi), Math.min(zb0, zb1), Math.max(lo, hi), Math.max(zb0, zb1)], yb, tIn - yb, mFascia, roof, null);   // and its back, at the wall line
+      return res;
+    };
+    const yAt = (pl, z) => { for (let i = 0; i + 1 < pl.length; i++) { const [za, ya] = pl[i], [zb, yb] = pl[i + 1]; if ((z - za) * (z - zb) <= 0 && za !== zb) return ya + (yb - ya) * (z - za) / (zb - za); }
+      return z > pl[0][0] ? pl[0][1] : pl[pl.length - 1][1]; };
+    const clipZ = (poly, zmin, zmax) => { let Q = poly;
+      for (const [k, s] of [[zmin, 1], [zmax, -1]]) { const res = []; for (let i = 0; i < Q.length; i++) { const A = Q[i], B = Q[(i + 1) % Q.length], ia = (A[0] - k) * s >= 0, ib = (B[0] - k) * s >= 0;
+        if (ia) res.push(A); if (ia !== ib) { const t = (k - A[0]) / (B[0] - A[0]); res.push([k, A[1] + (B[1] - A[1]) * t]); } } Q = res; }
+      return Q; };
+    const SOF1 = -0.19;   // the verge soffit's underside, square under the tile line; the barge board comes down to it
+    // a flat eave soffit (the Semi-D's) that runs out under a verge, and which end of a verge chain it meets
+    const eaveAt = (sd, zEnd, dir) => X.roof.soffits.find(s => {
+      const sx0 = Math.min(s.r[0], s.r[2]), sx1 = Math.max(s.r[0], s.r[2]), sz0 = Math.min(s.r[1], s.r[3]), sz1 = Math.max(s.r[1], s.r[3]);
+      return sx1 - sx0 >= sz1 - sz0 && (sd.out > 0 ? sx1 >= sd.xo - 0.05 : sx0 <= sd.xo + 0.05) && zEnd - dir * 0.01 > sz0 && zEnd - dir * 0.01 < sz1; });
+    for (const sd of sides.values()) {
+      const { out, xw, xo } = sd, T = 0.03;
+      // barge board (owner, Nov 2026: "one straight continuous board ... constant thickness"): one piece eave to ridge to
+      // eave, its top 30 mm over the tile edge and the same depth all the way, mitred at the change of pitch, plumb ends
+      const [xb0, xb1] = sd.flush ? (out > 0 ? [xo + 0.002, xo + T + 0.002] : [xo - T - 0.002, xo - 0.002]) : (out > 0 ? [xo - T, xo + 0.005] : [xo - 0.005, xo + T]);
+      const [lo, hi] = out > 0 ? [xw, xo - T] : [xo + T, xw];
+      sd.xb = [xb0, xb1]; sd.lo = lo; sd.hi = hi;
+      sd.chains = chainsAt(xo, out);
+      // its depth: at least SOF1, and down to the bottom of any eave fascia that runs into the verge, so the barge board
+      // covers the fascia's end at the corner (the bungalow's fascias sit back from the tile edge and hang lower: their
+      // ends showed under the board as a step)
+      let d = SOF1;
+      for (const ch of sd.chains) for (const f of X.roof.fascia) {
+        const fx0 = Math.min(f.r[0], f.r[2]), fx1 = Math.max(f.r[0], f.r[2]), fz0 = Math.min(f.r[1], f.r[3]), fz1 = Math.max(f.r[1], f.r[3]);
+        if (sd.flush || fx0 > lo + 0.01 || fx1 < hi - 0.01 || fz1 - fz0 > 0.2 || fz0 < ch[ch.length - 1][0] - 1e-3 || fz1 > ch[0][0] + 1e-3) continue;
+        if (X.roof.soffits.some(s => (fz0 + fz1) / 2 > Math.min(s.r[1], s.r[3]) && (fz0 + fz1) / 2 < Math.max(s.r[1], s.r[3]) && (fx0 + fx1) / 2 > Math.min(s.r[0], s.r[2]) && (fx0 + fx1) / 2 < Math.max(s.r[0], s.r[2]))) continue;   // (an eave box: its end is closed below)
+        for (const z of [fz0, fz1]) { const i = Math.max(0, ch.findIndex((q, k) => k + 1 < ch.length && (z - q[0]) * (z - ch[k + 1][0]) <= 0)), a = ch[i], b = ch[i + 1] || a;
+          const L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, cs = Math.abs(b[0] - a[0]) / L;
+          d = Math.min(d, -(yAt(ch, z) - f.y0) * cs - 0.003); }
+      }
+      sd.d = d; sd.bot = sd.chains.map(ch => offsetChain(ch, d));
+      sd.chains.forEach((ch, ci) => {
+        const top = offsetChain(ch, 0.03), bot = sd.flush ? offsetChain(ch, 0.03 - BB) : sd.bot[ci];
+        prism([...top, ...[...bot].reverse()], xb0, xb1, mFascia);
+        if (sd.flush) return;
+        // The verge soffit (owner, Nov 2026: a stepped block beside each column top): one solid box from the gable wall out
+        // to the barge board, up under the tiles, the barge board's depth, running on from eave to eave (not stopping at the
+        // wall line with an end face beside the column). At an eave it stops at the back of the fascia (which hides its
+        // end), or where a flat eave soffit runs out under it (that box's end is closed below); else its own end is plumb.
+        const zA = ch[0][0], zB = ch[ch.length - 1][0];
+        const cut = (zEnd, dir) => {   // dir 1: the end at the high z (front), -1: the low z (rear)
+          const s = eaveAt(sd, zEnd, dir);
+          if (s) return dir > 0 ? Math.min(s.r[1], s.r[3]) : Math.max(s.r[1], s.r[3]);
+          const f = X.roof.fascia.find(f => { const fx0 = Math.min(f.r[0], f.r[2]), fx1 = Math.max(f.r[0], f.r[2]), fz0 = Math.min(f.r[1], f.r[3]), fz1 = Math.max(f.r[1], f.r[3]);
+            return fx0 <= lo + 0.01 && fx1 >= hi - 0.01 && fz1 - fz0 < 0.2 && (dir > 0 ? fz1 <= zEnd + 1e-3 && fz0 > zEnd - 0.7 : fz0 >= zEnd - 1e-3 && fz1 < zEnd + 0.7); });
+          return f ? (dir > 0 ? Math.min(f.r[1], f.r[3]) : Math.max(f.r[1], f.r[3])) : zEnd;
+        };
+        const poly = [...offsetChain(ch, -0.005), ...[...sd.bot[ci]].reverse()], z0 = cut(zB, -1), z1 = cut(zA, 1);
+        // past the gable wall's ends (over the eave overhang) the box reaches in to the corner column's inner face, so the
+        // column top meets one flat underside across its whole width (the bungalow's stand half in the gable wall)
+        const cols = CORNER_PIERS.filter(c => out > 0 ? c[0] < lo - 1e-3 && c[2] > lo : c[2] > hi + 1e-3 && c[0] < hi);
+        const lo2 = out > 0 && cols.length ? Math.min(...cols.map(c => c[0])) : lo, hi2 = out < 0 && cols.length ? Math.max(...cols.map(c => c[2])) : hi;
+        const cuts = [z0, ...sd.gz.flat().filter(z => z > z0 + 1e-3 && z < z1 - 1e-3), z1].sort((a, b) => a - b);
+        for (let i = 0; i + 1 < cuts.length; i++) {
+          const zm = (cuts[i] + cuts[i + 1]) / 2, wall = sd.gz.some(([g0, g1]) => zm > g0 && zm < g1);
+          const pts = clipZ(poly, cuts[i], cuts[i + 1]); if (pts.length >= 3) prism(pts, wall ? lo : lo2, wall ? hi : hi2, mFascia);
+        }
+      });
+      if (sd.flush) continue;
+      // an eave soffit that runs out to the verge (the Semi-D's): its end closed by a board flush with the barge board, from
+      // the soffit up to the barge board's underside (one face with it, not set back as a grey end), and the step between
+      // the soffit and the higher verge soffit at the wall line closed in the wall's own plane, in the wall's plaster
+      for (const ci in sd.chains) for (const [zEnd, dir] of [[sd.chains[ci][0][0], 1], [sd.chains[ci][sd.chains[ci].length - 1][0], -1]]) {
+        const s = eaveAt(sd, zEnd, dir); if (!s) continue;
+        const sz0 = Math.min(s.r[1], s.r[3]), sz1 = Math.max(s.r[1], s.r[3]), zIn = dir > 0 ? sz0 : sz1, zOut = dir > 0 ? sz1 : sz0;
+        const yb = s.y - 0.02, bIn = yAt(sd.bot[ci], zIn), bOut = yAt(sd.bot[ci], zOut), zE = zIn - dir * 0.02;   // (on over the back's thickness)
+        if (bIn - yb > 0.005) prism([[zOut, yb], [zE, yb], [zE, yAt(sd.bot[ci], zE)], [zIn, bIn], [zOut, Math.max(yb + 0.001, bOut)]], sd.xb[0], sd.xb[1], mFascia);   // the end panel
+        let bx0 = sd.lo, bx1 = sd.hi;   // and its back, at the wall line: from a corner column's outer face on, flush with it
+        for (const c of CORNER_PIERS) if (c[0] < bx1 && c[2] > bx0 && (Math.abs(c[1] - zIn) < 0.02 || Math.abs(c[3] - zIn) < 0.02)) { if (out > 0) bx0 = Math.max(bx0, c[2]); else bx1 = Math.min(bx1, c[0]); }
+        const zb = zIn - dir * 0.02;   // (inside the wall line, its face on it)
+        if (bx1 - bx0 > 0.01 && bIn - yb > 0.005) block([bx0, Math.min(zIn, zb), bx1, Math.max(zIn, zb)], yb, bIn - yb + 0.01, mWall, roof, null);
       }
     }
-    // Bungalow corner piers carried on above the truss seat (owner, Nov 2026: "column to roof eave"): under a gable verge
-    // they rise to the white verge soffit and follow its slope; under the hipped wing they stop just under the tiles.
-    for (const r of PIERS) {
-      const [px0, pz0, px1, pz1] = [Math.min(r[0], r[2]), Math.min(r[1], r[3]), Math.max(r[0], r[2]), Math.max(r[1], r[3])], y0 = ffTop(r), xc = (px0 + px1) / 2;
-      const sd = [...sides.values()].find(v => (v.out > 0 ? xc > v.xw - 0.2 && xc < v.xo : xc < v.xw + 0.2 && xc > v.xo) && v.gz.some(([g0, g1]) => pz0 > g0 - 0.05 && pz1 < g1 + 0.05));
-      if (sd) {
-        const xs = sd.out > 0 ? sd.xo - 0.06 : sd.xo + 0.06, zs = [pz0, pz0 + (pz1 - pz0) / 3, pz0 + 2 * (pz1 - pz0) / 3, pz1];
-        const top = zs.map(z => { const t = tileY(xs, Math.min(pz1 - 0.002, Math.max(pz0 + 0.002, z))); return t == null ? null : [z, t - 0.185]; });
-        if (top.some(q => q == null || q[1] <= y0 + 0.01)) continue;
-        const m = prism([[pz1, y0], [pz0, y0], ...top], px0, px1, mWall);
-        m.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(m.geometry, 30)), mInk));
-        continue;
+    // Gable walls: where a corner column stands in the gable wall's thickness, the column rises in its place up to the
+    // verge soffit and the wall goes on over it from there (no sliver of wall beside or over the column top)
+    const sideOf = G => [...sides.values()].find(v => !v.flush && Math.abs(v.xw - (v.out > 0 ? G.x1 : G.x0)) < 0.01 && v.gz.some(([g0, g1]) => G.prof.every(q => q[0] >= g0 - 0.01 && q[0] <= g1 + 0.01)));
+    const colTop = (sd, z) => { const ci = sd ? sd.chains.findIndex(ch => (z - ch[0][0]) * (z - ch[ch.length - 1][0]) <= 1e-6) : -1; return ci < 0 ? null : yAt(sd.bot[ci], z); };
+    for (const G of X.roof.gables) {
+      const zmax = Math.max(...G.prof.map(q => q[0])), zmin = Math.min(...G.prof.map(q => q[0])), sd = sideOf(G);
+      const cols = CORNER_PIERS.filter(c => c[0] <= G.x0 + 1e-3 && c[2] >= G.x1 - 1e-3 && c[3] > zmin + 1e-3 && c[1] < zmax - 1e-3).map(c => [Math.max(c[1], zmin), Math.min(c[3], zmax)]).sort((u, v) => u[0] - v[0]);
+      const bot = []; let z = zmin;
+      for (const [a, b] of cols) {
+        const ya = colTop(sd, a), yb = colTop(sd, b); if (ya == null || yb == null) continue;
+        if (a > z + 1e-3) bot.push([z, G.y0], [a, G.y0]);
+        bot.push([a, ya], [b, yb]); z = b;
       }
-      let t = Infinity;
-      for (let i = 0; i <= 4; i++) for (let j = 0; j <= 4; j++) { const v = tileY(px0 + 0.002 + (px1 - px0 - 0.004) * i / 4, pz0 + 0.002 + (pz1 - pz0 - 0.004) * j / 4); if (v != null) t = Math.min(t, v); }
-      if (Number.isFinite(t) && t - 0.01 > y0 + 0.01) block([px0, pz0, px1, pz1], y0, t - 0.01 - y0, mWall, roof);
+      if (z < zmax - 1e-3) bot.push([z, G.y0], [zmax, G.y0]);
+      const top = [...G.prof].sort((u, v) => v[0] - u[0]);
+      extrudeZY([...top, ...bot.filter((p, i) => i === 0 || Math.abs(p[0] - bot[i - 1][0]) > 1e-4 || Math.abs(p[1] - bot[i - 1][1]) > 1e-4)], G.x0, G.x1, mWall);
+    }
+    // Corner columns (owner, Nov 2026: "column to roof eave", then "roof to the ground", then "die cleanly into the
+    // soffit/eave"): each one piece from the garden up. Under a gable verge the top is the verge soffit's own underside,
+    // following its slope; under a hipped eave it follows the underside of the tiles over it (no step, block or notch).
+    const pierMesh = (r, topAt, nx, nz) => {
+      const [x0, z0, x1, z1] = r, g = new THREE.BoxGeometry(1, 1, 1, nx, 1, nz), p = g.attributes.position, tops = [];
+      let yt = -Infinity;
+      for (let i = 0; i < p.count; i++) {
+        const x = x0 + (p.getX(i) + 0.5) * (x1 - x0), z = z0 + (p.getZ(i) + 0.5) * (z1 - z0);
+        if (p.getY(i) > 0) { const t = topAt(x, z); tops.push([i, t]); yt = Math.max(yt, t); }
+        p.setXYZ(i, x, 0, z);
+      }
+      for (const [i, t] of tops) p.setY(i, (t - PIER_BASE) / (yt - PIER_BASE));
+      g.computeVertexNormals();
+      const m = new THREE.Mesh(g, mWall); m.position.y = PIER_BASE; m.castShadow = m.receiveShadow = true;
+      m.add(new LineSegments2(new LineSegmentsGeometry().fromEdgesGeometry(new THREE.EdgesGeometry(g, 30)), mInk));
+      house.add(m); pierPart(m, yt);
+    };
+    for (const r of CORNER_PIERS) {
+      if (SEMID && r[0] < 0) continue;   // the left unit's stand under its hipped eave's flat soffit: made with the walls
+      const [px0, pz0, px1, pz1] = r, xc = (px0 + px1) / 2;
+      const sd = [...sides.values()].find(v => !v.flush && (v.out > 0 ? xc > v.xw - 0.2 && xc < v.xo : xc < v.xw + 0.2 && xc > v.xo) && v.gz.some(([g0, g1]) => pz0 > g0 - 0.05 && pz1 < g1 + 0.05));
+      if (sd && colTop(sd, pz0) != null && colTop(sd, pz1) != null) { pierMesh(r, (x, z) => colTop(sd, z), 1, 4); continue; }
+      if (SEMID) { pierPart(block(r, PIER_BASE, ffTop(r) - PIER_BASE, mWall, house), ffTop(r)); continue; }
+      const ty = (x, z) => tileY(Math.min(px1 - 0.002, Math.max(px0 + 0.002, x)), Math.min(pz1 - 0.002, Math.max(pz0 + 0.002, z)));
+      if ([[px0, pz0], [px1, pz0], [px0, pz1], [px1, pz1]].some(([x, z]) => ty(x, z) == null)) { pierPart(block(r, PIER_BASE, ffTop(r) - PIER_BASE, mWall, house), ffTop(r)); continue; }
+      pierMesh(r, (x, z) => ty(x, z) - 0.006, 6, 6);
     }
   }
   // Party wall top brought flush with the roof (the drawing stands it ~0.28 m proud): it follows the right
@@ -2615,7 +2875,12 @@ if (PACKBAKE) {
   X.openings.filter(o => o.kind === 'window' || o.kind === 'slider' || o.kind === 'fixed').forEach((o, i) => {
     const mid = (o.c0 + o.c1) / 2, inward = o.axis === 'x' ? (mid > HCZ ? -1 : 1) : (mid > HCX ? -1 : 1);
     const c = inward < 0 ? Math.min(o.c0, o.c1) : Math.max(o.c0, o.c1), off = c + inward * 0.09;
-    const span = o.a1 - o.a0, w = span * (0.6 + (i % 3) * 0.06), left = i % 2 === 0;
+    const span = o.a1 - o.a0, left = i % 2 === 0;
+    let w = span * (0.6 + (i % 3) * 0.06);
+    // across a window with a mullion it covers whole panes, its free edge behind the mullion (owner, Nov 2026: an edge
+    // standing just beside the mullion read as an extra vertical strip, a second stile, in the Semi-D's front window)
+    const ms = (o.mull || []).filter(([m, y0, y1]) => y1 - y0 > 0.3 && m > o.a0 + 0.1 && m < o.a1 - 0.1).map(q => q[0]);
+    if (ms.length) { const e = left ? o.a0 + 0.02 + w : o.a1 - 0.02 - w, m = ms.reduce((b, x) => Math.abs(x - e) < Math.abs(b - e) ? x : b); w = left ? m - o.a0 - 0.02 : o.a1 - 0.02 - m; }
     const y0 = Math.max(o.sill, (o.floor ? FF_BASE : 0)) + 0.03, y1 = o.head - 0.04; if (y1 - y0 < 0.4 || w < 0.3) return;
     const m = new THREE.Mesh(zig(w, y1 - y0, Math.max(2, Math.round(w / 0.35))), mExtSheer);
     const along = left ? o.a0 + w / 2 + 0.02 : o.a1 - w / 2 - 0.02;
@@ -2647,7 +2912,9 @@ const ceilIn = r => {
   if (out(xm, z0 - 0.01)) z0 += 0.02; if (out(xm, z1 + 0.01)) z1 -= 0.02;
   return [x0, z0, x1, z1];
 };
-if (SEMID) for (const r of [[-6.72, -13.255, 6.72, -10.466], [-6.72, -2.789, 6.72, 0], [-6.72, -10.466, -1.615, -2.789], [1.615, -10.466, 6.72, -2.789]]) ffBlock(ceilIn(r), 7.20, 0.045, mSlab, mInkSoft);
+// (the right unit's middle flat roof, between its two gables, is its own ceiling: the slab's soffit at 6.80, so the
+// ceiling stops at its edges and no strip of it shows above that flat roof)
+if (SEMID) for (const r of [[-6.72, -13.255, 6.72, -10.466], [-6.72, -2.789, 6.72, 0], [-6.72, -10.466, -1.615, -2.789], [1.615, -10.466, 6.72, -7.077], [1.615, -6.177, 6.72, -2.789]]) ffBlock(ceilIn(r), 7.20, 0.045, mSlab, mInkSoft);
 else for (const r of rectsMinus([...X.voids, ...OUT_FF, ...X.ff_top.zones.map(z => z.r)])) ffBlock(ceilIn(r), X.levels.ff_ceiling || 7.0, 0.045, mSlab, mInkSoft);
 if (!SEMID && X.ceilings) {   // Bungalow: the right wing's flat plaster false ceiling at 3.00 (section BB HEIGHT 3.000), hiding the 3.15 beams
   const fc = X.ceilings.GF.filter(c => c.ceiling === 3.0).map(c => c.r);
@@ -3681,6 +3948,7 @@ function apply(P) {
   for (const m of siteWalls) setH(m, lerp(0.9, m.userData.full, site));
   const ff = ease(seg(p, 0.20, 0.32));
   for (const m of ffParts) setH(m, m.userData.full * ff);
+  for (const m of pierParts) setH(m, lerp(m.userData.h0, m.userData.gf, rise) + m.userData.up * ff);   // the corner columns, in step with both
   ffDetail.scale.y = Math.max(ff, 0.001); ffDetail.position.y = FF_BASE * (1 - ff); ffDetail.visible = ff > 0.002;
   const rf = ease(seg(p, 0.29, 0.40));                       // the roof settles onto the walls
   roof.scale.y = 1; roof.position.y = 6.0 * (1 - ease(rf)); roof.visible = rf > 0.002;   // lands from above, full size

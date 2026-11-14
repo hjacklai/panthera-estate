@@ -10,11 +10,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "132" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "136" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="132",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="136",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -85,7 +85,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=108">
+<link rel="stylesheet" href="styles.css?v=109">
 <!-- returning BM / 中 visitors on /: the hero copy waits (hidden, its space kept) until app.js has put it in their language,
      so the English text never flashes and reflows; English visitors are untouched. Cleared just after app.js's
      DOMContentLoaded (applyI18n), or after 3 s at worst. On /ms/ and /zh/ the text is already in the page's
@@ -166,7 +166,7 @@
       "name": "Panthera Bertam, freehold semi-D and bungalow homes in Bertam, Penang",
       "url": "https://www.pantheraestate.com/",
       "inLanguage": "en",
-      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m² and ceilings of 2.85 to 3.5 m. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) price on request.",
+      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous floor-to-floor heights of 3.7 m on the ground floor and 3.45 m upstairs, and floor-to-ceiling sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
       "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, first home, family home, rumah berkembar, banglo, pegangan bebas, rumah pertama, 半独立式洋房, 独立式洋房, 永久地契, 首购屋, 三代同堂, 槟城",
       "datePosted": "2026-05-20",
       "dateModified": "2026-11-13",
@@ -200,9 +200,12 @@
           }
         },
         {
-          "@type": "Offer",
+          "@type": "AggregateOffer",
           "name": "Bungalow · 3 units",
-          "description": "Price on request",
+          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, facing the shared green of over 700 m². From RM 1.22 million, each priced by its land size.",
+          "lowPrice": 1220000,
+          "priceCurrency": "MYR",
+          "offerCount": 3,
           "url": "https://www.pantheraestate.com/#pricing",
           "availability": "https://schema.org/PreSale",
           "itemOffered": {
@@ -313,82 +316,82 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "地契是永久还是租赁?",
+          "name": "地契是永久还是租赁？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "永久地契。土地为 Lot 24480，交屋时发出个别地契。没有 99 年期限。"
+            "text": "永久地契。土地为 Lot 24480，交屋时每间房屋都发出个别地契。没有 99 年租约期限，房子归您所有，可以安心传给下一代。"
           }
         },
         {
           "@type": "Question",
-          "name": "外国人可以购买吗?",
+          "name": "外国人可以在这里买吗？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，因此仅独立式单位可能符合资格。详情请询销售。"
+            "text": "在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，独立式洋房（RM 1,220,000 起）则高于此门槛，因此外国买家仅独立式单位可能符合资格，须获州政府批准。规划前请先向销售询问最新规定。"
           }
         },
         {
           "@type": "Question",
-          "name": "什么是土著固打单位?",
+          "name": "什么是土著固打单位？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "部分单位为土著固打单位。各单位状况，请联系我们。"
+            "text": "部分单位为土著固打单位。看中哪个单位，先问我们，我们会先确认其状况，让您只为可以购买的房子做规划。"
           }
         },
         {
           "@type": "Question",
-          "name": "何时交屋?",
+          "name": "什么时候可以入住？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "预计 2028 年第四季，自签署 SPA 起 24 个月。日期载于 SPA 并附 LAD 条款，逾期将获赔偿。"
+            "text": "预计 2028 年第四季，自签署 SPA 起 24 个月。让全家有时间配合孩子的学期和工作安排搬家。"
           }
         },
         {
           "@type": "Question",
-          "name": "价格包含什么?",
+          "name": "房子包含什么？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到。"
+            "text": "价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到，让您在决定前清楚看到全家将得到什么。"
           }
         },
         {
           "@type": "Question",
-          "name": "我可以选择单位吗?",
+          "name": "我可以选择单位吗？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "可以，按价目表先到先得。角头单位(04 与 19)有溢价；独立式单位(01–03)按地段面积定价。"
+            "text": "可以，按价目表先到先得，越早决定，选择越多。角头单位（04 与 19）有溢价；独立式单位（01–03） RM 1,220,000 起，按地段面积定价。"
           }
         },
         {
           "@type": "Question",
-          "name": "维护安排如何?",
+          "name": "每月维护费是多少？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "业主委员会自交屋起维护绿地、道路、排水与水池，每户每月约 RM 180。非封闭式；布局本身阻挡过境车辆。"
+            "text": "每户每月约 RM 180。业主委员会自交屋起维护绿地、道路、排水与水池，让全家每天使用的空间有人负责打理。非封闭式；布局本身阻挡过境车辆。"
           }
         },
         {
           "@type": "Question",
-          "name": "日后可以扩建或改装吗?",
+          "name": "日后可以扩建或改装吗？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。"
+            "text": "可以，让房子随家庭一起成长。须在批准范围内：车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。"
           }
         },
         {
           "@type": "Question",
-          "name": "你们协助银行贷款吗?",
+          "name": "你们会协助申请银行贷款吗？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "可以。这是永久地契住宅，任何大型银行皆可融资，我们的团队会协助办理申请。批准与条款视您的个人状况而定。"
+            "text": "会。我们的团队协助您办理申请，您不必独自面对银行。贷款批准、成数与利率由银行按您的个人状况决定。"
           }
         },
         {
           "@type": "Question",
-          "name": "如果我还没准备好购买呢?",
+          "name": "如果我们还没准备好购买呢？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "也请先登记。完全免费，无需订金、绝无义务，并让您优先挑选心仪的地段，待您准备好时再决定。"
+            "text": "也请先登记。完全免费，无需订金、绝无义务，并让您优先挑选心仪的地段。何时决定，由您全家决定。"
           }
         }
       ]
@@ -506,7 +509,7 @@
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="5.2"/><path d="M14.6 16.2l1.4-1.6 1.4 1.6M16 14.6v3.6"/><path d="M13 7.5V4.6L16 2.6l3 2V7.5zM13 29.4v-2.9l3-2 3 2v2.9zM2.6 19V16.1l3-2 3 2V19zM23.4 19v-2.9l3-2 3 2V19z"/></svg>
           <div class="h" data-i18n="idea.p1.h">01 · 庭院式布局</div>
           <div class="t" data-i18n="idea.p1.t">每户均面向中央绿地。</div>
-          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">十九户围绕逾 700 平方米的共享绿地，每家出门走几步就到。</div>
+          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">一出家门就是共享绿地：孩子有地方玩耍，早上散步，傍晚与邻居聊天，不必开车。</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="23" height="17" rx="0.8"/><path d="M14 4.5v9h13.5M14 17.5v4"/><path d="M4.5 26.5h23M4.5 25v3M27.5 25v3"/></svg>
@@ -526,12 +529,12 @@
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="11.5" r="7.5"/><path d="M16 19v8.5M12.6 15.6l3.4 3.4 3.4-4.2M8.5 27.5h15"/></svg>
           <div class="h" data-i18n="site.note1.h">中央绿地</div>
-          <div class="t" data-i18n="site.note1.t">逾 700 m² 的共享开放空间。</div>
+          <div class="t" data-i18n="site.note1.t">绿地就在家门外。</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="7" width="22" height="18" rx="7"/><rect x="9.5" y="11.5" width="13" height="9" rx="3.5" stroke-dasharray="2 2.4"/><path d="M1.5 16H5M27 16h3.5"/></svg>
           <div class="h" data-i18n="site.note2.h">内部环道</div>
-          <div class="t" data-i18n="site.note2.t">40 英尺宽的进出道路，双入口通往园区。</div>
+          <div class="t" data-i18n="site.note2.t">道路宽敞，两个出入口：回家方便，出门也方便，几分钟就到大路。</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 3.5h12l4 4V26a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z"/><path d="M20 3.5v4h4M10.5 11h9M10.5 14.5h9M10.5 18h5"/><circle cx="20.5" cy="22" r="3"/><path d="M19 24.6l-.8 3.4 2.3-1.2 2.3 1.2-.8-3.4"/></svg>
@@ -541,7 +544,7 @@
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18.5v-6L16 7l7 5.5v6"/><path d="M14 18.5v-3.5h4v3.5"/><path d="M5.5 18.5h21v3h-21z"/><path d="M3 26.5c2 0 2-1.4 4-1.4s2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4 2-1.4 4-1.4 2 1.4 4 1.4"/></svg>
           <div class="h" data-i18n="site.note4.h">排水系统完善</div>
-          <div class="t" data-i18n="site.note4.t">298 平方米滞洪池与外围排水沟。</div>
+          <div class="t" data-i18n="site.note4.t">为雨季而规划：滞洪池与环绕园区的排水沟把雨水引离住宅。</div>
         </div>
       </div>
     </div>
@@ -557,7 +560,7 @@
       <div class="home-cover-scrim" aria-hidden="true"></div>
       <div class="home-cover-copy">
         <h2 class="title" data-i18n="h.semid.name">半独立式</h2>
-        <p class="product-pitch" data-i18n="h.semid.pitch">开放式厨房、客厅与餐厅连成一片，楼底挑高，落地玻璃直通花园。楼上三间睡房，楼下一间。</p>
+        <p class="product-pitch" data-i18n="h.semid.pitch">开放式厨房、客厅与餐厅连成一片，层高宽裕，落地玻璃推拉门直通您的侧院草坪。楼上三间睡房，楼下一间。</p>
       </div>
     </figure>
 
@@ -584,8 +587,8 @@
             <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.semid.s5.k">净高</div>
-            <div class="v"><span data-i18n="h.semid.s5.v">2.85–3.5 米</span></div>
+            <div class="k" data-i18n="h.semid.s5.k">层高</div>
+            <div class="v"><span data-i18n="h.semid.s5.v">3.7 / 3.45 米</span> <small data-i18n="h.semid.s5.u">一楼 / 二楼</small></div>
           </div>
           <div>
             <div class="k" data-i18n="h.semid.s6.k">地契</div>
@@ -677,8 +680,8 @@
             <div class="v"><span data-i18n="h.bungalow.s4.v">5+1</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.bungalow.s5.k">净高</div>
-            <div class="v"><span data-i18n="h.bungalow.s5.v">2.85–3.5 米</span></div>
+            <div class="k" data-i18n="h.bungalow.s5.k">层高</div>
+            <div class="v"><span data-i18n="h.bungalow.s5.v">3.7 / 3.45 米</span> <small data-i18n="h.bungalow.s5.u">一楼 / 二楼</small></div>
           </div>
           <div>
             <div class="k" data-i18n="h.bungalow.s6.k">地契</div>
@@ -686,7 +689,7 @@
           </div>
         </div>
         <div class="product-foot">
-          <div class="price"><strong data-i18n="h.bungalow.price.v">价格面议</strong></div>
+          <div class="price"><span class="lbl" data-i18n="h.bungalow.price.l">起价</span><strong data-i18n="h.bungalow.price.v">RM 1,220,000</strong></div>
           <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">登记您的意向</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
@@ -973,7 +976,8 @@
       </div>
     </div>
 
-    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">这是预发布价格。永久地契、面向自家绿地的家，RM 712.5k 起，趁名单在公开发布前仍然开放。</p>
+
+    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">预发布价格：半独立式洋房 RM 712,500 起，独立式洋房 RM 1,220,000 起。登记即可获取完整的逐户价目表，并优先挑选心仪的地段。</p>
 
     <div class="price-ranges" data-reveal>
 
@@ -999,7 +1003,8 @@
 
         <div class="prc-range">
           <div class="row">
-            <span class="val" data-i18n="h.bungalow.price.v">价格面议</span>
+            <span class="lbl" data-i18n="h.bungalow.price.l">起价</span>
+            <span class="val">RM 1.22m</span>
           </div>
         </div>
 
@@ -1022,7 +1027,7 @@
     </aside>
 
     <div class="prc-foot" style="margin-top: 28px; border-top: 1px solid var(--rule-soft); padding-top: 22px;">
-      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">土著固打单位</span></span>
+      <span class="leg"><span class="sw"></span><span data-i18n="pricing.leg.bumi">设有土著固打单位</span></span>
       <span class="spacer"></span>
       <span data-i18n="pricing.leg.note">所有价格以 SPA 为准 · E. &amp; O.E.</span>
     </div>
@@ -1036,7 +1041,7 @@
       <div>
         <div class="eyebrow" data-i18n="calc.eyebrow">负担能力</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="calc.title">拥有一间，需要多少。</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">拖动滑块，每月数字即时更新。仅供参考，最终批核由银行决定。</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">拖动滑块，每月数字即时更新。仅供参考，以银行批准的贷款成数与利率为准。</p>
       </div>
     </div>
 
@@ -1051,7 +1056,7 @@
             <span class="lbl" data-i18n="calc.price">房产价格</span>
             <span class="val" id="calc-price-v">RM 712,500</span>
           </div>
-          <input id="calc-price" type="range" min="700000" max="1000000" step="500" value="712500" aria-label="房产价格" data-i18n-aria="calc.price">
+          <input id="calc-price" type="range" min="700000" max="1500000" step="500" value="712500" aria-label="房产价格" data-i18n-aria="calc.price">
         </div>
 
         <div class="calc-field">
@@ -1146,47 +1151,47 @@
 
       <div class="faq-list" data-reveal>
         <details class="faq" open>
-          <summary><span class="ix">01</span><span data-i18n="faq.q1">地契是永久还是租赁?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a1">永久地契。土地为 Lot 24480，交屋时发出个别地契。没有 99 年期限。</p></div>
+          <summary><span class="ix">01</span><span data-i18n="faq.q1">地契是永久还是租赁？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a1">永久地契。土地为 Lot 24480，交屋时每间房屋都发出个别地契。没有 99 年租约期限，房子归您所有，可以安心传给下一代。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">02</span><span data-i18n="faq.q2">外国人可以购买吗?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a2">在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，因此仅独立式单位可能符合资格。详情请询销售。</p></div>
+          <summary><span class="ix">02</span><span data-i18n="faq.q2">外国人可以在这里买吗？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a2">在威省（槟城本土），外国人可购买售价 RM 100 万或以上的有地住宅，须获州政府批准并缴付州政府征费（马来西亚律师公会通告，2024 年 12 月）。我们的半独立式洋房售价低于此门槛，独立式洋房（RM 1,220,000 起）则高于此门槛，因此外国买家仅独立式单位可能符合资格，须获州政府批准。规划前请先向销售询问最新规定。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">03</span><span data-i18n="faq.q3">什么是土著固打单位?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a3">部分单位为土著固打单位。各单位状况，请联系我们。</p></div>
+          <summary><span class="ix">03</span><span data-i18n="faq.q3">什么是土著固打单位？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a3">部分单位为土著固打单位。看中哪个单位，先问我们，我们会先确认其状况，让您只为可以购买的房子做规划。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">04</span><span data-i18n="faq.q4">何时交屋?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a4">预计 2028 年第四季，自签署 SPA 起 24 个月。日期载于 SPA 并附 LAD 条款，逾期将获赔偿。</p></div>
+          <summary><span class="ix">04</span><span data-i18n="faq.q4">什么时候可以入住？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a4">预计 2028 年第四季，自签署 SPA 起 24 个月。让全家有时间配合孩子的学期和工作安排搬家。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">05</span><span data-i18n="faq.q5">价格包含什么?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a5">价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到。</p></div>
+          <summary><span class="ix">05</span><span data-i18n="faq.q5">房子包含什么？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a5">价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到，让您在决定前清楚看到全家将得到什么。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">06</span><span data-i18n="faq.q6">我可以选择单位吗?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a6">可以，按价目表先到先得。角头单位(04 与 19)有溢价；独立式单位(01–03)按地段面积定价。</p></div>
+          <summary><span class="ix">06</span><span data-i18n="faq.q6">我可以选择单位吗？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a6">可以，按价目表先到先得，越早决定，选择越多。角头单位（04 与 19）有溢价；独立式单位（01–03） RM 1,220,000 起，按地段面积定价。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">07</span><span data-i18n="faq.q7">维护安排如何?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a7">业主委员会自交屋起维护绿地、道路、排水与水池，每户每月约 RM 180。非封闭式；布局本身阻挡过境车辆。</p></div>
+          <summary><span class="ix">07</span><span data-i18n="faq.q7">每月维护费是多少？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a7">每户每月约 RM 180。业主委员会自交屋起维护绿地、道路、排水与水池，让全家每天使用的空间有人负责打理。非封闭式；布局本身阻挡过境车辆。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">08</span><span data-i18n="faq.q8">日后可以扩建或改装吗?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">可以，在批准范围内。车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。</p></div>
+          <summary><span class="ix">08</span><span data-i18n="faq.q8">日后可以扩建或改装吗？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a8">可以，让房子随家庭一起成长。须在批准范围内：车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">09</span><span data-i18n="faq.q9">你们协助银行贷款吗?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a9">可以。这是永久地契住宅，任何大型银行皆可融资，我们的团队会协助办理申请。批准与条款视您的个人状况而定。</p></div>
+          <summary><span class="ix">09</span><span data-i18n="faq.q9">你们会协助申请银行贷款吗？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a9">会。我们的团队协助您办理申请，您不必独自面对银行。贷款批准、成数与利率由银行按您的个人状况决定。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">10</span><span data-i18n="faq.q10">如果我还没准备好购买呢?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a10">也请先登记。完全免费，无需订金、绝无义务，并让您优先挑选心仪的地段，待您准备好时再决定。</p></div>
+          <summary><span class="ix">10</span><span data-i18n="faq.q10">如果我们还没准备好购买呢？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a10">也请先登记。完全免费，无需订金、绝无义务，并让您优先挑选心仪的地段。何时决定，由您全家决定。</p></div>
         </details>
       </div>
-      <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">还有疑问？<a href="/zh/guides/">阅读我们的指南 →</a></p>
+      <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">还有疑问？<a href="/zh/guides/">阅读我们的<span style="white-space:nowrap">指南 →</span></a> · <a href="/zh/disclaimer/">免责声明</a></p>
     </div>
   </div>
 </section>
@@ -1199,7 +1204,7 @@
       <div>
         <div class="eyebrow cream" data-i18n="reg.eyebrow">登记您的意向</div>
         <h2 class="title" style="margin-top:10px; color:var(--cream);" data-i18n="reg.title">抢占先机。</h2>
-        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">登记后，我们会通过 WhatsApp 发送完整价目表、平面图与宣传册，并让您在公开发布前优先选购地段。趁十九户尚在，选下那间推窗见绿的家。无需订金，绝无义务。</p>
+        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">登记加入我们的名单，我们会随时向您更新项目进展。</p>
       </div>
     </div>
 
@@ -1241,19 +1246,14 @@
 
       <aside class="reg-contact" data-reveal>
         <div class="card wa">
-          <div class="h" data-i18n="reg.contact.wa.h">更快捷，立即对话</div>
+          <div class="h" data-i18n="reg.contact.wa.h">立即对话</div>
           <div class="n" data-i18n="reg.contact.wa.n">+60 17-598 1858</div>
           <a class="action" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" data-i18n="reg.contact.wa.cta">打开 WhatsApp ↗</a>
         </div>
         <div class="card">
           <div class="h" data-i18n="reg.contact.fin.h">贷款协助</div>
           <div class="n" data-i18n="reg.contact.fin.n">任何大型银行</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">永久地契，如一般住宅般可融资。我们协助办理申请，条款视个人状况而定。</p>
-        </div>
-        <div class="card">
-          <div class="h" data-i18n="reg.contact.dev.h">发展商</div>
-          <div class="n" data-i18n="reg.contact.dev.n">Panthera Development Sdn. Bhd.</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.dev.b">销售咨询 周一至周六，上午 9 时至下午 6 时。</p>
+          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">我们协助您准备并提交贷款申请。贷款成数与利率以银行批准为准。</p>
         </div>
       </aside>
     </div>
@@ -1284,9 +1284,7 @@
       <div>
         <div class="h" data-i18n="footer.h.legal">法律</div>
         <ul>
-          <li><a href="#" data-i18n="footer.legal.disclaimer">免责声明</a></li>
-          <li><a href="#" data-i18n="footer.legal.privacy">隐私</a></li>
-          <li><a href="#" data-i18n="footer.legal.spa">SPA 条款</a></li>
+          <li data-i18n-html="footer.legal.disclaimer"><a href="/zh/disclaimer/">免责声明</a></li>
         </ul>
       </div>
 
@@ -1324,9 +1322,9 @@
   </div>
 </div>
 
-<script src="app.js?v=131" defer></script>
-<script src="walkthrough/hero-boot.js?v=132" defer></script>
-<script src="home-toggle.js?v=5" defer></script>
+<script src="app.js?v=132" defer></script>
+<script src="walkthrough/hero-boot.js?v=136" defer></script>
+<script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of
      downloading them again (owner, Nov 2026: "optimize load time on all devices, without compromising quality"). Pages and
@@ -1337,4 +1335,3 @@
 <script>(function(){var n=navigator,q=location.search;if(!("serviceWorker" in n))return;var sw=n.serviceWorker,local=/^(127\.0\.0\.1|localhost)$/.test(location.hostname);if(/[?&]nosw\b/.test(q)||(local&&!/[?&]sw=1\b/.test(q))){sw.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if(window.caches)caches.keys().then(function(ks){ks.forEach(function(k){if(/^pb-/.test(k))caches.delete(k)})}).catch(function(){});return}if(location.protocol!=="https:"&&!local)return;addEventListener("load",function(){(window.requestIdleCallback||setTimeout)(function(){sw.register("/sw.js",{scope:"/",updateViaCache:"none"}).then(function(){return sw.ready}).then(function(r){var L=[];try{L=performance.getEntriesByType("resource").map(function(e){return e.name})}catch(e){}if(r.active&&L.length)r.active.postMessage({warm:L})}).catch(function(){})},{timeout:5000})})})();</script>
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       y}).then(function(r){var L=[];try{L=performance.getEntriesByType("resource").map(function(e){return e.name})}catch(e){}if(r.active&&L.length)r.active.postMessage({warm:L})}).catch(function(){})},{timeout:5000}

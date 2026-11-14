@@ -54,7 +54,7 @@ const I18N = {
     "site.note4.t": "Planned for the rain: a retention pond and drains around the estate carry storm water away from the homes.",
 
     "h.semid.name": "The Semi-D",
-    "h.semid.pitch": "A big open-plan kitchen, living and dining, with generous floor-to-floor heights and full-height sliding glass doors onto your side lawn. Three bedrooms upstairs, one on the ground floor.",
+    "h.semid.pitch": "A big open-plan kitchen, living and dining, with generous floor-to-floor heights and floor-to-ceiling sliding glass doors onto your side lawn. Three bedrooms upstairs, one on the ground floor.",
     "h.semid.price.l": "From",
     "h.semid.price.v": "RM 712,500",
     "h.semid.s1.k": "Built-up", "h.semid.s1.v": "2,006", "h.semid.s1.u": "sq ft",
@@ -340,7 +340,7 @@ const I18N = {
     "site.note4.t": "Dirancang untuk musim hujan: kolam tadahan dan longkang di sekeliling kediaman menyalurkan air ribut jauh dari rumah.",
 
     "h.semid.name": "Rumah Berkembar",
-    "h.semid.pitch": "Dapur, ruang tamu dan ruang makan konsep terbuka yang luas, dengan ketinggian lantai ke lantai yang lapang dan pintu gelongsor kaca setinggi penuh ke laman tepi anda. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.",
+    "h.semid.pitch": "Dapur, ruang tamu dan ruang makan konsep terbuka yang luas, dengan ketinggian lantai ke lantai yang lapang dan pintu gelongsor kaca dari lantai ke siling ke laman tepi anda. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.",
     "h.semid.price.l": "Bermula",
     "h.semid.price.v": "RM 712,500",
     "h.semid.s1.k": "Keluasan binaan", "h.semid.s1.v": "2,006", "h.semid.s1.u": "kp",

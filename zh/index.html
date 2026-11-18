@@ -10,11 +10,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "140" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "141" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="140",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="141",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -319,7 +319,7 @@
           "name": "地契是永久还是租赁？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "永久地契。土地为 Lot 24480，交屋时每间房屋都发出个别地契。没有 99 年租约期限，房子归您所有，可以安心传给下一代。"
+            "text": "永久地契。交屋时每间房屋都发出个别地契。没有 99 年租约期限，房子归您所有，可以安心传给下一代。"
           }
         },
         {
@@ -343,15 +343,7 @@
           "name": "什么时候可以入住？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "预计 2028 年第四季，自签署 SPA 起 24 个月。让全家有时间配合孩子的学期和工作安排搬家。"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "房子包含什么？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到，让您在决定前清楚看到全家将得到什么。"
+            "text": "预计 2028 年第四季。"
           }
         },
         {
@@ -364,18 +356,10 @@
         },
         {
           "@type": "Question",
-          "name": "每月维护费是多少？",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "每户每月约 RM 180。业主委员会自交屋起维护绿地、道路、排水与水池，让全家每天使用的空间有人负责打理。非封闭式；布局本身阻挡过境车辆。"
-          }
-        },
-        {
-          "@type": "Question",
           "name": "日后可以扩建或改装吗？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "可以，让房子随家庭一起成长。须在批准范围内：车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。"
+            "text": "可以，让房子随家庭一起成长。须在批准范围内：车廊封闭与后厨扩建已预先批准；影响外观的改动须经 MBSP 批准。交屋时提供指南。"
           }
         },
         {
@@ -1152,7 +1136,7 @@
       <div class="faq-list" data-reveal>
         <details class="faq" open>
           <summary><span class="ix">01</span><span data-i18n="faq.q1">地契是永久还是租赁？</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a1">永久地契。土地为 Lot 24480，交屋时每间房屋都发出个别地契。没有 99 年租约期限，房子归您所有，可以安心传给下一代。</p></div>
+          <div class="answer"><p data-i18n="faq.a1">永久地契。交屋时每间房屋都发出个别地契。没有 99 年租约期限，房子归您所有，可以安心传给下一代。</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">02</span><span data-i18n="faq.q2">外国人可以在这里买吗？</span><span class="tog">+</span></summary>
@@ -1164,30 +1148,22 @@
         </details>
         <details class="faq">
           <summary><span class="ix">04</span><span data-i18n="faq.q4">什么时候可以入住？</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a4">预计 2028 年第四季，自签署 SPA 起 24 个月。让全家有时间配合孩子的学期和工作安排搬家。</p></div>
+          <div class="answer"><p data-i18n="faq.a4">预计 2028 年第四季。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">05</span><span data-i18n="faq.q5">房子包含什么？</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a5">价格所含项目的完整清单正在敲定中，将随买卖合约一并公布。已登记买家将率先收到，让您在决定前清楚看到全家将得到什么。</p></div>
-        </details>
-        <details class="faq">
-          <summary><span class="ix">06</span><span data-i18n="faq.q6">我可以选择单位吗？</span><span class="tog">+</span></summary>
+          <summary><span class="ix">05</span><span data-i18n="faq.q6">我可以选择单位吗？</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a6">可以，按价目表先到先得，越早决定，选择越多。角头单位（04 与 19）有溢价；独立式单位（01–03） RM 1,220,000 起，按地段面积定价。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">07</span><span data-i18n="faq.q7">每月维护费是多少？</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a7">每户每月约 RM 180。业主委员会自交屋起维护绿地、道路、排水与水池，让全家每天使用的空间有人负责打理。非封闭式；布局本身阻挡过境车辆。</p></div>
+          <summary><span class="ix">06</span><span data-i18n="faq.q8">日后可以扩建或改装吗？</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a8">可以，让房子随家庭一起成长。须在批准范围内：车廊封闭与后厨扩建已预先批准；影响外观的改动须经 MBSP 批准。交屋时提供指南。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">08</span><span data-i18n="faq.q8">日后可以扩建或改装吗？</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">可以，让房子随家庭一起成长。须在批准范围内：车廊封闭与后厨扩建已预先批准；影响外观的改动须经业委会与 MBSP 批准。交屋时提供指南。</p></div>
-        </details>
-        <details class="faq">
-          <summary><span class="ix">09</span><span data-i18n="faq.q9">你们会协助申请银行贷款吗？</span><span class="tog">+</span></summary>
+          <summary><span class="ix">07</span><span data-i18n="faq.q9">你们会协助申请银行贷款吗？</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a9">会。我们的团队协助您办理申请，您不必独自面对银行。贷款批准、成数与利率由银行按您的个人状况决定。</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">10</span><span data-i18n="faq.q10">如果我们还没准备好购买呢？</span><span class="tog">+</span></summary>
+          <summary><span class="ix">08</span><span data-i18n="faq.q10">如果我们还没准备好购买呢？</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a10">也请先登记。完全免费，无需订金、绝无义务，并让您优先挑选心仪的地段。何时决定，由您全家决定。</p></div>
         </details>
       </div>
@@ -1322,8 +1298,8 @@
   </div>
 </div>
 
-<script src="app.js?v=134" defer></script>
-<script src="walkthrough/hero-boot.js?v=140" defer></script>
+<script src="app.js?v=135" defer></script>
+<script src="walkthrough/hero-boot.js?v=141" defer></script>
 <script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of

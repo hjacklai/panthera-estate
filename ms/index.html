@@ -10,11 +10,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "140" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "141" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="140",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="141",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -319,7 +319,7 @@
           "name": "Pegangan bebas atau pajakan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Pegangan bebas. Tanah ialah Lot 24480, dan setiap rumah mendapat hak milik individu semasa penyerahan. Tiada kiraan pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak."
+            "text": "Pegangan bebas. Setiap rumah mendapat hak milik individu semasa penyerahan. Tiada kiraan pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak."
           }
         },
         {
@@ -343,15 +343,7 @@
           "name": "Bila boleh pindah masuk?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Ini memberi keluarga anda masa untuk mula merancang perpindahan mengikut sesi persekolahan dan kerja."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Apa yang didapati bersama rumah?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu, jadi anda boleh lihat apa yang keluarga anda dapat sebelum membuat keputusan."
+            "text": "Dianggarkan S4 2028."
           }
         },
         {
@@ -364,18 +356,10 @@
         },
         {
           "@type": "Question",
-          "name": "Berapa kos penyelenggaraan sebulan?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sekitar RM 180 sebulan setiap rumah. Persatuan Penduduk menjaga taman, jalan, longkang dan kolam dari penyerahan, jadi ruang yang keluarga anda guna setiap hari ada yang menjaganya. Tidak berpagar; susun atur menghalang lalu lintas."
-          }
-        },
-        {
-          "@type": "Question",
           "name": "Bolehkah kami besarkan atau ubah suai rumah kemudian?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Ya, supaya rumah boleh berkembang bersama keluarga anda. Dalam lingkungan yang diluluskan: penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP & MBSP. Garis panduan diberi semasa penyerahan."
+            "text": "Ya, supaya rumah boleh berkembang bersama keluarga anda. Dalam lingkungan yang diluluskan: penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan MBSP. Garis panduan diberi semasa penyerahan."
           }
         },
         {
@@ -1152,7 +1136,7 @@
       <div class="faq-list" data-reveal>
         <details class="faq" open>
           <summary><span class="ix">01</span><span data-i18n="faq.q1">Pegangan bebas atau pajakan?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a1">Pegangan bebas. Tanah ialah Lot 24480, dan setiap rumah mendapat hak milik individu semasa penyerahan. Tiada kiraan pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak.</p></div>
+          <div class="answer"><p data-i18n="faq.a1">Pegangan bebas. Setiap rumah mendapat hak milik individu semasa penyerahan. Tiada kiraan pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">02</span><span data-i18n="faq.q2">Bolehkah warga asing beli di sini?</span><span class="tog">+</span></summary>
@@ -1164,30 +1148,22 @@
         </details>
         <details class="faq">
           <summary><span class="ix">04</span><span data-i18n="faq.q4">Bila boleh pindah masuk?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a4">Dianggarkan S4 2028, 24 bulan dari tandatangan SPA. Ini memberi keluarga anda masa untuk mula merancang perpindahan mengikut sesi persekolahan dan kerja.</p></div>
+          <div class="answer"><p data-i18n="faq.a4">Dianggarkan S4 2028.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">05</span><span data-i18n="faq.q5">Apa yang didapati bersama rumah?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a5">Senarai penuh perkara yang termasuk sedang dimuktamadkan dan akan diterbitkan bersama Perjanjian Jual Beli. Pembeli berdaftar menerimanya terlebih dahulu, jadi anda boleh lihat apa yang keluarga anda dapat sebelum membuat keputusan.</p></div>
-        </details>
-        <details class="faq">
-          <summary><span class="ix">06</span><span data-i18n="faq.q6">Bolehkah saya pilih lot?</span><span class="tog">+</span></summary>
+          <summary><span class="ix">05</span><span data-i18n="faq.q6">Bolehkah saya pilih lot?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a6">Ya, mengikut giliran daripada senarai harga, jadi lebih awal anda putuskan, lebih banyak pilihan anda. Lot penjuru (04 dan 19) ada premium; lot banglo (01–03) dari RM 1.22 juta, setiap satunya dihargai mengikut saiz tanah.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">07</span><span data-i18n="faq.q7">Berapa kos penyelenggaraan sebulan?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a7">Sekitar RM 180 sebulan setiap rumah. Persatuan Penduduk menjaga taman, jalan, longkang dan kolam dari penyerahan, jadi ruang yang keluarga anda guna setiap hari ada yang menjaganya. Tidak berpagar; susun atur menghalang lalu lintas.</p></div>
+          <summary><span class="ix">06</span><span data-i18n="faq.q8">Bolehkah kami besarkan atau ubah suai rumah kemudian?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a8">Ya, supaya rumah boleh berkembang bersama keluarga anda. Dalam lingkungan yang diluluskan: penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan MBSP. Garis panduan diberi semasa penyerahan.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">08</span><span data-i18n="faq.q8">Bolehkah kami besarkan atau ubah suai rumah kemudian?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">Ya, supaya rumah boleh berkembang bersama keluarga anda. Dalam lingkungan yang diluluskan: penutup porch dan sambungan dapur belakang telah pra-lulus; perubahan fasad perlu kelulusan PP &amp; MBSP. Garis panduan diberi semasa penyerahan.</p></div>
-        </details>
-        <details class="faq">
-          <summary><span class="ix">09</span><span data-i18n="faq.q9">Adakah anda bantu dengan pinjaman bank?</span><span class="tog">+</span></summary>
+          <summary><span class="ix">07</span><span data-i18n="faq.q9">Adakah anda bantu dengan pinjaman bank?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a9">Ya. Pasukan kami bantu anda dengan permohonan, jadi anda tidak berurusan dengan bank seorang diri. Kelulusan, margin dan kadar pinjaman bergantung pada bank, berdasarkan profil anda.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">10</span><span data-i18n="faq.q10">Bagaimana jika kami belum bersedia membeli?</span><span class="tog">+</span></summary>
+          <summary><span class="ix">08</span><span data-i18n="faq.q10">Bagaimana jika kami belum bersedia membeli?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a10">Daftar juga. Ia percuma, tanpa deposit dan tanpa obligasi, dan anda mendapat pilihan utama lot yang anda suka. Keluarga anda yang tentukan masanya.</p></div>
         </details>
       </div>
@@ -1322,8 +1298,8 @@
   </div>
 </div>
 
-<script src="app.js?v=134" defer></script>
-<script src="walkthrough/hero-boot.js?v=140" defer></script>
+<script src="app.js?v=135" defer></script>
+<script src="walkthrough/hero-boot.js?v=141" defer></script>
 <script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of

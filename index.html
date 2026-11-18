@@ -8,11 +8,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "140" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "141" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="140",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="141",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -245,7 +245,7 @@
         {
           "@type": "Question",
           "name": "Is it freehold or leasehold?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Freehold. The land is Lot 24480, and every home gets its own individual title at handover. No 99-year lease clock, so the home is yours to keep and to pass on to your children." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Freehold. Every home gets its own individual title at handover. No 99-year lease clock, so the home is yours to keep and to pass on to your children." }
         },
         {
           "@type": "Question",
@@ -268,15 +268,7 @@
           "name": "When can we move in?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Estimated Q4 2028, 24 months from SPA signing. That gives your family time to start planning the move around school terms and work."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What comes with the house?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The full inclusions schedule is being finalised and will be published with the Sale & Purchase Agreement. Registered buyers receive it first, so you can see what your family is getting before you commit."
+            "text": "Estimated Q4 2028."
           }
         },
         {
@@ -289,18 +281,10 @@
         },
         {
           "@type": "Question",
-          "name": "What will upkeep cost each month?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Around RM 180 per home a month. A Residents' Association looks after the green, roads, drains and pond from handover, so the spaces your family uses every day have someone looking after them. Not gated; the layout keeps traffic out."
-          }
-        },
-        {
-          "@type": "Question",
           "name": "Can we extend or change the house later?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, so the house can grow with your family. Work within the approved envelope: porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA & MBSP sign-off. Guideline given at handover."
+            "text": "Yes, so the house can grow with your family. Work within the approved envelope: porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need MBSP sign-off. Guideline given at handover."
           }
         },
         {
@@ -1081,7 +1065,7 @@
       <div class="faq-list" data-reveal>
         <details class="faq" open>
           <summary><span class="ix">01</span><span data-i18n="faq.q1">Is it freehold or leasehold?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a1">Freehold. The land is Lot 24480, and every home gets its own individual title at handover. No 99-year lease clock, so the home is yours to keep and to pass on to your children.</p></div>
+          <div class="answer"><p data-i18n="faq.a1">Freehold. Every home gets its own individual title at handover. No 99-year lease clock, so the home is yours to keep and to pass on to your children.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">02</span><span data-i18n="faq.q2">Can foreigners buy here?</span><span class="tog">+</span></summary>
@@ -1093,30 +1077,22 @@
         </details>
         <details class="faq">
           <summary><span class="ix">04</span><span data-i18n="faq.q4">When can we move in?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a4">Estimated Q4 2028, 24 months from SPA signing. That gives your family time to start planning the move around school terms and work.</p></div>
+          <div class="answer"><p data-i18n="faq.a4">Estimated Q4 2028.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">05</span><span data-i18n="faq.q5">What comes with the house?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a5">The full inclusions schedule is being finalised and will be published with the Sale &amp; Purchase Agreement. Registered buyers receive it first, so you can see what your family is getting before you commit.</p></div>
-        </details>
-        <details class="faq">
-          <summary><span class="ix">06</span><span data-i18n="faq.q6">Can I choose my lot?</span><span class="tog">+</span></summary>
+          <summary><span class="ix">05</span><span data-i18n="faq.q6">Can I choose my lot?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a6">Yes, first-come from the published price list, so the earlier you decide, the more choice you have. Corner lots (04 and 19) carry a premium; bungalow lots (01–03) are from RM 1.22 million, each priced by its land size.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">07</span><span data-i18n="faq.q7">What will upkeep cost each month?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a7">Around RM 180 per home a month. A Residents' Association looks after the green, roads, drains and pond from handover, so the spaces your family uses every day have someone looking after them. Not gated; the layout keeps traffic out.</p></div>
+          <summary><span class="ix">06</span><span data-i18n="faq.q8">Can we extend or change the house later?</span><span class="tog">+</span></summary>
+          <div class="answer"><p data-i18n="faq.a8">Yes, so the house can grow with your family. Work within the approved envelope: porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need MBSP sign-off. Guideline given at handover.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">08</span><span data-i18n="faq.q8">Can we extend or change the house later?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a8">Yes, so the house can grow with your family. Work within the approved envelope: porch enclosure and rear-kitchen extension are pre-approved; streetscape changes need RA &amp; MBSP sign-off. Guideline given at handover.</p></div>
-        </details>
-        <details class="faq">
-          <summary><span class="ix">09</span><span data-i18n="faq.q9">Will you help with the bank loan?</span><span class="tog">+</span></summary>
+          <summary><span class="ix">07</span><span data-i18n="faq.q9">Will you help with the bank loan?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a9">Yes. Our team helps you with the application, so you are not dealing with the bank alone. Approval, loan margin and rate are up to the bank, based on your profile.</p></div>
         </details>
         <details class="faq">
-          <summary><span class="ix">10</span><span data-i18n="faq.q10">What if we're not ready to buy yet?</span><span class="tog">+</span></summary>
+          <summary><span class="ix">08</span><span data-i18n="faq.q10">What if we're not ready to buy yet?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a10">Register anyway. It is free, with no deposit and no obligation, and you get first pick of the lots you like. Your family decides when.</p></div>
         </details>
       </div>
@@ -1251,8 +1227,8 @@
   </div>
 </div>
 
-<script src="app.js?v=134" defer></script>
-<script src="walkthrough/hero-boot.js?v=140" defer></script>
+<script src="app.js?v=135" defer></script>
+<script src="walkthrough/hero-boot.js?v=141" defer></script>
 <script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of

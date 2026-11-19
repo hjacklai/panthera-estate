@@ -59,9 +59,9 @@ const POI = {   // anchors (estate frame) and what each card says
   // arrows step through them. Wider screens keep the four.
   features: { ay: 4, prio: 2, xz: [-25.5, 47], feat: true, app: true, only: 'phone', opens: 'green', label: 'hx.pin.features', ico: '.site-notes .note:nth-child(1) .ico' },
   green: { ay: 4, prio: 2, xz: [-25.5, 47], feat: true, app: true, only: 'desk', label: 'site.note1.h', ico: '.site-notes .note:nth-child(1) .ico' },
-  road: { ay: 1.5, prio: 3, xz: [-30, 29.4], feat: true, app: true, only: 'desk', label: 'site.note2.h', ico: '.site-notes .note:nth-child(2) .ico' },
-  pond: { ay: 1, prio: 4, xz: [-10.6, 42.6], feat: true, app: true, only: 'desk', label: 'site.note4.h', ico: '.site-notes .note:nth-child(4) .ico' },
-  title: { ay: 7, prio: 5, xz: [-44, 86], feat: true, app: true, only: 'desk', label: 'site.note3.h', ico: '.site-notes .note:nth-child(3) .ico' },
+  road: { ay: 1.5, prio: 3, xz: [-30, 29.4], feat: true, app: true, only: 'desk', label: 'site.note2.t', ico: '.site-notes .note:nth-child(2) .ico' },
+  pond: { ay: 1, prio: 4, xz: [-10.6, 42.6], feat: true, app: true, only: 'desk', label: 'site.note4.t', ico: '.site-notes .note:nth-child(4) .ico' },
+  title: { ay: 7, prio: 5, xz: [-44, 86], feat: true, app: true, only: 'desk', label: 'site.note3.t', ico: '.site-notes .note:nth-child(3) .ico' },
   semid: { ay: 12, prio: 6, xz: [-14.6, 16.2], feat: true, app: true, label: 'hx.pin.semid', svg: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 15 9.5 8l6.5 6.5L22.5 8l7 7"/><path d="M4.5 13.5V26h23V13.5M16 14.5V26"/><path d="M8 26v-5h3.5v5M20.5 26v-5H24v5"/></svg>' },
   bungalow: { ay: 11, prio: 7, xz: [-73.6, 13.4], feat: true, app: true, label: 'hx.pin.bungalow', svg: '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15 16 5l12 10"/><path d="M7 13v13h18V13"/><path d="M13 26v-7h6v7"/></svg>' },
 };
@@ -972,7 +972,7 @@ export async function start(o) {
       // a drag, pinch or wheel during the intro hands the camera over at once (capture: before the rig's own handler)
       const grab = () => { if (introT0 != null && !rigOn) finishIntro(); };
       for (const t of ['pointerdown', 'wheel', 'touchstart']) stage.addEventListener(t, grab, { capture: true, passive: true });
-      import(base + 'hero-app.js?v=36').then(mod => {
+      import(base + 'hero-app.js?v=37').then(mod => {
         app = mod.createApp({ ui, T, rig, homeNow, walkInto, location3d, reduced,
           setPanel(open, wide) { panelOpen = open; panelWide = !!wide; rig.setOff(...offNow()); dirty = true; need(); },
           skipIntro() { if (!rigOn) finishIntro(); },

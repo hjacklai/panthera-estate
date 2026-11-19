@@ -208,7 +208,7 @@ html.pbw-lock{ overflow: hidden; scroll-behavior: auto; }
 /* leaving for a tour: the hero copy, pins and the site's bars fade while the camera sets off */
 .hx-leave .hero-inner, .hx-leave .hero-scrim, .hx-leave .h3d-ui, .hx-leave .hx-veil{ opacity: 0 !important; transition: opacity .35s ease; pointer-events: none; }
 .hx-leave .h3d-ui button, .hx-leave .h3d-ui a, .hx-leave .h3d-ui .hx-card{ pointer-events: none !important; }   /* faded: no clicks (hero.js also makes the UI inert) */
-.pbw-going .topbar, .pbw-going .dock, .pbw-going .prelaunch-bar{ opacity: 0; transition: opacity .35s ease; }
+.pbw-going .topbar, .pbw-going .dock{ opacity: 0; transition: opacity .35s ease; }
 .pbw{ position: fixed; inset: 0; z-index: 2500; height: 100vh; height: 100dvh; overflow: hidden; background: var(--cream, #F2E9DF); }
 .pbw[hidden]{ display: none; }
 .pbw-stage{ position: absolute; inset: 0; z-index: 0; }
@@ -384,7 +384,7 @@ html.hxa-cap-on .hx-pins{ opacity: 1; visibility: visible; }
   color: var(--cream, #F2E9DF); pointer-events: auto;
 }
 .hxa-cap[hidden]{ display: none; }
-.hxa-cap-ic{ display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--cream, #F2E9DF); color: var(--terra-2, #8A4638); margin-bottom: 16px; }
+.hxa-cap-ic{ display: grid; place-items: center start; width: 48px; height: 48px; color: var(--cream, #F2E9DF); margin-bottom: 16px; }
 .hxa-cap-ic svg{ width: 26px; height: 26px; }
 .hxa-cap-h{ font-family: var(--mono, monospace); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(242,233,223,0.8); margin-bottom: 10px; }
 .hxa-cap-t{ margin: 0 0 10px; font-family: var(--serif, Georgia, serif); font-size: clamp(26px, 2.6vw, 36px); line-height: 1.12; }

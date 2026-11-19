@@ -10,11 +10,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "142" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "143" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="142",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="143",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -24,8 +24,8 @@
 <style>html.hx-app{--gutter:max(clamp(20px,3.2vw,64px),calc((100vw - 1600px) / 2))}@media (max-width:720px){html.hx-app .topbar-inner{padding:6px 16px}html.hx-app .topbar .lang{padding:2px;font-size:10px}html.hx-app .topbar .lang button{min-height:30px;padding:2px 8px}html.hx-app .hero-copy h1.display{font-size:25px;line-height:1.08;margin:0 0 8px}html.hx-app .hero-copy .lede{font-size:13px;line-height:1.45;margin-top:0}html.hx-app .hero--cinematic .hero-inner{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}}html.hx-app .topbar-inner{grid-template-columns:1fr auto}html.hx-app .topbar .brand-mark{justify-self:start}html.hx-app .topbar-side.right{justify-self:end}@media (min-width:761px){html.hx-app .hero--cinematic .hero-copy h1.display{font-size:clamp(30px,3vw,48px);line-height:1.06;max-width:none}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:nowrap}html.hx-app .hero--cinematic .hero-copy .lede{font-size:15px;max-width:46ch}}@media (max-width:760px){html.hx-app .hero-copy h1.display{font-size:22px}html.hx-app .hero-copy .lede{font-size:12.5px}}@media (min-width:761px){html.hx-app .hero--cinematic .hero-inner.wrap{max-width:none;margin-left:0;margin-right:0;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}}html.hx-app .topbar-inner{max-width:none;width:100%;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}html.hx-app .topbar .home-pill{display:none!important}html.hx-app .topbar-side.right{width:auto;gap:8px}html.hx-app .topbar{border-bottom:0}@media (min-width:761px) and (min-aspect-ratio:9/10){html.hx-app .hero--cinematic .hero-inner{padding-bottom:max(clamp(120px,16vh,205px),166px)}}html.hx-app .topbar .lang{padding:0;border:0}html.hx-app .topbar .lang button{width:40px;height:40px;min-height:40px;min-width:40px;padding:0;justify-content:center;border-radius:50%}@media (max-width:340px){html.hx-app .topbar .brand-mark .sub{display:none}}html.hx-app .topbar .brand-mark{min-width:0}@media (min-width:761px) and (max-height:520px){html.hx-app .topbar-inner{padding:5px max(16px,env(safe-area-inset-right,0px)) 5px max(16px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-inner.wrap{padding-left:max(20px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-copy h1.display{font-size:22px;line-height:1.08;margin:0 0 6px}html.hx-app .hero--cinematic .hero-inner,html.hx-app .hero--cinematic .hero-inner.wrap{padding-bottom:76px!important;padding-top:12px!important}html.hx-app .hero--cinematic .hero-copy{max-width:52vw}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:normal}html.hx-app .hero--cinematic .hero-copy h1.display{max-width:52vw}html.hx-app .hero--cinematic .hero-copy .lede{display:none}}</style>
 
 
-<title>Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas</title>
-<meta name="description" content="Rumah semi-D pegangan bebas di Bertam, Pulau Pinang untuk keluarga: 4 bilik (satu di bawah), laman tepi persendirian, menghadap taman. Dari RM 712,500.">
+<title>Panthera Bertam · Rumah pertama semi-D di Kepala Batas</title>
+<meta name="description" content="Rumah semi-D pegangan bebas di Bertam, Pulau Pinang untuk keluarga: 4 bilik (satu di bawah), laman tepi persendirian dan taman pusat dikongsi. Dari RM 712,500.">
 <meta name="author" content="Panthera Development Sdn Bhd">
 <meta name="keywords" content="Panthera Bertam, Bertam Penang property, Kepala Batas, Seberang Perai Utara, Penang semi-D, Penang bungalow, freehold Penang homes, Penang Technology Park, rumah berkembar Bertam, banglo Pulau Pinang, rumah pegangan bebas, projek baharu Seberang Perai Utara, 槟城 半独立式洋房, 独立式洋房, 永久地契, 威北, 甲抛峇底, pantheraestate">
 <meta name="theme-color" content="#F2E9DF" media="(prefers-color-scheme: light)">
@@ -50,8 +50,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Panthera Bertam">
 <meta property="og:url" content="https://www.pantheraestate.com/ms/">
-<meta property="og:title" content="Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas">
-<meta property="og:description" content="Rumah pertama yang berkembang bersama keluarga anda: rumah berkembar (semi-D) pegangan bebas 2,006 kaki persegi di Bertam, Kepala Batas. 4 bilik tidur, satu di tingkat bawah dengan pintu sendiri ke bilik air yang juga boleh dimasuki dari ruang tamu. Laman tepi persendirian di sisi yang terbuka, dan setiap rumah menghadap taman bersama seluas lebih 700 m². SK Bertam Perdana di seberang jalan. Dari RM 712,500. Pra-pelancaran, daftar minat anda.">
+<meta property="og:title" content="Panthera Bertam · Rumah pertama semi-D di Kepala Batas">
+<meta property="og:description" content="Rumah pertama yang berkembang bersama keluarga anda: rumah berkembar (semi-D) pegangan bebas 2,006 kaki persegi di Bertam, Kepala Batas. 4 bilik tidur, satu di tingkat bawah dengan pintu sendiri ke bilik air yang juga boleh dimasuki dari ruang tamu. Laman tepi persendirian di sisi yang terbuka, dan taman pusat bersama seluas lebih 700 m². SK Bertam Perdana di seberang jalan. Dari RM 712,500. Pra-pelancaran, daftar minat anda.">
 <meta property="og:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:secure_url" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:type" content="image/jpeg">
@@ -65,8 +65,8 @@
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://www.pantheraestate.com/ms/">
-<meta name="twitter:title" content="Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas">
-<meta name="twitter:description" content="Semi-D keluarga di Bertam, Pulau Pinang: pegangan bebas, 4 bilik tidur (satu di tingkat bawah), laman tepi persendirian dan taman bersama lebih 700 m² di hadapan. Dari RM 712,500. Pra-pelancaran.">
+<meta name="twitter:title" content="Panthera Bertam · Rumah pertama semi-D di Kepala Batas">
+<meta name="twitter:description" content="Semi-D keluarga di Bertam, Pulau Pinang: pegangan bebas, 4 bilik tidur (satu di tingkat bawah), laman tepi persendirian dan taman pusat bersama lebih 700 m². Dari RM 712,500. Pra-pelancaran.">
 <meta name="twitter:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta name="twitter:image:alt" content="Panthera Bertam, gambaran artis sebuah banglo">
 
@@ -85,7 +85,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=109">
+<link rel="stylesheet" href="styles.css?v=110">
 <!-- returning BM / 中 visitors on /: the hero copy waits (hidden, its space kept) until app.js has put it in their language,
      so the English text never flashes and reflows; English visitors are untouched. Cleared just after app.js's
      DOMContentLoaded (applyI18n), or after 3 s at worst. On /ms/ and /zh/ the text is already in the page's
@@ -121,8 +121,8 @@
       "@type": "WebPage",
       "@id": "https://www.pantheraestate.com/ms/#webpage",
       "url": "https://www.pantheraestate.com/ms/",
-      "name": "Panthera Bertam · Rumah Pertama Semi-D di Kepala Batas",
-      "description": "Rumah semi-D pegangan bebas di Bertam, Pulau Pinang untuk keluarga: 4 bilik (satu di bawah), laman tepi persendirian, menghadap taman. Dari RM 712,500.",
+      "name": "Panthera Bertam · Rumah pertama semi-D di Kepala Batas",
+      "description": "Rumah semi-D pegangan bebas di Bertam, Pulau Pinang untuk keluarga: 4 bilik (satu di bawah), laman tepi persendirian dan taman pusat dikongsi. Dari RM 712,500.",
       "inLanguage": "ms",
       "dateModified": "2026-11-13",
       "isPartOf": {
@@ -166,7 +166,7 @@
       "name": "Panthera Bertam, freehold semi-D and bungalow homes in Bertam, Penang",
       "url": "https://www.pantheraestate.com/",
       "inLanguage": "en",
-      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous floor-to-floor heights of 3.7 m on the ground floor and 3.45 m upstairs, and floor-to-ceiling sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
+      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, with a shared central green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous slab-to-slab heights of 3.7 m on the ground floor and 3.45 m upstairs, and floor-to-ceiling sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
       "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, first home, family home, rumah berkembar, banglo, pegangan bebas, rumah pertama, 半独立式洋房, 独立式洋房, 永久地契, 首购屋, 三代同堂, 槟城",
       "datePosted": "2026-05-20",
       "dateModified": "2026-11-13",
@@ -186,7 +186,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Semi-Detached · 16 units",
-          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, facing the shared green of over 700 m². From RM 712,500.",
+          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, and a shared central green of over 700 m² in the estate. From RM 712,500.",
           "lowPrice": 712500,
           "priceCurrency": "MYR",
           "offerCount": 16,
@@ -202,7 +202,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Bungalow · 3 units",
-          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, facing the shared green of over 700 m². From RM 1.22 million, each priced by its land size.",
+          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, in an estate with a shared central green of over 700 m². From RM 1.22 million, each priced by its land size.",
           "lowPrice": 1220000,
           "priceCurrency": "MYR",
           "offerCount": 3,
@@ -225,7 +225,7 @@
         "Panthera Bertam Kepala Batas",
         "Panthera Bertam Penang"
       ],
-      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, every one facing a shared central green of over 700 m², with SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
+      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, with a shared central green of over 700 m² and SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Kepala Batas",
@@ -367,7 +367,7 @@
           "name": "Adakah anda bantu dengan pinjaman bank?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Ya. Pasukan kami bantu permohonan anda, jadi anda tidak berurusan dengan bank seorang diri. Kelulusan, margin dan kadar pinjaman bergantung pada bank, berdasarkan profil anda."
+            "text": "Ya. Pasukan kami bantu permohonan anda, jadi anda tidak berurusan dengan bank seorang diri. Selebihnya bank yang tentukan."
           }
         },
         {
@@ -375,7 +375,7 @@
           "name": "Bagaimana jika kami belum bersedia membeli?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Daftar juga. Percuma, tanpa deposit, tanpa obligasi, dan anda dapat pilihan pertama lot yang anda suka. Keluarga anda yang tentukan masanya."
+            "text": "Daftar juga. Percuma dan tiada deposit. Keluarga anda yang tentukan masanya."
           }
         }
       ]
@@ -454,17 +454,17 @@
     <div class="hero-copy" data-reveal>
       <h1 class="display">
         <span data-i18n="hero.h1.a">Rumah eksklusif pegangan bebas,</span><br>
-        <span class="terra-mark" data-i18n="hero.h1.b">semuanya menghadap taman.</span>
+        <span class="terra-mark" data-i18n="hero.h1.b">menghadap taman.</span>
       </h1>
       <p class="lede" data-i18n="hero.lede">16 rumah berkembar dan 3 banglo di Bertam, Pulau Pinang. Tempat yang tenang untuk pulang, lima minit dari Penang Technology Park, dengan sekolah, hospital dan pusat beli-belah berdekatan.</p>
 
       <div class="hero-cta">
         <a href="#register" class="btn btn-primary">
-          <span data-i18n="hero.cta.primary">Daftar minat anda</span>
+          <span data-i18n="hero.cta.primary">Dapatkan senarai harga</span>
           <span class="arrow" aria-hidden="true">→</span>
         </a>
         <a href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" class="btn btn-wa">
-          <span data-i18n="hero.cta.wa">WhatsApp Jualan</span>
+          <span data-i18n="hero.cta.wa">WhatsApp jualan</span>
           <span class="arrow" aria-hidden="true">↗</span>
         </a>
       </div>
@@ -483,37 +483,37 @@
 <section id="estate" class="section" data-screen-label="02 Idea">
   <div class="wrap">
     <div class="idea-grid">
-      <div data-reveal>
+      <div>
         <p class="quote">
-          <span data-i18n="idea.quote.a">Rumah </span><span class="accent" data-i18n="idea.quote.b">menghadap taman.</span><span data-i18n="idea.quote.tail"> Dirancang sebagai satu kejiranan.</span>
+          <span data-i18n="idea.quote.a">Rumah </span><span class="accent" data-i18n="idea.quote.b">di sekeliling taman bersama.</span><span data-i18n="idea.quote.tail"> Dirancang sebagai satu kejiranan.</span>
         </p>
       </div>
-      <div class="idea-points" data-reveal>
+      <div class="idea-points">
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="5.2"/><path d="M14.6 16.2l1.4-1.6 1.4 1.6M16 14.6v3.6"/><path d="M13 7.5V4.6L16 2.6l3 2V7.5zM13 29.4v-2.9l3-2 3 2v2.9zM2.6 19V16.1l3-2 3 2V19zM23.4 19v-2.9l3-2 3 2V19z"/></svg>
-          <div class="h" data-i18n="idea.p1.h">01 · Pelan halaman</div>
-          <div class="t" data-i18n="idea.p1.t">Setiap rumah menghadap taman pusat.</div>
-          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">Pintu pagar anda terbuka ke kawasan hijau bersama: ruang untuk anak-anak bermain, berjalan pagi dan beramah mesra dengan jiran pada waktu petang.</div>
+          <div class="h" data-i18n="idea.p1.h">Pelan halaman</div>
+          <div class="t" data-i18n="idea.p1.t">Taman pusat dikongsi.</div>
+          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">Taman bersama di dalam kawasan perumahan, dengan ruang untuk anak-anak bermain.</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="23" height="17" rx="0.8"/><path d="M14 4.5v9h13.5M14 17.5v4"/><path d="M4.5 26.5h23M4.5 25v3M27.5 25v3"/></svg>
-          <div class="h" data-i18n="idea.p2.h">02 · Saiz yang sesuai</div>
-          <div class="t" data-i18n="idea.p2.t">Selesa, tanpa berlebihan: 2,006 hingga 2,642 kaki persegi.</div>
+          <div class="h" data-i18n="idea.p2.h">Saiz yang sesuai</div>
+          <div class="t" data-i18n="idea.p2.t">2,006 hingga 2,642 kaki persegi, tanpa bilik yang membazir.</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16.5" r="11"/><path d="M16 16.5V9M16 16.5l3.8-6.4"/><path d="M12.5 2.6h7"/></svg>
-          <div class="h" data-i18n="idea.p3.h">03 · Dekat tempat kerja</div>
-          <div class="t" data-i18n="idea.p3.t">Kerja teknologi 5 minit, bandar dalam 15.</div>
+          <div class="h" data-i18n="idea.p3.h">Dekat tempat kerja</div>
+          <div class="t" data-i18n="idea.p3.t">Kerja teknologi berdekatan, bandar dalam 15 minit.</div>
         </div>
       </div>
     </div>
 
     <div class="site-grid site-grid--notes-only" id="site">
-      <div class="site-notes" data-reveal>
+      <div class="site-notes">
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="11.5" r="7.5"/><path d="M16 19v8.5M12.6 15.6l3.4 3.4 3.4-4.2M8.5 27.5h15"/></svg>
           <div class="h" data-i18n="site.note1.h">Kawasan lapang</div>
-          <div class="t" data-i18n="site.note1.t">Kawasan hijau betul-betul di luar pintu pagar anda.</div>
+          <div class="t" data-i18n="site.note1.t">Taman bersama di dalam kawasan perumahan.</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="7" width="22" height="18" rx="7"/><rect x="9.5" y="11.5" width="13" height="9" rx="3.5" stroke-dasharray="2 2.4"/><path d="M1.5 16H5M27 16h3.5"/></svg>
@@ -544,7 +544,7 @@
       <div class="home-cover-scrim" aria-hidden="true"></div>
       <div class="home-cover-copy">
         <h2 class="title" data-i18n="h.semid.name">Rumah Berkembar</h2>
-        <p class="product-pitch" data-i18n="h.semid.pitch">Dapur, ruang tamu dan ruang makan konsep terbuka yang luas. Ketinggian lantai ke lantai yang lapang, dengan pintu gelongsor kaca dari lantai ke siling ke laman tepi anda. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.</p>
+        <p class="product-pitch" data-i18n="h.semid.pitch">Dapur, ruang tamu dan ruang makan konsep terbuka yang luas. Ketinggian papak ke papak yang lapang, dengan pintu gelongsor kaca dari lantai ke siling ke laman tepi anda. Tiga bilik tidur di tingkat atas, satu di tingkat bawah.</p>
       </div>
     </figure>
 
@@ -571,7 +571,7 @@
             <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.semid.s5.k">Tinggi siling</div>
+            <div class="k" data-i18n="h.semid.s5.k">Tinggi papak ke papak</div>
             <div class="v"><span data-i18n="h.semid.s5.v">3.7 m tingkat bawah · 3.45 m tingkat atas</span></div>
           </div>
           <div>
@@ -581,7 +581,7 @@
         </div>
         <div class="product-foot">
           <div class="price"><span class="lbl" data-i18n="h.semid.price.l">Bermula</span><strong data-i18n="h.semid.price.v">RM 712,500</strong></div>
-          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Daftar minat anda</span><span class="arrow" aria-hidden="true">→</span></a>
+          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Dapatkan senarai harga</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </article>
@@ -612,7 +612,7 @@
         </div>
         <figcaption>
           <span class="num mono">GF</span>
-          <span class="lbl" data-i18n="plans.p3">Berkembar · Tingkat Bawah</span>
+          <span class="lbl" data-i18n="plans.p3">Berkembar · Tingkat bawah</span>
         </figcaption>
       </figure>
       <figure class="plan-card" data-plan="4">
@@ -621,7 +621,7 @@
         </div>
         <figcaption>
           <span class="num mono">1F</span>
-          <span class="lbl" data-i18n="plans.p4">Berkembar · Tingkat Atas</span>
+          <span class="lbl" data-i18n="plans.p4">Berkembar · Tingkat atas</span>
         </figcaption>
       </figure>
     </div>
@@ -664,7 +664,7 @@
             <div class="v"><span data-i18n="h.bungalow.s4.v">5+1</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.bungalow.s5.k">Tinggi siling</div>
+            <div class="k" data-i18n="h.bungalow.s5.k">Tinggi papak ke papak</div>
             <div class="v"><span data-i18n="h.bungalow.s5.v">3.7 m tingkat bawah · 3.45 m tingkat atas</span></div>
           </div>
           <div>
@@ -674,7 +674,7 @@
         </div>
         <div class="product-foot">
           <div class="price"><span class="lbl" data-i18n="h.bungalow.price.l">Bermula</span><strong data-i18n="h.bungalow.price.v">RM 1,220,000</strong></div>
-          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Daftar minat anda</span><span class="arrow" aria-hidden="true">→</span></a>
+          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Dapatkan senarai harga</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </article>
@@ -705,7 +705,7 @@
         </div>
         <figcaption>
           <span class="num mono">GF</span>
-          <span class="lbl" data-i18n="plans.p1">Banglo · Tingkat Bawah</span>
+          <span class="lbl" data-i18n="plans.p1">Banglo · Tingkat bawah</span>
         </figcaption>
       </figure>
       <figure class="plan-card" data-plan="2">
@@ -714,7 +714,7 @@
         </div>
         <figcaption>
           <span class="num mono">1F</span>
-          <span class="lbl" data-i18n="plans.p2">Banglo · Tingkat Atas</span>
+          <span class="lbl" data-i18n="plans.p2">Banglo · Tingkat atas</span>
         </figcaption>
       </figure>
     </div>
@@ -727,10 +727,9 @@
   <div class="wrap">
     <div class="hd">
       <div>
-        <div class="eyebrow" data-i18n="loc.eyebrow">Lokasi</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="loc.title">Di mana anda berada.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="loc.human">Sekolah di seberang jalan, boleh jalan kaki. Surau berdekatan, dan taman teknologi lima minit dari rumah anda.</p>
-        <p class="lede" style="margin-top:8px; font-size:0.92em; opacity:0.8;" data-i18n="loc.lede">Di tepi Jalan Bertam, sepuluh minit dari lebuhraya. Sekolah, mal, hospital dan masjid, semuanya dalam pemanduan suku jam.</p>
+        <h2 class="title" data-i18n="loc.title">Di mana anda berada.</h2>
+        <p class="lede" style="margin-top:16px;" data-i18n="loc.human">Sekolah di seberang jalan, boleh jalan kaki. Taman teknologi lima minit dari rumah anda.</p>
+        <p class="lede" style="margin-top:8px; font-size:0.92em; opacity:0.8;" data-i18n="loc.lede">Di tepi Jalan Bertam, 7 minit dari lebuhraya. Sekolah, mal, hospital dan masjid, semuanya dalam pemanduan suku jam.</p>
       </div>
     </div>
 
@@ -749,9 +748,9 @@
         <button type="button" data-filter="all" class="active"><span class="sw"></span><span data-i18n="map.f.all">Semua</span> <span class="ct">· 32</span></button>
         <button type="button" data-filter="daily"><span class="sw"></span><span data-i18n="map.f.daily">Harian</span> <span class="ct">· 10</span></button>
         <button type="button" data-filter="schools"><span class="sw"></span><span data-i18n="map.f.schools">Sekolah</span> <span class="ct">· 5</span></button>
-        <button type="button" data-filter="lifestyle"><span class="sw"></span><span data-i18n="map.f.lifestyle">Riadah &amp; Gaya Hidup</span> <span class="ct">· 5</span></button>
+        <button type="button" data-filter="lifestyle"><span class="sw"></span><span data-i18n="map.f.lifestyle">Riadah &amp; gaya hidup</span> <span class="ct">· 5</span></button>
         <button type="button" data-filter="connect"><span class="sw"></span><span data-i18n="map.f.connect">Perhubungan</span> <span class="ct">· 5</span></button>
-        <button type="button" data-filter="future"><span class="sw"></span><span data-i18n="map.f.future">Pekerjaan &amp; Industri</span> <span class="ct">· 7</span></button>
+        <button type="button" data-filter="future"><span class="sw"></span><span data-i18n="map.f.future">Pekerjaan &amp; industri</span> <span class="ct">· 7</span></button>
       </div>
 
       <div id="loc-leaflet" class="loc-leaflet"></div>
@@ -764,14 +763,14 @@
         <span class="mono" data-i18n="loc.amen.heading">Tempat berdekatan · klik satu baris untuk melihatnya di peta</span>
       </div>
 
-      <div class="amen" data-reveal>
+      <div class="amen">
         <div class="amen-grp">
           <div class="h" data-i18n="loc.g1.h">Kehidupan harian</div>
           <ul>
             <li data-pin="21"><span class="num">21</span><span class="name">Surau Bertam Perdana</span><span class="dist">5 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="3"><span class="num">3</span><span class="name">Mydin Bertam Hypermarket</span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="1"><span class="num">1</span><span class="name">Sunshine Bertam Shopping Mall</span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
-            <li data-pin="26"><span class="num">26</span><span class="name">Petronas Bertam <em class="zh-only">(国油)</em></span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
+            <li data-pin="26"><span class="num">26</span><span class="name">Petronas Bertam <em class="zh-only">（国油）</em></span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="27"><span class="num">27</span><span class="name">Klinik Desa Paya Keladi <em data-i18n="loc.em.gp">(klinik am)</em></span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="6"><span class="num">6</span><span class="name">Masjid At-Taqwa Bertam Indah</span><span class="dist">8 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="2"><span class="num">2</span><span class="name">Lotus's Kepala Batas</span><span class="dist">8 <span data-i18n="loc.min">minit</span></span></li>
@@ -796,7 +795,7 @@
           <div class="h" data-i18n="loc.g5.h">Riadah &amp; gaya hidup</div>
           <ul>
             <li data-pin="24"><span class="num">24</span><span class="name">Bertam Indah sports pitches &amp; tennis</span><span class="dist">4 <span data-i18n="loc.min">minit</span></span></li>
-            <li data-pin="22"><span class="num">22</span><span class="name">Taman Bandaraya Vision Park <em class="zh-only">(宏愿公园)</em></span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
+            <li data-pin="22"><span class="num">22</span><span class="name">Taman Bandaraya Vision Park <em class="zh-only">（宏愿公园）</em></span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="25"><span class="num">25</span><span class="name">Bertam Plaza <em>(Pizza Hut, Domino's, Secret Recipe, 7-Eleven, Maybank)</em></span><span class="dist">6 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="29"><span class="num">29</span><span class="name">KFC Bertam</span><span class="dist">8 <span data-i18n="loc.min">minit</span></span></li>
             <li data-pin="30"><span class="num">30</span><span class="name">Kepala Batas Town <em>(Public Bank, Hong Leong, Bank Islam, Pizza Hut)</em></span><span class="dist">8 <span data-i18n="loc.min">minit</span></span></li>
@@ -838,12 +837,12 @@
       <div>
         <div class="eyebrow" data-i18n="bertam.eyebrow">Mengapa Bertam, sekarang</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="bertam.title">Bertam sedang membangun.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="bertam.lede">Penang Technology Park kira-kira lima minit dari sini. Kulim Hi-Tech Park dan Sungai Petani pun dekat sahaja. Kilang-kilang baharu sudah beroperasi, dan pekerjanya perlukan rumah berdekatan.</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="bertam.lede">Penang Technology Park terletak di Bertam sendiri. Kulim Hi-Tech Park dan Sungai Petani pun dekat sahaja. Kilang-kilang baharu sudah beroperasi, dan pekerjanya perlukan rumah berdekatan.</p>
       </div>
     </div>
 
     <div class="bertam-grid">
-      <div data-reveal>
+      <div>
         <p class="bertam-thesis" data-i18n-html="bertam.thesis">Rumah pegangan bebas,<br>lima minit dari<br><span class="accent">peluang kerja baharu</span>.</p>
 
         <div class="bertam-stats">
@@ -852,7 +851,7 @@
             <div class="txt">
               <div class="k" data-i18n="bertam.s1k">INV New Material</div>
               <div class="v">RM 6.4B</div>
-              <div class="u" data-i18n="bertam.s1u">Kilang pemisah bateri, beroperasi sejak Jun 2025, kira-kira 6 minit dari sini</div>
+              <div class="u" data-i18n="bertam.s1u">Kilang pemisah bateri, beroperasi sejak Jun 2025</div>
             </div>
           </div>
           <div>
@@ -868,7 +867,7 @@
             <div class="txt">
               <div class="k" data-i18n="bertam.s3k">Infineon · Kulim</div>
               <div class="v">RM 30B</div>
-              <div class="u" data-i18n="bertam.s3u">Pembesaran bakal menjadi kilang cip SiC 200mm terbesar dunia, fasa 1 dibuka sejak 2024</div>
+              <div class="u" data-i18n="bertam.s3u">Pembesaran yang menurut Infineon bakal menjadi kilang cip SiC 200mm terbesar dunia, fasa 1 dibuka sejak 2024</div>
             </div>
           </div>
           <div>
@@ -896,14 +895,15 @@
             </div>
           </div>
         </div>
+        <p class="bertam-src faq-more" data-i18n-html="bertam.src" style="margin-top:18px; font-size:0.85em; color:var(--text-mute);">Angka daripada MIDA, Buletin Mutiara dan laporan berita, disemak November 2026. Sumber penuh ada dalam panduan <a href="/ms/guides/investing-in-bertam/#sources">Pelaburan di Bertam</a> kami.</p>
       </div>
 
-      <div class="catalysts" data-reveal>
+      <div class="catalysts">
         <div class="cat">
           <div class="yr">1990s<small data-i18n="cat0.l">Bandar</small></div>
           <div>
             <h4 data-i18n="cat0.h">Bertam menjadi bandar yang lengkap.</h4>
-            <p data-i18n="cat0.b">Pusat beli-belah, dua hospital, kampus USM dan UiTM serta lebih sedozen sekolah. Keperluan harian sudah tersedia.</p>
+            <p data-i18n="cat0.b">Pusat beli-belah, dua hospital, kampus USM dan UiTM serta lebih sedozen sekolah.</p>
           </div>
         </div>
         <div class="cat">
@@ -925,7 +925,7 @@
           <div class="yr">2026<small data-i18n="cat3.l">Sekarang</small></div>
           <div>
             <h4 data-i18n="cat3.h">Panthera dibuka untuk pendaftaran.</h4>
-            <p data-i18n="cat3.b">Setia Fontaines memulakan taman perindustrian 509 ekar, dan harga tanah di sini masih jauh lebih rendah daripada di pulau.</p>
+            <p data-i18n="cat3.b">Setia Fontaines memulakan taman perindustrian 509 ekar.</p>
             <span class="tag" data-i18n="cat3.tag">Pra-pelancaran</span>
           </div>
         </div>
@@ -945,7 +945,7 @@
         </div>
       </div>
     </div>
-    <p class="lede" data-i18n="bertam.close" style="margin-top:30px; max-width:62ch;">Daftar sekarang untuk pilihan pertama rumah pegangan bebas, sebelum pelancaran awam.</p>
+    <p class="lede" data-i18n="bertam.close" style="margin-top:30px; max-width:62ch;">Pendaftaran dibuka sekarang, sebelum pelancaran awam.</p>
   </div>
 </section>
 
@@ -954,16 +954,15 @@
   <div class="wrap">
     <div class="hd">
       <div>
-        <div class="eyebrow" data-i18n="pricing.eyebrow">Harga</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="pricing.title">Harga yang jujur.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="pricing.lede">Dua jenis rumah pegangan bebas, kedua-duanya menghadap taman pusat.</p>
+        <h2 class="title" data-i18n="pricing.title">Harga setiap rumah.</h2>
+        <p class="lede" style="margin-top:16px;" data-i18n="pricing.lede">Dua jenis rumah pegangan bebas, berkongsi taman yang sama.</p>
       </div>
     </div>
 
 
-    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Harga pra-pelancaran: rumah berkembar dari RM 712,500, banglo dari RM 1.22 juta. Daftar untuk senarai penuh setiap lot dan pilihan pertama lot yang anda suka.</p>
+    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Harga pra-pelancaran: rumah berkembar dari RM 712,500, banglo dari RM 1.22 juta. Daftar untuk senarai penuh setiap lot.</p>
 
-    <div class="price-ranges" data-reveal>
+    <div class="price-ranges">
 
       <article class="prc-card" data-home="semid">
         <div class="tag"><span data-i18n="prc.sd.tag">Berkembar</span><span class="units" data-i18n="prc.sd.units">16 unit</span></div>
@@ -999,9 +998,8 @@
 
     </div>
 
-    <aside class="prc-cta" data-reveal>
+    <aside class="prc-cta">
       <div class="prc-cta-text">
-        <div class="prc-cta-eyebrow" data-i18n="pricing.eyebrow">Harga</div>
         <h3 data-i18n="pricing.cta.title">Mahukan senarai harga lot-demi-lot?</h3>
         <p data-i18n="pricing.cta.body">WhatsApp pasukan jualan kami. Kami hantar senarai terkini, dengan status ketersediaan dan lot Bumi, pada hari yang sama.</p>
       </div>
@@ -1024,12 +1022,12 @@
     <div class="hd">
       <div>
         <div class="eyebrow" data-i18n="calc.eyebrow">Kemampuan</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="calc.title">Apa yang diperlukan untuk memiliki satu.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Gerakkan penggelongsor untuk melihat ansuran bulanan anda. Anggaran sahaja: margin dan kadar pinjaman ikut kelulusan bank anda.</p>
+        <h2 class="title" style="margin-top:10px;" data-i18n="calc.title">Kos untuk memiliki rumah ini.</h2>
+        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Gerakkan penggelongsor untuk melihat ansuran bulanan anda. Anggaran sahaja. Margin dan kadar pinjaman ikut kelulusan bank anda.</p>
       </div>
     </div>
 
-    <div class="calc-grid" data-reveal>
+    <div class="calc-grid">
       <div class="calc-controls">
         <div class="calc-presets" role="tablist" aria-label="Jenis rumah" data-i18n-aria="aria.hometype">
           <button type="button" class="calc-preset active" data-preset="semid" data-price="712500" data-i18n="calc.preset.sd">Berkembar · RM 712.5k</button>
@@ -1102,9 +1100,8 @@
 
         <a id="calc-preapprove" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I%27d%20like%20a%20bank%20pre-approval%20for%20a%20home%20here." target="_blank" rel="noopener" class="calc-preapprove">
           <div class="calc-preapprove-text">
-            <div class="calc-preapprove-eyebrow" data-i18n="calc.pre.eyebrow">Langkah seterusnya</div>
-            <div class="calc-preapprove-title" data-i18n="calc.pre.title">Dapatkan pra-kelulusan pinjaman melalui WhatsApp</div>
-            <div class="calc-preapprove-sub" data-i18n="calc.pre.sub">Kami hantar angka anda kepada mana-mana bank utama dan maklumkan anggaran kelulusan pada hari yang sama.</div>
+            <div class="calc-preapprove-title" data-i18n="calc.pre.title">Semak pinjaman anda melalui WhatsApp</div>
+            <div class="calc-preapprove-sub" data-i18n="calc.pre.sub">Kami hantar angka anda kepada bank pada hari yang sama.</div>
           </div>
           <div class="calc-preapprove-cta">
             <span>WhatsApp</span>
@@ -1121,19 +1118,18 @@
   <div class="wrap">
     <div class="hd">
       <div>
-        <div class="eyebrow" data-i18n="faq.eyebrow">Jawapan jelas</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="faq.title">Soalan lazim pembeli.</h2>
+        <h2 class="title" data-i18n="faq.title">Soalan lazim pembeli.</h2>
       </div>
     </div>
 
     <div class="faq-grid">
-      <aside class="faq-aside" data-reveal>
+      <aside class="faq-aside">
         <div class="h" data-i18n="faq.aside.h">Tak jumpa jawapan anda?</div>
-        <p class="b" data-i18n="faq.aside.b">Pasukan jualan kami di WhatsApp Isnin–Sabtu, 9 pagi hingga 6 petang. Kebanyakan soalan dijawab dalam sejam.</p>
-        <a class="cta" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I%20have%20a%20question." target="_blank" rel="noopener" data-i18n="faq.aside.cta">Tanya di WhatsApp →</a>
+        <p class="b" data-i18n="faq.aside.b">Pasukan jualan kami di WhatsApp Isnin–Sabtu, 9 pagi hingga 6 petang.</p>
+        <a class="cta" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I%20have%20a%20question." target="_blank" rel="noopener" data-i18n="faq.aside.cta">WhatsApp jualan →</a>
       </aside>
 
-      <div class="faq-list" data-reveal>
+      <div class="faq-list">
         <details class="faq" open>
           <summary><span class="ix">01</span><span data-i18n="faq.q1">Pegangan bebas atau pajakan?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a1">Pegangan bebas. Setiap rumah mendapat hak milik individu semasa penyerahan. Tiada pajakan 99 tahun, jadi rumah ini milik anda untuk didiami dan diwariskan kepada anak-anak.</p></div>
@@ -1160,11 +1156,11 @@
         </details>
         <details class="faq">
           <summary><span class="ix">07</span><span data-i18n="faq.q9">Adakah anda bantu dengan pinjaman bank?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a9">Ya. Pasukan kami bantu permohonan anda, jadi anda tidak berurusan dengan bank seorang diri. Kelulusan, margin dan kadar pinjaman bergantung pada bank, berdasarkan profil anda.</p></div>
+          <div class="answer"><p data-i18n="faq.a9">Ya. Pasukan kami bantu permohonan anda, jadi anda tidak berurusan dengan bank seorang diri. Selebihnya bank yang tentukan.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">08</span><span data-i18n="faq.q10">Bagaimana jika kami belum bersedia membeli?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a10">Daftar juga. Percuma, tanpa deposit, tanpa obligasi, dan anda dapat pilihan pertama lot yang anda suka. Keluarga anda yang tentukan masanya.</p></div>
+          <div class="answer"><p data-i18n="faq.a10">Daftar juga. Percuma dan tiada deposit. Keluarga anda yang tentukan masanya.</p></div>
         </details>
       </div>
       <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">Ada soalan lain? <a href="/ms/guides/">Baca panduan <span style="white-space:nowrap">kami →</span></a> · <a href="/ms/disclaimer/">Penafian</a></p>
@@ -1180,18 +1176,17 @@
       <div>
         <div class="eyebrow cream" data-i18n="reg.eyebrow">Daftar minat anda</div>
         <h2 class="title" style="margin-top:10px; color:var(--cream);" data-i18n="reg.title">Jadilah yang pertama.</h2>
-        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">Sertai senarai kami dan kami akan maklumkan perkembangan projek kepada anda.</p>
+        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.9); max-width:64ch;" data-i18n="reg.lede">Sertai senarai kami untuk pilihan pertama lot, sebelum pelancaran awam. Kami akan maklumkan perkembangan projek kepada anda.</p>
       </div>
     </div>
 
-    <ul class="reg-trust" data-reveal aria-label="Kenapa daftar sekarang" data-i18n-aria="aria.why">
-      <li data-i18n="trust.1">Hanya 19 rumah</li>
-      <li data-i18n="trust.2">Pegangan bebas</li>
-      <li data-i18n="trust.3">Setiap rumah menghadap taman</li>
+    <ul class="reg-trust" aria-label="Kenapa daftar sekarang" data-i18n-aria="aria.why">
+      <li data-i18n="trust.1">19 rumah pegangan bebas</li>
+      <li data-i18n="trust.2">Berkembar dari RM 712,500</li>
     </ul>
 
     <div class="reg-grid">
-      <form id="reg-form" class="reg-form" novalidate data-reveal>
+      <form id="reg-form" class="reg-form" novalidate>
         <div class="field">
           <label for="f-name" data-i18n="reg.f.name">Nama anda</label>
           <input id="f-name" name="name" type="text" autocomplete="name" required>
@@ -1206,7 +1201,7 @@
             <label for="f-interest" data-i18n="reg.f.interest">Berminat dengan</label>
             <select id="f-interest" name="interest">
               <option value="Both, show me what's available" data-i18n="reg.opt.both">Kedua-duanya, tunjukkan yang tersedia</option>
-              <option value="Semi-Detached (16 units)" data-i18n="reg.opt.semid">Rumah Berkembar (16 unit)</option>
+              <option value="Semi-Detached (16 units)" data-i18n="reg.opt.semid">Rumah berkembar (16 unit)</option>
               <option value="Bungalow (3 units)" data-i18n="reg.opt.bungalow">Banglo (3 unit)</option>
             </select>
           </div>
@@ -1220,16 +1215,16 @@
         </div>
       </form>
 
-      <aside class="reg-contact" data-reveal>
+      <aside class="reg-contact">
         <div class="card wa">
-          <div class="h" data-i18n="reg.contact.wa.h">Borak sekarang</div>
+          <div class="h" data-i18n="reg.contact.wa.h">WhatsApp jualan</div>
           <div class="n" data-i18n="reg.contact.wa.n">+60 17-598 1858</div>
           <a class="action" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" data-i18n="reg.contact.wa.cta">Buka WhatsApp ↗</a>
         </div>
         <div class="card">
           <div class="h" data-i18n="reg.contact.fin.h">Bantuan pinjaman</div>
           <div class="n" data-i18n="reg.contact.fin.n">Mana-mana bank utama</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">Kami bantu anda menyediakan dan menghantar permohonan. Margin dan kadar pinjaman adalah seperti yang diluluskan oleh bank anda.</p>
+          <p style="color:rgba(242,233,223,0.9); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">Kami bantu anda menyediakan dan menghantar permohonan. Margin dan kadar pinjaman adalah seperti yang diluluskan oleh bank anda.</p>
         </div>
       </aside>
     </div>
@@ -1250,9 +1245,9 @@
         <ul>
           <li><a href="#estate" data-i18n="nav.estate">Kediaman</a></li>
           <li><a href="#homes" data-i18n="nav.homes">Rumah</a></li>
-          <li><a href="#site" data-i18n="nav.site">Pelan Tapak</a></li>
+          <li><a href="#site" data-i18n="nav.site">Pelan tapak</a></li>
           <li><a href="#location" data-i18n="nav.location">Lokasi</a></li>
-          <li><a href="#register" data-i18n="nav.register">Daftar Minat</a></li>
+          <li><a href="#register" data-i18n="nav.register">Daftar minat</a></li>
           <li><a href="walkthrough/" data-i18n="footer.walk">Lawatan maya 3D</a></li>
         </ul>
       </div>
@@ -1298,8 +1293,8 @@
   </div>
 </div>
 
-<script src="app.js?v=136" defer></script>
-<script src="walkthrough/hero-boot.js?v=142" defer></script>
+<script src="app.js?v=138" defer></script>
+<script src="walkthrough/hero-boot.js?v=143" defer></script>
 <script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of

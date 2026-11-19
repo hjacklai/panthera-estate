@@ -174,10 +174,10 @@ body.guide{ padding-bottom: 0 !important; }
   background: rgba(229,215,196,0.38); border-radius: 14px;
   padding: 20px 22px 22px; color: var(--text);
   text-decoration: none !important;
-  transition: background .2s ease, transform .2s ease;
+  transition: background .2s ease;
 }
 .g-sec .g-cards a{ color: var(--text); }
-.g-cards a:hover{ background: rgba(229,215,196,0.75); transform: translateY(-2px); }
+.g-cards a:hover{ background: rgba(229,215,196,0.75); }
 .g-cards .k{
   display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--terra-2);
@@ -190,23 +190,23 @@ body.guide{ padding-bottom: 0 !important; }
 
 /* the closing calls to action: the register band's terracotta, as one rounded block */
 .g-cta{
-  background: var(--terra); color: var(--cream);
+  background: var(--terra-2); color: var(--cream);
   border-radius: 18px;
   padding: clamp(30px, 5vw, 64px);
   display: grid; gap: 18px; justify-items: start;
 }
-.g-cta .eyebrow{ color: rgba(242,233,223,0.78); margin: 0; font-size: 12px; line-height: 1.5; }
+.g-cta .eyebrow{ color: rgba(242,233,223,0.9); margin: 0; font-size: 12px; line-height: 1.5; }
 .g-cta h2{
   font-family: var(--serif); font-weight: 400;
   font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.015em;
   margin: 0; color: var(--cream); max-width: 20ch;
 }
-.g-cta p{ margin: 0; font-size: 17px; line-height: 1.6; color: rgba(242,233,223,0.88); max-width: 56ch; }
+.g-cta p{ margin: 0; font-size: 17px; line-height: 1.6; color: rgba(242,233,223,0.9); max-width: 56ch; }
 .g-cta-row{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
 .g-cta .btn{ white-space: nowrap; }
 .g-cta .btn-primary{ background: var(--ink-deep); }
-.g-cta .btn-primary:hover{ background: var(--terra-2); }
-.g-cta .g-wa{ font-size: 14px; color: rgba(242,233,223,0.8); }
+.g-cta .btn-primary:hover{ background: var(--ink); }
+.g-cta .g-wa{ font-size: 14px; color: rgba(242,233,223,0.9); }
 .g-cta .g-wa a{ color: var(--cream); }
 
 /* footer: the site's footer, minus its hairline; four columns (brand, homes, guides, language) */

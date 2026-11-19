@@ -8,11 +8,11 @@
      address cannot be the base. In-page #links are kept on this page by app.js. Keep it first, before any URL. -->
 <base href="/">
 <!-- phones keep an open page and its files: when a newer build is live (version.txt), reload once, so visitors never sit on an
-     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "142" equal to hero-boot.js V and version.txt; one reload per
+     old copy (owner, Nov 2026: their phone kept showing an old version). Keep "143" equal to hero-boot.js V and version.txt; one reload per
      build per tab session, so a stale CDN copy can never loop. Crawlers and test browsers (the same check as the next
      script) never reload: a search engine renders the page hours or days after fetching it, and a reload mid-render
      would spoil that render -->
-<script>(function(){var B="142",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
+<script>(function(){var B="143",n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||""))return;function chk(){try{fetch("version.txt?"+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(!t||t===B)return;try{if(sessionStorage.getItem("pb-build")===t)return;sessionStorage.setItem("pb-build",t)}catch(e){return}location.reload()}).catch(function(){})}catch(e){}}chk();addEventListener("pageshow",function(e){if(e.persisted)chk()});document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk()})})();</script>
 <!-- the 3D app from the first paint: the same checks as walkthrough/hero-boot.js (it switches this off if the 3D cannot run),
      so a reload never flashes the scrolling page or a restored scroll position (owner, Nov 2026) -->
 <script>(function(){try{var d=document.documentElement,q=location.search,n=navigator,c=n.connection||{};if(/[?&]hero=(scroll|off|nogl)/.test(q))return;if(!/[?&]hero=/.test(q)&&(n.webdriver||/bot|crawl|spider|slurp|Google-InspectionTool|Chrome-Lighthouse|HeadlessChrome|GPTBot|ClaudeBot|PerplexityBot|bingpreview/i.test(n.userAgent||"")))return;if(!("WebGL2RenderingContext" in window)||typeof DecompressionStream==="undefined"||!(HTMLScriptElement.supports&&HTMLScriptElement.supports("importmap")))return;if(c.saveData||/^(slow-2g|2g|3g)$/.test(c.effectiveType||"")||(n.deviceMemory&&n.deviceMemory<2)||(window.matchMedia&&matchMedia("(prefers-reduced-data: reduce)").matches))return;d.classList.add("hx-app");if("scrollRestoration" in history)history.scrollRestoration="manual";}catch(e){}})();</script>
@@ -22,8 +22,8 @@
 <style>html.hx-app{--gutter:max(clamp(20px,3.2vw,64px),calc((100vw - 1600px) / 2))}@media (max-width:720px){html.hx-app .topbar-inner{padding:6px 16px}html.hx-app .topbar .lang{padding:2px;font-size:10px}html.hx-app .topbar .lang button{min-height:30px;padding:2px 8px}html.hx-app .hero-copy h1.display{font-size:25px;line-height:1.08;margin:0 0 8px}html.hx-app .hero-copy .lede{font-size:13px;line-height:1.45;margin-top:0}html.hx-app .hero--cinematic .hero-inner{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}}html.hx-app .topbar-inner{grid-template-columns:1fr auto}html.hx-app .topbar .brand-mark{justify-self:start}html.hx-app .topbar-side.right{justify-self:end}@media (min-width:761px){html.hx-app .hero--cinematic .hero-copy h1.display{font-size:clamp(30px,3vw,48px);line-height:1.06;max-width:none}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:nowrap}html.hx-app .hero--cinematic .hero-copy .lede{font-size:15px;max-width:46ch}}@media (max-width:760px){html.hx-app .hero-copy h1.display{font-size:22px}html.hx-app .hero-copy .lede{font-size:12.5px}}@media (min-width:761px){html.hx-app .hero--cinematic .hero-inner.wrap{max-width:none;margin-left:0;margin-right:0;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}}html.hx-app .topbar-inner{max-width:none;width:100%;padding-left:var(--gutter,40px);padding-right:var(--gutter,40px)}html.hx-app .topbar .home-pill{display:none!important}html.hx-app .topbar-side.right{width:auto;gap:8px}html.hx-app .topbar{border-bottom:0}@media (min-width:761px) and (min-aspect-ratio:9/10){html.hx-app .hero--cinematic .hero-inner{padding-bottom:max(clamp(120px,16vh,205px),166px)}}html.hx-app .topbar .lang{padding:0;border:0}html.hx-app .topbar .lang button{width:40px;height:40px;min-height:40px;min-width:40px;padding:0;justify-content:center;border-radius:50%}@media (max-width:340px){html.hx-app .topbar .brand-mark .sub{display:none}}html.hx-app .topbar .brand-mark{min-width:0}@media (min-width:761px) and (max-height:520px){html.hx-app .topbar-inner{padding:5px max(16px,env(safe-area-inset-right,0px)) 5px max(16px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-inner.wrap{padding-left:max(20px,env(safe-area-inset-left,0px))}html.hx-app .hero--cinematic .hero-copy h1.display{font-size:22px;line-height:1.08;margin:0 0 6px}html.hx-app .hero--cinematic .hero-inner,html.hx-app .hero--cinematic .hero-inner.wrap{padding-bottom:76px!important;padding-top:12px!important}html.hx-app .hero--cinematic .hero-copy{max-width:52vw}html.hx-app .hero--cinematic .hero-copy h1.display span{white-space:normal}html.hx-app .hero--cinematic .hero-copy h1.display{max-width:52vw}html.hx-app .hero--cinematic .hero-copy .lede{display:none}}</style>
 
 
-<title>Panthera Bertam · First-Home Family Semi-D, Bertam Penang</title>
-<meta name="description" content="Freehold semi-D in Bertam, Penang, designed to grow with your family: 4 bedrooms (one downstairs), a private side lawn, facing the green. From RM 712,500.">
+<title>Panthera Bertam · First-home family semi-D in Bertam, Penang</title>
+<meta name="description" content="Freehold semi-D in Bertam, Penang, designed to grow with your family: 4 bedrooms (one downstairs), a private side lawn and a shared central green. From RM 712,500.">
 <meta name="author" content="Panthera Development Sdn Bhd">
 <meta name="keywords" content="Panthera Bertam, Bertam Penang property, Kepala Batas, Seberang Perai Utara, Penang semi-D, Penang bungalow, freehold Penang homes, Penang Technology Park, rumah berkembar Bertam, banglo Pulau Pinang, rumah pegangan bebas, projek baharu Seberang Perai Utara, 槟城 半独立式洋房, 独立式洋房, 永久地契, 威北, 甲抛峇底, pantheraestate">
 <meta name="theme-color" content="#F2E9DF" media="(prefers-color-scheme: light)">
@@ -48,8 +48,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Panthera Bertam">
 <meta property="og:url" content="https://www.pantheraestate.com/">
-<meta property="og:title" content="Panthera Bertam · First-Home Family Semi-D, Bertam Penang">
-<meta property="og:description" content="A first home that grows with your family: freehold 2,006 sq ft semi-Ds in Bertam, Penang. 4 bedrooms, one on the ground floor with its own door into a bathroom also reached from the living area. A private side lawn on the open side, and every home faces a shared green of over 700 m². SK Bertam Perdana is across the road. From RM 712,500. Pre-launch, register your interest.">
+<meta property="og:title" content="Panthera Bertam · First-home family semi-D in Bertam, Penang">
+<meta property="og:description" content="A first home that grows with your family: freehold 2,006 sq ft semi-Ds in Bertam, Penang. 4 bedrooms, one on the ground floor with its own door into a bathroom also reached from the living area. A private side lawn on the open side, and a shared central green of over 700 m². SK Bertam Perdana is across the road. From RM 712,500. Pre-launch, register your interest.">
 <meta property="og:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:secure_url" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta property="og:image:type" content="image/jpeg">
@@ -63,8 +63,8 @@
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://www.pantheraestate.com/">
-<meta name="twitter:title" content="Panthera Bertam · First-Home Family Semi-D, Bertam Penang">
-<meta name="twitter:description" content="A family semi-D in Bertam, Penang: freehold, 4 bedrooms (one on the ground floor), a private side lawn and a shared green of over 700 m² in front. From RM 712,500. Pre-launch.">
+<meta name="twitter:title" content="Panthera Bertam · First-home family semi-D in Bertam, Penang">
+<meta name="twitter:description" content="A family semi-D in Bertam, Penang: freehold, 4 bedrooms (one on the ground floor), a private side lawn and a shared central green of over 700 m². From RM 712,500. Pre-launch.">
 <meta name="twitter:image" content="https://www.pantheraestate.com/assets/og-card.jpg?v=1">
 <meta name="twitter:image:alt" content="Panthera Bertam, bungalow artist's impression">
 
@@ -83,7 +83,7 @@
 <!-- Leaflet (open-source map renderer) is loaded lazily by app.js only when the
      map scrolls near the viewport, keeps ~150KB off the initial page load. -->
 
-<link rel="stylesheet" href="styles.css?v=109">
+<link rel="stylesheet" href="styles.css?v=110">
 <!-- returning BM / 中 visitors on /: the hero copy waits (hidden, its space kept) until app.js has put it in their language,
      so the English text never flashes and reflows; English visitors are untouched. Cleared just after app.js's
      DOMContentLoaded (applyI18n), or after 3 s at worst. On /ms/ and /zh/ the text is already in the page's
@@ -109,8 +109,8 @@
       "@type": "WebPage",
       "@id": "https://www.pantheraestate.com/#webpage",
       "url": "https://www.pantheraestate.com/",
-      "name": "Panthera Bertam · First-Home Family Semi-D, Bertam Penang",
-      "description": "Freehold semi-D in Bertam, Penang, designed to grow with your family: 4 bedrooms (one downstairs), a private side lawn, facing the green. From RM 712,500.",
+      "name": "Panthera Bertam · First-home family semi-D in Bertam, Penang",
+      "description": "Freehold semi-D in Bertam, Penang, designed to grow with your family: 4 bedrooms (one downstairs), a private side lawn and a shared central green. From RM 712,500.",
       "inLanguage": "en",
       "dateModified": "2026-11-13",
       "isPartOf": { "@id": "https://www.pantheraestate.com/#website" },
@@ -141,7 +141,7 @@
       "name": "Panthera Bertam, freehold semi-D and bungalow homes in Bertam, Penang",
       "url": "https://www.pantheraestate.com/",
       "inLanguage": "en",
-      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, every home facing a shared green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous floor-to-floor heights of 3.7 m on the ground floor and 3.45 m upstairs, and floor-to-ceiling sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
+      "description": "A 2-acre freehold estate of 16 semi-detached homes and 3 bungalows in Bertam, Kepala Batas, Seberang Perai Utara, Penang, with a shared central green of over 700 m². The Semi-D is designed as a first home that grows with the family, with room for parents to live in: 2,006 sq ft, 4 bedrooms (three upstairs, each with its own bathroom, and one on the ground floor with its own door into a bathroom that is also reached from the living area), 4 bathrooms, a private side lawn on its open side (the other side is the shared party wall), land of 210 to 318 m², generous slab-to-slab heights of 3.7 m on the ground floor and 3.45 m upstairs, and floor-to-ceiling sliding glass doors from the living and dining rooms onto the side lawn. SK Bertam Perdana primary school is across the road, about a 7-minute walk. Five minutes from Penang Technology Park @ Bertam. Pre-launch 2026, estimated handover Q4 2028. Semi-D from RM 712,500; bungalow (4+1 bedrooms, 5+1 bathrooms) from RM 1.22 million.",
       "keywords": "Bertam, Kepala Batas, Seberang Perai Utara, Penang, semi-D, bungalow, freehold, first home, family home, rumah berkembar, banglo, pegangan bebas, rumah pertama, 半独立式洋房, 独立式洋房, 永久地契, 首购屋, 三代同堂, 槟城",
       "datePosted": "2026-05-20",
       "dateModified": "2026-11-13",
@@ -157,7 +157,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Semi-Detached · 16 units",
-          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, facing the shared green of over 700 m². From RM 712,500.",
+          "description": "Freehold semi-D for first-home buyers and growing families: 2,006 sq ft, 4 bedrooms (one on the ground floor, with its own door into a bathroom also reached from the living area), 4 bathrooms, a private side lawn on its open side, and a shared central green of over 700 m² in the estate. From RM 712,500.",
           "lowPrice": 712500,
           "priceCurrency": "MYR",
           "offerCount": 16,
@@ -169,7 +169,7 @@
         {
           "@type": "AggregateOffer",
           "name": "Bungalow · 3 units",
-          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, facing the shared green of over 700 m². From RM 1.22 million, each priced by its land size.",
+          "description": "Freehold bungalow, the largest home in the estate: 2,642 sq ft, 4+1 bedrooms, 5+1 bathrooms, on 356 to 493 m² of land, in an estate with a shared central green of over 700 m². From RM 1.22 million, each priced by its land size.",
           "lowPrice": 1220000,
           "priceCurrency": "MYR",
           "offerCount": 3,
@@ -185,7 +185,7 @@
       "@id": "https://www.pantheraestate.com/#estate",
       "name": "Panthera Bertam",
       "alternateName": ["Panthera Bertam Kepala Batas", "Panthera Bertam Penang"],
-      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, every one facing a shared central green of over 700 m², with SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
+      "description": "19 freehold landed homes (16 semi-detached, 3 bungalows) in Bertam, Kepala Batas, Penang, with a shared central green of over 700 m² and SK Bertam Perdana primary school across the road. Each Semi-D has a private side lawn on its open side (the other side is the shared party wall) and a ground-floor bedroom with its own door into a bathroom that is also reached from the living area.",
       "address": { "@type": "PostalAddress", "addressLocality": "Kepala Batas", "postalCode": "13200", "addressRegion": "Pulau Pinang", "addressCountry": "MY" },
       "containedInPlace": {
         "@type": "Place",
@@ -292,7 +292,7 @@
           "name": "Will you help with the bank loan?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Our team helps with your application, so you don't deal with the bank alone. Approval, loan margin and rate are up to the bank, based on your profile."
+            "text": "Yes. Our team helps with your application, so you don't deal with the bank alone. The bank decides the rest."
           }
         },
         {
@@ -300,7 +300,7 @@
           "name": "What if we're not ready to buy yet?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Register anyway. It's free, no deposit, no obligation, and you get first pick of the lots you like. Your family decides when."
+            "text": "Register anyway. It's free and there's no deposit. Your family decides when."
           }
         }
       ]
@@ -385,11 +385,11 @@
 
       <div class="hero-cta">
         <a href="#register" class="btn btn-primary">
-          <span data-i18n="hero.cta.primary">Register your interest</span>
+          <span data-i18n="hero.cta.primary">Get the price list</span>
           <span class="arrow" aria-hidden="true">→</span>
         </a>
         <a href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" class="btn btn-wa">
-          <span data-i18n="hero.cta.wa">WhatsApp Sales</span>
+          <span data-i18n="hero.cta.wa">WhatsApp sales</span>
           <span class="arrow" aria-hidden="true">↗</span>
         </a>
       </div>
@@ -408,37 +408,37 @@
 <section id="estate" class="section" data-screen-label="02 Idea">
   <div class="wrap">
     <div class="idea-grid">
-      <div data-reveal>
+      <div>
         <p class="quote">
-          <span data-i18n="idea.quote.a">Homes </span><span class="accent" data-i18n="idea.quote.b">facing the park.</span><span data-i18n="idea.quote.tail"> Planned as one neighbourhood.</span>
+          <span data-i18n="idea.quote.a">Homes </span><span class="accent" data-i18n="idea.quote.b">around a shared park.</span><span data-i18n="idea.quote.tail"> Planned as one neighbourhood.</span>
         </p>
       </div>
-      <div class="idea-points" data-reveal>
+      <div class="idea-points">
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="5.2"/><path d="M14.6 16.2l1.4-1.6 1.4 1.6M16 14.6v3.6"/><path d="M13 7.5V4.6L16 2.6l3 2V7.5zM13 29.4v-2.9l3-2 3 2v2.9zM2.6 19V16.1l3-2 3 2V19zM23.4 19v-2.9l3-2 3 2V19z"/></svg>
-          <div class="h" data-i18n="idea.p1.h">01 · Courtyard plan</div>
-          <div class="t" data-i18n="idea.p1.t">Every home faces the central green.</div>
-          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">Your front gate opens onto shared green space: room for the kids to play, morning walks and evenings with the neighbours.</div>
+          <div class="h" data-i18n="idea.p1.h">Courtyard plan</div>
+          <div class="t" data-i18n="idea.p1.t">A shared central green.</div>
+          <div class="t" data-i18n="idea.p1.b" style="margin-top:6px; font-size:0.92em; opacity:0.78;">A shared green inside the estate, with room for the kids to play.</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="23" height="17" rx="0.8"/><path d="M14 4.5v9h13.5M14 17.5v4"/><path d="M4.5 26.5h23M4.5 25v3M27.5 25v3"/></svg>
-          <div class="h" data-i18n="idea.p2.h">02 · Right-sized</div>
-          <div class="t" data-i18n="idea.p2.t">Generous, not wasteful: 2,006 to 2,642 sq ft.</div>
+          <div class="h" data-i18n="idea.p2.h">Right-sized</div>
+          <div class="t" data-i18n="idea.p2.t">2,006 to 2,642 sq ft, with no wasted rooms.</div>
         </div>
         <div class="p">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16.5" r="11"/><path d="M16 16.5V9M16 16.5l3.8-6.4"/><path d="M12.5 2.6h7"/></svg>
-          <div class="h" data-i18n="idea.p3.h">03 · Close to work</div>
-          <div class="t" data-i18n="idea.p3.t">Tech jobs 5 minutes away, town within 15.</div>
+          <div class="h" data-i18n="idea.p3.h">Close to work</div>
+          <div class="t" data-i18n="idea.p3.t">Tech jobs close by, town within 15 minutes.</div>
         </div>
       </div>
     </div>
 
     <div class="site-grid site-grid--notes-only" id="site">
-      <div class="site-notes" data-reveal>
+      <div class="site-notes">
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="11.5" r="7.5"/><path d="M16 19v8.5M12.6 15.6l3.4 3.4 3.4-4.2M8.5 27.5h15"/></svg>
           <div class="h" data-i18n="site.note1.h">Central green</div>
-          <div class="t" data-i18n="site.note1.t">Green space right outside your front gate.</div>
+          <div class="t" data-i18n="site.note1.t">A shared green inside the estate.</div>
         </div>
         <div class="note">
           <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="7" width="22" height="18" rx="7"/><rect x="9.5" y="11.5" width="13" height="9" rx="3.5" stroke-dasharray="2 2.4"/><path d="M1.5 16H5M27 16h3.5"/></svg>
@@ -465,17 +465,17 @@
 <section id="homes" class="section" data-screen-label="05 Semi-D">
   <div class="wrap">
     <figure class="home-cover" data-reveal>
-      <img src="assets/hero-2.webp?v=5" srcset="assets/hero-2-768.webp?v=5 768w, assets/hero-2-1080.webp?v=5 1080w, assets/hero-2.webp?v=5 1349w" sizes="(min-width: 1200px) 1100px, 100vw" width="1349" height="784" alt="Semi-Detached homes at Panthera Bertam at golden hour, artist's impression" data-i18n-alt="alt.sd.hero" loading="lazy" decoding="async" fetchpriority="low">
+      <img src="assets/hero-2.webp?v=5" srcset="assets/hero-2-768.webp?v=5 768w, assets/hero-2-1080.webp?v=5 1080w, assets/hero-2.webp?v=5 1349w" sizes="(min-width: 1200px) 1100px, 100vw" width="1349" height="784" alt="Semi-detached homes at Panthera Bertam at golden hour, artist's impression" data-i18n-alt="alt.sd.hero" loading="lazy" decoding="async" fetchpriority="low">
       <div class="home-cover-scrim" aria-hidden="true"></div>
       <div class="home-cover-copy">
         <h2 class="title" data-i18n="h.semid.name">The Semi-D</h2>
-        <p class="product-pitch" data-i18n="h.semid.pitch">A big open-plan kitchen, living and dining. Generous floor-to-floor heights, with floor-to-ceiling sliding glass doors onto your side lawn. Three bedrooms upstairs, one on the ground floor.</p>
+        <p class="product-pitch" data-i18n="h.semid.pitch">A big open-plan kitchen, living and dining. Generous slab-to-slab heights, with floor-to-ceiling sliding glass doors onto your side lawn. Three bedrooms upstairs, one on the ground floor.</p>
       </div>
     </figure>
 
     <article class="product" data-reveal>
       <figure class="product-art pinned">
-        <div class="product-img"><img src="assets/perspective-semid-front.webp?v=7" width="1200" height="779" alt="Semi-Detached watercolour, front pair, artist's impression" data-i18n-alt="alt.sd.wc.front" loading="lazy" decoding="async" fetchpriority="low"></div>
+        <div class="product-img"><img src="assets/perspective-semid-front.webp?v=7" width="1200" height="779" alt="Semi-detached watercolour, front pair, artist's impression" data-i18n-alt="alt.sd.wc.front" loading="lazy" decoding="async" fetchpriority="low"></div>
       </figure>
       <div class="product-body">
         <div class="specs specs-6">
@@ -484,7 +484,7 @@
             <div class="v"><span data-i18n="h.semid.s1.v">2,006</span> <small data-i18n="h.semid.s1.u">sq ft</small></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.semid.s2.k">Land Size</div>
+            <div class="k" data-i18n="h.semid.s2.k">Land size</div>
             <div class="v"><span data-i18n="h.semid.s2.v">2,260–3,423 sq ft</span></div>
           </div>
           <div>
@@ -496,7 +496,7 @@
             <div class="v"><span data-i18n="h.semid.s4.v">4</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.semid.s5.k">Ceiling heights</div>
+            <div class="k" data-i18n="h.semid.s5.k">Slab-to-slab heights</div>
             <div class="v"><span data-i18n="h.semid.s5.v">3.7 m downstairs · 3.45 m upstairs</span></div>
           </div>
           <div>
@@ -506,7 +506,7 @@
         </div>
         <div class="product-foot">
           <div class="price"><span class="lbl" data-i18n="h.semid.price.l">From</span><strong data-i18n="h.semid.price.v">RM 712,500</strong></div>
-          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
+          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Get the price list</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </article>
@@ -514,14 +514,14 @@
     <div class="sketch-row" data-reveal>
       <div class="sketch-row-grid sketch-row-grid--two">
         <figure class="sketch-card" style="--rot:-0.8deg;">
-          <div class="sketch-img"><img src="assets/perspective-semid-left.webp?v=7" width="1200" height="720" alt="Semi-Detached watercolour, left perspective" data-i18n-alt="alt.sd.wc.left" loading="lazy" decoding="async"></div>
+          <div class="sketch-img"><img src="assets/perspective-semid-left.webp?v=7" width="1200" height="720" alt="Semi-detached watercolour, left perspective" data-i18n-alt="alt.sd.wc.left" loading="lazy" decoding="async"></div>
           <figcaption>
             <span class="num mono">L</span>
             <span class="lbl" data-i18n="sketches.s.left">Semi-D · Left side</span>
           </figcaption>
         </figure>
         <figure class="sketch-card" style="--rot:0.6deg;">
-          <div class="sketch-img"><img src="assets/perspective-semid-right.webp?v=7" width="1200" height="773" alt="Semi-Detached watercolour, right perspective" data-i18n-alt="alt.sd.wc.right" loading="lazy" decoding="async"></div>
+          <div class="sketch-img"><img src="assets/perspective-semid-right.webp?v=7" width="1200" height="773" alt="Semi-detached watercolour, right perspective" data-i18n-alt="alt.sd.wc.right" loading="lazy" decoding="async"></div>
           <figcaption>
             <span class="num mono">R</span>
             <span class="lbl" data-i18n="sketches.s.right">Semi-D · Right side</span>
@@ -533,20 +533,20 @@
     <div class="plans-gallery home-plans" data-reveal>
       <figure class="plan-card" data-plan="3">
         <div class="plan-img">
-          <img src="assets/floor-plan-p3.webp?v=7" srcset="assets/floor-plan-p3-800.webp?v=7 800w, assets/floor-plan-p3.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Semi-Detached Ground Floor plan" data-i18n-alt="alt.sd.gf" loading="lazy" decoding="async">
+          <img src="assets/floor-plan-p3.webp?v=7" srcset="assets/floor-plan-p3-800.webp?v=7 800w, assets/floor-plan-p3.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Semi-detached ground floor plan" data-i18n-alt="alt.sd.gf" loading="lazy" decoding="async">
         </div>
         <figcaption>
           <span class="num mono">GF</span>
-          <span class="lbl" data-i18n="plans.p3">Semi-D · Ground Floor</span>
+          <span class="lbl" data-i18n="plans.p3">Semi-D · Ground floor</span>
         </figcaption>
       </figure>
       <figure class="plan-card" data-plan="4">
         <div class="plan-img">
-          <img src="assets/floor-plan-p4.webp?v=7" srcset="assets/floor-plan-p4-800.webp?v=7 800w, assets/floor-plan-p4.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Semi-Detached First Floor plan" data-i18n-alt="alt.sd.ff" loading="lazy" decoding="async">
+          <img src="assets/floor-plan-p4.webp?v=7" srcset="assets/floor-plan-p4-800.webp?v=7 800w, assets/floor-plan-p4.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Semi-detached first floor plan" data-i18n-alt="alt.sd.ff" loading="lazy" decoding="async">
         </div>
         <figcaption>
           <span class="num mono">1F</span>
-          <span class="lbl" data-i18n="plans.p4">Semi-D · First Floor</span>
+          <span class="lbl" data-i18n="plans.p4">Semi-D · First floor</span>
         </figcaption>
       </figure>
     </div>
@@ -577,7 +577,7 @@
             <div class="v"><span data-i18n="h.bungalow.s1.v">2,642</span> <small data-i18n="h.bungalow.s1.u">sq ft</small></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.bungalow.s2.k">Land Size</div>
+            <div class="k" data-i18n="h.bungalow.s2.k">Land size</div>
             <div class="v"><span data-i18n="h.bungalow.s2.v">3,832–5,308 sq ft</span></div>
           </div>
           <div>
@@ -589,7 +589,7 @@
             <div class="v"><span data-i18n="h.bungalow.s4.v">5+1</span></div>
           </div>
           <div>
-            <div class="k" data-i18n="h.bungalow.s5.k">Ceiling heights</div>
+            <div class="k" data-i18n="h.bungalow.s5.k">Slab-to-slab heights</div>
             <div class="v"><span data-i18n="h.bungalow.s5.v">3.7 m downstairs · 3.45 m upstairs</span></div>
           </div>
           <div>
@@ -599,7 +599,7 @@
         </div>
         <div class="product-foot">
           <div class="price"><span class="lbl" data-i18n="h.bungalow.price.l">From</span><strong data-i18n="h.bungalow.price.v">RM 1,220,000</strong></div>
-          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Register your interest</span><span class="arrow" aria-hidden="true">→</span></a>
+          <a href="#register" class="btn btn-primary"><span data-i18n="hero.cta.primary">Get the price list</span><span class="arrow" aria-hidden="true">→</span></a>
         </div>
       </div>
     </article>
@@ -626,20 +626,20 @@
     <div class="plans-gallery home-plans" data-reveal>
       <figure class="plan-card" data-plan="1">
         <div class="plan-img">
-          <img src="assets/floor-plan-p1.webp?v=7" srcset="assets/floor-plan-p1-800.webp?v=7 800w, assets/floor-plan-p1.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Bungalow Ground Floor plan" data-i18n-alt="alt.bg.gf" loading="lazy" decoding="async">
+          <img src="assets/floor-plan-p1.webp?v=7" srcset="assets/floor-plan-p1-800.webp?v=7 800w, assets/floor-plan-p1.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Bungalow ground floor plan" data-i18n-alt="alt.bg.gf" loading="lazy" decoding="async">
         </div>
         <figcaption>
           <span class="num mono">GF</span>
-          <span class="lbl" data-i18n="plans.p1">Bungalow · Ground Floor</span>
+          <span class="lbl" data-i18n="plans.p1">Bungalow · Ground floor</span>
         </figcaption>
       </figure>
       <figure class="plan-card" data-plan="2">
         <div class="plan-img">
-          <img src="assets/floor-plan-p2.webp?v=7" srcset="assets/floor-plan-p2-800.webp?v=7 800w, assets/floor-plan-p2.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Bungalow First Floor plan" data-i18n-alt="alt.bg.ff" loading="lazy" decoding="async">
+          <img src="assets/floor-plan-p2.webp?v=7" srcset="assets/floor-plan-p2-800.webp?v=7 800w, assets/floor-plan-p2.webp?v=7 1400w" sizes="(max-width: 720px) 100vw, 560px" width="1400" height="1400" alt="Bungalow first floor plan" data-i18n-alt="alt.bg.ff" loading="lazy" decoding="async">
         </div>
         <figcaption>
           <span class="num mono">1F</span>
-          <span class="lbl" data-i18n="plans.p2">Bungalow · First Floor</span>
+          <span class="lbl" data-i18n="plans.p2">Bungalow · First floor</span>
         </figcaption>
       </figure>
     </div>
@@ -652,10 +652,9 @@
   <div class="wrap">
     <div class="hd">
       <div>
-        <div class="eyebrow" data-i18n="loc.eyebrow">Location</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="loc.title">Where you are.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="loc.human">Walk to the school across the road. The surau is close by, and the tech park is five minutes from your door.</p>
-        <p class="lede" style="margin-top:8px; font-size:0.92em; opacity:0.8;" data-i18n="loc.lede">Just off Jalan Bertam, ten minutes from the expressway. Schools, mall, hospital and mosque, all within a quarter-hour drive.</p>
+        <h2 class="title" data-i18n="loc.title">Where you are.</h2>
+        <p class="lede" style="margin-top:16px;" data-i18n="loc.human">Walk to the school across the road. The tech park is five minutes from your door.</p>
+        <p class="lede" style="margin-top:8px; font-size:0.92em; opacity:0.8;" data-i18n="loc.lede">Just off Jalan Bertam, 7 minutes from the expressway. Schools, mall, hospital and mosque, all within a quarter-hour drive.</p>
       </div>
     </div>
 
@@ -674,9 +673,9 @@
         <button type="button" data-filter="all" class="active"><span class="sw"></span><span data-i18n="map.f.all">All</span> <span class="ct">· 32</span></button>
         <button type="button" data-filter="daily"><span class="sw"></span><span data-i18n="map.f.daily">Daily</span> <span class="ct">· 10</span></button>
         <button type="button" data-filter="schools"><span class="sw"></span><span data-i18n="map.f.schools">Schools</span> <span class="ct">· 5</span></button>
-        <button type="button" data-filter="lifestyle"><span class="sw"></span><span data-i18n="map.f.lifestyle">Play &amp; Lifestyle</span> <span class="ct">· 5</span></button>
+        <button type="button" data-filter="lifestyle"><span class="sw"></span><span data-i18n="map.f.lifestyle">Play &amp; lifestyle</span> <span class="ct">· 5</span></button>
         <button type="button" data-filter="connect"><span class="sw"></span><span data-i18n="map.f.connect">Connect</span> <span class="ct">· 5</span></button>
-        <button type="button" data-filter="future"><span class="sw"></span><span data-i18n="map.f.future">Jobs &amp; Industry</span> <span class="ct">· 7</span></button>
+        <button type="button" data-filter="future"><span class="sw"></span><span data-i18n="map.f.future">Jobs &amp; industry</span> <span class="ct">· 7</span></button>
       </div>
 
       <div id="loc-leaflet" class="loc-leaflet"></div>
@@ -691,14 +690,14 @@
         <span class="mono" data-i18n="loc.amen.heading">Nearby places · click a row to show it on the map</span>
       </div>
 
-      <div class="amen" data-reveal>
+      <div class="amen">
         <div class="amen-grp">
           <div class="h" data-i18n="loc.g1.h">Daily life</div>
           <ul>
             <li data-pin="21"><span class="num">21</span><span class="name">Surau Bertam Perdana</span><span class="dist">5 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="3"><span class="num">3</span><span class="name">Mydin Bertam Hypermarket</span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="1"><span class="num">1</span><span class="name">Sunshine Bertam Shopping Mall</span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
-            <li data-pin="26"><span class="num">26</span><span class="name">Petronas Bertam <em class="zh-only">(国油)</em></span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
+            <li data-pin="26"><span class="num">26</span><span class="name">Petronas Bertam <em class="zh-only">（国油）</em></span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="27"><span class="num">27</span><span class="name">Klinik Desa Paya Keladi <em data-i18n="loc.em.gp">(GP clinic)</em></span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="6"><span class="num">6</span><span class="name">Masjid At-Taqwa Bertam Indah</span><span class="dist">8 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="2"><span class="num">2</span><span class="name">Lotus's Kepala Batas</span><span class="dist">8 <span data-i18n="loc.min">min</span></span></li>
@@ -723,7 +722,7 @@
           <div class="h" data-i18n="loc.g5.h">Play &amp; lifestyle</div>
           <ul>
             <li data-pin="24"><span class="num">24</span><span class="name">Bertam Indah sports pitches &amp; tennis</span><span class="dist">4 <span data-i18n="loc.min">min</span></span></li>
-            <li data-pin="22"><span class="num">22</span><span class="name">Taman Bandaraya Vision Park <em class="zh-only">(宏愿公园)</em></span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
+            <li data-pin="22"><span class="num">22</span><span class="name">Taman Bandaraya Vision Park <em class="zh-only">（宏愿公园）</em></span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="25"><span class="num">25</span><span class="name">Bertam Plaza <em>(Pizza Hut, Domino's, Secret Recipe, 7-Eleven, Maybank)</em></span><span class="dist">6 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="29"><span class="num">29</span><span class="name">KFC Bertam</span><span class="dist">8 <span data-i18n="loc.min">min</span></span></li>
             <li data-pin="30"><span class="num">30</span><span class="name">Kepala Batas Town <em>(Public Bank, Hong Leong, Bank Islam, Pizza Hut)</em></span><span class="dist">8 <span data-i18n="loc.min">min</span></span></li>
@@ -765,12 +764,12 @@
       <div>
         <div class="eyebrow" data-i18n="bertam.eyebrow">Why Bertam, now</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="bertam.title">Bertam is developing.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="bertam.lede">Penang Technology Park is about five minutes away. Kulim Hi-Tech Park and Sungai Petani are a short drive. New factories are already running here, and the people who work in them need homes close by.</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="bertam.lede">Penang Technology Park is in Bertam itself. Kulim Hi-Tech Park and Sungai Petani are a short drive away. New factories are already running here, and the people who work in them need homes close by.</p>
       </div>
     </div>
 
     <div class="bertam-grid">
-      <div data-reveal>
+      <div>
         <p class="bertam-thesis" data-i18n-html="bertam.thesis">
           A freehold home,<br>five minutes from<br>the <span class="accent">new jobs</span>.
         </p>
@@ -781,7 +780,7 @@
             <div class="txt">
               <div class="k" data-i18n="bertam.s1k">INV New Material</div>
               <div class="v">RM 6.4B</div>
-              <div class="u" data-i18n="bertam.s1u">Battery-separator plant, open since June 2025, about 6 min away</div>
+              <div class="u" data-i18n="bertam.s1u">Battery-separator plant, open since June 2025</div>
             </div>
           </div>
           <div>
@@ -797,7 +796,7 @@
             <div class="txt">
               <div class="k" data-i18n="bertam.s3k">Infineon · Kulim</div>
               <div class="v">RM 30B</div>
-              <div class="u" data-i18n="bertam.s3u">Expansion set to be the world's largest 200mm SiC chip fab, phase 1 open since 2024</div>
+              <div class="u" data-i18n="bertam.s3u">Expansion that Infineon says will be the world's largest 200mm SiC chip fab, phase 1 open since 2024</div>
             </div>
           </div>
           <div>
@@ -825,14 +824,15 @@
             </div>
           </div>
         </div>
+        <p class="bertam-src faq-more" data-i18n-html="bertam.src" style="margin-top:18px; font-size:0.85em; color:var(--text-mute);">Figures from MIDA, Buletin Mutiara and news reports, checked November 2026. The full sources are in our <a href="/guides/investing-in-bertam/#sources">Investing in Bertam guide</a>.</p>
       </div>
 
-      <div class="catalysts" data-reveal>
+      <div class="catalysts">
         <div class="cat">
           <div class="yr">1990s<small data-i18n="cat0.l">Town</small></div>
           <div>
             <h4 data-i18n="cat0.h">Bertam becomes a proper town.</h4>
-            <p data-i18n="cat0.b">Malls, two hospitals, USM and UiTM campuses and more than a dozen schools. Daily life here is already sorted.</p>
+            <p data-i18n="cat0.b">Malls, two hospitals, USM and UiTM campuses and more than a dozen schools.</p>
           </div>
         </div>
         <div class="cat">
@@ -854,7 +854,7 @@
           <div class="yr">2026<small data-i18n="cat3.l">Now</small></div>
           <div>
             <h4 data-i18n="cat3.h">Panthera opens for registration.</h4>
-            <p data-i18n="cat3.b">Setia Fontaines breaks ground on a 509-acre industrial park, and land here still costs far less than on the island.</p>
+            <p data-i18n="cat3.b">Setia Fontaines breaks ground on a 509-acre industrial park.</p>
             <span class="tag" data-i18n="cat3.tag">Pre-launch</span>
           </div>
         </div>
@@ -874,7 +874,7 @@
         </div>
       </div>
     </div>
-    <p class="lede" data-i18n="bertam.close" style="margin-top:30px; max-width:62ch;">Register now for first pick of a freehold home, before the public launch.</p>
+    <p class="lede" data-i18n="bertam.close" style="margin-top:30px; max-width:62ch;">Registration is open now, before the public launch.</p>
   </div>
 </section>
 
@@ -883,19 +883,18 @@
   <div class="wrap">
     <div class="hd">
       <div>
-        <div class="eyebrow" data-i18n="pricing.eyebrow">Pricing</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="pricing.title">Honest pricing.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="pricing.lede">Two freehold house types, both facing the central green.</p>
+        <h2 class="title" data-i18n="pricing.title">What each home costs.</h2>
+        <p class="lede" style="margin-top:16px;" data-i18n="pricing.lede">Two freehold house types, sharing the green.</p>
       </div>
     </div>
 
 
-    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Pre-launch prices: Semi-D from RM 712,500, bungalow from RM 1.22 million. Register for the full lot-by-lot list and first pick of the lots you like.</p>
+    <p class="lede" data-i18n="pricing.frame" style="margin-bottom:22px; max-width:60ch;">Pre-launch prices: Semi-D from RM 712,500, bungalow from RM 1.22 million. Register for the full lot-by-lot list.</p>
 
-    <div class="price-ranges" data-reveal>
+    <div class="price-ranges">
 
       <article class="prc-card" data-home="semid">
-        <div class="tag"><span data-i18n="prc.sd.tag">Semi-Detached</span><span class="units" data-i18n="prc.sd.units">16 units</span></div>
+        <div class="tag"><span data-i18n="prc.sd.tag">Semi-detached</span><span class="units" data-i18n="prc.sd.units">16 units</span></div>
         <h3 data-i18n="prc.sd.h">Semi-D</h3>
 
         <div class="prc-range">
@@ -928,9 +927,8 @@
 
     </div>
 
-    <aside class="prc-cta" data-reveal>
+    <aside class="prc-cta">
       <div class="prc-cta-text">
-        <div class="prc-cta-eyebrow" data-i18n="pricing.eyebrow">Pricing</div>
         <h3 data-i18n="pricing.cta.title">Want the full lot-by-lot list?</h3>
         <p data-i18n="pricing.cta.body">WhatsApp our sales team. We send the current list, with availability and Bumi-lot status, the same day.</p>
       </div>
@@ -954,11 +952,11 @@
       <div>
         <div class="eyebrow" data-i18n="calc.eyebrow">Affordability</div>
         <h2 class="title" style="margin-top:10px;" data-i18n="calc.title">What it takes to own one.</h2>
-        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Move the sliders to see your monthly payment. Indicative only: the loan margin and rate are what your bank approves.</p>
+        <p class="lede" style="margin-top:16px;" data-i18n="calc.lede">Move the sliders to see your monthly payment. Indicative only. The loan margin and rate are what your bank approves.</p>
       </div>
     </div>
 
-    <div class="calc-grid" data-reveal>
+    <div class="calc-grid">
       <div class="calc-controls">
         <div class="calc-presets" role="tablist" aria-label="Home type" data-i18n-aria="aria.hometype">
           <button type="button" class="calc-preset active" data-preset="semid" data-price="712500" data-i18n="calc.preset.sd">Semi-D · RM 712.5k</button>
@@ -1031,9 +1029,8 @@
 
         <a id="calc-preapprove" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I%27d%20like%20a%20bank%20pre-approval%20for%20a%20home%20here." target="_blank" rel="noopener" class="calc-preapprove">
           <div class="calc-preapprove-text">
-            <div class="calc-preapprove-eyebrow" data-i18n="calc.pre.eyebrow">Take the next step</div>
-            <div class="calc-preapprove-title" data-i18n="calc.pre.title">Get pre-approved on WhatsApp</div>
-            <div class="calc-preapprove-sub" data-i18n="calc.pre.sub">We send your figures to any major bank and reply with an indicative approval the same day.</div>
+            <div class="calc-preapprove-title" data-i18n="calc.pre.title">Check your loan on WhatsApp</div>
+            <div class="calc-preapprove-sub" data-i18n="calc.pre.sub">We send your figures to the bank the same day.</div>
           </div>
           <div class="calc-preapprove-cta">
             <span>WhatsApp</span>
@@ -1050,19 +1047,18 @@
   <div class="wrap">
     <div class="hd">
       <div>
-        <div class="eyebrow" data-i18n="faq.eyebrow">Plain answers</div>
-        <h2 class="title" style="margin-top:10px;" data-i18n="faq.title">Things buyers ask.</h2>
+        <h2 class="title" data-i18n="faq.title">Things buyers ask.</h2>
       </div>
     </div>
 
     <div class="faq-grid">
-      <aside class="faq-aside" data-reveal>
+      <aside class="faq-aside">
         <div class="h" data-i18n="faq.aside.h">Couldn't find your answer?</div>
-        <p class="b" data-i18n="faq.aside.b">Our sales team is on WhatsApp Mon–Sat, 9am to 6pm. Most questions get a reply within the hour.</p>
-        <a class="cta" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I%20have%20a%20question." target="_blank" rel="noopener" data-i18n="faq.aside.cta">Ask on WhatsApp →</a>
+        <p class="b" data-i18n="faq.aside.b">Our sales team is on WhatsApp Mon–Sat, 9am to 6pm.</p>
+        <a class="cta" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I%20have%20a%20question." target="_blank" rel="noopener" data-i18n="faq.aside.cta">WhatsApp sales →</a>
       </aside>
 
-      <div class="faq-list" data-reveal>
+      <div class="faq-list">
         <details class="faq" open>
           <summary><span class="ix">01</span><span data-i18n="faq.q1">Is it freehold or leasehold?</span><span class="tog">+</span></summary>
           <div class="answer"><p data-i18n="faq.a1">Freehold. Every home gets its own individual title at handover. No 99-year lease, so the home is yours to keep and pass on to your children.</p></div>
@@ -1089,11 +1085,11 @@
         </details>
         <details class="faq">
           <summary><span class="ix">07</span><span data-i18n="faq.q9">Will you help with the bank loan?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a9">Yes. Our team helps with your application, so you don't deal with the bank alone. Approval, loan margin and rate are up to the bank, based on your profile.</p></div>
+          <div class="answer"><p data-i18n="faq.a9">Yes. Our team helps with your application, so you don't deal with the bank alone. The bank decides the rest.</p></div>
         </details>
         <details class="faq">
           <summary><span class="ix">08</span><span data-i18n="faq.q10">What if we're not ready to buy yet?</span><span class="tog">+</span></summary>
-          <div class="answer"><p data-i18n="faq.a10">Register anyway. It's free, no deposit, no obligation, and you get first pick of the lots you like. Your family decides when.</p></div>
+          <div class="answer"><p data-i18n="faq.a10">Register anyway. It's free and there's no deposit. Your family decides when.</p></div>
         </details>
       </div>
       <p class="faq-more" data-i18n-html="faq.more" style="margin-top:28px; font-size:0.92em; opacity:0.85;">More questions? <a href="/guides/">Read our <span style="white-space:nowrap">guides →</span></a> · <a href="/disclaimer/">Disclaimer</a></p>
@@ -1109,18 +1105,17 @@
       <div>
         <div class="eyebrow cream" data-i18n="reg.eyebrow">Register your interest</div>
         <h2 class="title" style="margin-top:10px; color:var(--cream);" data-i18n="reg.title">Be first in line.</h2>
-        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.86); max-width:64ch;" data-i18n="reg.lede">Join our list and we'll keep you updated on the project.</p>
+        <p class="lede" style="margin-top:16px; color:rgba(242,233,223,0.9); max-width:64ch;" data-i18n="reg.lede">Join the list for first pick of the lots, before the public launch. We'll keep you posted on the project.</p>
       </div>
     </div>
 
-    <ul class="reg-trust" data-reveal aria-label="Why register now" data-i18n-aria="aria.why">
-      <li data-i18n="trust.1">Only 19 homes</li>
-      <li data-i18n="trust.2">Freehold title</li>
-      <li data-i18n="trust.3">Every home faces the green</li>
+    <ul class="reg-trust" aria-label="Why register now" data-i18n-aria="aria.why">
+      <li data-i18n="trust.1">19 freehold homes</li>
+      <li data-i18n="trust.2">Semi-D from RM 712,500</li>
     </ul>
 
     <div class="reg-grid">
-      <form id="reg-form" class="reg-form" novalidate data-reveal>
+      <form id="reg-form" class="reg-form" novalidate>
         <div class="field">
           <label for="f-name" data-i18n="reg.f.name">Your name</label>
           <input id="f-name" name="name" type="text" autocomplete="name" required>
@@ -1135,7 +1130,7 @@
             <label for="f-interest" data-i18n="reg.f.interest">Interested in</label>
             <select id="f-interest" name="interest">
               <option value="Both, show me what's available" data-i18n="reg.opt.both">Both, show me what's available</option>
-              <option value="Semi-Detached (16 units)" data-i18n="reg.opt.semid">Semi-Detached (16 units)</option>
+              <option value="Semi-Detached (16 units)" data-i18n="reg.opt.semid">Semi-detached (16 units)</option>
               <option value="Bungalow (3 units)" data-i18n="reg.opt.bungalow">Bungalow (3 units)</option>
             </select>
           </div>
@@ -1149,16 +1144,16 @@
         </div>
       </form>
 
-      <aside class="reg-contact" data-reveal>
+      <aside class="reg-contact">
         <div class="card wa">
-          <div class="h" data-i18n="reg.contact.wa.h">Chat now</div>
+          <div class="h" data-i18n="reg.contact.wa.h">WhatsApp sales</div>
           <div class="n" data-i18n="reg.contact.wa.n">+60 17-598 1858</div>
           <a class="action" href="https://wa.me/60175981858?text=Hi%20Panthera%20Bertam%2C%20I'd%20like%20to%20know%20more." target="_blank" rel="noopener" data-i18n="reg.contact.wa.cta">Open WhatsApp ↗</a>
         </div>
         <div class="card">
           <div class="h" data-i18n="reg.contact.fin.h">Mortgage help</div>
           <div class="n" data-i18n="reg.contact.fin.n">Any major bank</div>
-          <p style="color:rgba(242,233,223,0.7); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">We help you prepare and submit the application. The loan margin and rate are what your bank approves.</p>
+          <p style="color:rgba(242,233,223,0.9); font-size:14px; margin-top:6px;" data-i18n="reg.contact.fin.b">We help you prepare and submit the application. The loan margin and rate are what your bank approves.</p>
         </div>
       </aside>
     </div>
@@ -1177,9 +1172,9 @@
       <div>
         <div class="h" data-i18n="footer.h.explore">Explore</div>
         <ul>
-          <li><a href="#estate" data-i18n="nav.estate">The Estate</a></li>
+          <li><a href="#estate" data-i18n="nav.estate">The estate</a></li>
           <li><a href="#homes" data-i18n="nav.homes">Homes</a></li>
-          <li><a href="#site" data-i18n="nav.site">Site Plan</a></li>
+          <li><a href="#site" data-i18n="nav.site">Site plan</a></li>
           <li><a href="#location" data-i18n="nav.location">Location</a></li>
           <li><a href="#register" data-i18n="nav.register">Register</a></li>
           <li><a href="walkthrough/" data-i18n="footer.walk">3D walkthrough</a></li>
@@ -1227,8 +1222,8 @@
   </div>
 </div>
 
-<script src="app.js?v=136" defer></script>
-<script src="walkthrough/hero-boot.js?v=142" defer></script>
+<script src="app.js?v=138" defer></script>
+<script src="walkthrough/hero-boot.js?v=143" defer></script>
 <script src="home-toggle.js?v=6" defer></script>
 <script src="topo-flow.js?v=7" defer></script>
 <!-- the service worker (sw.js): repeat visits take the site's versioned files (?v=) from the visitor's device instead of
